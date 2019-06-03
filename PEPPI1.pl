@@ -10,9 +10,9 @@ use warnings;
 
 #User defined variables
 
-my $infasta = "/nfs/amino-home/ewbell/PEPPI/protein_sequence.txt"; #Input amino acid sequence file name
+my $infasta = "/nfs/amino-home/ewbell/PEPPI/2703719062.genes.faa"; #Input amino acid sequence file name
 my $peppidir= "/nfs/amino-home/ewbell/PEPPI"; #Location of the PEPPI package and scripts
-my $outdir="/nfs/amino-home/ewbell/56gene"; #Location of where output and next step scripts will be written to
+my $outdir="/nfs/amino-home/ewbell/mduhaime"; #Location of where output and next step scripts will be written to
 my $springdir="/nfs/amino-home/ewbell/SPRING-PPI/SPRING";
 my $maxjobs=300;
 my $batchsize=1;
@@ -68,7 +68,7 @@ for my $ind (1..$i){
 	    sleep(300);
 	}
 	if ($hpc){
-	    print `qsub -N PEPPI1_prot$ind -l mem=15gb -l pmem=15gb -l file=5gb -l walltime=48:00:00 -o $fastadir/prot$ind/out.log -e $fastadir/prot$ind/err.log $peppidir/bin/wrapper.pl -F "$peppidir/bin/ConDo/bin/ConDo.sh $fastadir/prot$ind/seq.fasta 1"`;
+	    print `qsub -N PEPPI1_prot$ind -l mem=15gb -l pmem=15gb -l file=5gb -l walltime=48:00:00 -o $fastadir/prot$ind/out.log -e $fastadir/prot$ind/err.log $peppidir/bin/condowrapper.pl -F "$peppidir/bin/ConDo/bin/ConDo.sh $fastadir/prot$ind/seq.fasta 1"`;
 	} else {
 	    print `$peppidir/bin/ConDo/bin/ConDo.sh $fastadir/prot$ind/seq.fasta 4`;
 	}
