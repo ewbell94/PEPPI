@@ -3,9 +3,9 @@
 use strict;
 use warnings;
 
-my $peppidir="PEPPIDIR";
-my $outdir="OUTDIR/PPI";
-my $pairname="PAIRNAME";
+my $peppidir="!PEPPIDIR!";
+my $outdir="!OUTDIR!/PPI";
+my $pairname="!PAIRNAME!";
 
 my @chains=split("-",$pairname);
 print `mkdir $outdir/$pairname/STRING`;

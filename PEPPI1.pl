@@ -37,7 +37,7 @@ if (!$infastaB){
 }
 
 #DO NOT EDIT BENEATH THIS LINE
-my $hpc=!$localflag;
+my $hpc=($localflag) ? 0 : 1;
 my $peppidir= "/nfs/amino-home/ewbell/PEPPI";
 my $maxjobs=300;
 
@@ -135,10 +135,10 @@ for my $ind (1..$i){
 }
 
 my $peppi2 = `cat $peppidir/bin/PEPPI2temp.pl`;
-$peppi2=~s/PEPPIDIR/$peppidir/;
-$peppi2=~s/OUTDIR/$outdir/;
-$peppi2=~s/HPC/$hpc/;
-$peppi2=~s/MAXJOBS/$maxjobs/;
+$peppi2=~s/\!PEPPIDIR\!/$peppidir/;
+$peppi2=~s/\!OUTDIR\!/$outdir/;
+$peppi2=~s/\!HPC\!/$hpc/;
+$peppi2=~s/\!MAXJOBS\!/$maxjobs/;
 open(my $peppi2script,">","$outdir/PEPPI2.pl");
 print $peppi2script $peppi2;
 close($peppi2script);

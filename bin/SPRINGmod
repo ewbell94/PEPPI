@@ -6,9 +6,9 @@ use Scalar::Util qw(looks_like_number);
 use List::Util qw(min);
 use POSIX qw(floor);
 
-my $peppidir="PEPPIDIR";
-my $outdir="OUTDIR/PPI";
-my $pairname="PAIRNAME";
+my $peppidir="!PEPPIDIR!";
+my $outdir="!OUTDIR!/PPI";
+my $pairname="!PAIRNAME!";
 
 my @qchains=split("-",$pairname);
 print `mkdir $outdir/$pairname/SPRING`;

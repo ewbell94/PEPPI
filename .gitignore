@@ -1,6 +1,6 @@
 lib/
 *~
-SPRING-PPI/ZiSet/*/
+SPRING-PPI/ZiSet/
 IntAct/
 trainset/
 test/

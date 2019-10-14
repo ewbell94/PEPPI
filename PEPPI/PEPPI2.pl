@@ -3,10 +3,10 @@
 use strict;
 use warnings;
 
-my $peppidir="!PEPPIDIR!";
-my $outdir="!OUTDIR!";
-my $hpc=!HPC!;
-my $maxjobs=!MAXJOBS!;
+my $peppidir="/nfs/amino-home/ewbell/PEPPI";
+my $outdir="/nfs/amino-home/ewbell/PEPPI/PEPPI";
+my $hpc=0;
+my $maxjobs=300;
 
 my $user=`whoami`;
 chomp($user);
