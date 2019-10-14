@@ -7,6 +7,8 @@ my $peppidir="!PEPPIDIR!";
 my $outdir="!OUTDIR!";
 my $hpc=!HPC!;
 my $maxjobs=!MAXJOBS!;
+my $nohomo=1;
+my $benchmarkflag=0;
 
 my $user=`whoami`;
 chomp($user);
@@ -43,6 +45,7 @@ print `mkdir $outdir/PPI`;
 print `mkdir $outdir/hhr`;
 for my $i (0..scalar(@domainsA)-1){
     for my $j (0..scalar(@domainsB)-1){
+	next if (-e "$outdir/PPI/$domainsB[$j]-$domainsA[$i]" || ($nohomo && $domainsB[$j] eq $domainsA[$i]));
 	my $pairdir="$outdir/PPI/$domainsA[$i]-$domainsB[$j]";
 	print `mkdir $pairdir`;
 	my @domainparts=split("_",$domainsA[$i]);
@@ -53,56 +56,31 @@ for my $i (0..scalar(@domainsA)-1){
 }
 
 my @supported=("SPRING","STRING");
-for my $prog (@supported){
-    my $modtext=`cat $peppidir/bin/${prog}mod`;
-    $modtext=~s/\!PEPPIDIR\!/$peppidir/;
+
+for my $int (glob("$outdir/PPI/*/")){
+    my @parts=split("/",$int);
+    my $pairname=$parts[-1];
+    for my $prog (@supported){
+	my $modtext=`cat $peppidir/bin/${prog}mod`;
+	$modtext=~s/\!PEPPIDIR\!/$peppidir/;
+	$modtext=~s/\!OUTDIR\!/$outdir/;
+	$modtext=~s/\!PAIRNAME\!/$pairname/;
+	$modtext=~s/\!BENCHMARK\!/$benchmarkflag/;
+	open(my $jobscript,">","$int/$pairname-$prog.pl");
+	print $jobscript $modtext;
+	close($jobscript);
+	print `chmod +x $int/$pairname-$prog.pl`;
+	if ($hpc){
+	    my $jobname="PEPPI_$prog\_$pairname";
+	    my $errloc="$int/err_$prog.log";
+	    my $outloc="$int/out_$prog.log";
+	    print `qsub -e $errloc -o $outloc -N $jobname -l walltime="24:00:00" $int/$pairname-$prog.pl`;
+	} else {
+	    print `$int/$pairname-$prog.pl`;
+	}
+    }
 }
 
-=pod
-my $batchnum=1;
-my @querylist=();
-for my $pair (glob("$outdir/PPI/*/")){
-    next if (-e "$pair/SPRING/TemplateSummary.txt");
-    my @pairparts=split("/",$pair);
-    my $pairname=$pairparts[-1];
-    push(@querylist,$pairname);
-    if (scalar(@querylist) >= $batchsize){
-	my $args=join(' ',@querylist);
-	if ($hpc){
-	    my $jobname="SPRINGbatch$batchnum";
-	    my $errloc="$outdir/SPRING/SPRINGbatch$batchnum\_err.log";
-	    my $outloc="$outdir/SPRING/SPRINGbatch$batchnum\_out.log";
-	    if ($batchsize == 1){
-		$jobname="SPRING_$args";
-		$errloc="$pair/err.log";
-		$outloc="$pair/out.log";
-	    }
-	    while (`qstat -u $user | wc -l`-5 >= $maxjobs){
-		sleep(60);
-	    }
-	    print `qsub -e $errloc -o $outloc -l walltime="24:00:00" -N $jobname $peppidir/bin/springwrapper.pl -F "$springdir $outdir/SPRING $args"`; 
-	} else {
-	    print `$peppidir/bin/springwrapper.pl $springdir $outdir/SPRING $args`;
-	}
-	@querylist=();
-	$batchnum++;
-    }
-}
-if (scalar(@querylist) > 0){
-    my $args=join(' ',@querylist);
-    if ($hpc){
-	my $jobname="SPRINGbatch$batchnum";
-	my $errloc="$outdir/SPRING/SPRINGbatch$batchnum\_err.log";
-	my $outloc="$outdir/SPRING/SPRINGbatch$batchnum\_out.log";
-	while (`qstat -u $user | wc -l`-5 >= $maxjobs){
-	    sleep(60);
-	}
-	print `qsub -e $errloc -o $outloc -l walltime="24:00:00" -N $jobname $peppidir/bin/springwrapper.pl -F "$springdir $outdir/SPRING $args"`;
-    } else {
-	print `$peppidir/bin/springwrapper.pl $springdir $outdir/SPRING $args`;
-    }
-}
-=cut
 open(my $peppi3script,">","$outdir/PEPPI3.pl");
 my $peppi3=`cat $peppidir/bin/PEPPI3temp.pl`;
 $peppi3=~s/\!OUTDIR\!/$outdir/;

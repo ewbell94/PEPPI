@@ -9,6 +9,7 @@ use POSIX qw(floor);
 my $peppidir="!PEPPIDIR!";
 my $outdir="!OUTDIR!/PPI";
 my $pairname="!PAIRNAME!";
+my $benchmarkflag=!BENCHMARK!;
 
 my @qchains=split("-",$pairname);
 print `mkdir $outdir/$pairname/SPRING`;
@@ -18,7 +19,7 @@ my $bindir="$peppidir/SPRING-PPI/bin"; #location of program binaries
 my $outputdir="$outdir/$pairname/SPRING"; #location of program output
 my $dbdir="/nfs/amino-home/liuzi/lz_program/TACOS/database"; #location of SPRING database
 my $maxmodels=5; #maximum number of model pdb files to make
-my $scut=1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
+my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
 my $dimerdb="/nfs/amino-library/DIMERDB/HHsearch/hhm.db"; #location of dimer chain template database for HHsearch threading
 my $zmin=2.0; #Minimum Z-score for reporting templates; if none are found satisfying this threshold, zmin is set to -5
