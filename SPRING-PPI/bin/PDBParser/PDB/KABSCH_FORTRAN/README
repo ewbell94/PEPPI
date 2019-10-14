@@ -1,0 +1,11 @@
+This is spicker implemented for protein complexes. For information
+on the parameters and requirements run:
+./spicker.py 
+
+
+ScoreMod.f is a function written in python.  The
+ScoreMod.so is ScoreMod.f wrapped into c so that
+it can be called by python as a funciton.  To 
+recompile ScoreMod.f run:
+
+f2py -c -m ScoreMod ScoreMod.f

@@ -6,6 +6,7 @@ use warnings;
 my $maxjobs=300;
 my $benchmarkdir="/nfs/amino-home/ewbell/PEPPI/SPRING-PPI/ZiSet";
 open(my $targets,"<","$benchmarkdir/target_list");
+#open(my $targets,"<","$benchmarkdir/shortlist");
 while (my $target=<$targets>){
     print "$target";
     chomp($target);
@@ -21,5 +22,6 @@ while (my $target=<$targets>){
     while(`qstat -u ewbell | wc -l`-5>=$maxjobs){
 	sleep(60);
     }
-    print `qsub -N "SPRING_$target" -o $targetdir/out.log -e $targetdir/err.log -l nodes=1:ppn=1 -l mem=5gb -l pmem=5gb -l walltime=10:00:00 $benchmarkdir/$target/$target.pl -F "$targetdir/$chains[0].seq $targetdir/$chains[1].seq"`;
+    print `qsub -N "SPRING_$target" -o $targetdir/out.log -e $targetdir/err.log -l nodes=1:ppn=1 -l walltime=10:00:00 $benchmarkdir/$target/$target.pl -F "$targetdir/$chains[0].seq $targetdir/$chains[1].seq"`;
+    #print `$benchmarkdir/$target/$target.pl $targetdir/$chains[0].seq $targetdir/$chains[1].seq`;
 }

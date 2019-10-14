@@ -7,25 +7,27 @@ use List::Util qw(min);
 use POSIX qw(floor);
 
 #User-set parameters
-my $bindir="/nfs/amino-home/ewbell/PEPPI/SPRING-PPI/bin";
-my $outputdir="/nfs/amino-home/ewbell/PEPPI/SPRING-PPI/HP1-prot";
-my $dbdir="/nfs/amino-home/liuzi/lz_program/TACOS/database";
-my $maxtemplates=1000000;
-my $maxmodels=20;
-my $scut=1.1;
-#my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2015_06/uniprot20_2015_06";
-my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02";
-my $dimerdb="/nfs/amino-library/DIMERDB/HHsearch/hhm.db";
-my $zmin=2.0;
-my $hhdir="/nfs/amino-home/ewbell/mduhaime/hhr";
+my $bindir="/nfs/amino-home/ewbell/PEPPI/SPRING-PPI/bin"; #location of program binaries
+my $outputdir="OUTDIR"; #location of program output
+my $dbdir="/nfs/amino-home/liuzi/lz_program/TACOS/database"; #location of SPRING database
+my $maxmodels=20; #maximum number of model pdb files to make
+my $scut=0.3; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
+my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
+my $dimerdb="/nfs/amino-library/DIMERDB/HHsearch/hhm.db"; #location of dimer chain template database for HHsearch threading
+my $zmin=2.0; #Minimum Z-score for reporting templates; if none are found satisfying this threshold, zmin is set to -5
+my $hhdir="/nfs/amino-home/ewbell/PEPPI/SPRING-PPI/ZiSet/hhr"; #location of hhr files of previously run HHsearch results
 
+#DO NOT CHANGE BENEATH THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING
 #Processed parameters
 my $user=`whoami`;
 chomp($user);
-$ENV{'HHLIB'}="$bindir/hhsuite/";
-my @weights=(12.0,1.4);
-my $homothresh=0.9;
-my $seqmax=1500;
+$ENV{'HHLIB'}="$bindir/hhsuite/"; #necessary for proper function of HHsearch
+my @weights=(12.0,1.4); #weights for SPRING score calculation
+my $homothresh=0.9; #
+my $seqmax=1500; #maximum allowable length of input sequences; sequences longer than this will be truncated
+my $minmono=20; #minimum number of monomer templates for dimer matching
+
+#Read in arguments and process input
 if (scalar(@ARGV) < 2){
     print "Not enough arguments were supplied\n";
     exit(1);
@@ -44,7 +46,6 @@ my @parts1=split('\.',$preprot1);
 my @parts2=split('\.',$preprot2);
 my $prot1=$parts1[0];
 my $prot2=$parts2[0];
-my $tempdir="/tmp/$user/PPI_$prot1-$prot2";
 
 if (! -e "$prot1file" || ! -e "$prot2file"){
     print "Protein sequence files were not found!\n";
@@ -57,6 +58,7 @@ if (-e "$outputdir/SPRING/TemplateSummary.txt"){
 }
 
 #Make working directory
+my $tempdir="/tmp/$user/PPI_$prot1-$prot2";
 if (! -e "$tempdir"){
     print `mkdir -p $tempdir`;
 } else {
@@ -107,8 +109,17 @@ my @prot2hits=fetchHits($prot2);
 
 #Store dfire and complex list
 open(my $complexfile,"<","$dbdir/pdb/ComplexList.txt");
-my @complexlines=<$complexfile>;
-chomp(@complexlines);
+my %complexlist=(); #Find all potential partner chains given some core chain
+while (my $line=<$complexfile>){
+    chomp($line);
+    my @chains=split("-",$line);
+    if (exists($complexlist{$chains[0]})){
+	push(@{$complexlist{$chains[0]}},$chains[1]);
+    } else {
+	my @value=($chains[1]);
+	$complexlist{$chains[0]}=\@value;
+    }
+}
 close($complexfile);
 
 open(my $dfirefile,"<","$bindir/dfire.txt");
@@ -119,26 +130,26 @@ close($dfirefile);
 #Build index match dictionary
 print "Building index\n";
 
-open(my $indexfile,"<","$dbdir/SPRING/indexAll.txt");
-my @indexlines=<$indexfile>;
-#chomp(@indexlines);
-close($indexfile);
-
-my @prothits=(@prot1hits,@prot2hits);
-my %index=();
-for my $hit (@prothits){
-    if (!exists($index{$hit[0]})){
-	my @grephits=grep(/ $hit[0]/,@indexlines);
-	$index{$hit[0]}=\@grephits;
+open(my $indexfile,"<","$dbdir/SPRING/index.txt");
+my %forwardindex=(); #Search for the HHsearch template of a given chain
+my %reverseindex=(); #Search for chains assigned to a given HHsearch template
+while (my $line=<$indexfile>){
+    chomp($line);
+    my @parts=split(' ',$line);
+    $forwardindex{"$parts[0]/$parts[1]"}=$parts[2];
+    if (exists($reverseindex{$parts[2]})){
+	push(@{$reverseindex{$parts[2]}},"$parts[0]/$parts[1]");
+    } else {
+	my @value=("$parts[0]/$parts[1]");
+	$reverseindex{$parts[2]}=\@value;
     }
 }
+close($indexfile);
 
 #Search for dimer templates given monomeric hits
 my @dimerTemplates=fetchDimers(\@prot1hits,\@prot2hits);
-for my $i (0..scalar(@dimerTemplates)-1){
-    print "$dimerTemplates[$i][0] $dimerTemplates[$i][1]\n";
-}
 
+#Flip the sequence order and search for more dimer templates if the chains are nonidentical
 if (getSeqID("$tempdir/$prot1.fasta","$tempdir/$prot2.fasta") < $homothresh){
     my @flippedTemplates=fetchDimers(\@prot2hits,\@prot1hits);
     for my $i (0..scalar(@flippedTemplates)-1){
@@ -197,6 +208,8 @@ for my $i (0..scalar(@dimerTemplates)-1){
 }
 close($summary);
 
+print `rm -rf $tempdir`;
+
 sub getSeqID{
     my $fname1=$_[0];
     my $fname2=$_[1];
@@ -209,8 +222,14 @@ sub getSeqID{
     } else {
 	return 0.0;
     }
-    $NWresult=~/Sequence identity: (.*)\(/;
-    return $1*1.0;
+    $NWresult=~/Identical length:\s+(\d+)/;
+    my $idcount=$1;
+    $NWresult=~/Length of sequence 1:\s+(\d+).*\nLength of sequence 2:\s+(\d+)/;
+    my $seq1len=$1;
+    my $seq2len=$2;
+    return min($idcount/$seq1len,$idcount/$seq2len) if ($fname2=~/\.fasta/);
+    return $idcount/$seq1len if ($fname2=~/\.pdb/);
+    return 0.0;
 }
 
 sub makeHHR{
@@ -224,26 +243,23 @@ sub makeHHR{
 sub fetchHits{
     my $prot=$_[0];
     my @templates=();
-    my @scores=();
+    my @outlist=();
     open(my $hhrfile,"<","$tempdir/$prot.hhr");
-    for my $i (0..8){
-	my $throwaway=<$hhrfile>;
-    }
     while (my $line=<$hhrfile>){
-	my @parts=split(' ',$line);
-	last if (!looks_like_number($parts[0]));
-	next if (grep(/^$parts[1]$/,@templates));
-	push(@templates,$parts[1]);
-	push(@scores,-1*log($parts[3])/log(10));
+	if (substr($line,0,1) eq ">"){
+	    my $target=substr($line,1,5);
+	    next if (grep(/$target/,@templates));
+	    push(@templates,$target);
+	    my $scoreline=<$hhrfile>;
+	    $scoreline=~/E-value=(\S+) .*Identities=(\d+)%/;
+	    my $score=$1;
+	    my $seqid=$2/100;
+	    my @pair=($target,-1*log($score)/log(10));
+	    push(@outlist,\@pair) if ($seqid<=$scut);
+	}
     }
     close($hhrfile);
     
-    my @outlist=();
-    for my $i (0..scalar(@templates)-1){
-	my @pair=($templates[$i],$scores[$i]);
-	push(@outlist,\@pair) if ($pair[1] >= $zmin && getSeqID("$tempdir/$prot.fasta","$dbdir/pdb/chains/".substr($templates[$i],1,2)."/$templates[$i].pdb") < $scut);
-    }
-    @outlist=sort{$b->[1]<=>$a->[1]} @outlist;
     return @outlist;
 }
 
@@ -286,28 +302,37 @@ sub newFetchHits{
 sub fetchDimers{
     print "Fetching dimers\n";
     my @prot1list=@{$_[0]};
+    @prot1list=sort{$b->[1]<=>$a->[1]} @prot1list;
     my @prot2list=@{$_[1]};
     my @dimerlist=();
-    for my $i (0..min($maxtemplates-1,scalar(@prot1list)-1)){
-	my @prot1hits=@{$index{$prot1list[$i][0]}};
-	#print "$prot1list[$i][0] ".scalar(@prot1hits)."\n";
-	for my $prot1hitline (@prot1hits){
-	    my @prot1parts=split(' ',$prot1hitline);
-	    my $biomol1="$prot1parts[0]/$prot1parts[1]";
+    my @cutofflist=();
+    my $cutoffcore=0;
+    my $checkflag=0;
+    for my $i (0..scalar(@prot1list)-1){
+	if (!$checkflag && $prot1list[$i][1]-$zmin < -1e-4){
+	    $checkflag=1;
+	    if ($cutoffcore > 1){
+		return @cutofflist;
+	    }
+	}
+	next if (!exists($reverseindex{$prot1list[$i][0]}));
+	my @prot1hits=@{$reverseindex{$prot1list[$i][0]}};
+	print "$prot1list[$i][0]\n";
+	$cutoffcore++ if ($prot1list[$i][1]-$zmin>-1e-4);
+	for my $biomol1 (@prot1hits){
 	    next if ($biomol1=~/_1_/);
-	    for my $j (0..min($maxtemplates-1,scalar(@prot2list)-1)){
-		my $zscore=min($prot1list[$i][1],$prot2list[$j][1]);
-		my @prot2hits=@{$index{$prot2list[$j][0]}};
-		#print "\t$prot2list[$j][0] ".scalar(@prot2hits)."\n";
-		for my $prot2hitline (@prot2hits){
-		    my @prot2parts=split(' ',$prot2hitline);
-		    my $biomol2="$prot2parts[0]/$prot2parts[1]";
-		    next if ($biomol2=~/_0_/ || $biomol1 ge $biomol2);
-		    #print "$biomol1-$biomol2\n";
-		    if (grep(/$biomol1-$biomol2/,@complexlines)){
-			#print "$biomol1,$biomol2,$zscore\n";
-			my @dimerpair=($biomol1,$biomol2,$zscore);
+	    my @prot1complexes=@{$complexlist{$biomol1}};
+	    for my $partner (@prot1complexes){
+		next if (!exists($forwardindex{$partner}));
+		my $prot2hit=$forwardindex{$partner};
+		for my $j (0..scalar(@prot2list)-1){
+		    if ($prot2list[$j][0] eq $prot2hit){
+			my $zscore=min($prot1list[$i][1],$prot2list[$j][1]);
+			my @dimerpair=($biomol1,$partner,$zscore);
 			push(@dimerlist,\@dimerpair);
+			
+			push(@cutofflist,\@dimerpair) if ($zscore-$zmin>-1e-4);
+			last;
 		    }
 		}
 	    }

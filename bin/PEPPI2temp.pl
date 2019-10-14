@@ -5,15 +5,14 @@ use warnings;
 
 my $peppidir="PEPPIDIR";
 my $outdir="OUTDIR";
-my $springdir="SPRINGDIR";
 my $hpc=HPC;
-my $batchsize=BATCHSIZE;
 my $maxjobs=MAXJOBS;
 
 my $user=`whoami`;
 chomp($user);
 
-print `python $peppidir/bin/seqsplitter.py $outdir`;
+#print `python $peppidir/bin/seqsplitter.py $outdir`;
+print `python $peppidir/bin/splitFUD.py $outdir`;
 
 my @domains=();
 for my $prot (glob("$outdir/fasta/*/")){
@@ -26,11 +25,11 @@ for my $prot (glob("$outdir/fasta/*/")){
     }
 }
 
-print `mkdir $outdir/SPRING`;
+print `mkdir $outdir/PPI`;
 print `mkdir $outdir/hhr`;
 for my $i (0..scalar(@domains)-1){
     for my $j ($i+1..scalar(@domains)-1){
-	my $pairdir="$outdir/SPRING/$domains[$i]-$domains[$j]";
+	my $pairdir="$outdir/PPI/$domains[$i]-$domains[$j]";
 	print `mkdir $pairdir`;
 	my @domainparts=split("_",$domains[$i]);
 	print `cp $outdir/fasta/$domainparts[0]/$domainparts[1].fasta $pairdir/$domains[$i].seq`;
@@ -39,9 +38,15 @@ for my $i (0..scalar(@domains)-1){
     }
 }
 
+my @supported=("SPRING","STRING");
+for my $prog (@supported){
+    my $modtext=`cat $peppidir/bin/${prog}mod`;
+}
+
+=pod
 my $batchnum=1;
 my @querylist=();
-for my $pair (glob("$outdir/SPRING/*/")){
+for my $pair (glob("$outdir/PPI/*/")){
     next if (-e "$pair/SPRING/TemplateSummary.txt");
     my @pairparts=split("/",$pair);
     my $pairname=$pairparts[-1];
@@ -82,7 +87,7 @@ if (scalar(@querylist) > 0){
 	print `$peppidir/bin/springwrapper.pl $springdir $outdir/SPRING $args`;
     }
 }
-
+=cut
 open(my $peppi3script,">","$outdir/PEPPI3.pl");
 my $peppi3=`cat $peppidir/bin/PEPPI3temp.pl`;
 $peppi3=~s/OUTDIR/$outdir/;
