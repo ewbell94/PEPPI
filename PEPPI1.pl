@@ -19,11 +19,11 @@ chomp($outdir);
 $outdir="$outdir/PEPPI";
 
 GetOptions(
-    "local" => \$localflag,
-    "domains" => \$domaindiv,
-    "output" => \$outdir,
-    "inputA=s" => \$infastaA,
-    "inputB=s" => \$infastaB,
+    "local" => \$localflag, #Set to 1 if supercomputer cluster is not to be used
+    "domains" => \$domaindiv, #Set to 1 if sequences are to be divided
+    "output=s" => \$outdir, #Directory for output
+    "inputA|A=s" => \$infastaA, #Input fasta A
+    "inputB|B=s" => \$infastaB, #Input fasta B; for intrainteraction prediction, this should be the same file as A
     ) or die "Invalid arguments were passed into PEPPI";
 
 if (!$infastaA){
@@ -123,11 +123,11 @@ if (openhandle($fastaout)){
 for my $ind (1..$i){
     if ($domaindiv){
 	next if (-e "$fastadir/prot$ind/fu.txt");
-	while($hpc && `qstat -u $user | wc -l`-5 >= $maxjobs){
+	while($hpc && `squeue -u $user | wc -l`-1 >= $maxjobs){
 	    sleep(300);
 	}
 	if ($hpc){
-	    print `qsub -N PEPPI1_prot$ind -l mem=15gb -l pmem=15gb -l walltime=24:00:00 -o $fastadir/prot$ind/out.log -e $fastadir/prot$ind/err.log $peppidir/bin/runFUD.pl -F "$fastadir/prot$ind"`;
+	    print `sbatch -J PEPPI1_prot$ind --mem=15gb -t 24:00:00 -o $fastadir/prot$ind/out.log -e $fastadir/prot$ind/err.log $peppidir/bin/runFUD.pl $fastadir/prot$ind`;
 	} else {
 	    print `$peppidir/bin/runFUD.pl $fastadir/prot$ind`;
 	}

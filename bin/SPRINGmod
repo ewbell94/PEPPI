@@ -18,19 +18,19 @@ print `mkdir $outdir/$pairname/SPRING`;
 my $bindir="$peppidir/SPRING-PPI/bin"; #location of program binaries
 my $outputdir="$outdir/$pairname/SPRING"; #location of program output
 my $dbdir="/nfs/amino-home/liuzi/lz_program/TACOS/database"; #location of SPRING database
-my $maxmodels=5; #maximum number of model pdb files to make
+my $maxmodels=3; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
 my $dimerdb="/nfs/amino-library/DIMERDB/HHsearch/hhm.db"; #location of dimer chain template database for HHsearch threading
 my $zmin=2.0; #Minimum Z-score for reporting templates; if none are found satisfying this threshold, zmin is set to -5
-my $hhdir="$outputdir/hhr"; #location of hhr files of previously run HHsearch results
+my $hhdir="$outdir/../hhr"; #location of hhr files of previously run HHsearch results
 
 #DO NOT CHANGE BENEATH THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING
 #Processed parameters
 my $user=`whoami`;
 chomp($user);
 $ENV{'HHLIB'}="$bindir/hhsuite/"; #necessary for proper function of HHsearch
-my @weights=(1,12.0,1.4); #weights for SPRING score calculation
+my @weights=(1,12.0,-1.4); #weights for SPRING score calculation
 my $homothresh=0.9; #
 my $seqmax=1500; #maximum allowable length of input sequences; sequences longer than this will be truncated
 my $minmono=5000; #number of monomer templates for dimer matching
@@ -61,7 +61,8 @@ if (-e "$outputdir/SPRING/TemplateSummary.txt"){
 }
 
 #Make working directory
-my $tempdir="/tmp/$user/PPI_$prot1-$prot2";
+my $randomTag=int(rand(1000000));
+my $tempdir="/tmp/$user/PEPPI_SPRING_$prot1-$prot2\_$randomTag";
 if (! -e "$tempdir"){
     print `mkdir -p $tempdir`;
 } else {
@@ -260,6 +261,7 @@ sub makeHHR{
     print `$bindir/hhsuite/scripts/addss.pl $tempdir/$prot.a3m`;
     print `$bindir/hhsuite/bin/hhmake -i $tempdir/$prot.a3m -id 90 -diff 100 -cov 0 -qid 0`;
     print `$bindir/hhsuite/bin/hhsearch -i $tempdir/$prot.hhm -d $dimerdb -id 90 -diff 100 -cov 0 -qid 0 -e 0.001 -p 20 -E 0.01 -Z 30000 -z 20000 -B 30000 -b 20000`;
+    print `cp $tempdir/$prot.hhr $hhdir/$prot.hhr`;
 }
 
 sub fetchHits{
@@ -348,7 +350,7 @@ sub constructMonomer{
 		    'G'=>"GLY",'H'=>"HIS",'I'=>"ILE",'K'=>"LYS",'L'=>"LEU",
 		    'M'=>"MET",'N'=>"ASN",'P'=>"PRO",'Q'=>"GLN",'R'=>"ARG",
 		    'S'=>"SER",'T'=>"THR",'V'=>"VAL",'W'=>"TRP",'Y'=>"TYR",
-		    'B'=>"BBB",'Z'=>"ZZZ",'X'=>"XYZ");
+		    'B'=>"BBB",'Z'=>"ZZZ",'X'=>"XYZ",'U'=>"SEC",'O'=>"PYL");
     
     my @alignment=();
     my @qaa=();
@@ -390,10 +392,18 @@ sub constructMonomer{
 		    if ($qchar eq "-"){
 			push(@alignment,-1);
 		    } elsif ($tchar eq "-") {
-			push(@qaa,$onetothree{$qchar});
+			if ($onetothree{$qchar} ne ""){
+			    push(@qaa,$onetothree{$qchar});
+			} else {
+			    push(@qaa,"UNK");
+			}
 			$startq++;
 		    } else {
-			push(@qaa,$onetothree{$qchar});
+			if ($onetothree{$qchar} ne ""){
+			    push(@qaa,$onetothree{$qchar});
+			} else {
+			    push(@qaa,"UNK");
+			}
 			push(@alignment,$startq);
 			$startq++;
 		    }
@@ -493,7 +503,7 @@ sub constructModel{
 	print $modelfile $connectline;
     }
     close($modelfile);
-
+=pod
     my %aminocode=('ALA'=>0,'CYS'=>1,'ASP'=>2,'GLU'=>3,'PHE'=>4,
 		   'GLY'=>5,'HIS'=>6,'ILE'=>7,'LYS'=>8,'LEU'=>9,
 		   'MET'=>10,'ASN'=>11,'PRO'=>12,'GLN'=>13,'ARG'=>14,
@@ -524,6 +534,7 @@ sub constructModel{
 	}
     }
     close($modelfile);
+    
 
     my $dfire=0.0;
     for my $i (0..scalar(@Acoord)-1){
@@ -540,6 +551,10 @@ sub constructModel{
 	    }
 	}
     }
+=cut
+    my $dfire=`$bindir/dcomplex $tempdir/$dimer1name-$dimer2name.pdb A B`;
+    #$dfire=-4.7 if (!looks_like_number($dfire));
+    print "$dfire";
     my $tmscore=min($tm1score,$tm2score);
     my $springscore=$weights[0]*$zscore+$weights[1]*$tmscore+$weights[2]*$dfire;
     #print "$zscore,$tmscore,$dfire,$springscore\n\n";

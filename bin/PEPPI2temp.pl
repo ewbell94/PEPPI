@@ -7,8 +7,8 @@ my $peppidir="!PEPPIDIR!";
 my $outdir="!OUTDIR!";
 my $hpc=!HPC!;
 my $maxjobs=!MAXJOBS!;
-my $nohomo=1;
-my $benchmarkflag=0;
+my $nohomo=0;
+my $benchmarkflag=1;
 
 my $user=`whoami`;
 chomp($user);
@@ -56,7 +56,7 @@ for my $i (0..scalar(@domainsA)-1){
 }
 
 my @supported=("SPRING","STRING");
-
+#my @supported=("STRING");
 for my $int (glob("$outdir/PPI/*/")){
     my @parts=split("/",$int);
     my $pairname=$parts[-1];
@@ -71,10 +71,14 @@ for my $int (glob("$outdir/PPI/*/")){
 	close($jobscript);
 	print `chmod +x $int/$pairname-$prog.pl`;
 	if ($hpc){
+	    while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+		print "Queue is currently full, waiting for submission...\n";
+		sleep(60);
+	    }
 	    my $jobname="PEPPI_$prog\_$pairname";
 	    my $errloc="$int/err_$prog.log";
 	    my $outloc="$int/out_$prog.log";
-	    print `qsub -e $errloc -o $outloc -N $jobname -l walltime="24:00:00" $int/$pairname-$prog.pl`;
+	    print `sbatch -J $jobname -o $outloc -e $errloc -t 24:00:00 $int/$pairname-$prog.pl`;
 	} else {
 	    print `$int/$pairname-$prog.pl`;
 	}

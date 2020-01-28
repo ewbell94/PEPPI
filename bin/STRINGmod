@@ -2,46 +2,121 @@
 
 use strict;
 use warnings;
+use List::Util qw(min);
 
 my $peppidir="!PEPPIDIR!";
 my $outdir="!OUTDIR!/PPI";
 my $pairname="!PAIRNAME!";
+my $user=`whoami`;
+chomp($user);
 
+my $randomTag=int(rand(1000000));
+my $tempdir="/tmp/$user/PEPPI_STRING_$pairname\_$randomTag";
+if (! -e "$tempdir"){
+    print `mkdir -p $tempdir`;
+} else {
+    print `rm -rf $tempdir/*`;
+}
+
+my $seqid=0.9;
+my $maxtargets=100;
 my @chains=split("-",$pairname);
 print `mkdir $outdir/$pairname/STRING`;
-
 open(my $resfile,">","$outdir/$pairname/STRING/res.txt");
-my $blast1res=`$peppidir/bin/blastp -query $outdir/$pairname/$chains[0].seq -db $peppidir/lib/STRING/STRINGseqsv11.db -task blastp-fast -outfmt 6 | head -1`;
+print `date`;
+print `cp $peppidir/lib/STRING/STRINGseqsv11.db* $tempdir/`;
+print `sync`;
+print `date`;
+
+my $blast1res=`$peppidir/bin/blastp -query $outdir/$pairname/$chains[0].seq -db $tempdir/STRINGseqsv11.db -max_target_seqs $maxtargets -outfmt "6 sseqid nident qlen slen"`;
 print $blast1res;
 if ($blast1res eq ""){
+    print "BLAST for sequence A returned no hits in STRING.\n";
     print $resfile "?\n?\n?\n?\n";
+    print `rm -rf $tempdir`;
     exit(1);
 }
+print "\n";
 
-my $blast2res=`$peppidir/bin/blastp -query $outdir/$pairname/$chains[1].seq -db $peppidir/lib/STRING/STRINGseqsv11.db -task blastp-fast -outfmt 6 | head -1`;
+my $blast2res=`$peppidir/bin/blastp -query $outdir/$pairname/$chains[1].seq -db $tempdir/STRINGseqsv11.db -max_target_seqs $maxtargets -outfmt "6 sseqid nident qlen slen"`;
 print $blast2res;
 if ($blast2res eq ""){
+    print "BLAST for sequence B returned no hits in STRING.\n";
     print $resfile "?\n?\n?\n?\n";
+    print `rm -rf $tempdir`;
     exit(1);
 }
+print "\n";
+print `rm -rf $tempdir`;
 
-my @b1parts=split(" ",$blast1res);
-my $id1=$b1parts[1];
+my @ids1=extractID($blast1res);
+my @ids2=extractID($blast2res);
 
-my @b2parts=split(" ",$blast2res);
-my $id2=$b2parts[1];
+for my $i (0..scalar(@ids1)-1){
+    my $id1=$ids1[$i][0];
+    if ($ids1[$i][1] < $seqid){
+	print "Sequence A homology is too low\n";
+	print $resfile "?\n?\n?\n?\n";
+	exit(1);
+    }
+    for my $j (0..scalar(@ids2)-1){
+	
+	my $id2=$ids2[$j][0];
+	
+	if ($id1 eq $id2){
+	    print "Homodimer detected.  Homodimers are not in the STRING database.\n";
+	    print $resfile "?\n?\n?\n?\n";
+	    exit(1);
+	}
+	next if ($ids2[$j][1] < $seqid);
+	my @parts1=split(/\./,$id1);
+	my @parts2=split(/\./,$id2);
+	next if ($parts1[0] ne $parts2[0]);
+	print "$id1 $id2\n";
+	my $hashcode=`python $peppidir/bin/getHashcode.py $id1 $id2`*1;
+	#print `cp $peppidir/lib/STRING/$hashcode.txt $tempdir/STRINGlink.txt`;
+	#open (my $stringlink,"<","$tempdir/STRINGlink.txt");
+=pod
+	print "Starting stringlink search...\n";
+	open(my $stringlink,"<","$peppidir/lib/STRING/$hashcode.txt");
+	my $grepline="";
+	while (my $line=<$stringlink>){
+	    my @linesplit=split(" ",$line);
+	    if (($linesplit[0]==$id1 && $linesplit[1]==$id2) || ($linesplit[1]==$id1 && $linesplit[0]==$id2)){
+		$grepline=$line;
+		last;
+	    }
+	}
+	close($stringlink);
+=cut
+	#print `rm -rf $tempdir/STRINGlink.txt`;
+	my $grepline=`fgrep "$id1" $peppidir/lib/STRING/$hashcode.txt | fgrep "$id2" | head -1`;
 
-my $hashcode=`python $peppidir/bin/getHashcode.py $id1 $id2`*1;
-my $grepline=`grep "$id1" $peppidir/lib/STRING/$hashcode.txt | grep "$id2" | head -1`;
-
-if ($grepline eq ""){
-    print $resfile "?\n?\n?\n?\n";
-} else {
-    my @parts=split(' ',$grepline);
-    my $neighbor=$parts[2];
-    my $fusion=$parts[3];
-    my $cooccurrence=$parts[4];
-    my $coexpression=$parts[5];
-    print $resfile "$neighbor\n$fusion\n$cooccurrence\n$coexpression\n";
+	if ($grepline ne ""){
+	    print "Dimer found!\n";
+	    my @parts=split(' ',$grepline);
+	    my $gn=$parts[2]/1000.0; #gene neighborhood
+	    my $gf=$parts[3]/1000.0; #gene fusion
+	    my $co=$parts[4]/1000.0; #co-occurrence
+	    my $ce=$parts[5]/1000.0; #co-expression
+	    print $resfile "$gn\n$gf\n$co\n$ce\n";
+	    exit(1);
+	}
+    }
 }
 
+print `sync`;
+
+sub extractID{
+    my $blastres=$_[0];
+    my @blines=split("\n",$blastres);
+    my @ids=();
+    for my $i (0..scalar(@blines)-1){
+	my @bparts=split(" ",$blines[$i]);
+	my $seqid=min($bparts[1]/$bparts[2],$bparts[1]/$bparts[3]);
+	my @pair=($bparts[0],$seqid);
+	push(@ids,\@pair);
+    }
+
+    return @ids;
+}
