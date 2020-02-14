@@ -15,41 +15,43 @@ chomp($user);
 
 print `python $peppidir/bin/splitFUD.py $outdir`;
 
-my @protsA=();
+my @domainsA=();
 open(my $protcodeA,"<","$outdir/protcodeA.csv");
 while (my $line=<$protcodeA>){
     my @parts=split(",",$line);
-    push(@protsA,"$parts[0]");
+    my $prot=$parts[0];
+    my $i=1;
+    while (-e "$outdir/fasta/$prot/$i.fasta"){
+	push(@domainsA,"$prot\_$i");
+	$i++;
+    }
 }
 close($protcodeA);
 
-my @protsB=();
+my @domainsB=();
 open(my $protcodeB,"<","$outdir/protcodeB.csv");
 while (my $line=<$protcodeB>){
     my @parts=split(",",$line);
-    push(@protsB,"$parts[0]");
+    my $prot=$parts[0];
+    my $i=1;
+    while (-e "$outdir/fasta/$prot/$i.fasta"){
+	push(@domainsB,"$prot\_$i");
+	$i++;
+    }
 }
 close($protcodeB);
 
 print `mkdir $outdir/PPI`;
 print `mkdir $outdir/hhr`;
-for my $i (0..scalar(@protsA)-1){
-    for my $j (0..scalar(@protsB)-1){
-	next if (-e "$outdir/PPI/$protsB[$j]-$protsA[$i]" || ($nohomo && $protsB[$j] eq $protsA[$i]));
-	my $pairdir="$outdir/PPI/$protsA[$i]-$protsB[$j]";
+for my $i (0..scalar(@domainsA)-1){
+    for my $j (0..scalar(@domainsB)-1){
+	next if (-e "$outdir/PPI/$domainsB[$j]-$domainsA[$i]" || ($nohomo && $domainsB[$j] eq $domainsA[$i]));
+	my $pairdir="$outdir/PPI/$domainsA[$i]-$domainsB[$j]";
 	print `mkdir $pairdir`;
-	print `cp $outdir/fasta/$protsA[$i]/seq.fasta $pairdir/$protsA[$i].seq`;
-	my $n=1;
-	while (-f "$outdir/fasta/$protsA[$i]/$n.fasta"){
-	    print `cp $outdir/fasta/$protsA[$i]/$n.fasta $pairdir/$protsA[$i]\_$n.seq`;
-	    $n++;
-	}
-	print `cp $outdir/fasta/$protsB[$j]/seq.fasta $pairdir/$protsB[$j].seq`;
-	$n=1;
-	while (-f "$outdir/fasta/$protsB[$j]/$n.fasta"){
-	    print `cp $outdir/fasta/$protsB[$j]/$n.fasta $pairdir/$protsB[$j]\_$n.seq`;
-	    $n++;
-	}
+	my @domainparts=split("_",$domainsA[$i]);
+	print `cp $outdir/fasta/$domainparts[0]/$domainparts[1].fasta $pairdir/$domainsA[$i].seq`;
+	@domainparts=split("_",$domainsB[$j]);
+	print `cp $outdir/fasta/$domainparts[0]/$domainparts[1].fasta $pairdir/$domainsB[$j].seq`;
     }
 }
 

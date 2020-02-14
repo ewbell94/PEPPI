@@ -11,11 +11,12 @@ my $outdir="!OUTDIR!/PPI";
 my $pairname="!PAIRNAME!";
 my $benchmarkflag=!BENCHMARK!;
 
+my @qchains=split("-",$pairname);
 print `mkdir $outdir/$pairname/SPRING`;
 
 #User-set parameters
 my $bindir="$peppidir/SPRING-PPI/bin"; #location of program binaries
-my $springout="$outdir/$pairname/SPRING"; #location of program output
+my $outputdir="$outdir/$pairname/SPRING"; #location of program output
 my $dbdir="/nfs/amino-home/liuzi/lz_program/TACOS/database"; #location of SPRING database
 my $maxmodels=3; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
@@ -35,14 +36,104 @@ my $seqmax=1500; #maximum allowable length of input sequences; sequences longer 
 my $minmono=5000; #number of monomer templates for dimer matching
 my $dimercount=100; #number of dimers to be assembled
 my $topcount=$dimercount;
-my $topscore=-100.0;
+#Read in arguments and process input
+my $currdir=`pwd`;
+chomp($currdir);
+my $prot1file="$outdir/$pairname/$qchains[0].seq";
+$prot1file="$currdir/$prot1file" if (substr($prot1file,0,1) ne "/");
+my $prot2file="$outdir/$pairname/$qchains[1].seq";
+$prot2file="$currdir/$prot2file" if (substr($prot2file,0,1) ne "/");
+(my $preprot1=$prot1file)=~s/.*\///g;
+(my $preprot2=$prot2file)=~s/.*\///g;
+my @parts1=split('\.',$preprot1);
+my @parts2=split('\.',$preprot2);
+my $prot1=$parts1[0];
+my $prot2=$parts2[0];
 
-if (-e "$springout/res.txt"){
-    print "SPRING has already been run!\n";
+if (! -e "$prot1file" || ! -e "$prot2file"){
+    print "Protein sequence files were not found!\n";
     exit(2);
 }
 
+if (-e "$outputdir/SPRING/TemplateSummary.txt"){
+    print "SPRING has already been run!\n";
+    exit(3);
+}
 
+#Make working directory
+my $randomTag=int(rand(1000000));
+my $tempdir="/tmp/$user/PEPPI_SPRING_$prot1-$prot2\_$randomTag";
+if (! -e "$tempdir"){
+    print `mkdir -p $tempdir`;
+} else {
+    print `rm -rf $tempdir/*`;
+}
+
+chdir("$tempdir");
+
+print `cp $prot1file $tempdir/$prot1.fasta`;
+print `cp $prot2file $tempdir/$prot2.fasta`;
+
+#Make output directory
+if (! -e "$outputdir"){
+    print `mkdir -p $outputdir`;
+} else {
+    #print `rm -rf $outputdir/*`;
+}
+
+#Copy HHR files or run HHsearch
+print "Running HHsearch\n";
+if (-e "$hhdir/$prot1.hhr"){
+    print `cp $hhdir/$prot1.hhr $tempdir`;
+} else {
+    makeHHR($prot1);
+    if (! -e "$tempdir/$prot1.hhr"){
+	print "HHsearch failed for $prot1.\n";
+	exit(4);
+    } else {
+	print `cp $tempdir/$prot1.hhr $outputdir/$prot1.hhr`;
+    }
+}
+if (-e "$hhdir/$prot2.hhr"){
+    print `cp $hhdir/$prot2.hhr $tempdir`;
+} else {
+    makeHHR($prot2);
+    if (! -e "$tempdir/$prot2.hhr"){
+	print "HHsearch failed for $prot2.\n";
+	exit(4);
+    } else {
+	print `cp $tempdir/$prot2.hhr $outputdir/$prot2.hhr`;
+    }
+}
+
+#Fetch HHsearch hits from HHR files
+print "Fetching HHsearch hits\n";
+my @prot1hits=fetchHits($prot1);
+my @prot2hits=fetchHits($prot2);
+
+#Store dfire and complex list
+open(my $complexfile,"<","$dbdir/pdb/ComplexList.txt");
+my %complexlist=(); #Find all potential partner chains given some core chain
+while (my $line=<$complexfile>){
+    chomp($line);
+    my @chains=split("-",$line);
+    if (exists($complexlist{$chains[0]})){
+	push(@{$complexlist{$chains[0]}},$chains[1]);
+    } else {
+	my @value=($chains[1]);
+	$complexlist{$chains[0]}=\@value;
+    }
+}
+close($complexfile);
+
+open(my $dfirefile,"<","$bindir/dfire.txt");
+#open(my $dfirefile,"<","$bindir/newdfire.txt");
+my @dfire=<$dfirefile>;
+chomp(@dfire);
+close($dfirefile);
+
+#Build index match dictionary
+print "Building index\n";
 
 open(my $indexfile,"<","$dbdir/SPRING/index.txt");
 my %forwardindex=(); #Search for the HHsearch template of a given chain
@@ -60,188 +151,86 @@ while (my $line=<$indexfile>){
 }
 close($indexfile);
 
-my @qseqs=split("-",$pairname);
-my @domainPairs=();
-my $m=1;
-while (-e "$outdir/$pairname/$qseqs[0]\_$m.seq"){
-    my $n=1;
-    while (-e "$outdir/$pairname/$qseqs[1]\_$n.seq"){
-	my @domainPair=("$qseqs[0]\_$m","$qseqs[1]\_$n");
-	push(@domainPairs,\@domainPair);
-	$n++;
-    }
-    $m++;
-}
-
-my $randomTag=int(rand(1000000));
-my $tempdir="/tmp/$user/PEPPI_SPRING_$qseqs[0]-$qseqs[1]\_$randomTag";
-if (! -e "$tempdir"){
-    print `mkdir -p $tempdir`;
-} else {
-    print `rm -rf $tempdir/*`;
-}
-chdir("$tempdir");
-
-for my $pointer (@domainPairs){
-    #Read in arguments and process input
-    my @qdoms = @{$pointer};
-    my $prot1file="$outdir/$pairname/$qdoms[0].seq";
-    my $prot2file="$outdir/$pairname/$qdoms[1].seq";
-    my $prot1=$qdoms[0];
-    my $prot2=$qdoms[1];
-    
-    my $outputdir="$springout/$qdoms[0]-$qdoms[1]";
-    print `mkdir $outputdir`;
-    if (! -e "$prot1file" || ! -e "$prot2file"){
-	print "Protein sequence files were not found!\n";
-	next;
-    }
-    
-    
-    #Make working directory
-    
-    
-    print `cp $prot1file $tempdir/$prot1.fasta`;
-    print `cp $prot2file $tempdir/$prot2.fasta`;
-    
-    #Copy HHR files or run HHsearch
-    print "Running HHsearch\n";
-    if (-e "$hhdir/$prot1.hhr"){
-	print `cp $hhdir/$prot1.hhr $tempdir`;
-    } else {
-	makeHHR($prot1);
-	if (! -e "$tempdir/$prot1.hhr"){
-	    print "HHsearch failed for $prot1.\n";
-	    exit(4);
-	} else {
-	    print `cp $tempdir/$prot1.hhr $outputdir/$prot1.hhr`;
-	}
-    }
-    if (-e "$hhdir/$prot2.hhr"){
-	print `cp $hhdir/$prot2.hhr $tempdir`;
-    } else {
-	makeHHR($prot2);
-	if (! -e "$tempdir/$prot2.hhr"){
-	    print "HHsearch failed for $prot2.\n";
-	    exit(4);
-	} else {
-	    print `cp $tempdir/$prot2.hhr $outputdir/$prot2.hhr`;
-	}
-    }
-    
-    #Fetch HHsearch hits from HHR files
-    print "Fetching HHsearch hits\n";
-    my @prot1hits=fetchHits($prot1);
-    my @prot2hits=fetchHits($prot2);
-    
-    #Store dfire and complex list
-    open(my $complexfile,"<","$dbdir/pdb/ComplexList.txt");
-    my %complexlist=(); #Find all potential partner chains given some core chain
-    while (my $line=<$complexfile>){
-	chomp($line);
-	my @chains=split("-",$line);
-	if (exists($complexlist{$chains[0]})){
-	    push(@{$complexlist{$chains[0]}},$chains[1]);
-	} else {
-	    my @value=($chains[1]);
-	    $complexlist{$chains[0]}=\@value;
-	}
-    }
-    close($complexfile);
-    
-    #open(my $dfirefile,"<","$bindir/dfire.txt");
-    #open(my $dfirefile,"<","$bindir/newdfire.txt");
-    #my @dfire=<$dfirefile>;
-    #chomp(@dfire);
-    #close($dfirefile);
-    
-    #Build index match dictionary
-    print "Building index\n";
-    
-    
-    
 #Search for dimer templates given monomeric hits
-    my @dimerTemplates=fetchDimers(\@prot1hits,\@prot2hits,\%complexlist);
-    
+my @dimerTemplates=fetchDimers(\@prot1hits,\@prot2hits);
+
 #Flip the sequence order and search for more dimer templates if the chains are nonidentical
-    if (getSeqID("$tempdir/$prot1.fasta","$tempdir/$prot2.fasta") < $homothresh){
-	my @flippedTemplates=fetchDimers(\@prot2hits,\@prot1hits,\%complexlist);
-	for my $i (0..scalar(@flippedTemplates)-1){
-	    my $dupflag=0;
-	    for my $j (0..scalar(@dimerTemplates)-1){
-		if ($dimerTemplates[$j][0] eq $flippedTemplates[$i][1] && $dimerTemplates[$j][1] eq $flippedTemplates[$i][0]){
-		    $dupflag=1;
-		    last;
-		}
-	    }
-	    if (!$dupflag){
-		my @flipped=($flippedTemplates[$i][1],$flippedTemplates[$i][0],$flippedTemplates[$i][2]);
-		push(@dimerTemplates,\@flipped);
-	    } else {
-		print "Duplicate purged: $flippedTemplates[$i][0] $flippedTemplates[$i][1]\n";
+if (getSeqID("$tempdir/$prot1.fasta","$tempdir/$prot2.fasta") < $homothresh){
+    my @flippedTemplates=fetchDimers(\@prot2hits,\@prot1hits);
+    for my $i (0..scalar(@flippedTemplates)-1){
+	my $dupflag=0;
+	for my $j (0..scalar(@dimerTemplates)-1){
+	    if ($dimerTemplates[$j][0] eq $flippedTemplates[$i][1] && $dimerTemplates[$j][1] eq $flippedTemplates[$i][0]){
+		$dupflag=1;
+		last;
 	    }
 	}
+	if (!$dupflag){
+	    my @flipped=($flippedTemplates[$i][1],$flippedTemplates[$i][0],$flippedTemplates[$i][2]);
+	    push(@dimerTemplates,\@flipped);
+	} else {
+	    print "Duplicate purged: $flippedTemplates[$i][0] $flippedTemplates[$i][1]\n";
+	}
     }
-    
-    @dimerTemplates=sort{$b->[2]<=>$a->[2]} @dimerTemplates;
-    
-#Create and score models from selected dimer templates
-    
-    print "Constructing models\n";
-    
-    constructMonomer($prot1,$prot1hits[0][0]);
-    print `cp $tempdir/$prot1.pdb $outputdir/$prot1.pdb`;
-    constructMonomer($prot2,$prot2hits[0][0]);
-    print `cp $tempdir/$prot2.pdb $outputdir/$prot2.pdb`;
-    
-    my $hhr1head=`head $tempdir/$prot1.hhr`;
-    $hhr1head=~/Match_columns\s+(\d+)/;
-    my $seq1len=$1;
-    my $hhr2head=`head $tempdir/$prot2.hhr`;
-    $hhr2head=~/Match_columns\s+(\d+)/;
-    my $seq2len=$1;
-    
-    if (scalar(@dimerTemplates)==0){
-	print "No dimer templates found!\n";
-	exit(0);
-    }
-#print "$seq1len,$seq2len\n";
-    my @dimerModels=();
-    for my $i (0..min(scalar(@dimerTemplates)-1,$dimercount-1)){
-	print "$dimerTemplates[$i][0]-$dimerTemplates[$i][1]\n";
-	my @scores=constructModel($prot1,$prot2,$dimerTemplates[$i][0],$dimerTemplates[$i][1],$dimerTemplates[$i][2],$seq1len,$seq2len);
-	my @model=($dimerTemplates[$i][0],$dimerTemplates[$i][1],\@scores);
-	push(@dimerModels,\@model);
-    }
-    
-    @dimerModels=sort{$b->[2][0]<=>$a->[2][0]} @dimerModels;
-    
-    my $domainscore=$dimerModels[0][2][0];
-    $topscore=$domainscore if ($domainscore>$topscore);
-
-    print "Writing output\n";
-    open(my $summary,">","$outputdir/TemplateSummary.txt");
-    for my $i (0..min(scalar(@dimerModels)-1,$topcount-1)){
-	(my $dimer1name=$dimerModels[$i][0])=~s/\//_/g;
-	(my $dimer2name=$dimerModels[$i][1])=~s/\//_/g;
-	print `cp $tempdir/$dimer1name-$dimer2name.pdb $outputdir/model$i.pdb` if ($i < $maxmodels);
-	print $summary sprintf("%s\t%s\t%.3f\t%.3f\t%.3f\t%.3f\n",$dimerModels[$i][0],$dimerModels[$i][1],$dimerModels[$i][2][0],$dimerModels[$i][2][1],$dimerModels[$i][2][2],$dimerModels[$i][2][3]);
-    }
-    close($summary);
-    
-    #print `tar -zcf $tempdir/pdb.tar.gz $tempdir/*-*.pdb`;
-    #print `cp $tempdir/pdb.tar.gz $outputdir/`;
-    print `sync`;
-    print `rm -rf $tempdir/*`;
 }
 
-print `rm -rf $tempdir`;
-open(my $resfile,">","$outdir/$pairname/SPRING/res.txt");
+@dimerTemplates=sort{$b->[2]<=>$a->[2]} @dimerTemplates;
 
-if ($topscore==-100.0){
+#Create and score models from selected dimer templates
+
+print "Constructing models\n";
+
+constructMonomer($prot1,$prot1hits[0][0]);
+print `cp $tempdir/$prot1.pdb $outputdir/$prot1.pdb`;
+constructMonomer($prot2,$prot2hits[0][0]);
+print `cp $tempdir/$prot2.pdb $outputdir/$prot2.pdb`;
+
+my $hhr1head=`head $tempdir/$prot1.hhr`;
+$hhr1head=~/Match_columns\s+(\d+)/;
+my $seq1len=$1;
+my $hhr2head=`head $tempdir/$prot2.hhr`;
+$hhr2head=~/Match_columns\s+(\d+)/;
+my $seq2len=$1;
+
+if (scalar(@dimerTemplates)==0){
+    print "No dimer templates found!\n";
+    exit(0);
+}
+#print "$seq1len,$seq2len\n";
+my @dimerModels=();
+for my $i (0..min(scalar(@dimerTemplates)-1,$dimercount-1)){
+    print "$dimerTemplates[$i][0]-$dimerTemplates[$i][1]\n";
+    my @scores=constructModel($prot1,$prot2,$dimerTemplates[$i][0],$dimerTemplates[$i][1],$dimerTemplates[$i][2]);
+    my @model=($dimerTemplates[$i][0],$dimerTemplates[$i][1],\@scores);
+    push(@dimerModels,\@model);
+}
+
+@dimerModels=sort{$b->[2][0]<=>$a->[2][0]} @dimerModels;
+
+print "Writing output\n";
+open(my $summary,">","$outputdir/TemplateSummary.txt");
+for my $i (0..min(scalar(@dimerModels)-1,$topcount-1)){
+    (my $dimer1name=$dimerModels[$i][0])=~s/\//_/g;
+    (my $dimer2name=$dimerModels[$i][1])=~s/\//_/g;
+    print `cp $tempdir/$dimer1name-$dimer2name.pdb $outputdir/model$i.pdb` if ($i < $maxmodels);
+    print $summary sprintf("%s\t%s\t%.3f\t%.3f\t%.3f\t%.3f\n",$dimerModels[$i][0],$dimerModels[$i][1],$dimerModels[$i][2][0],$dimerModels[$i][2][1],$dimerModels[$i][2][2],$dimerModels[$i][2][3]);
+}
+close($summary);
+
+#print `tar -zcf $tempdir/pdb.tar.gz $tempdir/*-*.pdb`;
+#print `cp $tempdir/pdb.tar.gz $outputdir/`;
+print `sync`;
+print `rm -rf $tempdir`;
+
+open(my $resfile,">","$outdir/$pairname/SPRING/res.txt");
+if (! -e "$outdir/$pairname/SPRING/TemplateSummary.txt"){
     print $resfile "?\n";
 } else {
-    print $resfile "$topscore\n";
+    open(my $springres,"<","$outdir/$pairname/SPRING/TemplateSummary.txt");
+    my $toptemplate=<$springres>;
+    close($springres);
+    my @parts=split(' ',$toptemplate);
+    print $resfile "$parts[2]\n";
 }
 
 sub getSeqID{
@@ -328,7 +317,6 @@ sub fetchDimers{
     print "Fetching dimers\n";
     my @prot1list=@{$_[0]};
     my @prot2list=@{$_[1]};
-    my %complexlist=%{$_[2]};
     my @dimerlist=();
     for my $i (0..scalar(@prot1list)-1){
 	next if (!exists($reverseindex{$prot1list[$i][0]}));
@@ -460,8 +448,6 @@ sub constructModel{
     my $dimer1temp=$_[2];
     my $dimer2temp=$_[3];
     my $zscore=$_[4];
-    my $seq1len=$_[5];
-    my $seq2len=$_[6];
 
     my $dimer1sub=substr($dimer1temp,1,2);
     my $dimer2sub=substr($dimer2temp,1,2);

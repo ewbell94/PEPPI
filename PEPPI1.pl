@@ -123,7 +123,7 @@ if (openhandle($fastaout)){
 for my $ind (1..$i){
     if ($domaindiv){
 	next if (-e "$fastadir/prot$ind/fu.txt");
-	while($hpc && `squeue -u $user | wc -l`-1 >= $maxjobs){
+	while($hpc && (`squeue -u $user | wc -l`-1 >= $maxjobs || `squeue -u $user | grep "PEPPI1" | wc -l` >=100)){
 	    sleep(300);
 	}
 	if ($hpc){

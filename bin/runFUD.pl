@@ -35,10 +35,10 @@ printf "running FUpred program\n";
 print "$fupredpl $datadir\n";
 system("$fupredpl $datadir");
 ####### [2] plot figures
-my $domaininfo=`cat $datadir/fu.txt`;
-system("Rscript $fubindir/scripts/PlotCEMapBoundary.R $datadir/protein.ce \"$domaininfo\" $datadir/map.jpg");
-system("Rscript $fubindir/scripts/PlotScore.R $datadir/protein.2c $datadir/protein.2d \"$domaininfo\" $datadir/score.jpg");
-system("");
+#my $domaininfo=`cat $datadir/fu.txt`;
+#system("Rscript $fubindir/scripts/PlotCEMapBoundary.R $datadir/protein.ce \"$domaininfo\" $datadir/map.jpg");
+#system("Rscript $fubindir/scripts/PlotScore.R $datadir/protein.2c $datadir/protein.2d \"$domaininfo\" $datadir/score.jpg");
+#system("");
 #### [4] run file2html.py ####
-printf "preparing webpage display\n";
-system("$file2html $datadir");
+#printf "preparing webpage display\n";
+#system("$file2html $datadir");

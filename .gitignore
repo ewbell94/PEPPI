@@ -2,5 +2,4 @@ lib/
 *~
 SPRING-PPI/ZiSet/
 IntAct/
-trainset/
-test/
+*.tar.gz
