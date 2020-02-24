@@ -5,7 +5,6 @@ use warnings;
 
 my $peppidir="!PEPPIDIR!";
 my $outdir="!OUTDIR!";
-my $hpc=!HPC!;
 my $maxjobs=!MAXJOBS!;
 my $nohomo=0;
 my $benchmarkflag=1;
@@ -68,20 +67,17 @@ for my $int (glob("$outdir/PPI/*/")){
 	print $jobscript $modtext;
 	close($jobscript);
 	print `chmod +x $int/$pairname-$prog.pl`;
-	if ($hpc){
-	    while (`squeue -u $user | wc -l`-1 >= $maxjobs){
-		print "Queue is currently full, waiting for submission...\n";
-		sleep(60);
-	    }
-	    my $jobname="PEPPI_$prog\_$pairname";
-	    my $errloc="$int/err_$prog.log";
-	    my $outloc="$int/out_$prog.log";
-	    print `sbatch -J $jobname -o $outloc -e $errloc -t 24:00:00 $int/$pairname-$prog.pl`;
-	} else {
-	    print `$int/$pairname-$prog.pl`;
+	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+	    print "Queue is currently full, waiting for submission...\n";
+	    sleep(60);
 	}
+	my $jobname="PEPPI_$prog\_$pairname";
+	my $errloc="$int/err_$prog.log";
+	my $outloc="$int/out_$prog.log";
+	print `sbatch -J $jobname -o $outloc -e $errloc -t 24:00:00 $int/$pairname-$prog.pl`;
     }
 }
+
 
 open(my $peppi3script,">","$outdir/PEPPI3.pl");
 my $peppi3=`cat $peppidir/bin/PEPPI3temp.pl`;

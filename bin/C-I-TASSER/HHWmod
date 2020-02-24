@@ -1,0 +1,761 @@
+#!/usr/bin/perl
+use Math::Trig;
+
+##################### setup  the environment and Working DIRectory ########################
+$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin:";
+$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
+$ENV{'HHLIB'}="/nfs/amino-home/zhng/library/yzhang/HHpred/HHsuite_lomets";
+$ENV{'pdbdir'}="/nfs/amino-home/zhng/local_library/HHL";
+
+my $hhlib=$ENV{'HHLIB'};
+my $pdbdir=$ENV{'pdbdir'};
+
+##################################################### HHW ###########################################################################
+#   version 6.0 author WeiZheng Jan-31-2018.
+#   change hhpmodeller.pl to hhpmodeller_align.pl (use align as identify calculator) 
+#
+# 1.The pdb library is at /nfs/amino-home/zhng/local_library/HHL our lomets pdb70 database, built by Wei Zheng
+#   contain separate pdb, a3m, hhm files and pdb.hhm in db subdirectory.
+#
+# 2.HHsuite is at /nfs/amino-home/zhng/library/yzhang/HHpred/HHsuite_lomets
+#   HHpred is at  $HHsuite/scripts/hhpred
+#
+# 3.run HHpred threading method get $n_temp templates, (first run hhsearch get protein.start.lst [initS.dat] hhpred select templates from 
+#   protein.start.lst generate protein.out). get init.dat for CA templates. then run hhpred modeller generate model for query. (init.hhpm)
+#   $HHsuite/scripts/hhpred/hhpmodeller_align.pl -i protein.seq -o templates.hhr -m (modellertype) -tnum max_template_num > seq.log
+#
+# 4.run $HHsuite/scripts/hhpred/hhpsmodeller.pl generate full atomic model for query basing on each template
+#   in init.dat, generate init.mod file. 
+#   $HHsuite/scripts/hhpred/hhpsmodeller.pl -i protein.seq -t template.pdb[in init.dat] -o seq.pdb -m (modellertype 0 or 1) -mode pdb > seq.log
+#   0 sali modeller, 1 soeding modeller
+#
+# 5.run $HHsuite/scripts/hhpred/hhpsmodeller.pl generate full atomic model for query basing on each template
+#   in initS.dat, generate initS.mod file, adding code judge whether model file exist.
+#   $HHsuite/scripts/hhpred/hhpsmodeller.pl -i protein.seq -t template.pdb[in initS.dat] -o seq.pdb -m (modellertype 0 or 1) -mode pdb > seq.log
+#   0 sali modeller, 1 soeding modeller
+#
+# 6.output files:
+#   init1.dat: hhpred selected templates
+#   init.mod: modeller model for query sequnece basing on each template in init.dat (my modified modeller model)
+#   initS.dat: hhpred start templates (remove identify >=cutoff template), generate by hhsearch, hhpred select templates from this file.
+#   initS.mod: modeller model for query sequnece basing on each template in initS.dat (my modified modeller model)
+#   protein.pdb: modeller model for query sequnece basing on multipy templates in init.dat (soeding model)
+#
+#
+# HHpred softs version:
+# HHsuite: hhblits hhsearch hhmake hhfilter version 2.0.15 (if update to 3.0.1, need to change hhpred all scripts, too many bugs now) 
+# Modeller: version 9.16, New modeller changed by soeding
+# dssp: version 2.0.4 used in addss.pl configured by HHPath.pm
+# psipred: version 2.6 used in addss.pl configured by HHPath.pm
+# HHsearch Database: PDB70 for HHsearch version 2016_03 (not for HHblits)
+# HHblits Database: Uniprot20 version 2016_02
+#######################################################################################################################################
+
+%ts=(
+     'GLY'=>'G',
+     'ALA'=>'A',
+     'VAL'=>'V',
+     'LEU'=>'L',
+     'ILE'=>'I',
+     'SER'=>'S',
+     'THR'=>'T',
+     'CYS'=>'C',
+     'MET'=>'M',
+     'PRO'=>'P',
+     'ASP'=>'D',
+     'ASN'=>'N',
+     'GLU'=>'E',
+     'GLN'=>'Q',
+     'LYS'=>'K',
+     'ARG'=>'R',
+     'HIS'=>'H',
+     'PHE'=>'F',
+     'TYR'=>'Y',
+     'TRP'=>'W',
+
+     'ASX'=>'B',
+     'GLX'=>'Z',
+     'UNK'=>'X',
+
+     'G'=>'GLY',
+     'A'=>'ALA',
+     'V'=>'VAL',
+     'L'=>'LEU',
+     'I'=>'ILE',
+     'S'=>'SER',
+     'T'=>'THR',
+     'C'=>'CYS',
+     'M'=>'MET',
+     'P'=>'PRO',
+     'D'=>'ASP',
+     'N'=>'ASN',
+     'E'=>'GLU',
+     'Q'=>'GLN',
+     'K'=>'LYS',
+     'R'=>'ARG',
+     'H'=>'HIS',
+     'F'=>'PHE',
+     'Y'=>'TYR',
+     'W'=>'TRP',
+
+     'a'=>'CYS',
+     'b'=>'CYS',
+     'c'=>'CYS',
+     'd'=>'CYS',
+     'e'=>'CYS',
+     'f'=>'CYS',
+     'g'=>'CYS',
+     'h'=>'CYS',
+     'i'=>'CYS',
+     'j'=>'CYS',
+     'k'=>'CYS',
+     'l'=>'CYS',
+     'm'=>'CYS',
+     'n'=>'CYS',
+     'o'=>'CYS',
+     'p'=>'CYS',
+     'q'=>'CYS',
+     'r'=>'CYS',
+     's'=>'CYS',
+     't'=>'CYS',
+     'u'=>'CYS',
+     'v'=>'CYS',
+     'w'=>'CYS',
+     'x'=>'CYS',
+     'y'=>'CYS',
+     'z'=>'CYS',
+
+     'B'=>'ASX',
+     'Z'=>'GLX',
+     'X'=>'CYS',
+    );
+
+$o="!O!";
+$s="!S!";
+$m="!M!";###### modeller type 0: sali modeller 1: soeding modeller
+if(not($m eq "0" or $m eq "1")){
+   $m="1";
+}
+$tag="!TAG!";
+$idcut0=!ID_CUT!;
+#$n_temp=!N_TEMP!;####max template numbers
+$n_temp=30; # too slow if n_temp >30
+$user="!USER!";
+$libdir="!LIB_DIR!";
+################# directories #############################
+$data_dir="!DATA_DIR!/$s";  #for seq.txt and init.dat
+$work_dir="/tmp/$user/$tag";
+
+################ working directory ########################
+`/bin/mkdir -p $work_dir`;
+chdir "$work_dir";
+`/bin/rm -f $work_dir/*`;
+`cp $libdir/bin/align ./align`;
+
+#### exclude PDB ####
+my @exclude_pdb_list=();
+if (-s "$data_dir/exclude_pdb_list" )
+{
+    system("cp $data_dir/exclude_pdb_list $work_dir/exclude_pdb_list");
+    foreach my $line(`cat $work_dir/exclude_pdb_list`)
+    {
+        push(@exclude_pdb_list,substr($line,0,4));
+    }
+    #$n_temp+=scalar @exclude_pdb_list;
+}
+
+################ make fasta sequence file #################
+@seqtxts=`cat $data_dir/seq.txt`;
+$sequence="";
+foreach $seqtxt(@seqtxts){
+    goto pos6 if($seqtxt=~/\>/);
+    $seqtxt=~s/\s//mg;
+    $seqtxt=~s/\n//mg;
+    $sequence=$sequence.$seqtxt;
+  pos6:;
+}
+$Lch=length $sequence;
+open(seq,">protein.seq");
+printf seq ">protein\n";
+for($i=1;$i<=$Lch;$i++){
+    $a=substr($sequence,$i-1,1);
+    printf seq "$a";
+    $seqQ{$i}=$a;   #only for check
+    if($i==int($i/60)*60){
+	printf seq "\n";
+    }
+}
+printf seq "\n";
+close(seq);
+
+################################ run hhpthreading for templates.hhr file ####################################
+my $cutoff=100*$idcut0;
+printf "running $hhlib/scripts/hhpred/hhpmodeller_align.pl to pick up templates and generate model for target.....\n";
+system("$hhlib/scripts/hhpred/hhpmodeller_align3.pl -i protein.seq -o protein -cutoff $cutoff -m $m -tnum $n_temp -excl exclude_pdb_list >protein.log");
+system("cp protein.final.lst protein.out");
+`/bin/cp protein            protein.pdb`;
+`/bin/cp protein.pdb $data_dir/hhpred_model.pdb`; ####
+
+#goto pos50; # if you donot want full-length model
+#################################################################
+########### run FG-MG on the model -------->
+$seqdat="$data_dir/seq.com";
+if(!-s "$seqdat"){
+    $seqdat="$data_dir/seq.dat";
+}
+if(!-s "$seqdat"){
+    print "error, there is no seq.dat for fgmd\n";
+    exit();
+}
+`cp $seqdat ./seq.dat`;
+`/nfs/amino-home/zhng/bin/fgmd.pl protein.pdb REF1_protein.pdb 71`;
+######## copy B-factor:
+open(a,"protein.pdb");
+while($line=<a>){
+    if($line=~/^ATOM/){
+	if(substr($line,12,4)=~/CA/){
+	    if(substr($line,22,4)=~/(\d+)/){
+		$res=$1;
+		$bf{$res}=substr($line,54,12);
+	    }
+	}
+    }
+}
+close(a);
+open(a,"REF1_protein.pdb");
+open(b,">REF_protein.pdb");
+while($line=<a>){
+    if($line=~/^ATOM/){
+	if(substr($line,22,4)=~/(\d+)/){
+	    $res=$1;
+	}
+	$part1=substr($line,0,54);
+	printf b "%54s%12s\n",$part1,$bf{$res};
+    }
+}
+close(a);
+close(b);
+`/bin/cp REF_protein.pdb $data_dir/REF_hhpred_model.pdb`; ####
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ pos50:;
+
+################ calculate HHPred Z-score ######################
+open(dist,"protein.out");
+$i=0;
+while($line=<dist>){
+    if($line=~/No Hit                             Prob E-value/){
+	while($line=<dist>){
+	    goto end_dist if($line=~/^No\s+\d+/);
+	    if($line=~/(\d+)\s+(\S+)/){
+		$i++;
+		$NO{$i}=$1;
+		$T_name{$i}=$2;
+		#$score{$i}=substr($line,58,6);
+		$score{$i}=substr($line,57,6);
+		$score_a+=$score{$i};
+		$score_a2+=$score{$i}**2;
+	    }
+	}
+    }
+}
+end_dist:;
+close(dist);
+$N_hit=$i;
+if($N_hit > 1){
+   $score_a/=$N_hit;
+   $score_a2/=$N_hit;
+   $dev=sqrt($score_a2-$score_a**2);
+   if($dev<0.0001){
+       $dev=0.0001;
+   }
+   for($i=1;$i<=$N_hit;$i++){
+       $zscore{$i}=-($score_a-$score{$i})/$dev;
+       if($i>1){
+	   if($zscore{$i}>$zscore{$i-1}){
+	       $zscore{$i}=$zscore{$i-1}-0.01;
+	      }
+       }
+   }
+}
+else
+{
+   $zscore{1}=0;
+}
+
+###########################################################
+##### create template file 'init.dat' #####################
+###########################################################
+open(init,">init.dat");
+open(initmod,">init.mod");
+$i_t=0;
+for($i=1;$i<=$N_hit;$i++){
+    $template_name=$T_name{$i};
+    $pdb="$pdbdir/$template_name\.pdb";
+    goto pos2 if(!-s "$pdb");
+    
+    ############ check homology ##############
+    if (scalar @exclude_pdb_list)
+    {
+        $template_pdb_ID=substr($template_name,0,4);
+        foreach $exclude_pdb_ID (@exclude_pdb_list)
+        {
+            goto pos2 if($template_pdb_ID eq $exclude_pdb_ID);
+        }
+    }
+    if($idcut0<0.999){
+	$align_rst=`./align protein.seq $pdb 2`;
+	   if($align_rst=~/Identical length\:\s+(\d+)/){
+	      $id=$1/$Lch;
+	      goto pos2 if($id>=$idcut0);
+	   }
+    }
+    
+    ###### read alignment ####################
+    open(align,"protein.out");
+    $L_ali=0;
+    while($line=<align>){
+	if($line=~/^No\s+$NO{$i}/){
+	    while($line=<align>){
+		if($line=~/Score\=\s*(\S+)/){
+		    $zscore_value=$1;
+		}
+		goto pos4 if($line=~/No\s+\d+/);
+		if($line=~/^Q protein\s+(\d+)\s+(\S+)\s+(\d+)\s+\(/){
+		    $nQ=$1-1;
+		    $sequenceQ=$2;
+		}
+		if($line=~/T\s+$template_name\s+(\d+)\s+(\S+)/){
+		    $nT=$1-1;
+		    $sequenceT=$2;
+		    ###
+		    $L=length $sequenceT;
+		    for($j=1;$j<=$L;$j++){
+			$sQ=substr($sequenceQ,$j-1,1);
+			$sT=substr($sequenceT,$j-1,1);
+			$nQ++ if($sQ ne "-");
+			$nT++ if($sT ne "-");
+			if($sQ ne "-" && $sT ne "-"){
+			    $L_ali++;
+			    $resQ{$L_ali}=$nQ;
+			    $resT{$L_ali}=$nT;
+			    $seqQ{$L_ali}=$sQ;
+			    $seqT{$L_ali}=$sT;
+			}
+		    }
+		}
+	    }
+	}
+    }
+  pos4:;
+    close(align);
+    
+    ############ get coordinates from PDB file ---------->
+    open(pdb,"$pdb");
+    $n=0;
+    $L_ali1=0;
+    while($line=<pdb>){
+	if(substr($line,12,4)=~/CA/){
+	    $n++;
+	    substr($line,22,4)=~/(\d+)/;
+	    $tmp=$1;
+	    ######## check whether the coordinate exist ---------->
+	    for($j=1;$j<=$L_ali;$j++){
+		if($tmp == $resT{$j}){
+		    $L_ali1++;
+		    $resQ1{$L_ali1}=$resQ{$j};
+		    $seqQ1{$L_ali1}=$seqQ{$j};
+		    $resT1{$L_ali1}=$resT{$j};
+		    $seqT1{$L_ali1}=$seqT{$j};
+		    $xyz{$L_ali1}=substr($line,30,24);
+		    ##### check template sequence ----->
+		    $tmp1=substr($line,17,3);
+		    if($tmp1 ne $ts{$seqT1{$L_ali1}}){
+			printf "Template mismatch warning: $template_name: $tmp1 ne $ts{$seqT1{$L_ali1}}!\n";
+		    }
+		    ##### check query sequence ----->
+		    $tmp1=substr($sequence,$resQ1{$L_ali1}-1,1);
+		    if($tmp1 ne $seqQ1{$L_ali1}){
+			printf "Query mismatch warning: $template_name: $tmp1 ne $seqQ1{$L_ali1}!\n";
+		    }
+		    goto pos10;
+		}
+	    }
+	  pos10:;
+	}
+    }
+    close(pdb);
+    #goto pos2 if($L_ali1/$Lch <0.35);   # Alignement is too short
+    goto pos2 if($L_ali1<5);   # Alignement is too short
+    $i_t++;
+
+    if($i_t==1){
+	$zscore_value1=$zscore_value;
+    }
+    ############## output init.dat ------------------>
+    printf init "%5d %8.3f %5d   %6s\n",$L_ali1,$zscore_value,$i_t,$template_name;
+    for($j=1;$j<=$L_ali1;$j++){
+	printf init "ATOM  %5s  CA  %3s  %4d    %24s%5d %3s\n",
+	$j,$ts{$seqQ1{$j}},$resQ1{$j},$xyz{$j},$resT1{$j},$ts{$seqT1{$j}};
+    }
+    printf init "TER\n";
+	############# use modeller generate full atomic model baseing on each template #############
+	system("/bin/cp $pdb ./");
+	if($m eq "0"){
+	    printf "using sali modeller build full atomic model for query basing on template $template_name \n";
+	}
+	else{
+	    printf "using soeding modeller build full atomic model for query basing on template $template_name \n";
+	}
+	system("$hhlib/scripts/hhpred/hhpsmodeller.pl -i protein.seq -t $template_name.pdb -m $m -o $template_name.modeller$m.pdb -mode pdb >$template_name.modeller$m.log");
+	
+	############## output init.mod ------------------>
+	printf initmod "%5d %8.3f %5d   %6s\n",$L_ali1,$zscore_value,$i_t,$template_name;
+	my $modelfile="$template_name.modeller$m.pdb";
+	open (model,"$modelfile");
+	my $k=0;
+	while($line=<model>){
+	   if($line =~ /ATOM.{2}\s*(\d+)\s.([\S|\s]{3}).(\S{3})\s.\s*(\d+)[\s|\D]\s*(-?\d+.\d+)\s*(-?\d+.\d+)\s*(-?\d+.\d+)\s*/){
+	      #my $nres=$4;
+		  #for($j=1;$j<=$L_ali;$j++){
+		     #if($nres==$resT1{$j})
+			 #{
+			    my $atomnum=$1;
+			    my $atomtype=$2;
+				my $resType=$3;
+				my $resNum=$4;
+				my $x=$5;
+				my $y=$6;
+				my $z=$7;
+				$k++;
+				printf initmod "ATOM  %5s  %3s %3s  %4d    %8s%8s%8s         \n",
+			    #$k+$i_t*10000,$atomtype,$ts{$seqQ1{$j}},$resQ1{$j},$x,$y,$z;
+			    $atomnum,$atomtype,$resType,$resNum,$x,$y,$z;
+			 #}
+		  #} 
+	   }
+	}
+	printf initmod "TER\n";
+    goto pos3 if($i_t >= $n_temp);
+  pos2:;
+}
+ pos3:;
+close(initmod);
+close(init);
+
+open(init1,">init1.dat");
+printf init1 "%5d %5d (N_temp, Lch)\n",$i_t,$Lch;
+close(init1);
+`cat init.dat >>init1.dat`;
+###################################### HHpred start template list from hhsearch ###################################
+
+################ calculate HHPred Z-score ######################
+open(sdist,"protein.start.lst");
+$si=0;
+while($line=<sdist>){
+    if($line=~/No Hit                             Prob E-value/){
+	while($line=<sdist>){
+	    goto Send_dist if($line=~/^No\s+\d+/);
+	    if($line=~/(\d+)\s+(\S+)/){
+		$si++;
+		$NO{$si}=$1;
+		$T_name{$si}=$2;
+		$sscore{$si}=substr($line,57,6);
+		$sscore_a+=$sscore{$i};
+		$sscore_a2+=$sscore{$i}**2;
+	    }
+	}
+    }
+}
+Send_dist:;
+close(sdist);
+$N_hit=$si;
+if($N_hit > 1){
+   $sscore_a/=$N_hit;
+   $sscore_a2/=$N_hit;
+   $dev=sqrt($sscore_a2-$sscore_a**2);
+   if($dev<0.0001){
+       $dev=0.0001;
+   }
+   for($i=1;$i<=$N_hit;$i++){
+       $zsscore{$i}=-($sscore_a-$sscore{$i})/$dev;
+       if($i>1){
+	   if($zsscore{$i}>$zsscore{$i-1}){
+	       $zsscore{$i}=$zsscore{$i-1}-0.01;
+	      }
+       }
+   }
+}
+else
+{
+   $zsscore{1}=0;
+}
+
+###########################################################
+##### create template file 'init.dat' #####################
+###########################################################
+open(initS,">initS.dat");
+open(initSmod,">initS.mod");
+$i_t=0;
+for($i=1;$i<=$N_hit;$i++){
+    $zsscore_value=$zsscore{$i};
+    $template_name=$T_name{$i};
+    $pdb="$pdbdir/$template_name\.pdb";
+    goto Spos2 if(!-s "$pdb");
+    
+    ############ check homology ##############
+    if (scalar @exclude_pdb_list)
+    {
+        $template_pdb_ID=substr($template_name,0,4);
+        foreach $exclude_pdb_ID (@exclude_pdb_list)
+        {
+            goto Spos2 if($template_pdb_ID eq $exclude_pdb_ID);
+        }
+    }
+    if($idcut0<0.999){
+	$align_rst=`./align protein.seq $pdb 2`;
+	   if($align_rst=~/Identical length\:\s+(\d+)/){
+	      $id=$1/$Lch;
+	      goto Spos2 if($id>=$idcut0);
+	   }
+    }
+    
+    ###### read alignment ####################
+    open(Salign,"protein.start.lst");
+    $L_ali=0;
+    while($line=<Salign>){
+	#if($line=~/^\>$template_name/){
+	if($line=~/^No\s+$NO{$i}/){
+	    while($line=<Salign>){
+		if($line=~/Score\=\s*(\S+)/){
+		    $zsscore_value=$1;
+		}
+		goto Spos4 if($line=~/No\s+\d+/);
+		if($line=~/^Q protein\s+(\d+)\s+(\S+)\s+(\d+)\s+\(/){
+		    $nQ=$1-1;
+		    $sequenceQ=$2;
+		}
+		if($line=~/T\s+$template_name\s+(\d+)\s+(\S+)/){
+		    $nT=$1-1;
+		    $sequenceT=$2;
+		    ###
+		    $L=length $sequenceT;
+		    for($j=1;$j<=$L;$j++){
+			$sQ=substr($sequenceQ,$j-1,1);
+			$sT=substr($sequenceT,$j-1,1);
+			$nQ++ if($sQ ne "-");
+			$nT++ if($sT ne "-");
+			if($sQ ne "-" && $sT ne "-"){
+			    $L_ali++;
+			    $resQ{$L_ali}=$nQ;
+			    $resT{$L_ali}=$nT;
+			    $seqQ{$L_ali}=$sQ;
+			    $seqT{$L_ali}=$sT;
+			}
+		    }
+		}
+	    }
+	}
+    }
+  Spos4:;
+    close(Salign);
+    
+    ############ get coordinates from PDB file ---------->
+    open(pdb,"$pdb");
+    $n=0;
+    $L_ali1=0;
+    while($line=<pdb>){
+	if(substr($line,12,4)=~/CA/){
+	    $n++;
+	    substr($line,22,4)=~/(\d+)/;
+	    $tmp=$1;
+	    ######## check whether the coordinate exist ---------->
+	    for($j=1;$j<=$L_ali;$j++){
+		if($tmp == $resT{$j}){
+		    $L_ali1++;
+		    $resQ1{$L_ali1}=$resQ{$j};
+		    $seqQ1{$L_ali1}=$seqQ{$j};
+		    $resT1{$L_ali1}=$resT{$j};
+		    $seqT1{$L_ali1}=$seqT{$j};
+		    $xyz{$L_ali1}=substr($line,30,24);
+		    ##### check template sequence ----->
+		    $tmp1=substr($line,17,3);
+		    if($tmp1 ne $ts{$seqT1{$L_ali1}}){
+			printf "Template mismatch warning: $template_name: $tmp1 ne $ts{$seqT1{$L_ali1}}!\n";
+		    }
+		    ##### check query sequence ----->
+		    $tmp1=substr($sequence,$resQ1{$L_ali1}-1,1);
+		    if($tmp1 ne $seqQ1{$L_ali1}){
+			printf "Query mismatch warning: $template_name: $tmp1 ne $seqQ1{$L_ali1}!\n";
+		    }
+		    goto Spos10;
+		}
+	    }
+	  Spos10:;
+	}
+    }
+    close(pdb);
+    #goto pos2 if($L_ali1/$Lch <0.35);   # Alignement is too short
+    goto Spos2 if($L_ali1<5);   # Alignement is too short
+    $i_t++;
+
+    if($i_t==1){
+	$zsscore_value1=$zsscore_value;
+    }
+    ############## output init.dat ------------------>
+    printf initS "%5d %8.3f %5d   %6s\n",$L_ali1,$zsscore_value,$i_t,$template_name;
+    for($j=1;$j<=$L_ali1;$j++){
+	printf initS "ATOM  %5s  CA  %3s  %4d    %24s%5d %3s\n",
+	$j,$ts{$seqQ1{$j}},$resQ1{$j},$xyz{$j},$resT1{$j},$ts{$seqT1{$j}};
+    }
+    printf initS "TER\n";
+	############# use modeller generate full atomic model baseing on each template #############
+	if(!-s "$template_name.modeller$m.pdb")
+	{
+	    system("/bin/cp $pdb ./");
+	    if($m eq "0"){
+	        printf "using sali modeller build full atomic model for query basing on template $template_name \n";
+	    }
+	    else{
+	        printf "using soeding modeller build full atomic model for query basing on template $template_name \n";
+	    }
+	    system("$hhlib/scripts/hhpred/hhpsmodeller.pl -i protein.seq -t $template_name.pdb -m $m -o $template_name.modeller$m.pdb -mode pdb >$template_name.modeller$m.log");
+	}
+	else
+	{
+	    printf "model basing on $template_name exists! get model from $template_name.modeller$m.pdb\n";
+	}
+	############## output init.mod ------------------>
+	printf initSmod "%5d %8.3f %5d   %6s\n",$L_ali1,$zsscore_value,$i_t,$template_name;
+	my $modelfile="$template_name.modeller$m.pdb";
+	open (model,"$modelfile");
+	my $k=0;
+	while($line=<model>){
+	   if($line =~ /ATOM.{2}\s*(\d+)\s.([\S|\s]{3}).(\S{3})\s.\s*(\d+)[\s|\D]\s*(-?\d+.\d+)\s*(-?\d+.\d+)\s*(-?\d+.\d+)\s*/){
+	      #my $nres=$4;
+		  #for($j=1;$j<=$L_ali;$j++){
+		     #if($nres==$resT1{$j})
+			 #{
+			    my $atomnum=$1;
+			    my $atomtype=$2;
+				my $resType=$3;
+				my $resNum=$4;
+				my $x=$5;
+				my $y=$6;
+				my $z=$7;
+				$k++;
+				printf initSmod "ATOM  %5s  %3s %3s  %4d    %8s%8s%8s         \n",
+	                               #$k+$i_t*10000,$atomtype,$ts{$seqQ1{$j}},$resQ1{$j},$x,$y,$z;
+								   $atomnum,$atomtype,$resType,$resNum,$x,$y,$z;
+			 #}
+		  #} 
+	   }
+	}
+	printf initSmod "TER\n";
+    goto Spos3 if($i_t >= $n_temp);
+  Spos2:;
+}
+Spos3:;
+close(initSmod);
+close(initS);
+
+open(initS1,">initS1.dat");
+printf initS1 "%5d %5d (N_temp, Lch)\n",$i_t,$Lch;
+close(initS1);
+`cat initS.dat >>initS1.dat`;
+
+########## reformat all files to init.dat format------->
+@ff=qw(
+init.mod
+initS.mod
+);
+
+foreach $f(@ff){
+    $nt=0;
+    open(a,"$f");
+    while($line=<a>){
+	while($line=<a>){
+	    if($line=~/^TER/){
+		$nt++;
+		goto pos10aa;
+	    }
+	}
+      pos10aa:;
+    }
+    close(a);
+    
+    open(a,"$f");
+    open(b,">$f\_new");
+    print b "$nt\n";
+    $k=0;
+    while($line=<a>){
+	if($line=~/(\d+)\s+(\S+)\s+(\S+)\s+(\S+)/){
+	    $z=$2;
+	    $template=$4;
+	    $k++;
+	    $L_ali=0;
+	    while($line=<a>){
+		if($line=~/^TER/){
+		    goto pos10a;
+		}
+		if(substr($line,12,4)=~/CA/){
+		    $L_ali++;
+		    $LINE{$L_ali}=$line;
+		}
+	    }
+	}
+      pos10a:;
+	printf b "%5d %8.3f %5d %12s\n",$L_ali,$z,$k,$template;
+	for($j=1;$j<=$L_ali;$j++){
+	    print b "$LINE{$j}";
+	}
+	print b "TER\n";
+    }
+}
+
+@ff=qw(
+protein.pdb
+);
+
+foreach $f(@ff){
+    open(a,"$f");
+    open(b,">$f\_new");
+    $L_ali=0;
+    if($zsscore_value1>0){
+	$z=$zsscore_value1;
+    }else{
+	$z=$zscore_value1;
+    }
+    while($line=<a>){
+	if($line=~/^PARENT\s+(\S+)/){
+	    $template=$1;
+	}
+	if(substr($line,12,4)=~/CA/){
+	    $L_ali++;
+	    $LINE{$L_ali}=$line;
+	}
+    }
+    print b "1\n";
+    printf b "%5d %8.3f %5d %12s\n",$L_ali,$z,1,$template;
+    for($j=1;$j<=$L_ali;$j++){
+	print b "$LINE{$j}";
+    }
+    print b "TER\n";
+}
+
+################################################## end ############################################################
+
+`/bin/cp init1.dat            $data_dir/init$o\.HHW`;        #original hhpred threading
+`/bin/cp init.mod_new            $data_dir/init$o\.HHWm`;    #init.dat + modeller (full-length)
+
+`/bin/cp initS1.dat            $data_dir/init$o\.HHWa`;      #hhpred start templates
+`/bin/cp initS.mod_new            $data_dir/init$o\.HHWam`;  #initS.dat + modeller (full-length)
+
+`/bin/cp protein.pdb_new            $data_dir/init$o\.HHWb`; #hhpred+modeller (full-length)
+#`/bin/cp protein.log            $data_dir/protein.log`; #hhpred+modeller (full-length) log
+
+#exit();
+################# endding procedure ######################
+sleep(1);
+`rm -fr $work_dir`;
+
+exit();

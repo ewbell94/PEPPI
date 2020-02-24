@@ -10,17 +10,17 @@ use Getopt::Long qw(GetOptions);
 #
 #
 
-my $localflag=0;
 my $domaindiv=0;
 my $infastaA;
 my $infastaB;
 my $outdir=`pwd`;
+my $benchmarkflag=0;
 chomp($outdir);
 $outdir="$outdir/PEPPI";
 
 GetOptions(
-    "local" => \$localflag, #Set to 1 if supercomputer cluster is not to be used
-    "domains" => \$domaindiv, #Set to 1 if sequences are to be divided
+    "domains" => \$domaindiv,
+    "benchmark" => \$benchmarkflag,
     "output=s" => \$outdir, #Directory for output
     "inputA|A=s" => \$infastaA, #Input fasta A
     "inputB|B=s" => \$infastaB, #Input fasta B; for intrainteraction prediction, this should be the same file as A
@@ -37,10 +37,15 @@ if (!$infastaB){
 }
 
 #DO NOT EDIT BENEATH THIS LINE
-my $hpc=($localflag) ? 0 : 1;
+=pod
+if (system("squeue")){
+    die "Must be connected to cluster to run.\n";
+}
+=cut
 my $peppidir= "/nfs/amino-home/ewbell/PEPPI";
 my $maxjobs=300;
 
+#Organize sequences
 print `mkdir $outdir` if (!-e "$outdir");
 print `cp $infastaA $outdir/A.fasta`;
 print `cp $infastaB $outdir/B.fasta`;
@@ -119,25 +124,17 @@ if (openhandle($fastaout)){
     print "Input fasta file 2 was empty.  Exiting...\n";
     exit(1);
 }
-
+=pod
 for my $ind (1..$i){
-    if ($domaindiv){
-	next if (-e "$fastadir/prot$ind/fu.txt");
-	while($hpc && (`squeue -u $user | wc -l`-1 >= $maxjobs || `squeue -u $user | grep "PEPPI1" | wc -l` >=100)){
-	    sleep(300);
-	}
-	if ($hpc){
-	    print `sbatch -J PEPPI1_prot$ind --mem=15gb -t 24:00:00 -o $fastadir/prot$ind/out.log -e $fastadir/prot$ind/err.log $peppidir/bin/runFUD.pl $fastadir/prot$ind`;
-	} else {
-	    print `$peppidir/bin/runFUD.pl $fastadir/prot$ind`;
-	}
-    }
+    my $args="-o $outdir -t prot$ind -j $maxjobs";
+    $args="$args -b" if ($benchmarkflag);
+    $args="$args -d" if ($domaindiv);
+    print `$peppidir/bin/C-I-TASSER/mkinput1.pl $args`;
 }
-
+=cut
 my $peppi2 = `cat $peppidir/bin/PEPPI2temp.pl`;
 $peppi2=~s/\!PEPPIDIR\!/$peppidir/;
 $peppi2=~s/\!OUTDIR\!/$outdir/;
-$peppi2=~s/\!HPC\!/$hpc/;
 $peppi2=~s/\!MAXJOBS\!/$maxjobs/;
 open(my $peppi2script,">","$outdir/PEPPI2.pl");
 print $peppi2script $peppi2;

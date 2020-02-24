@@ -1,0 +1,356 @@
+#!/usr/bin/perl
+#PBS -e !ERRFILE!
+#PBS -o !OUTFILE!
+#PBS -l !WALLTIME!
+#PBS -l !NODE!
+
+use Math::Trig;
+
+#################### WWW ####################################
+# in this file, only following files need to copy back:
+# 1, init.WWW
+# 2, T0212_frg.dat (need by chunk_folding and chunk_rank)
+# 3, T0212_frgscore.dat (need by chunk_rank)
+#############################################################
+
+
+##### report node -------->
+`hostname`=~/(\S+)/;
+$node=$1;
+printf "hostname: $node\n";
+$time=`date`;
+printf "starting time: $time";
+$pwd=`pwd`;
+printf "pwd: $pwd";
+#^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+$home="/nfs/amino-home/zhng";
+$lib="/nfs/amino-library";
+
+########### setup  the environment and Working DIRectory ###
+$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin:/usr/pbs/bin";
+$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
+
+$o="!O!";
+$s="!S!";
+$run="!RUN!";
+$idcut0=!ID_CUT!;
+$libdir="!LIB_DIR!";
+$datadir="!DATA_DIR!/$s";
+################# directories #############################
+$bindir="$lib/WWW";
+if (! -d "$bindir")
+{
+    $bindir="/nfs/amino-home/zhng/library/yzhang/WWW";
+}
+if (! -d "$bindir")
+{
+    $bindir="/nfs/amino-home/zhng/a_protein11/bin";
+}
+$blastdir="$lib/blast/bin";
+$nr="$lib/nr/nr";
+$PSIPRED="$libdir/bin/psipred";
+
+########
+$workdir="/tmp/!USER!/!TAG!";
+`rm -fr $workdir`;
+`mkdir -p $workdir`;
+`mkdir -p $datadir`;
+chdir "$workdir";
+
+####### seq.txt ------------>
+
+################ make fasta sequence file #################
+@seqtxts=`cat $datadir/seq.txt`;
+$sequence="";
+foreach $seqtxt(@seqtxts){
+    goto pos6 if($seqtxt=~/\>/);
+    $seqtxt=~s/\s//mg;
+    $seqtxt=~s/\n//mg;
+    $sequence=$sequence.$seqtxt;
+  pos6:;
+}
+$Lch=length $sequence;
+open(seq,">$s\.seq");
+printf seq "\>$s\n";
+for($i=1;$i<=$Lch;$i++){
+    $a=substr($sequence,$i-1,1);
+    printf seq "$a";
+    if($i==int($i/60)*60){
+	printf seq "\n";
+    }
+}
+printf seq "\n";
+close(seq);
+
+#-------Step 1: run threading ------------->
+#blast1:
+$ecut=0.001;
+printf "run psiblast-1 .....\n";
+$chk="$datadir/psitmp.chk"; #this is needed
+$blast="$datadir/blast.out";
+$pssm="$datadir/pssm.txt";
+
+`$bindir/blast+.pl $s.seq 3 10 0.001 1000`;
+`cp blast.out ./$s.blast`;
+`cp pssm.txt ./psitmp.mat3`;
+`cp pssm.txt $s.mat3`;
+`cp mtx $s.mtx`;
+
+system("$bindir/mkmsa.pl $s.seq $s.blast $s.aln"); #$s.aln is output
+
+$ecut=1.0;
+printf "run psiblast-2 .....\n";
+`$bindir/blast+.pl $s.seq 3 1 1 1000`;
+`cp pssm.txt psitmp.mat3`;
+`cp blast.out $s.blast`;
+system("$bindir/mkmsa.pl $s.seq $s.blast $s\_e10.aln");
+
+# run palign:
+`cp $bindir/charge_inp.dat .`;
+`cp $bindir/fort.21_1.61_CA .`;
+`cat $s\.seq > _tmp_.seq`;
+`cat $s\.mtx > _tmp_.mtx`;
+`cat $s\.aln > _tmp_.prf`;
+`cat $s\_e10.aln > _tmp_.aln`;
+
+`echo -1 7 > _gtest.inp`;
+`echo _tmp_.seq >> _gtest.inp`;
+`echo _tmp_.mtx >> _gtest.inp`;
+`echo _tmp_.prf >> _gtest.inp`;
+`echo _tmp_.aln >> _gtest.inp`;
+`echo seq_all.txt >> _gtest.inp`;
+`echo sec_all.txt >> _gtest.inp`;
+`echo $libdir/SP3/ >> _gtest.inp`;
+
+printf "run psipred ...\n";
+$w1="$PSIPRED/data/weights.dat";
+$w2="$PSIPRED/data/weights.dat2";
+$w3="$PSIPRED/data/weights.dat3";
+$w4="$PSIPRED/data/weights.dat4";
+$w5="$PSIPRED/data/weights_p2.dat";
+system("$PSIPRED/bin/psipred _tmp_.mtx $w1 $w2 $w3 $w4 > _tmp_.ss");
+system("$PSIPRED/bin/psipass2 $w5 1 1.0 1.0 _tmp_.ss2 _tmp_.ss > _tmp_.horiz");
+#system("$PSIPRED/psipass2 $w5 1 0.98 1.09 _tmp_.ss2 _tmp_.ss > _tmp_.horiz");
+system("$bindir/psipred2sec.awk _tmp_.horiz >_tmp_.vert");
+
+printf "run threading .......\n";
+system("$bindir/palign<_gtest.inp> _tmp_.out");
+`mv _tmp_.out  $s\_sp3.out`;
+`mv fort.99 $s\_align.dat`;
+`mv fort.98 $s\_frgscore.dat`;
+# output:
+# S0304_sp3.out      @threading scores
+# S0304_align.dat    @threading alignments
+# S0304_frgscore.dat @fragment scores
+
+#-------Step 2: run remove homologous ------------->
+#printf "Lch=$Lch\n";
+goto pos_homo if($run eq "real");
+@lines=`sort -n -k 7 $s\_sp3.out`;
+$n_check=0;
+$n_homo=0;
+$N_check=1000; #how many templates needed to check
+foreach $line(@lines){
+    if($line=~/\S+\s+\S+\s+(\S+)/){
+	$s0=$1;
+	$temp="$libdir/SP3/$s0\.pdb";
+	if(-s "$temp"){
+	    $n_check++;
+	    #printf "$n_check $line";
+	    $rst=`$libdir/bin/align $s.seq $temp 2`;
+	    if($rst=~/Identical length:\s*(\d+)/){
+		$id=$1/$Lch;
+		if($id>=$idcut0){
+		    $n_homo++;
+		    $s_homo{$n_homo}=$s0;
+		    #printf "$n_homo --- $s_homo{$n_homo} ---$id\n";
+		}
+	    }
+	    goto pos2a if($n_check>$N_check);
+	}
+    }
+}
+ pos2a:;
+if($n_homo>0){
+    ####### S0304_sp3.out ###########
+    open(old,"$s\_sp3.out");
+    open(new,">tmp.tmp");
+    while($line=<old>){
+	for($i=1;$i<=$n_homo;$i++){
+	    if($line=~/$s_homo{$i}/){
+		#printf "$s\_sp3.out -- $line\n";
+		goto pos2b;
+	    }
+	}
+	print new "$line";
+      pos2b:;
+    }
+    close(new);
+    `mv tmp.tmp $s\_sp3.out`;
+    ####### S0304_frgscore.dat ###########
+    open(old,"$s\_frgscore.dat");
+    open(new,">tmp.tmp");
+    while($line=<old>){
+      pos2c:;
+	for($i=1;$i<=$n_homo;$i++){
+	    if($line=~/$s_homo{$i}/){
+		#printf "$s\_frgscore.dat -- $line\n";
+		while($line=<old>){
+		    if($line=~/\>/){
+			goto pos2c;
+		    }
+		    if($line!~/\S+/){
+			goto pos2cc;
+		    }
+		}
+	    }
+	}
+	print new "$line";
+      pos2cc:;
+    }
+    close(new);
+    `mv tmp.tmp $s\_frgscore.dat`;
+    ####### S0304_align.dat ###########
+    open(old,"$s\_align.dat");
+    open(new,">tmp.tmp");
+    while($line=<old>){
+	for($i=1;$i<=$n_homo;$i++){
+	    if($line=~/\>P1;$s_homo{$i}/){
+		#printf "$s\_align.dat -- $line\n";
+		while($line=<old>){
+		    if($line!~/\S+/){
+			goto pos2d;
+		    }
+		}
+	    }
+	}
+	print new "$line";
+      pos2d:;
+    }
+    close(new);
+    `mv tmp.tmp $s\_align.dat`;
+}
+
+ pos_homo:;
+#-------Step 3: select good fragments and templates ------------->
+if(!-s "$s\_excl.lst"){
+    `touch $s\_excl.lst`;
+}
+open(in,">__tmp_frg.inp");
+printf in "$s\_frgscore.dat
+-1
+$s\_excl.lst
+sec_all.txt
+$libdir/SP3/
+";
+close(in);
+#system("$bindir/prepare<__tmp_frg.inp > $s\_frg.dat");#not work for some proteins
+system("$bindir/prepare5 <__tmp_frg.inp > $s\_frg.dat");
+# (need pdb library)
+# input:
+# S0304_frgscore.dat
+# output:
+# S0304_frg.dat
+$cat=`cat $s\_frg.dat`;
+if($cat=~/no enough loops, exit/){
+    printf "too few loops, quit\n";
+    open(f,">$datadir/no_chunk");
+    printf f "too few loops, do not run chunk\n";
+    close(f);
+    open(report,">>$datadir/status_report");
+    printf report "too few loops, do not run chunk, only output init.WWW\n";
+    close(report);
+    #exit();
+}
+
+$in1="$s\_sp3.out";
+$in2="$s\_align.dat";
+system("$bindir/select_template.job $s $in1 $in2 $libdir/SP3/ $bindir");
+# input: 
+# S0304_sp3.out      @threading scores
+# S0304_align.dat    @threading alignments
+# output:
+# S0304_sp3_*.pdb    @best templates
+
+################## generate init ------------------>
+$k=0;
+for($i=1;$i<=100;$i++){
+    $file="$s\_sp3_$i\.pdb";
+    if(-s "$file"){
+	if($run eq "benchmark"){
+	    open(f,"$file");
+	    <f>=~/template:\s*(\S+)/;
+	    $tmp=$1;
+	    close(f);
+	    $pdb="$libdir/SP3/$tmp.pdb";
+	    if(-s "$pdb"){
+		$rst=`$libdir/bin/align $s.seq $pdb 2`;
+		if($rst=~/Identical length:\s*(\d+)/){
+		    $id=$1/$Lch;
+		    if($id>=$idcut0){
+			goto pos11;
+		    }
+		}
+	    }
+	}
+	$k++;
+	$L_ali{$k}=0;
+	open(file,"$file");
+	$res_old="xxx";
+	while($line=<file>){
+	    if($line=~/template:\s*(\S+)\s+(\S+)/){
+		$temp{$k}=$1;
+		$zscore{$k}=$2;
+	    }
+	    $res_new=substr($line,21,5);
+	    if(substr($line,12,4)=~/CA/ && $res_new ne $res_old){
+		$L_ali{$k}++;
+		$LINE{$k,$L_ali{$k}}=substr($line,0,54);
+		$res_old=$res_new;
+	    }
+	}
+	close(file);
+	if($L_ali{$k}<5){
+	    $k--;
+	    goto pos11;
+	}
+	goto pos11a if($k>=20);
+      pos11:;
+    }
+}
+ pos11a:;
+open(init,">init.dat");
+printf init "$k  $Lch\n";
+for($i=1;$i<=$k;$i++){
+    printf init "%5d %8.3f %5d %10s\n",
+    $L_ali{$i},$zscore{$i},$i,$temp{$i};
+    for($j=1;$j<=$L_ali{$i};$j++){
+	print init "$LINE{$i,$j}\n";
+    }
+    print init "TER\n";
+}
+close(init);
+
+######### copy files back -------->
+#`cp $s\.seq  $datadir`;
+#`cp $s\.mtx $datadir`;
+#`cp $s\.mat3 $datadir`;
+#`cp $s\.aln $datadir`;
+
+#`cp $s\_frg.dat $datadir/frg$o.dat`;  #needed by frg_all_test
+#`cp $s\_frgscore.dat $datadir/fragscore$o.dat`; #needed by calquality_sp3frg
+`cp init.dat $datadir/init$o\.WWW`;
+#for($i=1;$i<=10;$i++){
+    #`cp $s\_sp3_$i\.pdb $datadir`;
+#}
+
+################# endding procedure ######################
+$time=`date`;
+printf "ending time: $time";
+`sync`;
+`sync`;
+sleep(1);
+`rm -fr $workdir`;
+
+exit();

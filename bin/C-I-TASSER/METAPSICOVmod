@@ -1,0 +1,160 @@
+#!/usr/bin/perl
+#PBS -e !ERRFILE!
+#PBS -o !OUTFILE!
+#PBS -l !WALLTIME!
+#PBS -l !NODE!
+
+########################################################
+# Step-1: run meta-psicov
+# Step-2: run run_nebcon.pl
+# Step-3: run old_nebcon.pl (ngelected)
+########################################################
+# 1, why use different MSA to calculate neff?
+# 2, why neglect deepcontact in run_nebcon.pl?
+# 3, the original codes cannot run through in independent account 
+#    becuase *.map not copied and many other bugs
+########################################################
+
+use Math::Trig;
+
+########### setup  the environment and Working DIRectory ###
+$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin";
+$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
+
+##### report node -------->
+`hostname`=~/(\S+)/;
+$node=$1;
+printf "hostname: $node\n";
+$time=`date`;
+printf "starting time: $time";
+$pwd=`pwd`;
+printf "pwd: $pwd";
+#^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+################# directories #############################
+$s="!S!";
+$o="!O!";
+$data_dir="!DATA_DIR!/$s";  #for seq.txt 
+$work_dir="/tmp/!USER!/!TAG!";
+$psicov_dir="/nfs/amino-library/contact/psicov";
+$cont_dir="!CON_DIR!";
+$blastdir="/nfs/amino-library/blast/bin"; #blast always uses local
+$bindir2="!BIN_DIR!";
+$bindir="$bindir2/bin"; 
+
+################ working directory ########################
+`/bin/rm -fr $work_dir`;
+`/bin/mkdir -p $work_dir`;
+chdir "$work_dir";
+
+################ make fasta sequence file #################
+@seqtxts=`cat $data_dir/seq.txt`;
+$sequence="";
+foreach $seqtxt(@seqtxts){
+    goto pos6 if($seqtxt=~/\>/);
+    $seqtxt=~s/\s//mg;
+    $seqtxt=~s/\n//mg;
+    $sequence=$sequence.$seqtxt;
+  pos6:;
+}
+$Lch=length $sequence;
+open(seq,">protein.seq");
+printf seq ">protein\n";
+for($i=1;$i<=$Lch;$i++){
+    $a=substr($sequence,$i-1,1);
+    printf seq "$a";
+    $seqQ{$i}=$a;   #only for check
+    #$log{$i,$seqQ{$i}}++;
+    if($i==int($i/60)*60){
+	printf seq "\n";
+    }
+}
+printf seq "\n";
+close(seq);
+########## prepare sequence for NN-BYES:
+open(seq,">seq.txt");
+printf seq "$sequence\n";
+close(seq);
+
+######### Copy MSA to tmp ############
+#$aln="$data_dir/MSA/protein_uniref90_metaclust.aln";
+$aln="$data_dir/MSA/!MSA!";
+if (-s "$aln"){
+    `/bin/cp $aln protein.aln`;
+}else{
+    printf "error: $aln does not exist!\n";
+    exit();
+}
+
+# Step-1:
+########### run meta-psicov #######################
+printf "\n-------------- run metapsicov (we can try run_metapsicov_yz2e) ----------->\n";
+
+$bindir1="/nfs/amino-home/zhng/library/yzhang/contact/metapsicov";
+system("$bindir1/run_metapsicov_yz3_multicpu protein.seq"); # from old but using protein.aln
+printf "^^^^^^^^^^^^^^^ metapsicov completed ^^^^^^^^^^^^^^^^^^^^^\n";
+
+if(-s "protein.metapsicov.stage2" <10){
+    print "there is no protein.metapsicov.stage2 generated\n";
+    goto pos13;
+}
+
+## Neff for metapsicov -->
+printf "\n------------- obtain neff ----------->\n";
+`$bindir2/bin/alnstats protein.aln protein.colstats protein.pairstats`;
+$neff=`head -3 protein.colstats|tail -1`; ## created a new protein.colstats, since Metapsicov derived protein.colstats is based on 0.62 seq id
+$neff_len=$neff/sqrt($Lch);
+
+############ sort output ----------->
+for($q=1;$q<=2;$q++){
+    open(a,"protein.metapsicov.stage$q");
+    $n=0;
+    while($line=<a>){
+	if($line=~/(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/){
+	    $n++;
+	    $I{$n}=$1;
+	    $J{$n}=$2;
+	    $conf{$n}=$5;
+	}
+    }
+    close(a);
+    open(a,">metapsicov.$q.dat");
+    printf a "%3d\t%8.4f\n",$n,$neff_len;
+    for($i=1;$i<=$n;$i++){
+	printf a "%5d %5d %8.3f\n",$I{$i},$J{$i},$conf{$i};
+    }
+    close(a);
+}
+
+############## Copy result back to output ##########
+printf "\n---------- copy metapsicov.dat back -------------->\n";
+`/bin/cp metapsicov.2.dat $data_dir/metapsicov.dat`;
+print "METAPSICOV is complete now\n\n";
+
+####### for NeBcon ------------>
+#`cp protein.ss2 $data_dir/MSA/protein.ss`;
+#`cp protein.solv $data_dir/MSA`;
+#`cp protein.colstats $data_dir/MSA`;
+
+#######  ccmpred --------->
+printf "\n---------- rescale and copy ccmpred.dat --------------\n";
+`/bin/cp protein.ccmpred ccmpred.dat`;
+system("$bindir/modify_gremlin_merged.pl $work_dir ccmpred protein.aln $bindir2");
+`/bin/cp $work_dir/ccmpred3.dat $data_dir/ccmpred.dat`;
+
+#######  freecontact=evfold --------->
+printf "\n---------- rescale and copy freecontact.dat --------------\n";
+`/bin/cp protein.evfold freecontact.dat`;
+system("$bindir/modify_freecontact.pl $work_dir freecontact protein.aln $bindir2");
+`/bin/cp $work_dir/freecontact2.dat $data_dir/freecontact.dat`;
+
+ pos13:;
+##### ^^^^^^^^^^^^^^^ metapsicov is completed ^^^^^^^^^^^^^^^^^^^^
+
+$time=`date`;
+printf "ending time: $time";
+`sync`;
+`sync`;
+sleep(1);
+`rm -rf $work_dir`;
+exit();

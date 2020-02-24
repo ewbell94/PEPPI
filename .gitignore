@@ -3,3 +3,4 @@ lib/
 SPRING-PPI/ZiSet/
 IntAct/
 *.tar.gz
+test/

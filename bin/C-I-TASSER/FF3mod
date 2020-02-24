@@ -1,0 +1,279 @@
+#!/usr/bin/perl
+use Math::Trig;
+
+########### setup  the environment and Working DIRectory ###
+$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin";
+$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
+
+##### report node -------->
+`hostname`=~/(\S+)/;
+$node=$1;
+printf "hostname: $node\n";
+$time=`date`;
+printf "starting time: $time";
+$pwd=`pwd`;
+printf "pwd: $pwd";
+#^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+$home="/nfs/amino-home/zhng";
+$lib="/nfs/amino-library";
+
+################# directories #############################
+$data_dir="!DATA_DIR!/!S!";  #for seq.txt and init.dat
+$work_dir="/tmp/!USER!/!TAG!";
+$idcut0=!ID_CUT!;
+
+#$ffas_dir="/home/yzhang/library/yzhang/FFAS3D";
+$ffas_dir="$lib/FFAS3D";
+
+$db="$lib/nr/nr";
+$psipreddir="$lib/bin/psipred";
+$bindir="$ffas_dir/bin";
+$dbdir="$ffas_dir/db";
+$pdbdir="$ffas_dir/pdb12";
+$flagstru=0; # 0 for sequence; 1 for sequence+structure
+# please download psipred, blast+, nr, dsspcmbi
+# prepare seq.txt or seq.txt+cpdb.pdb in the directory
+
+################ working directory ########################
+`/bin/mkdir -p $work_dir`;
+chdir "$work_dir";
+`/bin/rm -f $work_dir/*`;
+`cp $lib/bin/align ./align`;
+
+################ make fasta sequence file #################
+@seqtxts=`cat $data_dir/seq.txt`;
+$sequence="";
+foreach $seqtxt(@seqtxts){
+    goto pos6 if($seqtxt=~/\>/);
+    $seqtxt=~s/\s//mg;
+    $seqtxt=~s/\n//mg;
+    $sequence=$sequence.$seqtxt;
+  pos6:;
+}
+$Lch=length $sequence;
+open(seq,">seq.txt");
+printf seq ">protein\n";
+for($i=1;$i<=$Lch;$i++){
+    $a=substr($sequence,$i-1,1);
+    printf seq "$a";
+    $seqQ{$i}=$a;   #only for check
+}
+printf seq "\n";
+close(seq);
+
+########### run FFAS-feature generation #######################
+print "doing psiblast\n";
+system("$home/bin/blast+.pl seq.txt");
+#    input: 
+#         seq.txt
+#    output:
+#         blast.out
+#         pssm.txt
+#         psitmp.chk
+#         mtx
+    
+if(!-s "protein.ss2" || !-s "protein.horiz"){
+    print "doing pripred\n";
+    `$psipreddir/bin/psipred mtx $psipreddir/data/weights.dat $psipreddir/data/weights.dat2 $psipreddir/data/weights.dat3 > protein.ss`;
+    `$psipreddir/bin/psipass2 $psipreddir/data/weights_p2.dat 1 1.0 1.0 protein.ss2 protein.ss > protein.horiz`;
+    `$bindir/ss22dat protein.ss2 seq.dat`;
+    `rm protein.ss`;
+    
+    #`cp protein.ss2 $data_dir`;
+    #`cp protein.horiz $data_dir`;
+}
+if(!-s "pre.sol"){
+    print "predict solve\n";
+    `$bindir/getannfeature 6 psitmp.chk protein.ss2 annfeat6.dat`;
+    `$bindir/predictsas 6 100 $bindir/sastrainres6-100.net annfeat6.dat pre.sol`;
+    `rm annfeat6.dat`;
+    
+    #`cp pre.sol $data_dir`;
+}
+if(!-s "pre.dep"){
+    print "predict depth\n";
+    `$bindir/getannfeature 16 psitmp.chk protein.ss2 annfeat16.dat`;
+    `$bindir/predictdep 16 70 $bindir/deptrainres16-70.net annfeat16.dat pre.dep`;
+    `rm annfeat16.dat`;
+    
+    #`cp pre.dep $data_dir`;
+}
+
+###################finished
+if($flagstru==0){
+    goto posend;
+}
+###################template
+if(!-s "pdb.pdb"){
+    print "get pdb file\n";
+    `$bindir/pdb2seq cpdb.pdb cpdb.txt`;
+    `$bindir/relabelpdb seq.txt cpdb.txt cpdb.pdb pdb.pdb`;	
+    `$bindir/dsspcmbi pdb.pdb > pdb.dssp`;
+    `$bindir/dssp2dat seq.txt pdb.pdb pdb.dssp pdb.dat`;
+    `rm cpdb.txt cpdb.pdb align.txt pdb.dssp`;
+}
+if(!-s "pdb.sol"){
+    print "calc solvent\n";
+    `$bindir/pdb2solve pdb.pdb cpdb.sol`;
+    `$bindir/relabelsolve seq.txt cpdb.sol pdb.sol`;
+    `rm cpdb.sol`;
+}
+if(!-s "pdb.dep"){
+    print "calc depth\n";
+    `$bindir/pdb2depth pdb.pdb cpdb.dep`;
+    `$bindir/relabelsolve seq.txt cpdb.dep pdb.dep`;
+    `rm cpdb.dep`;
+}
+###################end
+posend:;
+
+$ENV{'FFAS3D'}="$ffas_dir";
+$ffas=$ENV{'FFAS3D'};
+open(fbla,">blast1.out");
+printf fbla ">";
+close(fbla);
+`cat seq.txt blast.out >> blast1.out`;
+`echo \"\n>*\" >> blast1.out`;
+`cat blast1.out | $bindir/parse_blastc.pl > mu`;
+`cat mu |$bindir/profilc > ff`;
+
+###########run FFAS3D --------------->
+`$bindir/build3fone $work_dir`; #require seq.dat pre.sol pre.dep (pdb.dat pdb.sol pdb.dep) ff
+`$bindir/ffas3d 3f $dbdir/3f12b 2 >re.all`; #allow assigning multiple CPUs
+
+########## rank template ----------->
+`$bindir/shrinkali re.all re.all.s`;
+`$bindir/align2initdat re.all.s $pdbdir 999 1 init.dat`; #1 modify z-score in init.dat based on real coverage
+`$bindir/reorderaligninit re.all.s init.dat re.all.t init.dat.t`; #2 renew and reorder re.all and init.dat based on new z-score, change terminal align
+
+`$bindir/align2initdat re.all.s $pdbdir 999 0 init.dat2`; #3 feature file
+`$bindir/init2feat init.dat2 pdb.pdb init.feat`; #3 feature file
+`$bindir/traindataannmaxsub init.feat maxsub.dat`; #3 input file, best if using original zscore
+`$bindir/simple_testmaxsub 13 $bindir/trainmaxsub2-13.net maxsub.dat maxsub.res`; #3 predicted maxsub score
+`$bindir/extractpredmaxsub init.dat.t maxsub.res maxsub.restt`; #3 in the new order
+
+`$bindir/cutaligninit re.all.t init.dat.t re.all.tt init.dat.tt`; #4 cut based on z-score delta, lowcov trimmed, not change order
+`$bindir/initrerankmaxsub2 init.dat.tt protein.ss2 maxsub.sortp`; #5 pairwise maxsub, take time, need TM-score program
+`$bindir/initrerankcom2 re.all.tt maxsub.restt maxsub.sortp re.all.ttt`; #6 at most top10 left, change order
+
+#### exclude PDB ####
+my @exclude_pdb_list=();
+if (-s "$data_dir/exclude_pdb_list" )
+{
+    system("cp $data_dir/exclude_pdb_list $work_dir/exclude_pdb_list");
+    foreach my $line(`cat $work_dir/exclude_pdb_list`)
+    {
+        push(@exclude_pdb_list,substr($line,0,4));
+    }
+}
+
+######## remove homologous and reformat tempaltes -------->
+#       init.dat    (original)
+#       init.dat2   (=init.dat but with different z-score)
+#       init.dat.t  (best, reordered from init.dat)
+#       init.dat.tt (same as init.dat.t)
+
+@ff=qw(
+       init.dat.t
+       );
+
+foreach $f(@ff){
+    open(f,"$f");
+    $line=<f>;
+    $nt=0;
+    if($line=~/(\d+)/){
+	$nt=$1;
+    }
+    $k=0;
+    for($i=1;$i<=$nt;$i++){
+	$line=<f>;
+	if($line=~/(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/){
+	    $tmp=$1;
+	    if($tmp>$Lch/5){
+		$k++;
+		$L_ali{$k}=$1;
+		$zscore{$k}=-$2;
+		$template{$k}=$6;
+		$mk{$k}=1;
+		for($j=1;$j<=$L_ali{$k};$j++){
+		    $LINE{$k,$j}=<f>;
+		}
+		<f>;
+	    }
+	}
+    }
+    $nt=$k;
+    $nt1=$nt;
+    
+    if($idcut0<0.1){
+	$idcut0=0.1;
+    }
+    if($idcut0<0.999){
+	$nt1=0;
+	for($i=1;$i<=$nt;$i++){
+	    $mk{$i}=1;
+	    if(-s "$pdbdir/$template{$i}.pdb"){
+		$align_rst=`./align seq.txt $pdbdir/$template{$i}.pdb 2`;
+		if($align_rst=~/Identical length\:\s+(\d+)/){
+		    $id=$1/$Lch;
+		    if($id>$idcut0){
+			$mk{$i}=0;
+			printf "$f: $template{$i} is homologous, id($i)=$id\n";
+		    }
+		}
+	    }
+            if (scalar @exclude_pdb_list)
+            {
+                $template_pdb_ID=substr($template{$i},0,4);
+                foreach $exclude_pdb_ID (@exclude_pdb_list)
+                {
+                    if($template_pdb_ID eq $exclude_pdb_ID)
+                    {
+			$mk{$i}=0;
+			printf "$f: $template{$i} is excluded\n";
+                    }
+                }
+            }
+
+	    if($mk{$i}==1){
+		$nt1++;
+	    }
+	}
+    }
+    $n_temp=!N_TEMP!;
+    $nt1=$n_temp if($nt1>=$n_temp);
+    
+    open(f,">$f.new");
+    printf f "%5d %5d (N_temp, Lch)\n",$nt1,$Lch;
+    $k=0;
+    for($i=1;$i<=$nt;$i++){
+	if($mk{$i}==1){
+	    $k++;
+	    printf f "%5d %8.3f %5d %15s\n",$L_ali{$i},$zscore{$i},$k,$template{$i};
+	    for($j=1;$j<=$L_ali{$i};$j++){
+		print f "$LINE{$i,$j}";
+	    }
+	    printf f "TER\n";
+	    goto pos1c if($k>=$n_temp);
+	}
+    }
+  pos1c:;
+    close(f);
+}
+
+`/bin/cp init.dat.t.new       $data_dir/init!O!.FF3`;
+
+#`/bin/cp init.dat.new         $data_dir/init!O!.FFAS3a.1`;
+#`/bin/cp init.dat2.new        $data_dir/init!O!.FFAS3a.2`;
+#`/bin/cp init.dat.tt.new      $data_dir/init!O!.FFAS3a.4`;
+
+################# endding procedure ######################
+$time=`date`;
+printf "ending time: $time";
+`sync`;
+`sync`;
+sleep(1);
+`rm -fr $work_dir`;
+
+exit();
