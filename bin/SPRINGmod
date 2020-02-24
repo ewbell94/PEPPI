@@ -42,7 +42,19 @@ if (-e "$springout/res.txt"){
     exit(2);
 }
 
-
+open(my $complexfile,"<","$dbdir/pdb/ComplexList.txt");
+my %complexlist=(); #Find all potential partner chains given some core chain
+while (my $line=<$complexfile>){
+    chomp($line);
+    my @chains=split("-",$line);
+    if (exists($complexlist{$chains[0]})){
+	push(@{$complexlist{$chains[0]}},$chains[1]);
+    } else {
+	my @value=($chains[1]);
+	$complexlist{$chains[0]}=\@value;
+    }
+}
+close($complexfile);
 
 open(my $indexfile,"<","$dbdir/SPRING/index.txt");
 my %forwardindex=(); #Search for the HHsearch template of a given chain
@@ -135,19 +147,7 @@ for my $pointer (@domainPairs){
     my @prot2hits=fetchHits($prot2);
     
     #Store dfire and complex list
-    open(my $complexfile,"<","$dbdir/pdb/ComplexList.txt");
-    my %complexlist=(); #Find all potential partner chains given some core chain
-    while (my $line=<$complexfile>){
-	chomp($line);
-	my @chains=split("-",$line);
-	if (exists($complexlist{$chains[0]})){
-	    push(@{$complexlist{$chains[0]}},$chains[1]);
-	} else {
-	    my @value=($chains[1]);
-	    $complexlist{$chains[0]}=\@value;
-	}
-    }
-    close($complexfile);
+    
     
     #open(my $dfirefile,"<","$bindir/dfire.txt");
     #open(my $dfirefile,"<","$bindir/newdfire.txt");
