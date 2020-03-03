@@ -1,0 +1,57 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $peppidir="!PEPPIDIR!";
+my $outdir="!OUTDIR!/PPI";
+my $pairname="!PAIRNAME!";
+my $benchmarkflag=!BENCHMARK!;
+
+print `mkdir $outdir/$pairname/OLDSPRING`;
+
+#User-set parameters
+my $bindir="/nfs/amino-home/ewbell/SPRING-PPI/SPRING"; #location of program binaries
+my $springout="$outdir/$pairname/OLDSPRING"; #location of program output
+my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
+my $hhdir="$outdir/../hhr"; #location of hhr files of previously run HHsearch results
+
+#DO NOT CHANGE BENEATH THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING
+#Processed parameters
+my $user=`whoami`;
+chomp($user);
+
+if (-e "$springout/res.txt"){
+    print "SPRING has already been run!\n";
+    exit(2);
+}
+
+my @chains=split("-",$pairname);
+print `$bindir/spring.py -q $pairname -iDir $outdir -oDir $springout -hhr1 $hhdir/$chains[0]\_1.hhr -hhr2 $hhdir/$chains[1]\_1.hhr -dockMono -scut $scut`;
+
+open(my $resfile,">","$springout/res.txt");
+
+if (! -e "$springout/SPRING/TemplateSummary.txt"){
+    print "Template Summary not found.\n";
+    print $resfile "?\n";
+    exit(2);
+}
+
+open(my $summary,"<","$springout/SPRING/TemplateSummary.txt");
+
+my $throwaway=<$summary>;
+my $topscore=-100;
+while (my $line=<$summary>){
+    last if ($line=~/^DONE$/);
+    my @parts=split(" ",$line);
+    $topscore=$parts[2];
+    last;
+}
+close($summary);
+
+if ($topscore!=-100){
+    print $resfile "$topscore\n";
+} else {
+    print "Template Summary was empty.\n";
+    print $resfile "?\n";
+}

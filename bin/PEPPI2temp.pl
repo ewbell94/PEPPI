@@ -52,8 +52,8 @@ for my $i (0..scalar(@protsA)-1){
     }
 }
 
-my @supported=("SPRING","STRING");
-#my @supported=("STRING");
+#my @supported=("SPRING","STRING");
+my @supported=("OLDSPRING");
 for my $int (glob("$outdir/PPI/*/")){
     my @parts=split("/",$int);
     my $pairname=$parts[-1];
