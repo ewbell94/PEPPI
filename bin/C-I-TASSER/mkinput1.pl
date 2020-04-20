@@ -41,7 +41,6 @@ $ENV{'PATH'}="/nfs/amino-home/zhanglabs/bin:$ENV{'PATH'}";
 
 $user="$ENV{USER}"; # user name, please change it to your own name, i.e. 'jsmith'
 $outdir="";
-$bindir="/nfs/amino-home/ewbell/PEPPI/bin/C-I-TASSER";
 $njobmax=1; #maximum number of jobs submitted by you
 $Q="batch"; #what queue you want to use to submit your jobs
 $oj="1"; #flag number for different runs, useful when you run multiple jobs for same protein
@@ -421,11 +420,6 @@ sub submitjob{
     print "$jobname was submitted.\n";
     
   pos1d:;
-}
-
-#Submit ThreaDom job
-if ($domaindiv){
-
 }
 
  pos1:;

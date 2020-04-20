@@ -209,7 +209,7 @@ foreach $F(@FF){
 	printf "$data_dir/$a.dat exist, neglect the job\n";
 	goto pos1;
     }
-    
+=pod
     ######### check whether the job is running ##########
     if($jobname=~/record\/(\S+)/){
 	$jobname1=$1;
@@ -237,6 +237,8 @@ foreach $F(@FF){
     print note "$jobname\t at $date $bsub\n";
     close(note);
     #sleep(1);
+=cut
+    print `$jobname`;
   pos1:;
 }
 

@@ -136,6 +136,7 @@ my $peppi2 = `cat $peppidir/bin/PEPPI2temp.pl`;
 $peppi2=~s/\!PEPPIDIR\!/$peppidir/;
 $peppi2=~s/\!OUTDIR\!/$outdir/;
 $peppi2=~s/\!MAXJOBS\!/$maxjobs/;
+$peppi2=~s/\!BENCHMARKFLAG\!/$benchmarkflag/;
 open(my $peppi2script,">","$outdir/PEPPI2.pl");
 print $peppi2script $peppi2;
 close($peppi2script);

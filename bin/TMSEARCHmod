@@ -1,0 +1,187 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use List::Util qw(min max);
+
+my $peppidir="!PEPPIDIR!";
+my $outdir="!OUTDIR!/PPI";
+my $pairname="!PAIRNAME!";
+my $benchmarkflag=!BENCHMARK!;
+
+#User-set parameters
+my $bindir="$peppidir/bin"; #location of program binaries
+my $tmout="$outdir/$pairname/TMSEARCH"; #location of program output
+my $dbdir="/nfs/amino-home/ewbell/SPRINGDB"; #location of SPRING database
+my $complexlist="$dbdir/70CDHITstruct.txt";
+my $tophits=100;
+my $maxmodels=1; #maximum number of model pdb files to make
+my $modeldir="$outdir/../model"; #location of hhr files of previously run HHsearch results
+
+#DO NOT CHANGE BENEATH THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING
+#Processed parameters
+my $user=`whoami`;
+chomp($user);
+my $homothresh=0.9;
+my $topscore=0.0;
+
+if (-e "$tmout/res.txt"){
+    print "TMSEARCH has already been run!\n";
+    exit(2);
+}
+
+print `mkdir $tmout`;
+
+my @qseqs=split("-",$pairname);
+my @domainPairs=();
+my $m=1;
+while (-e "$outdir/$pairname/$qseqs[0]\_$m.seq"){
+    my $n=1;
+    while (-e "$outdir/$pairname/$qseqs[1]\_$n.seq"){
+	my @domainPair=("$qseqs[0]\_$m","$qseqs[1]\_$n");
+	push(@domainPairs,\@domainPair);
+	$n++;
+    }
+    $m++;
+}
+
+my $randomTag=int(rand(1000000));
+my $tempdir="/tmp/$user/PEPPI_TMSEARCH_$qseqs[0]-$qseqs[1]\_$randomTag";
+if (! -e "$tempdir"){
+    print `mkdir -p $tempdir`;
+} else {
+    print `rm -rf $tempdir/*`;
+}
+chdir("$tempdir");
+
+for my $pointer (@domainPairs){
+    #Read in arguments and process input
+    my @qdoms = @{$pointer};
+    my $prot1file="$outdir/$pairname/$qdoms[0].seq";
+    my $prot2file="$outdir/$pairname/$qdoms[1].seq";
+    my $prot1=$qdoms[0];
+    my $prot2=$qdoms[1];
+
+    my $outputdir="$tmout/$qdoms[0]-$qdoms[1]";
+    print `mkdir $outputdir`;
+    if (! -e "$prot1file" || ! -e "$prot2file"){
+	print "Protein sequence files were not found!\n";
+	next;
+    }
+    
+    
+    #Make working directory
+    
+    
+    print `cp $prot1file $tempdir/$prot1.fasta`;
+    print `cp $prot2file $tempdir/$prot2.fasta`;
+    my $homoflag=(getSeqID("$tempdir/$prot1.fasta","$tempdir/$prot2.fasta") >= $homothresh);
+    
+#Copy HHR files or run HHsearch
+    print "Running C-I-TASSER modeling\n";
+    if (-e "$modeldir/$prot1.pdb"){
+	print `cp $modeldir/$prot1.pdb $tempdir`;
+    } else {
+	makeCITASSERmodel($prot1);
+	if (! -e "$tempdir/$prot1.pdb"){
+	    print "C-I-TASSER failed for $prot1.\n";
+	    exit(4);
+	} else {
+	    print `cp $tempdir/$prot1.pdb $modeldir/$prot1.pdb`;
+	}
+    }
+    if (-e "$modeldir/$prot2.pdb"){
+	print `cp $modeldir/$prot2.pdb $tempdir`;
+    } else {
+	makeCITASSERmodel($prot2);
+	if (! -e "$tempdir/$prot2.pdb"){
+	    print "C-I-TASSER failed for $prot2.\n";
+	    exit(4);
+	} else {
+	    print `cp $tempdir/$prot2.pdb $modeldir/$prot2.pdb`;
+	}
+    }
+   
+#Search for dimer templates given monomeric hits
+    my @dimerTemplates=tmSearch($prot1,$prot2,$homoflag);
+    
+#Flip the sequence order and search for more dimer templates if the chains are nonidentical
+    
+#Create and score models from selected dimer templates
+    print `sync`;
+    print `rm -rf $tempdir/*`;
+}
+
+print `rm -rf $tempdir`;
+open(my $resfile,">","$outdir/$pairname/NEWDB/res.txt");
+
+if ($topscore==0.0){
+    print $resfile "?\n";
+} else {
+    print $resfile "$topscore\n";
+}
+
+sub getSeqID{
+    my $fname1=$_[0];
+    my $fname2=$_[1];
+    return 0.0 if (! -f $fname1 || ! -f $fname2);
+    my $NWresult;
+    if ($fname2=~/\.fasta/){
+	$NWresult=`$bindir/NWalign $fname1 $fname2`;
+    } elsif ($fname2=~/\.pdb/){
+	$NWresult=`$bindir/NWalign $fname1 $fname2 2`;
+    } else {
+	return 0.0;
+    }
+    $NWresult=~/Identical length:\s+(\d+)/;
+    my $idcount=$1;
+    $NWresult=~/Length of sequence 1:\s+(\d+).*\nLength of sequence 2:\s+(\d+)/;
+    my $seq1len=$1;
+    my $seq2len=$2;
+    return min($idcount/$seq1len,$idcount/$seq2len) if ($fname2=~/\.fasta/);
+    return $idcount/$seq1len if ($fname2=~/\.pdb/);
+    return 0.0;
+}
+
+sub makeCITASSERmodel{
+    my $prot=$_[0];
+    print `mkdir $tempdir/$prot`;
+    print `cp $tempdir/$prot.fasta $tempdir/$prot/seq.fasta`;
+    my $args="-o $tempdir -s $prot";
+    $args="$args -b" if ($benchmarkflag);
+    #$args="$args -d" if 
+    print `$bindir/makeModel.pl $args`;
+    print `cp $tempdir/cluster/$prot/REF_model1.pdb $tempdir/$prot.pdb`;
+    print `cp $tempdir/$prot.pdb $modeldir/$prot.pdb`;
+}
+
+sub tmSearch{
+    print "Fetching dimers\n";
+    my $prot1=$_[0];
+    my $prot2=$_[1];
+    my $homoflag=$_[2];
+
+    open(my $complexfile,"<",$complexlist);
+    
+    my @complexid=();
+    while (my $line=<$complexfile>){
+	chomp($line);
+	my @chains=split("-",$line);
+	my $pairseqid=max(2/(1/getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$chains[0].pdb")+1/getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$chains[1].pdb")),2/(1/getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$chains[0].pdb")+1/getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$chains[1].pdb")));
+	my @pair=($line,$pairseqid);
+	push(@complexid,\@pair);
+    }
+    
+    @complexid=sort{$b->[1]<=>$a->[1]} @complexid;
+    
+    my @complextm=();
+    for my $pointer (@complexid){
+	my @pair=@{$pointer};
+	my $tmthresh=0.0;
+	if (scalar(@complextm) >= $tophits){
+	    my $scoretobeat=$complextm[$tophits-1][1];
+	    $tmthresh=1/(2/$scoretobeat-1);
+	}
+    }
+}
+

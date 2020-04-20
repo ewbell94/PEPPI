@@ -162,7 +162,7 @@ for my $pointer (@domainPairs){
 		}
 	    }
 	    if (!$dupflag){
-		my @flipped=($flippedTemplates[$i][1],$flippedTemplates[$i][0],$flippedTemplates[$i][2]);
+		my @flipped=($flippedTemplates[$i][1],$flippedTemplates[$i][0],$flippedTemplates[$i][2],$flippedTemplates[$i][4],$flippedTemplates[$i][3]);
 		push(@dimerTemplates,\@flipped);
 	    } else {
 		print "Duplicate purged: $flippedTemplates[$i][0] $flippedTemplates[$i][1]\n";
