@@ -37,11 +37,11 @@ if (!$infastaB){
 }
 
 #DO NOT EDIT BENEATH THIS LINE
-=pod
-if (system("squeue")){
+
+if (system("squeue > /dev/null")){
     die "Must be connected to cluster to run.\n";
 }
-=cut
+
 my $peppidir= "/nfs/amino-home/ewbell/PEPPI";
 my $maxjobs=300;
 
@@ -124,14 +124,30 @@ if (openhandle($fastaout)){
     print "Input fasta file 2 was empty.  Exiting...\n";
     exit(1);
 }
-=pod
+
+print `mkdir $outdir/hhr`;
+print `mkdir $outdir/model`;
 for my $ind (1..$i){
-    my $args="-o $outdir -t prot$ind -j $maxjobs";
-    $args="$args -b" if ($benchmarkflag);
-    $args="$args -d" if ($domaindiv);
-    print `$peppidir/bin/C-I-TASSER/mkinput1.pl $args`;
+    if (! -e "$outdir/model/prot$ind.pdb"){
+	my $args="-o $outdir/fasta -t prot$ind";
+	$args="$args -b" if ($benchmarkflag);
+	$args="$args -d" if ($domaindiv);
+	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+	    sleep(60);
+	}
+	#print `sbatch -o $outdir/fasta/prot$ind/out_makeModel.log $peppidir/bin/makeModel.pl $args`;
+    }
+
+
+    if (! -e "$outdir/hhr/prot$ind.hhr"){
+	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+	    sleep(60);
+	}
+	print `sbatch -o $outdir/fasta/prot$ind/out_makeHHR.log $peppidir/bin/makeHHR.pl -o $outdir/fasta -t prot$ind`;
+    }
+
 }
-=cut
+
 my $peppi2 = `cat $peppidir/bin/PEPPI2temp.pl`;
 $peppi2=~s/\!PEPPIDIR\!/$peppidir/;
 $peppi2=~s/\!OUTDIR\!/$outdir/;

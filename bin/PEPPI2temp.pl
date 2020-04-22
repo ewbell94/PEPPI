@@ -35,8 +35,8 @@ while (my $line=<$protcodeB>){
 close($protcodeB);
 
 print `mkdir $outdir/PPI`;
-print `mkdir $outdir/hhr`;
-print `mkdir $outdir/model`;
+#print `mkdir $outdir/hhr`;
+#print `mkdir $outdir/model`;
 for my $i (0..scalar(@protsA)-1){
     for my $j (0..scalar(@protsB)-1){
 	next if (-e "$outdir/PPI/$protsB[$j]-$protsA[$i]" || ($nohomo && $protsB[$j] eq $protsA[$i]));
