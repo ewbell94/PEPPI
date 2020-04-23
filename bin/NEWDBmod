@@ -132,8 +132,6 @@ for my $pointer (@domainPairs){
 	if (! -e "$tempdir/$prot1\_new.hhr"){
 	    print "HHsearch failed for $prot1.\n";
 	    exit(4);
-	} else {
-	    print `cp $tempdir/$prot1\_new.hhr $outputdir/$prot1\_new.hhr`;
 	}
     }
     if (-e "$hhdir/$prot2\_new.hhr"){
@@ -143,8 +141,6 @@ for my $pointer (@domainPairs){
 	if (! -e "$tempdir/$prot2\_new.hhr"){
 	    print "HHsearch failed for $prot2.\n";
 	    exit(4);
-	} else {
-	    print `cp $tempdir/$prot2\_new.hhr $outputdir/$prot2\_new.hhr`;
 	}
     }
     
