@@ -1,0 +1,25 @@
+The PDB directory contains modules for working with Proteins, DNA and RNA data from
+pdb files.  The three modules used in this directory are the most commonly used
+in Brandon Govindarajoo's framework.  The order of studying each module should 
+be: pdbchains.py, alignment.py, and interface.py
+
+pdbchains.py:
+A module for reading, writing and manipulating pdb data.
+
+alignment.py:
+A module for sequence and structure alignment.
+
+interface.py:
+A set of functions for protein dimer complexes.  
+
+NWalign:
+Directory containing python wrappers for NWalign implemented
+in fortran.
+
+TMalign:
+Directory containing python wrapper for TMalign implemented 
+in c++.
+
+TMscore
+Directory cotaining python wrapper for TMscore implemented in
+fortran

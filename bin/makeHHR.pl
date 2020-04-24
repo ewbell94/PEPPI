@@ -14,7 +14,7 @@ my $outdir="";
 ######### Needed changes ended #################################
 
 my $target="";
-my $bindir="/nfs/amino-home/ewbell/PEPPI/SPRING-PPI/bin";
+my $bindir="/nfs/amino-home/ewbell/PEPPI/bin";
 my $domaindiv=0;
 
 GetOptions(
