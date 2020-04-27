@@ -8,7 +8,7 @@ my $outdir="!OUTDIR!";
 my $maxjobs=!MAXJOBS!;
 my $nohomo=0;
 my $benchmarkflag=!BENCHMARKFLAG!;
-my $batchsize=5;
+my $batchsize=200;
 
 my $user=`whoami`;
 chomp($user);
