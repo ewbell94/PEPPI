@@ -14,7 +14,7 @@ my $benchmarkflag=!BENCHMARK!;
 print `mkdir $outdir/$pairname/NEWDB`;
 
 #User-set parameters
-my $bindir="$peppidir/SPRING-PPI/bin"; #location of program binaries
+my $bindir="$peppidir/bin"; #location of program binaries
 my $springout="$outdir/$pairname/NEWDB"; #location of program output
 my $dbdir="/nfs/amino-home/ewbell/SPRINGDB"; #location of SPRING database
 my $complexlist="$dbdir/70CDHITstruct.txt";

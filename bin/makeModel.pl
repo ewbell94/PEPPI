@@ -32,7 +32,7 @@ my $run=($benchflag) ? "benchmark" : "real";
 
 eval{
     local $SIG{ALRM}=sub{ die "alarm\n"};
-    alarm(259000);
+    alarm(216000);
     CITASSER();
     #alarm(0);
 };

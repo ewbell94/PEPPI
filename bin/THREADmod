@@ -14,7 +14,7 @@ my $benchmarkflag=!BENCHMARK!;
 print `mkdir $outdir/$pairname/THREAD`;
 
 #User-set parameters
-my $bindir="$peppidir/SPRING-PPI/bin"; #location of program binaries
+my $bindir="$peppidir/bin"; #location of program binaries
 my $springout="$outdir/$pairname/THREAD"; #location of program output
 my $dbdir="/nfs/amino-home/liuzi/lz_program/TACOS/database"; #location of SPRING database
 my $maxmodels=3; #maximum number of model pdb files to make
