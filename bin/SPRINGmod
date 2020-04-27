@@ -14,7 +14,7 @@ my $benchmarkflag=!BENCHMARK!; #Set to 1 to run in "benchmark mode" (templates <
 print `mkdir $outdir/$pairname/SPRING`;
 
 #User-set parameters
-my $bindir="$peppidir/SPRING-PPI/bin"; #location of program binaries
+my $bindir="$peppidir/bin"; #location of program binaries
 my $springout="$outdir/$pairname/SPRING"; #location of program output
 my $dbdir="/nfs/amino-home/liuzi/lz_program/TACOS/database"; #location of SPRING database
 my $maxmodels=3; #maximum number of model pdb files to make
