@@ -42,7 +42,7 @@ if (system("squeue > /dev/null")){
     die "Must be connected to cluster to run.\n";
 }
 
-my $peppidir= "/nfs/amino-home/ewbell/PEPPI";
+my $peppidir= "/home/ewbell/PEPPI";
 my $maxjobs=300;
 
 #Organize sequences
@@ -143,7 +143,7 @@ for my $ind (1..$i){
 	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
 	    sleep(60);
 	}
-	print `sbatch -o $outdir/fasta/prot$ind/out_makeHHR.log $peppidir/bin/makeHHR.pl -o $outdir/fasta -t prot$ind`;
+	#print `sbatch -o $outdir/fasta/prot$ind/out_makeHHR.log $peppidir/bin/makeHHR.pl -o $outdir/fasta -t prot$ind`;
     }
 
 }
