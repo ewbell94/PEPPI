@@ -8,12 +8,11 @@ my $outdir="!OUTDIR!";
 my $maxjobs=!MAXJOBS!;
 my $nohomo=0;
 my $benchmarkflag=!BENCHMARKFLAG!;
-my $batchsize=10;
+my $batchsize=5;
 
 my $user=`whoami`;
 chomp($user);
 
-print "User\n";
 my $singleflag=0;
 $singleflag=1 if (scalar(@ARGV) > 0 && $ARGV[0] eq "s");
 
