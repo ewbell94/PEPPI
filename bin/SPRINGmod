@@ -16,11 +16,11 @@ print `mkdir $outdir/$pairname/SPRING`;
 #User-set parameters
 my $bindir="$peppidir/bin"; #location of program binaries
 my $springout="$outdir/$pairname/SPRING"; #location of program output
-my $dbdir="/nfs/amino-home/liuzi/lz_program/TACOS/database"; #location of SPRING database
+my $dbdir="/oasis/projects/nsf/mia181/zhanglab/DIMER"; #location of SPRING database
 my $maxmodels=3; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
-my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
-my $dimerdb="/nfs/amino-library/DIMERDB/HHsearch/hhm.db"; #location of dimer chain template database for HHsearch threading
+my $uniprotdb="/oasis/projects/nsf/mia181/zhanglab/library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
+my $dimerdb="/oasis/projects/nsf/mia181/zhanglab/library/DIMERDB/HHsearch/hhm.db"; #location of dimer chain template database for HHsearch threading
 my $zmin=2.0; #Minimum Z-score for reporting templates; if none are found satisfying this threshold, zmin is set to -5
 my $hhdir="$outdir/../hhr"; #location of hhr files of previously run HHsearch results
 
