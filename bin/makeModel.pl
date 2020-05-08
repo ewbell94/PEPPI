@@ -1,12 +1,12 @@
 #!/usr/bin/perl
-#SBATCH -t 72:00:00
+#SBATCH -t 48:00:00
 #SBATCH --mem=10G
 #SBATCH -J makeModel.pl
 
 use Math::Trig;
 use Getopt::Long qw(GetOptions);
 
-$ENV{'PATH'}="/nfs/amino-home/zhanglabs/bin:$ENV{'PATH'}";
+#$ENV{'PATH'}="/nfs/amino-home/zhanglabs/bin:$ENV{'PATH'}";
 
 $user="$ENV{USER}"; # user name, please change it to your own name, i.e. 'jsmith'
 $outdir="";
@@ -17,7 +17,7 @@ $oj="1"; #flag number for different runs, useful when you run multiple jobs for 
 ######### Needed changes ended #################################
 
 my $s="";
-my $bindir="/nfs/amino-home/ewbell/PEPPI/bin/C-I-TASSER";
+my $bindir="/home/ewbell/PEPPI/bin/C-I-TASSER";
 my $benchflag=0;
 my $domaindiv=0;
 
@@ -98,7 +98,7 @@ sub CITASSER{
     #
     # The log files are in $outdir/record if you want to debug your files
 
-    $lib="/nfs/amino-library";
+    $lib="/oasis/projects/nsf/mia181/zhanglab/library";
 
     ################# directory assignment #############################
     $u=substr($user,0,1);
@@ -324,6 +324,7 @@ sub CITASSER{
     $mod1=~s/\!INPUTDIR\!/$datadir/mg;
     $mod1=~s/\!RUN\!/$run/mg;
     $mod1=~s/\!BINDIR\!/$bindir/mg;
+    $mod1=~s/\!LIBRARYDIR\!/$librarydir/mg;
     open(job,">$jobname");
     print job "$mod1\n";
     close(job);

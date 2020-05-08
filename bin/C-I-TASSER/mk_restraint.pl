@@ -7,15 +7,15 @@ use Math::Trig;
 # http://salilab.org/modeller/manual/node414.html
 ########
 
-$ENV{'PATH'}='/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin';
-$ENV{'LD_LIBRARY_PATH'}='/usr/local/lib:/usr/lib:/lib';
+#$ENV{'PATH'}='/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin';
+#$ENV{'LD_LIBRARY_PATH'}='/usr/local/lib:/usr/lib:/lib';
 
 ############################################
 # usage: 
 # >modeller.pl distCA.rsr combo.pdb comb.dat dist.dat combCA.dat 20(n_int) 0.5(dev) 0.6(conf)
 
 $lib="/nfs/amino-library";
-
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if(!-d "$lib");
 $rsr="$ARGV[0]"; #output
 $combo="$ARGV[1]";
 $dev_distL="$ARGV[2]"; #0,0.001,0.01,0.05

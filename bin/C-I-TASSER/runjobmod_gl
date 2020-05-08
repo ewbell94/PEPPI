@@ -1,0 +1,24 @@
+#!/bin/tcsh -f
+#SBATCH --job-name=!JOBNAME!
+#SBATCH --output=!OUTFILE!
+#SBATCH --error=!ERRFILE!
+#SBATCH --partition=standard
+#SBATCH --nodes=1
+#SBATCH --mem=10G
+#SBATCH --ntasks-per-node=1
+#SBATCH --export=ALL
+#SBATCH -t 48:00:00
+#SBATCH -A zhng
+
+
+set hostname=`hostname`
+set date=`date`
+set pwd=`pwd`;
+echo hostname: $hostname > !RECORDDIR!/ware_!TAG!
+echo starting time: $date >> !RECORDDIR!/ware_!TAG!
+echo pwd: $pwd >> !RECORDDIR!/ware_!TAG!
+
+!JOBNAME!
+
+set date=`date`
+echo endding time: $date >> !RECORDDIR!/ware_!TAG!

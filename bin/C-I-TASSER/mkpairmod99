@@ -1,10 +1,19 @@
 #!/usr/bin/perl
+#SBATCH --job-name="!TAG!"
+#SBATCH --output="!OUTFILE!"
+#SBATCH --error="!ERRFILE!"
+#SBATCH --partition=!Q!
+#SBATCH --nodes=1
+#SBATCH --mem=!MEM!
+#SBATCH --ntasks-per-node=1
+#SBATCH -t !WALLTIME!
+#SBATCH -A !ACCOUNT!
 
 use Math::Trig;
 
 ########### setup  the environment and Working DIRectory ###
-$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin";
-$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
+#$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin";
+#$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
 
 ##### report node -------->
 `hostname`=~/(\S+)/;
@@ -20,10 +29,12 @@ $s="!S!";
 $inputdir="!INPUTDIR!";
 $run="!RUN!";
 $bindir="!BINDIR!";
-$librarydir="/nfs/amino-library";
+$librarydir="!LIBRARYDIR!";
+
 ################# directories #############################
-$work_dir="/tmp/!USER!/!TAG!";
-`/bin/mkdir -p $work_dir`;
+#$work_dir="/tmp/!USER!/!TAG!";
+$work_dir="/scratch/$ENV{USER}/$ENV{SLURM_JOBID}";
+#`/bin/mkdir -p $work_dir`;
 chdir "$work_dir";
 `/bin/rm -f $work_dir/*`;
 `cp $librarydir/bin/align ./align`;

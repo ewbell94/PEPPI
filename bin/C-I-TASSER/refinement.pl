@@ -46,10 +46,13 @@ if(!-s "$model_init"){
 
 $home="/nfs/amino-home/zhng";
 $lib="/nfs/amino-library";
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if (!-d "$lib");
+$home="$lib" if (!-d "$home");
 
 ################# work directories #############################
 $random=int(rand()*100000000000);
 $workdir="/tmp/REF402S$random\_$mod";
+#$workdir="/scratch/$ENV{USER}/$ENV{SLURM_JOBID}/REF402S$random\_$mod";
 `/bin/mkdir -p $workdir`;
 chdir "$workdir";
 `/bin/rm -f $workdir/*`;

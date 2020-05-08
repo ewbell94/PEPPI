@@ -1,5 +1,8 @@
 #!/usr/bin/perl
+
 use Math::Trig;
+use File::Basename;
+use Cwd 'abs_path';
 
 #################################################################
 # Disclaimer: C-I-TASSER is the software developed at Zhang Lab #
@@ -37,42 +40,15 @@ use Math::Trig;
 
 ######### variables may need to change #####################
 @ss=qw(
-QHD43415_3D2D2D1
-QHD43415_3D2D2D2
-QHD43415_3D2D2
-QHD43415_11D2
-QHD43415_2
-QHD43415_12
-QHD43415_13
-QHD43415_4
-QHD43415_14
-QHD43415_3D1D2
-QHD43415_3D1D1D2
-QHD43415_5
-QHD43415_2D2
-QHD43415_15
-QHD43415_6
-QHD43415_4D1D1
-QHD43415_2D3
-QHD43415_3D1D1D1D2
-QHD43415_3D1D1D1D1
-QHD43415_8
-QHD43415_1
-QHD43415_4D1D2
-QHD43415_11D1D2
-QHD43415_10
-QHD43415_11D1D1
-QHD43415_3D2D1
-QHD43415_9
-QHD43415_2D1
-QHD43415_4D2
-QHD43415_7
+        76290
        );  #list of protein target names, seq.fasta ready for each target
 
-$user="$ENV{USER}"; # user name, please change it to your name, e.g. 'jsmith'
-$outdir="/nfs/amino-home/zcx/Task/2019-nCoV/C-I-TASSER_corrected";
-$bindir="/nfs/amino-home/zcx/Projects/C-I-TASSER/version_2018_09_01";
-$Q="default"; #what queue you want to use to submit your jobs
+$user=$ENV{USER}; # your own name, i.e, liuzi
+#$user="yzhang_test"; # user name, please change it to your name, e.g. 'jsmith'
+$outdir="/oasis/projects/nsf/mia174/jlspzw/Minigenome/CIT_data"; #where input/output files are
+$bindir="/home/jlspzw/C-I-TASSER/version_2018_09_01/"; #where script and cas programs are
+$Q="shared"; #what queue you want to use to submit your jobs
+$account="mia174"; # project account
 $clusterdir="$outdir/cluster"; #where the cluster results will be
 $oj="1"; #flag number for different runs, useful when you run multiple jobs for same protein
 #####################################################////////
@@ -87,7 +63,9 @@ $oj="1"; #flag number for different runs, useful when you run multiple jobs for 
 
 
 ### Please do not change files below unless you know what you are doing #####
+
 $lib="/nfs/amino-library";
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if(!-d "$lib");
 
 ########## clustering parameters -------------->
 #$spicker="spicker45d"; #nst=20200
@@ -205,7 +183,9 @@ foreach $s(@ss){
     $runjobname="$recorddir/$tag\_run";
     $errfile="$recorddir/err_$tag";
     $outfile="$recorddir/out_$tag";
-    $walltime="walltime=20:00:00,mem=3500mb";
+    #$walltime="walltime=20:00:00,mem=3500mb";
+    $walltime="20:00:00";
+    $mem="5000mb";
     $node="nodes=1:ppn=1";
     ###
     #------- jobname ------>
@@ -213,6 +193,9 @@ foreach $s(@ss){
     $mod=~s/\!ERRFILE\!/$errfile/mg;
     $mod=~s/\!OUTFILE\!/$outfile/mg;
     $mod=~s/\!WALLTIME\!/$walltime/mg;
+    $mod=~s/\!MEM\!/$mem/mg;
+    $mod=~s/\!ACCOUNT\!/$account/mg;
+    $mod=~s/\!Q\!/$Q/mg;
     $mod=~s/\!NODE\!/$node/mg;
     
     $mod=~s/\!O\!//mg;
@@ -251,8 +234,9 @@ foreach $s(@ss){
     
     ### submit clustering file #################
   pos42:;
-    printf "qsub -q $Q $jobname\n";
-    $qsub=`qsub -q $Q $jobname`;
+    #printf "qsub -q $Q $jobname\n";
+    $qsub=`sbatch $jobname`;
+    #$qsub=`qsub -q $Q $jobname`;
     if(length $qsub ==0){
 	sleep(20);
 	goto pos42;

@@ -179,18 +179,6 @@ printf "run Raptor threading ..........\n";
 `./CNFsearch -a 4 -q $s -g $work_dir -l ./databases/bc100_list -d ./databases/TPL_BC100/ -o $s.rank -n 500`;
 
 ########### retrive alignment of init.dat --------->
-
-#### exclude PDB ####
-my @exclude_pdb_list=();
-if (-s "$data_dir/exclude_pdb_list" )
-{
-    system("cp $data_dir/exclude_pdb_list $work_dir/exclude_pdb_list");
-    foreach my $line(`cat $work_dir/exclude_pdb_list`)
-    {
-        push(@exclude_pdb_list,substr($line,0,4));
-    }
-}
-
 printf "retrive alignment file .....\n";
 open(rank,"$s.rank");
 open(init,">init.dat");
@@ -293,14 +281,6 @@ while($line=<rank>){
 	close(a);
 	
 	############ check homology ##############
-        if (scalar @exclude_pdb_list)
-        {
-            $template_pdb_ID=substr($template,0,4);
-            foreach $exclude_pdb_ID (@exclude_pdb_list)
-            {
-                goto pos2c if($template_pdb_ID eq $exclude_pdb_ID);
-            }
-        }
 	if($idcut0<0.999){
 	    $align_rst=`./align $sequence $s.fasta 4`;
 	    if($align_rst=~/Identical length\:\s+(\d+)/){

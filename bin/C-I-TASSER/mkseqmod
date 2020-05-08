@@ -1,4 +1,14 @@
 #!/usr/bin/perl
+#SBATCH --job-name="!TAG!"
+#SBATCH --output="!OUTFILE!"
+#SBATCH --error="!ERRFILE!"
+#SBATCH --partition=!Q!
+#SBATCH --nodes=1
+#SBATCH --mem=!MEM!
+#SBATCH --ntasks-per-node=1
+#SBATCH -t !WALLTIME!
+#SBATCH -A !ACCOUNT!
+
 #PBS -e !ERRFILE!
 #PBS -o !OUTFILE!
 #PBS -l !WALLTIME!
@@ -6,8 +16,8 @@
 use Math::Trig;
 
 ########### setup  the environment and Working DIRectory ###
-$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin";
-$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
+#$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin";
+#$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
 
 ##### report node -------->
 `hostname`=~/(\S+)/;
@@ -19,7 +29,9 @@ $pwd=`pwd`;
 printf "pwd: $pwd";
 #^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-$tmpdir="/tmp/!USER!/!TAG!";
+#$tmpdir="/tmp/!USER!/!TAG!";
+$tmpdir="/scratch/$ENV{USER}/$ENV{SLURM_JOBID}";
+$tmpdir="/tmp/!USER!/!TAG!" if (!-d "$tmpdir" || ! "$ENV{SLURM_JOBID}");
 $datadir="!DATADIR!";
 $librarydir="!LIBRARYDIR!";
 
@@ -32,7 +44,7 @@ $PSSpreddir="$librarydir/bin/PSSpred";
 system("$PSSpreddir/runPSSpred.pl $tmpdir $datadir seq.txt seq.pss exp.dat");
 
 ######### combine PSIpred and PSSpred into 'seq.dat'---------->
-system("/nfs/amino-library/bin/combine_SS.pl $datadir seq.psi.ss seq.pss.ss seq.dat");
+system("$librarydir/bin/combine_SS.pl $datadir seq.psi.ss seq.pss.ss seq.dat");
 
 ################# endding procedure ######################
 $time=`date`;

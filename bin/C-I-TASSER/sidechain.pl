@@ -7,6 +7,12 @@ if(!-s "$model"){
     printf "without $mode, quit!\n";
 }
 
+
+
+$lib="/nfs/amino-library";
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if (!-d "$lib");
+
+
 ######### generate backbone.pdb ################
 open(model,"$model");
 open(back1,">backbone.pdb");
@@ -24,8 +30,8 @@ close(model);
 
 ######### generate $model.scw ------------>
 #`/home/yzhang/library/yzhang/bin/scwrl3_lin/scwrl3 -i backbone.pdb -o $model\.scw`;
-`/nfs/amino-library/bin/scwrl4/Scwrl4 -i backbone.pdb -o $model\.scw`;
-
+#`/nfs/amino-library/bin/scwrl4/Scwrl4 -i backbone.pdb -o $model\.scw`;
+`$lib/bin/scwrl4/Scwrl4 -i backbone.pdb -o $model\.scw`;
 ########## compare $model and $model.scw -------------->
 if(!-s "$model\.scw"){
     printf "Without $model.xcw generated, quit!\n";

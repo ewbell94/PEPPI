@@ -5,11 +5,17 @@ use Math::Trig;
 #nr at    /library/yzhang/FFAS/blast/db
 #pdb at   /library/yzhang/PDB
 
+#$home="/nfs/amino-home/zhng";
+#$lib="/nfs/amino-library";
 $home="/nfs/amino-home/zhng";
 $lib="/nfs/amino-library";
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if(!-d "$lib");
+$home="$lib" if (!-d "$home");
 
 ########### setup  the environment and Working DIRectory ###
-$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin:$lib/FFAS/soft";
+#$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin:$lib/FFAS/soft";
+#$ENV{'FFAS'}="$lib/FFAS";
+$ENV{'PATH'}="$lib/FFAS/soft:$ENV{'PATH'}";
 $ENV{'FFAS'}="$lib/FFAS";
 ############### FFAS ############################
 
@@ -124,11 +130,13 @@ $tag="!TAG!";
 $usrname="!USER!";
 $libdir="!LIB_DIR!";
 $o="!O!";
-$idcut0=!ID_CUT!;
+$idcut="!ID_CUT!"; 
 $ntemp="!N_TEMP!";
 $libdir_local="$lib";
  
-$work_dir="/tmp/$usrname/$tag";
+#$work_dir="/tmp/$usrname/$tag";
+$work_dir="/scratch/$ENV{USER}/$ENV{SLURM_JOBID}";
+$work_dir="/tmp/$usrname/$tag" if (!-d "$work_dir" || ! "$ENV{SLURM_JOBID}");
 ################ working directory ########################
 `/bin/mkdir -p $work_dir`;
 chdir "$work_dir";
@@ -172,17 +180,6 @@ printf "running FFAS .....\n";
 ###########################################################
 ##### create template file 'init.dat' #####################
 ###########################################################
-#### exclude PDB ####
-my @exclude_pdb_list=();
-if (-s "$data_dir/exclude_pdb_list" )
-{
-    system("cp $data_dir/exclude_pdb_list $work_dir/exclude_pdb_list");
-    foreach my $line(`cat $work_dir/exclude_pdb_list`)
-    {
-        push(@exclude_pdb_list,substr($line,0,4));
-    }
-}
-
 $check=-1;  ## this variable used to indicate the start line of a new query-template alignment
 $count=0;   ## this variable used to indicate which line is query sequence and template sequence
 $it=0;
@@ -233,15 +230,8 @@ while($line=<FFASIN>){
 		{
 		    `cp $home/PDBall/$template_name\.pdb ./temp.pdb`;
 		}
-                
-                if (scalar @exclude_pdb_list)
-                {
-                    $template_pdb_ID=substr($template_name,0,4);
-                    foreach $exclude_pdb_ID (@exclude_pdb_list)
-                    {
-                        goto PPP if($template_pdb_ID eq $exclude_pdb_ID);
-                    }
-                }
+		
+		$idcut0=!ID_CUT!;
 		if($idcut0<0.999)
 		{
 		    $align_rst=`./align protein.seq temp.pdb 2`;

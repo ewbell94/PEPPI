@@ -27,24 +27,24 @@ my $pdbdir=$ENV{'pdbdir'};
 # 4.run $HHsuite/scripts/hhpred/hhpsmodeller.pl generate full atomic model for query basing on each template
 #   in init.dat, generate init.mod file. 
 #   $HHsuite/scripts/hhpred/hhpsmodeller.pl -i protein.seq -t template.pdb[in init.dat] -o seq.pdb -m (modellertype 0 or 1) -mode pdb > seq.log
-#   0 sali modeller, 1 soeding modeller
+#   0 sali modeller, 1 sording modeller
 #
 # 5.run $HHsuite/scripts/hhpred/hhpsmodeller.pl generate full atomic model for query basing on each template
 #   in initS.dat, generate initS.mod file, adding code judge whether model file exist.
 #   $HHsuite/scripts/hhpred/hhpsmodeller.pl -i protein.seq -t template.pdb[in initS.dat] -o seq.pdb -m (modellertype 0 or 1) -mode pdb > seq.log
-#   0 sali modeller, 1 soeding modeller
+#   0 sali modeller, 1 sording modeller
 #
 # 6.output files:
 #   init1.dat: hhpred selected templates
 #   init.mod: modeller model for query sequnece basing on each template in init.dat (my modified modeller model)
 #   initS.dat: hhpred start templates (remove identify >=cutoff template), generate by hhsearch, hhpred select templates from this file.
 #   initS.mod: modeller model for query sequnece basing on each template in initS.dat (my modified modeller model)
-#   protein.pdb: modeller model for query sequnece basing on multipy templates in init.dat (soeding model)
+#   protein.pdb: modeller model for query sequnece basing on multipy templates in init.dat (sording model)
 #
 #
 # HHpred softs version:
 # HHsuite: hhblits hhsearch hhmake hhfilter version 2.0.15 (if update to 3.0.1, need to change hhpred all scripts, too many bugs now) 
-# Modeller: version 9.16, New modeller changed by soeding
+# Modeller: version 9.16, New modeller changed by sording
 # dssp: version 2.0.4 used in addss.pl configured by HHPath.pm
 # psipred: version 2.6 used in addss.pl configured by HHPath.pm
 # HHsearch Database: PDB70 for HHsearch version 2016_03 (not for HHblits)
@@ -132,7 +132,7 @@ my $pdbdir=$ENV{'pdbdir'};
 
 $o="!O!";
 $s="!S!";
-$m="!M!";###### modeller type 0: sali modeller 1: soeding modeller
+$m="!M!";###### modeller type 0: sali modeller 1: sording modeller
 if(not($m eq "0" or $m eq "1")){
    $m="1";
 }
@@ -151,18 +151,6 @@ $work_dir="/tmp/$user/$tag";
 chdir "$work_dir";
 `/bin/rm -f $work_dir/*`;
 `cp $libdir/bin/align ./align`;
-
-#### exclude PDB ####
-my @exclude_pdb_list=();
-if (-s "$data_dir/exclude_pdb_list" )
-{
-    system("cp $data_dir/exclude_pdb_list $work_dir/exclude_pdb_list");
-    foreach my $line(`cat $work_dir/exclude_pdb_list`)
-    {
-        push(@exclude_pdb_list,substr($line,0,4));
-    }
-    #$n_temp+=scalar @exclude_pdb_list;
-}
 
 ################ make fasta sequence file #################
 @seqtxts=`cat $data_dir/seq.txt`;
@@ -191,7 +179,7 @@ close(seq);
 ################################ run hhpthreading for templates.hhr file ####################################
 my $cutoff=100*$idcut0;
 printf "running $hhlib/scripts/hhpred/hhpmodeller_align.pl to pick up templates and generate model for target.....\n";
-system("$hhlib/scripts/hhpred/hhpmodeller_align3.pl -i protein.seq -o protein -cutoff $cutoff -m $m -tnum $n_temp -excl exclude_pdb_list >protein.log");
+system("$hhlib/scripts/hhpred/hhpmodeller_align2.pl -i protein.seq -o protein -cutoff $cutoff -m $m -tnum $n_temp >protein.log");
 system("cp protein.final.lst protein.out");
 `/bin/cp protein            protein.pdb`;
 `/bin/cp protein.pdb $data_dir/hhpred_model.pdb`; ####
@@ -289,19 +277,12 @@ open(init,">init.dat");
 open(initmod,">init.mod");
 $i_t=0;
 for($i=1;$i<=$N_hit;$i++){
+    #$zscore_value=$zscore{$i}; #donot use this score when template is too few
     $template_name=$T_name{$i};
     $pdb="$pdbdir/$template_name\.pdb";
     goto pos2 if(!-s "$pdb");
     
     ############ check homology ##############
-    if (scalar @exclude_pdb_list)
-    {
-        $template_pdb_ID=substr($template_name,0,4);
-        foreach $exclude_pdb_ID (@exclude_pdb_list)
-        {
-            goto pos2 if($template_pdb_ID eq $exclude_pdb_ID);
-        }
-    }
     if($idcut0<0.999){
 	$align_rst=`./align protein.seq $pdb 2`;
 	   if($align_rst=~/Identical length\:\s+(\d+)/){
@@ -314,6 +295,7 @@ for($i=1;$i<=$N_hit;$i++){
     open(align,"protein.out");
     $L_ali=0;
     while($line=<align>){
+	#if($line=~/^\>$template_name/){
 	if($line=~/^No\s+$NO{$i}/){
 	    while($line=<align>){
 		if($line=~/Score\=\s*(\S+)/){
@@ -404,7 +386,7 @@ for($i=1;$i<=$N_hit;$i++){
 	    printf "using sali modeller build full atomic model for query basing on template $template_name \n";
 	}
 	else{
-	    printf "using soeding modeller build full atomic model for query basing on template $template_name \n";
+	    printf "using sording modeller build full atomic model for query basing on template $template_name \n";
 	}
 	system("$hhlib/scripts/hhpred/hhpsmodeller.pl -i protein.seq -t $template_name.pdb -m $m -o $template_name.modeller$m.pdb -mode pdb >$template_name.modeller$m.log");
 	
@@ -503,14 +485,6 @@ for($i=1;$i<=$N_hit;$i++){
     goto Spos2 if(!-s "$pdb");
     
     ############ check homology ##############
-    if (scalar @exclude_pdb_list)
-    {
-        $template_pdb_ID=substr($template_name,0,4);
-        foreach $exclude_pdb_ID (@exclude_pdb_list)
-        {
-            goto Spos2 if($template_pdb_ID eq $exclude_pdb_ID);
-        }
-    }
     if($idcut0<0.999){
 	$align_rst=`./align protein.seq $pdb 2`;
 	   if($align_rst=~/Identical length\:\s+(\d+)/){
@@ -616,7 +590,7 @@ for($i=1;$i<=$N_hit;$i++){
 	        printf "using sali modeller build full atomic model for query basing on template $template_name \n";
 	    }
 	    else{
-	        printf "using soeding modeller build full atomic model for query basing on template $template_name \n";
+	        printf "using sording modeller build full atomic model for query basing on template $template_name \n";
 	    }
 	    system("$hhlib/scripts/hhpred/hhpsmodeller.pl -i protein.seq -t $template_name.pdb -m $m -o $template_name.modeller$m.pdb -mode pdb >$template_name.modeller$m.log");
 	}
@@ -751,7 +725,6 @@ foreach $f(@ff){
 `/bin/cp initS.mod_new            $data_dir/init$o\.HHWam`;  #initS.dat + modeller (full-length)
 
 `/bin/cp protein.pdb_new            $data_dir/init$o\.HHWb`; #hhpred+modeller (full-length)
-#`/bin/cp protein.log            $data_dir/protein.log`; #hhpred+modeller (full-length) log
 
 #exit();
 ################# endding procedure ######################

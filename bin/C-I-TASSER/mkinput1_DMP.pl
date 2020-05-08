@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 use Math::Trig;
+use File::Basename;
+use Cwd 'abs_path';
 
 #################################################################
 # Disclaimer: C-I-TASSER is the software developed at Zhang Lab #
@@ -36,36 +38,29 @@ use Math::Trig;
 
 
 ######## ALL these variables MUST be changed before run ###############
+=pod
 @ss=qw(
-1qexA
-1al0G
-1c17M
-1sa0E
-1d0qA
-1y7qA
+        xxxx       
        ); #this is a list of protein targets, seq.fasta should be ready for each target
-
-$user="$ENV{USER}"; # user name, please change it to your own name, i.e. 'jsmith'
-$outdir="/nfs/amino-home/zcx/Task/hard/lomets";
-$bindir="/nfs/amino-home/zcx/Projects/C-I-TASSER/version_2018_09_01";
+=cut
+$outdir="/oasis/projects/nsf/mia174/jlspzw/TestDMP"; #where input/output files are
 $run="benchmark"; #='real', use all templates; ='benchmark', homology templates (id>30%) are excluded
-$njobmax=300; #maximum number of jobs submitted by you
-$njoballmax=1200; #maximum number of jobs submitted by the whole lab
-$Q="default"; #what queue you want to use to submit your jobs
+$njobmax=1000; #maximum number of jobs submitted by you
+$njoballmax=1000; #maximum number of jobs submitted by the whole lab
+$Q="shared"; #what queue you want to use to submit your jobs
+$account="mia174"; # project account
 $oj="1"; #flag number for different runs, useful when you run multiple jobs for same protein
-$svmseq="yes"; # run C-I-TASSER
+#$svmseq="yes"; # run C-I-TASSER
 $svmseq="no";  # run I-TASSER
 ######### Needed changes ended #################################
+$user="$ENV{USER}"; # your user name, e.g. 'zhengwei'
+$bindir=dirname(abs_path(__FILE__)); # where script and cas programs are
 
-
-
-
-
-
-
-
-
-
+@ss=`cat $outdir/list`;
+foreach my $line(@ss)
+{
+   chomp($line);
+}
 
 
 
@@ -81,7 +76,9 @@ $svmseq="no";  # run I-TASSER
 #
 # The log files are in $outdir/record if you want to debug your files
 
+
 $lib="/nfs/amino-library";
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if(!-d "$lib");
 
 ################# directory assignment #############################
 $u=substr($user,0,1);
@@ -90,29 +87,20 @@ $recorddir="$outdir/record"; #for record all log files and intermiddiate job fil
 `mkdir -p $recorddir`;
 
 @TT=qw(
-       HHW
+       
+       DMP
 
-       SPX
-       FF3
-       MUS
-       RAP3
-       HHP
+       ); #10 threading programs can run, all are 13, other 3 should be run in amino
 
-       JJJb
-       IIIe
-       VVV
-       BBB
-       WWW
+# HHW library is not in comet, RAP3 get high IO, RRR3 pdb library PDBall is not in comet
 
-       RRR3
-       PRC
-       ); #threading programs
+
 # when you update @TT, please remember to update type.pl
 
-#HHW-HHpred (modified)
+#HHW-HHpred (modified)  do not run it on comet
 #SPX-Sparkx
 #FF3-FFAS3D
-#RAP3-Raptor
+#RAP3-Raptor     do not run it on comet
 #HHP-HHpred (modified)
 
 #MUS-MUSTER
@@ -200,8 +188,8 @@ foreach $s(@ss){
 	$njoball=$2;
     }
     if($njobuser > $njobmax && $njoball >$njoballmax){
-	printf "$njobuser > $njobmax && $njoball >$njoballmax, let's wait 2 minutes\n";
-	sleep (120);
+	printf "$njobuser > $njobmax && $njoball >$njoballmax, let's wait 10 minutes\n";
+	sleep (600);
 	goto pos50;
     }
     
@@ -227,14 +215,19 @@ foreach $s(@ss){
     $jobname="$recorddir/$tag";
     $errfile="$recorddir/err_$tag";
     $outfile="$recorddir/out_$tag";
-    $walltime="walltime=10:00:00,mem=3000mb";
+#    $walltime="walltime=10:00:00,mem=3000mb";
+    $walltime="10:00:00";
+    $mem="5000mb";
     ###
     $mod1=$mod;
     $mod1=~s/\!ERRFILE\!/$errfile/mg;
     $mod1=~s/\!OUTFILE\!/$outfile/mg;
     $mod1=~s/\!WALLTIME\!/$walltime/mg;
-    $mod1=~s/\!NODE\!/$node/mg;
+    $mod1=~s/\!MEM\!/$mem/mg;
     $mod1=~s/\!TAG\!/$tag/mg;
+    $mod1=~s/\!ACCOUNT\!/$account/mg;
+    $mod1=~s/\!Q\!/$Q/mg;
+
     $mod1=~s/\!USER\!/$user/mg;
     $mod1=~s/\!DATADIR\!/$datadir/mg;
     $mod1=~s/\!LIBRARYDIR\!/$librarydir/mg;
@@ -246,6 +239,7 @@ foreach $s(@ss){
     ######### check whether the job is running ##########
     if($jobname=~/record\/(\S+)/){
 	$jobname1=$1;
+	$qzy=`squeue -o %j`;
 	if($qzy=~/$jobname1/){
 	    printf "$jobname1 is running, neglect the job\n";
 	    goto pos1a;
@@ -254,7 +248,8 @@ foreach $s(@ss){
     
     ########## submit my job ##############
   pos41:;
-    $bsub=`qsub -q $Q $jobname`;
+    #$bsub=`sbatch $jobname`;
+    $bsub="$jobname";
     chomp($bsub);
     if(length $bsub ==0){
 	sleep(20);
@@ -290,31 +285,43 @@ foreach $s(@ss){
     $jobname="$recorddir/$tag";
     $errfile="$recorddir/err_$tag";
     $outfile="$recorddir/out_$tag";
-    $walltime="walltime=30:00:00,mem=3000mb";
+    #$walltime="walltime=30:00:00,mem=3000mb";
+    $walltime="30:00:00";
+    $mem="5000mb";
     ###
     $mod1=$mod;
+    $mod1=~s/\!ERRFILE\!/$errfile/mg;
+    $mod1=~s/\!OUTFILE\!/$outfile/mg;
+    $mod1=~s/\!WALLTIME\!/$walltime/mg;
+    $mod1=~s/\!MEM\!/$mem/mg;
     $mod1=~s/\!TAG\!/$tag/mg;
+    $mod1=~s/\!ACCOUNT\!/$account/mg;
+    $mod1=~s/\!Q\!/$Q/mg;
+
     $mod1=~s/\!USER\!/$user/mg;
     $mod1=~s/\!S\!/$s/mg;
     $mod1=~s/\!INPUTDIR\!/$datadir/mg;
     $mod1=~s/\!RUN\!/$run/mg;
     $mod1=~s/\!BINDIR\!/$bindir/mg;
+    $mod1=~s/\!LIBRARYDIR\!/$librarydir/mg;
     open(job,">$jobname");
     print job "$mod1\n";
     close(job);
     `chmod a+x $jobname`;
     
     ######### check whether the job is running ##########
-    #if($jobname=~/record\/(\S+)/){
-	#$jobname1=$1;
-	#if($qzy=~/$jobname1/){
-	    #printf "$jobname1 is running, neglect the job\n";
+    if($jobname=~/record\/(\S+)/){
+	$jobname1=$1;
+	$qzy=`squeue -o %j`;
+	if($qzy=~/$jobname1/){
+	    printf "$jobname1 is running, neglect the job\n";
 	    goto pos1c;
-	#}
-    #}
+	}
+    }
     
   pos43:;
-    $bsub=`qsub -q $Q -e $errfile -o $outfile -l $walltime $jobname`;
+    #$bsub=`sbatch $jobname`;
+    $bsub="$jobname";
     chomp($bsub);
     if(length $bsub ==0){
 	sleep(20);
@@ -342,18 +349,22 @@ foreach $s(@ss){
 	    $tag="$o$u$T$oj\_$s"; # unique name
 	    $jobmod="$T"."mod";
 	    if($T eq "RRR6" || $T=~/RAP/ || $T=~/FF3/ || $T=~/HHW/ || $T=~/CET/ || $T=~/MAP/){ # need multiple nodes or high memory
-		$walltime="walltime=40:00:00,mem=15000mb"; #<>=2.5h; [1.5,5.8]
+		$walltime="walltime=48:00:00";
+                $mem="10000mb"; #<>=2.5h; [1.5,5.8]
 		if($Lch>1000){
-		    $walltime="walltime=40:00:00,mem=25000mb"; #<>=2.5h; [1.5,5.8]
+		    $walltime="walltime=48:00:00";
+                    $mem="25000mb"; #<>=2.5h; [1.5,5.8]
 		}
 	    }else{
-		$walltime="walltime=40:00:00,mem=4000mb";
+		$walltime="walltime=48:00:00";
+                $mem="10000mb";
 		if($Lch>1000){
-		    $walltime="walltime=40:00:00,mem=10000mb"; #<>=2.5h; [1.5,5.8]
+		    $walltime="walltime=48:00:00";
+                    $mem="10000mb"; #<>=2.5h; [1.5,5.8]
 		}
 	    }
 	    &submitjob($workdir,$recorddir,$lib_dir,$data_dir,$bindir,
-		       $tag,$jobmod,$walltime,$id_cut,$n_temp,
+		       $tag,$jobmod,$walltime,$mem,$id_cut,$n_temp,
 		       $s,$o,$Q,$user,$run,$outdir);
 	}
     }
@@ -361,7 +372,7 @@ foreach $s(@ss){
     #####//////////////
     sub submitjob{
 	my($workdir,$recorddir,$lib_dir,$data_dir,$bindir,
-	   $tag,$jobmod,$walltime,$id_cut,$n_temp,
+	   $tag,$jobmod,$walltime,$mem,$id_cut,$n_temp,
 	   $s,$o,$Q,$user,$run,$outdir)=@_;
 	
 	###
@@ -376,10 +387,15 @@ foreach $s(@ss){
 	$mod=~s/\!ERRFILE\!/$errfile/mg;
 	$mod=~s/\!OUTFILE\!/$outfile/mg;
 	$mod=~s/\!WALLTIME\!/$walltime/mg;
+	$mod=~s/\!MEM\!/$mem/mg;
+	$mod=~s/\!TAG\!/$tag/mg;
+	$mod=~s/\!ACCOUNT\!/$account/mg;
+	$mod=~s/\!Q\!/$Q/mg;
+
 	$mod=~s/\!RECORDDIR\!/$recorddir/mg;
 	$mod=~s/\!JOBNAME\!/$jobname/mg;
 	$mod=~s/\!NODE\!/$node/mg;
-	$mod=~s/\!TAG\!/$tag/mg;
+
 	open(runjob,">$runjobname");
 	print runjob "$mod\n";
 	close(runjob);
@@ -387,6 +403,14 @@ foreach $s(@ss){
 	###
 	#------- jobname ------>
 	$mod=`cat $bindir/$jobmod`;
+	$mod=~s/\!ERRFILE\!/$errfile/mg;
+	$mod=~s/\!OUTFILE\!/$outfile/mg;
+	$mod=~s/\!WALLTIME\!/$walltime/mg;
+	$mod=~s/\!MEM\!/$mem/mg;
+	$mod=~s/\!TAG\!/$tag/mg;
+	$mod=~s/\!ACCOUNT\!/$account/mg;
+	$mod=~s/\!Q\!/$Q/mg;
+
 	$mod=~s/\!S\!/$s/mg;
 	$mod=~s/\!O\!/$o/mg;
 	$mod=~s/\!ID_CUT\!/$id_cut/mg;
@@ -394,7 +418,6 @@ foreach $s(@ss){
 	$mod=~s/\!DATA_DIR\!/$outdir/mg;
 	$mod=~s/\!DATADIR\!/$outdir/mg;
 	$mod=~s/\!LIB_DIR\!/$lib_dir/mg;
-	$mod=~s/\!TAG\!/$tag/mg;
 	$mod=~s/\!USER\!/$user/mg;
 	$mod=~s/\!RUN\!/$run/mg;
 	open(job,">$jobname");
@@ -405,6 +428,7 @@ foreach $s(@ss){
 	######### check whether the job is running ##########
 	if($jobname=~/record\/(\S+)/){
 	    $jobname1=$1;
+	    $qzy=`squeue -o %j`;
 	    if($qzy=~/$jobname1/){
 		printf "$jobname1 is running, neglect the job\n";
 		goto pos1d;
@@ -413,8 +437,10 @@ foreach $s(@ss){
 	
 	#-------job submision --------------->
       pos44:;
-	$bsub=`qsub -q $Q $runjobname`;
-	chomp($bsub);
+	$bsub=`sbatch $runjobname`;
+	
+        #$bsub="$runjobname";
+        chomp($bsub);
 	if(length $bsub ==0){
 	    sleep(20);
 	    goto pos44;
@@ -473,10 +499,8 @@ foreach $s(@ss){
 	#exit();
 	
 	########## skip the job if contact files are created ------>
-	if(-s "$datadir/MSA/protein.aln" && -s "$datadir/nebconB.dat" && 
-           -s "$datadir/gremlin.dat" && -s "$datadir/restriplet.dat" &&
-           -s "$datadir/tripletres.dat"){
-	    printf "$datadir/contact map exist, neglect the job\n";
+	if(-s "$datadir/MSA/protein.aln" && -s "$datadir/nebconB.dat"){
+	    printf "$datadir/nebconB.dat exist, neglect the job\n";
 	    goto pos1e;
 	}
 	
@@ -490,8 +514,9 @@ foreach $s(@ss){
 	}
 	
       pos42:;
-	$bsub=`qsub -q $Q $jobname`;
-	chomp($bsub);
+	#$bsub=`qsub -q $Q $jobname`;
+	$bsub="$jobname";  ##### MSA will generate high IO, should be run in amino, so I also suggest run contact on amino
+        chomp($bsub);
 	if(length $bsub ==0){
 	    sleep(20);
 	    goto pos42;

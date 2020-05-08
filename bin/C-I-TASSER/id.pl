@@ -9,8 +9,12 @@ if($Nt_view<1){
     $Nt_view=30;
 }
 
+#$home="/nfs/amino-home/zhng";
+#$lib="/nfs/amino-library";
 $home="/nfs/amino-home/zhng";
 $lib="/nfs/amino-library";
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if(!-d "$lib");
+$home="$lib" if (!-d "$home");
 
 $library="$lib";
 %ts=(

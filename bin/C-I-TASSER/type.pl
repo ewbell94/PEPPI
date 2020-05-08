@@ -9,8 +9,10 @@
 # usage:
 #        type.pl $datadir (must have init.* at $datadir)
 #################################################################################################
+#$bindir="/home/jlspzw/C-I-TASSER/version_2018_09_01/";
 
 $datadir=$ARGV[0];
+$bindir=$ARGV[1];
 if(!-s "$datadir/rmsinp"){
     printf "quit, without target\n";
     exit();
@@ -288,7 +290,7 @@ for($m1=1;$m1<=$M;$m1++){
 	
 	#####
 	$M2++;
-	$rst=`/nfs/amino-home/zhng/bin/TMscore $init1 $init2 -l $Lch`;
+	$rst=`$bindir/bin/TMscore $init1 $init2 -l $Lch`;
 	#print "$rst\n";
 	$TM{$M2}=$1 if($rst=~/TM-score    =\s*(\S+)/);
 	#print "TM_M2=$TM{$M2}, $M2\n";

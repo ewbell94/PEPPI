@@ -5,6 +5,8 @@ $move="$ARGV[1]";
 
 $home="/nfs/amino-home/zhng";
 $lib="/nfs/amino-library";
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if (! -d "$lib");
+$home="$lib" if (!-d "$home");
 
 ############# centerize the protein -------------->
 open(pdb,"$input");

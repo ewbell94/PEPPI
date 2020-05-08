@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 use Math::Trig;
+use File::Basename;
+use Cwd 'abs_path';
 
 #################################################################
 # Disclaimer: C-I-TASSER is the software developed at Zhang Lab #
@@ -38,66 +40,35 @@ use Math::Trig;
 #
 ######### variables may need to change #########################
 
-@ss=qw(
-QHD43415_3D2D2D1
-QHD43415_3D2D2D2
-QHD43415_3D2D2
-QHD43415_11D2
-QHD43415_2
-QHD43415_12
-QHD43415_13
-QHD43415_4
-QHD43415_14
-QHD43415_3D1D2
-QHD43415_3D1D1D2
-QHD43415_5
-QHD43415_2D2
-QHD43415_15
-QHD43415_6
-QHD43415_4D1D1
-QHD43415_2D3
-QHD43415_3D1D1D1D2
-QHD43415_3D1D1D1D1
-QHD43415_8
-QHD43415_1
-QHD43415_4D1D2
-QHD43415_11D1D2
-QHD43415_10
-QHD43415_11D1D1
-QHD43415_3D2D1
-QHD43415_9
-QHD43415_2D1
-QHD43415_4D2
-QHD43415_7
-       );  #list of protein target names, seq.fasta ready for each target
+#@ss=qw();  #list of protein target names, seq.fasta ready for each target
 
-$user="$ENV{USER}"; #change it to your own name, e.g. 'jsmith'
-$outdir="/nfs/amino-home/zcx/Task/2019-nCoV/C-I-TASSER_corrected";
-$bindir="/nfs/amino-home/zcx/Projects/C-I-TASSER/version_2018_09_01"; #where script and cas programs are
+$user="$ENV{USER}";
+#$user="jlspzw"; #change it to your own name, e.g. 'jsmith'
+$outdir="/oasis/projects/nsf/mia174/jlspzw/Minigenome/CIT_data_rev/";
+#$outdir="/oasis/projects/nsf/mia174/liuzi/program/C-I-TASSER/version_2018_09_01/test"; #where input/output files are
+$bindir="/home/jlspzw/C-I-TASSER/version_2018_09_01/";
+#$bindir="/nfs/amino-home/zhng/zhanglab_programs/C-I-TASSER/version_2018_09_01"; #where script and cas programs are
 $njobmax=300; #maximum number of job submitted by me
-$njoballmax=1000; #maximum number of job submitted by the whole lab
-$Q="default"; #what queue you want to use to submit your jobs
+$njoballmax=2000; #maximum number of job submitted by the whole lab
+$Q="shared"; #what queue you want to use to submit your jobs
 $oj="1"; #flag number for different runs, useful when you run multiple jobs for same protein
+$account="mia174"; # project account
 $svmseq="yes"; # run C-I-TASSER
 #$svmseq="no";  # run I-TASSER
 #####################################################////////
-
-
-
-
-
-
-
-
-
-
-
+=pod
+@ss=`ls $outdir`;
+foreach my $line(@ss)
+{
+   chomp($line);
+}
+=cut
 
 
 ######## you do not need to change the content below ###########
 $lib="/nfs/amino-library";
-$lib="/library/yzhang" if(!-d "$lib");
-
+#$lib="/library/yzhang" if(!-d "$lib");
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if(!-d "$lib");
 %ncycle=(
 	 'A'=>500,
 	 'M'=>250,
@@ -133,7 +104,7 @@ $pair1="pair1.dat";
 $pair3="pair3.dat";
 
 $commondir="$lib/common"; #common files
-$hour=200; #$time=$hour_max if(Lch>220), 24*3=72, 24*4=96, 24*5=120
+$hour=47; #$time=$hour_max if(Lch>220), 24*3=72, 24*4=96, 24*5=120
 
 ###
 $mod=`cat $bindir/submittassermod`;
@@ -147,7 +118,7 @@ $fWcon="1";
 $qzy=`$bindir/qzy`;
 
 foreach $s(@ss){
-    printf "--------- $s -------------\n";
+    printf "---------$s -------------\n";
     $datadir="$outdir/$s";
     
     ####### check input files ##############
@@ -197,7 +168,6 @@ foreach $s(@ss){
     if($Lch>400){
 	$i2{"M"}=$n_temp;
 	$i2{"F"}=$n_temp;
-	$i2{"A"}=0; # added by chengxin: 'A' jobs is not scalable for big targets
     }
     
     foreach $T(@TT){
@@ -207,12 +177,17 @@ foreach $s(@ss){
 	    $jobname="$recorddir/$tag";
 	    $errfile="$recorddir/err_$tag";
 	    $outfile="$recorddir/out_$tag";
-	    $walltime="walltime=$hour:59:00,mem=3000mb";
+	    #$walltime="walltime=$hour:59:00,mem=3000mb";
 	    ###
+	    $walltime="$hour:59:00";
+            $mem="5000mb";
 	    $mod1=$mod;
 	    $mod1=~s/\!ERRFILE\!/$errfile/mg;
 	    $mod1=~s/\!OUTFILE\!/$outfile/mg;
 	    $mod1=~s/\!WALLTIME\!/$walltime/mg;
+	    $mod1=~s/\!MEM\!/$mem/mg;
+	    $mod1=~s/\!ACCOUNT\!/$account/mg;
+	    $mod1=~s/\!Q\!/$Q/mg;
 	    #
 	    $mod1=~s/\!INPUTDIR\!/$datadir/mg;
 	    $mod1=~s/\!OUTPUTDIR\!/$datadir/mg;
@@ -287,7 +262,8 @@ foreach $s(@ss){
 	    
 	    ### submit jobs ----------->
 	  pos42:;
-	    $bsub=`qsub -q $Q $jobname`;
+	    #$bsub=`qsub -q $Q $jobname`;
+	    $bsub=`sbatch $jobname`;
 	    chomp($bsub); 
 	    if(length $bsub ==0){
 		sleep(20);

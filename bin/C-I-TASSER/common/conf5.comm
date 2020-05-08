@@ -1,0 +1,518 @@
+0.10 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.095     8     1      svmseq.dat
+   0.115     8     2      svmcon.dat
+   0.155     8     1     betacon.dat
+   0.165     8     2      psicov.dat
+   0.165     8     2       spcon.dat
+   0.105     8     2  metapsicov.dat
+   0.095     8     1     nnbayes.dat
+   0.085     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.105     8     1      svmseq.dat
+   0.115     8     2      svmcon.dat
+   0.145     8     1     betacon.dat
+   0.155     8     2      psicov.dat
+   0.215     8     2       spcon.dat
+   0.105     8     2  metapsicov.dat
+   0.055     8     1     nnbayes.dat
+   0.065     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.145     8     1      svmseq.dat
+   0.165     8     2      svmcon.dat
+   0.145     8     1     betacon.dat
+   0.155     8     2      psicov.dat
+   0.265     8     2       spcon.dat
+   0.175     8     2  metapsicov.dat
+   0.275     8     1     nnbayes.dat
+   0.335     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.125     8     1      svmseq.dat
+   0.145     8     2      svmcon.dat
+   0.145     8     1     betacon.dat
+   0.155     8     2      psicov.dat
+   0.245     8     2       spcon.dat
+   0.155     8     2  metapsicov.dat
+   0.225     8     1     nnbayes.dat
+   0.255     8     2    nnbayesb.dat
+0.15 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.115     8     1      svmseq.dat
+   0.235     8     2      svmcon.dat
+   0.225     8     1     betacon.dat
+   0.245     8     2      psicov.dat
+   0.215     8     2       spcon.dat
+   0.165     8     2  metapsicov.dat
+   0.135     8     1     nnbayes.dat
+   0.125     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.125     8     1      svmseq.dat
+   0.295     8     2      svmcon.dat
+   0.185     8     1     betacon.dat
+   0.185     8     2      psicov.dat
+   0.255     8     2       spcon.dat
+   0.185     8     2  metapsicov.dat
+   0.105     8     1     nnbayes.dat
+   0.125     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.235     8     1      svmseq.dat
+   0.335     8     2      svmcon.dat
+   0.185     8     1     betacon.dat
+   0.185     8     2      psicov.dat
+   0.305     8     2       spcon.dat
+   0.265     8     2  metapsicov.dat
+   0.355     8     1     nnbayes.dat
+   0.385     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.165     8     1      svmseq.dat
+   0.295     8     2      svmcon.dat
+   0.195     8     1     betacon.dat
+   0.195     8     2      psicov.dat
+   0.285     8     2       spcon.dat
+   0.225     8     2  metapsicov.dat
+   0.295     8     1     nnbayes.dat
+   0.335     8     2    nnbayesb.dat
+0.20 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.125     8     1      svmseq.dat
+   0.335     8     2      svmcon.dat
+   0.295     8     1     betacon.dat
+   0.295     8     2      psicov.dat
+   0.255     8     2       spcon.dat
+   0.235     8     2  metapsicov.dat
+   0.185     8     1     nnbayes.dat
+   0.165     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.155     8     1      svmseq.dat
+   0.425     8     2      svmcon.dat
+   0.205     8     1     betacon.dat
+   0.225     8     2      psicov.dat
+   0.295     8     2       spcon.dat
+   0.255     8     2  metapsicov.dat
+   0.155     8     1     nnbayes.dat
+   0.165     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.275     8     1      svmseq.dat
+   0.435     8     2      svmcon.dat
+   0.225     8     1     betacon.dat
+   0.225     8     2      psicov.dat
+   0.345     8     2       spcon.dat
+   0.305     8     2  metapsicov.dat
+   0.415     8     1     nnbayes.dat
+   0.455     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.235     8     1      svmseq.dat
+   0.415     8     2      svmcon.dat
+   0.235     8     1     betacon.dat
+   0.245     8     2      psicov.dat
+   0.315     8     2       spcon.dat
+   0.285     8     2  metapsicov.dat
+   0.355     8     1     nnbayes.dat
+   0.385     8     2    nnbayesb.dat
+0.225 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.135     8     1      svmseq.dat
+   0.355     8     2      svmcon.dat
+   0.305     8     1     betacon.dat
+   0.315     8     2      psicov.dat
+   0.275     8     2       spcon.dat
+   0.245     8     2  metapsicov.dat
+   0.215     8     1     nnbayes.dat
+   0.205     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.215     8     1      svmseq.dat
+   0.455     8     2      svmcon.dat
+   0.225     8     1     betacon.dat
+   0.245     8     2      psicov.dat
+   0.305     8     2       spcon.dat
+   0.275     8     2  metapsicov.dat
+   0.185     8     1     nnbayes.dat
+   0.185     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.295     8     1      svmseq.dat
+   0.495     8     2      svmcon.dat
+   0.245     8     1     betacon.dat
+   0.245     8     2      psicov.dat
+   0.355     8     2       spcon.dat
+   0.345     8     2  metapsicov.dat
+   0.445     8     1     nnbayes.dat
+   0.485     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.255     8     1      svmseq.dat
+   0.455     8     2      svmcon.dat
+   0.265     8     1     betacon.dat
+   0.265     8     2      psicov.dat
+   0.335     8     2       spcon.dat
+   0.315     8     2  metapsicov.dat
+   0.385     8     1     nnbayes.dat
+   0.405     8     2    nnbayesb.dat
+0.25 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.145     8     1      svmseq.dat
+   0.435     8     2      svmcon.dat
+   0.325     8     1     betacon.dat
+   0.375     8     2      psicov.dat
+   0.295     8     2       spcon.dat
+   0.275     8     2  metapsicov.dat
+   0.235     8     1     nnbayes.dat
+   0.225     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.235     8     1      svmseq.dat
+   0.485     8     2      svmcon.dat
+   0.265     8     1     betacon.dat
+   0.265     8     2      psicov.dat
+   0.325     8     2       spcon.dat
+   0.335     8     2  metapsicov.dat
+   0.215     8     1     nnbayes.dat
+   0.205     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.335     8     1      svmseq.dat
+   0.515     8     2      svmcon.dat
+   0.275     8     1     betacon.dat
+   0.255     8     2      psicov.dat
+   0.375     8     2       spcon.dat
+   0.375     8     2  metapsicov.dat
+   0.465     8     1     nnbayes.dat
+   0.515     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.275     8     1      svmseq.dat
+   0.495     8     2      svmcon.dat
+   0.295     8     1     betacon.dat
+   0.285     8     2      psicov.dat
+   0.345     8     2       spcon.dat
+   0.355     8     2  metapsicov.dat
+   0.405     8     1     nnbayes.dat
+   0.425     8     2    nnbayesb.dat
+0.275 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.165     8     1      svmseq.dat
+   0.475     8     2      svmcon.dat
+   0.355     8     1     betacon.dat
+   0.385     8     2      psicov.dat
+   0.305     8     2       spcon.dat
+   0.285     8     2  metapsicov.dat
+   0.255     8     1     nnbayes.dat
+   0.245     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.255     8     1      svmseq.dat
+   0.525     8     2      svmcon.dat
+   0.285     8     1     betacon.dat
+   0.305     8     2      psicov.dat
+   0.335     8     2       spcon.dat
+   0.375     8     2  metapsicov.dat
+   0.235     8     1     nnbayes.dat
+   0.225     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.365     8     1      svmseq.dat
+   0.555     8     2      svmcon.dat
+   0.295     8     1     betacon.dat
+   0.285     8     2      psicov.dat
+   0.395     8     2       spcon.dat
+   0.405     8     2  metapsicov.dat
+   0.495     8     1     nnbayes.dat
+   0.535     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.295     8     1      svmseq.dat
+   0.515     8     2      svmcon.dat
+   0.305     8     1     betacon.dat
+   0.305     8     2      psicov.dat
+   0.365     8     2       spcon.dat
+   0.375     8     2  metapsicov.dat
+   0.425     8     1     nnbayes.dat
+   0.455     8     2    nnbayesb.dat
+0.30 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.175     8     1      svmseq.dat
+   0.495     8     2      svmcon.dat
+   0.385     8     1     betacon.dat
+   0.425     8     2      psicov.dat
+   0.335     8     2       spcon.dat
+   0.355     8     2  metapsicov.dat
+   0.275     8     1     nnbayes.dat
+   0.265     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.285     8     1      svmseq.dat
+   0.565     8     2      svmcon.dat
+   0.305     8     1     betacon.dat
+   0.315     8     2      psicov.dat
+   0.345     8     2       spcon.dat
+   0.395     8     2  metapsicov.dat
+   0.255     8     1     nnbayes.dat
+   0.245     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.385     8     1      svmseq.dat
+   0.615     8     2      svmcon.dat
+   0.305     8     1     betacon.dat
+   0.295     8     2      psicov.dat
+   0.405     8     2       spcon.dat
+   0.435     8     2  metapsicov.dat
+   0.515     8     1     nnbayes.dat
+   0.565     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.315     8     1      svmseq.dat
+   0.555     8     2      svmcon.dat
+   0.335     8     1     betacon.dat
+   0.315     8     2      psicov.dat
+   0.375     8     2       spcon.dat
+   0.395     8     2  metapsicov.dat
+   0.465     8     1     nnbayes.dat
+   0.475     8     2    nnbayesb.dat
+0.325 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.195     8     1      svmseq.dat
+   0.535     8     2      svmcon.dat
+   0.395     8     1     betacon.dat
+   0.445     8     2      psicov.dat
+   0.355     8     2       spcon.dat
+   0.375     8     2  metapsicov.dat
+   0.295     8     1     nnbayes.dat
+   0.295     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.305     8     1      svmseq.dat
+   0.585     8     2      svmcon.dat
+   0.325     8     1     betacon.dat
+   0.325     8     2      psicov.dat
+   0.365     8     2       spcon.dat
+   0.395     8     2  metapsicov.dat
+   0.295     8     1     nnbayes.dat
+   0.255     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.395     8     1      svmseq.dat
+   0.625     8     2      svmcon.dat
+   0.335     8     1     betacon.dat
+   0.305     8     2      psicov.dat
+   0.425     8     2       spcon.dat
+   0.455     8     2  metapsicov.dat
+   0.545     8     1     nnbayes.dat
+   0.585     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.345     8     1      svmseq.dat
+   0.575     8     2      svmcon.dat
+   0.365     8     1     betacon.dat
+   0.335     8     2      psicov.dat
+   0.385     8     2       spcon.dat
+   0.425     8     2  metapsicov.dat
+   0.485     8     1     nnbayes.dat
+   0.515     8     2    nnbayesb.dat
+0.35 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.235     8     1      svmseq.dat
+   0.555     8     2      svmcon.dat
+   0.425     8     1     betacon.dat
+   0.465     8     2      psicov.dat
+   0.365     8     2       spcon.dat
+   0.395     8     2  metapsicov.dat
+   0.315     8     1     nnbayes.dat
+   0.305     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.345     8     1      svmseq.dat
+   0.605     8     2      svmcon.dat
+   0.345     8     1     betacon.dat
+   0.335     8     2      psicov.dat
+   0.375     8     2       spcon.dat
+   0.435     8     2  metapsicov.dat
+   0.325     8     1     nnbayes.dat
+   0.275     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.425     8     1      svmseq.dat
+   0.635     8     2      svmcon.dat
+   0.375     8     1     betacon.dat
+   0.315     8     2      psicov.dat
+   0.455     8     2       spcon.dat
+   0.505     8     2  metapsicov.dat
+   0.565     8     1     nnbayes.dat
+   0.625     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.375     8     1      svmseq.dat
+   0.605     8     2      svmcon.dat
+   0.395     8     1     betacon.dat
+   0.355     8     2      psicov.dat
+   0.405     8     2       spcon.dat
+   0.455     8     2  metapsicov.dat
+   0.505     8     1     nnbayes.dat
+   0.535     8     2    nnbayesb.dat
+0.375 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.265     8     1      svmseq.dat
+   0.565     8     2      svmcon.dat
+   0.445     8     1     betacon.dat
+   0.495     8     2      psicov.dat
+   0.375     8     2       spcon.dat
+   0.415     8     2  metapsicov.dat
+   0.335     8     1     nnbayes.dat
+   0.325     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.385     8     1      svmseq.dat
+   0.625     8     2      svmcon.dat
+   0.365     8     1     betacon.dat
+   0.345     8     2      psicov.dat
+   0.385     8     2       spcon.dat
+   0.475     8     2  metapsicov.dat
+   0.355     8     1     nnbayes.dat
+   0.295     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.435     8     1      svmseq.dat
+   0.705     8     2      svmcon.dat
+   0.395     8     1     betacon.dat
+   0.325     8     2      psicov.dat
+   0.465     8     2       spcon.dat
+   0.525     8     2  metapsicov.dat
+   0.595     8     1     nnbayes.dat
+   0.635     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.385     8     1      svmseq.dat
+   0.625     8     2      svmcon.dat
+   0.415     8     1     betacon.dat
+   0.385     8     2      psicov.dat
+   0.415     8     2       spcon.dat
+   0.475     8     2  metapsicov.dat
+   0.525     8     1     nnbayes.dat
+   0.545     8     2    nnbayesb.dat
+0.40 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.305     8     1      svmseq.dat
+   0.595     8     2      svmcon.dat
+   0.485     8     1     betacon.dat
+   0.505     8     2      psicov.dat
+   0.395     8     2       spcon.dat
+   0.435     8     2  metapsicov.dat
+   0.385     8     1     nnbayes.dat
+   0.335     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.415     8     1      svmseq.dat
+   0.645     8     2      svmcon.dat
+   0.415     8     1     betacon.dat
+   0.385     8     2      psicov.dat
+   0.395     8     2       spcon.dat
+   0.485     8     2  metapsicov.dat
+   0.395     8     1     nnbayes.dat
+   0.355     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.445     8     1      svmseq.dat
+   0.755     8     2      svmcon.dat
+   0.415     8     1     betacon.dat
+   0.345     8     2      psicov.dat
+   0.475     8     2       spcon.dat
+   0.555     8     2  metapsicov.dat
+   0.635     8     1     nnbayes.dat
+   0.655     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.405     8     1      svmseq.dat
+   0.645     8     2      svmcon.dat
+   0.435     8     1     betacon.dat
+   0.405     8     2      psicov.dat
+   0.435     8     2       spcon.dat
+   0.505     8     2  metapsicov.dat
+   0.565     8     1     nnbayes.dat
+   0.585     8     2    nnbayesb.dat
+0.425 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.315     8     1      svmseq.dat
+   0.665     8     2      svmcon.dat
+   0.495     8     1     betacon.dat
+   0.505     8     2      psicov.dat
+   0.415     8     2       spcon.dat
+   0.475     8     2  metapsicov.dat
+   0.415     8     1     nnbayes.dat
+   0.355     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.455     8     1      svmseq.dat
+   0.675     8     2      svmcon.dat
+   0.435     8     1     betacon.dat
+   0.395     8     2      psicov.dat
+   0.405     8     2       spcon.dat
+   0.505     8     2  metapsicov.dat
+   0.415     8     1     nnbayes.dat
+   0.375     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.455     8     1      svmseq.dat
+   0.775     8     2      svmcon.dat
+   0.445     8     1     betacon.dat
+   0.365     8     2      psicov.dat
+   0.485     8     2       spcon.dat
+   0.575     8     2  metapsicov.dat
+   0.655     8     1     nnbayes.dat
+   0.675     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.425     8     1      svmseq.dat
+   0.675     8     2      svmcon.dat
+   0.485     8     1     betacon.dat
+   0.425     8     2      psicov.dat
+   0.445     8     2       spcon.dat
+   0.525     8     2  metapsicov.dat
+   0.585     8     1     nnbayes.dat
+   0.615     8     2    nnbayesb.dat
+0.45 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.325     8     1      svmseq.dat
+   0.665     8     2      svmcon.dat
+   0.505     8     1     betacon.dat
+   0.585     8     2      psicov.dat
+   0.425     8     2       spcon.dat
+   0.485     8     2  metapsicov.dat
+   0.455     8     1     nnbayes.dat
+   0.375     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.465     8     1      svmseq.dat
+   0.705     8     2      svmcon.dat
+   0.495     8     1     betacon.dat
+   0.415     8     2      psicov.dat
+   0.415     8     2       spcon.dat
+   0.515     8     2  metapsicov.dat
+   0.445     8     1     nnbayes.dat
+   0.385     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.465     8     1      svmseq.dat
+   0.829     8     2      svmcon.dat
+   0.475     8     1     betacon.dat
+   0.425     8     2      psicov.dat
+   0.505     8     2       spcon.dat
+   0.585     8     2  metapsicov.dat
+   0.675     8     1     nnbayes.dat
+   0.695     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.445     8     1      svmseq.dat
+   0.695     8     2      svmcon.dat
+   0.495     8     1     betacon.dat
+   0.435     8     2      psicov.dat
+   0.465     8     2       spcon.dat
+   0.555     8     2  metapsicov.dat
+   0.635     8     1     nnbayes.dat
+   0.635     8     2    nnbayesb.dat
+0.475 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.345     8     1      svmseq.dat
+   0.685     8     2      svmcon.dat
+   0.525     8     1     betacon.dat
+   0.585     8     2      psicov.dat
+   0.435     8     2       spcon.dat
+   0.505     8     2  metapsicov.dat
+   0.485     8     1     nnbayes.dat
+   0.395     8     2    nnbayesb.dat
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.485     8     1      svmseq.dat
+   0.735     8     2      svmcon.dat
+   0.505     8     1     betacon.dat
+   0.425     8     2      psicov.dat
+   0.445     8     2       spcon.dat
+   0.575     8     2  metapsicov.dat
+   0.505     8     1     nnbayes.dat
+   0.395     8     2    nnbayesb.dat
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.495     8     1      svmseq.dat
+   0.829     8     2      svmcon.dat
+   0.475     8     1     betacon.dat
+   0.435     8     2      psicov.dat
+   0.535     8     2       spcon.dat
+   0.595     8     2  metapsicov.dat
+   0.705     8     1     nnbayes.dat
+   0.715     8     2    nnbayesb.dat
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.455     8     1      svmseq.dat
+   0.705     8     2      svmcon.dat
+   0.505     8     1     betacon.dat
+   0.465     8     2      psicov.dat
+   0.475     8     2       spcon.dat
+   0.585     8     2  metapsicov.dat
+   0.655     8     1     nnbayes.dat
+   0.655     8     2    nnbayesb.dat

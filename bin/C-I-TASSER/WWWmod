@@ -1,4 +1,14 @@
 #!/usr/bin/perl
+#SBATCH --job-name="!TAG!"
+#SBATCH --output="!OUTFILE!"
+#SBATCH --error="!ERRFILE!"
+#SBATCH --partition=!Q!
+#SBATCH --nodes=1
+#SBATCH --mem=!MEM!
+#SBATCH --ntasks-per-node=1
+#SBATCH -t !WALLTIME!
+#SBATCH -A !ACCOUNT!
+
 #PBS -e !ERRFILE!
 #PBS -o !OUTFILE!
 #PBS -l !WALLTIME!
@@ -24,12 +34,16 @@ $pwd=`pwd`;
 printf "pwd: $pwd";
 #^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+#$home="/nfs/amino-home/zhng";
+#$lib="/nfs/amino-library";
 $home="/nfs/amino-home/zhng";
 $lib="/nfs/amino-library";
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if(!-d "$lib");
+$home="$lib" if (!-d "$home");
 
 ########### setup  the environment and Working DIRectory ###
-$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin:/usr/pbs/bin";
-$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
+#$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin:/usr/pbs/bin";
+#$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
 
 $o="!O!";
 $s="!S!";
@@ -38,21 +52,16 @@ $idcut0=!ID_CUT!;
 $libdir="!LIB_DIR!";
 $datadir="!DATA_DIR!/$s";
 ################# directories #############################
-$bindir="$lib/WWW";
-if (! -d "$bindir")
-{
-    $bindir="/nfs/amino-home/zhng/library/yzhang/WWW";
-}
-if (! -d "$bindir")
-{
-    $bindir="/nfs/amino-home/zhng/a_protein11/bin";
-}
+$bindir="$home/protein11/bin";
 $blastdir="$lib/blast/bin";
 $nr="$lib/nr/nr";
 $PSIPRED="$libdir/bin/psipred";
 
 ########
-$workdir="/tmp/!USER!/!TAG!";
+#$workdir="/tmp/!USER!/!TAG!";
+$workdir="/scratch/$ENV{USER}/$ENV{SLURM_JOBID}";
+$workdir="/tmp/!USER!/!TAG!" if (!-d "$workdir" || ! "$ENV{SLURM_JOBID}");
+
 `rm -fr $workdir`;
 `mkdir -p $workdir`;
 `mkdir -p $datadir`;
@@ -91,7 +100,7 @@ $chk="$datadir/psitmp.chk"; #this is needed
 $blast="$datadir/blast.out";
 $pssm="$datadir/pssm.txt";
 
-`$bindir/blast+.pl $s.seq 3 10 0.001 1000`;
+`$home/bin/blast+.pl $s.seq 3 10 0.001 1000`;
 `cp blast.out ./$s.blast`;
 `cp pssm.txt ./psitmp.mat3`;
 `cp pssm.txt $s.mat3`;
@@ -101,7 +110,7 @@ system("$bindir/mkmsa.pl $s.seq $s.blast $s.aln"); #$s.aln is output
 
 $ecut=1.0;
 printf "run psiblast-2 .....\n";
-`$bindir/blast+.pl $s.seq 3 1 1 1000`;
+`$home/bin/blast+.pl $s.seq 3 1 1 1000`;
 `cp pssm.txt psitmp.mat3`;
 `cp blast.out $s.blast`;
 system("$bindir/mkmsa.pl $s.seq $s.blast $s\_e10.aln");

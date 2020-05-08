@@ -16,8 +16,8 @@
 use Math::Trig;
 
 ########### setup  the environment and Working DIRectory ###
-#$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin";
-#$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
+$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin";
+$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
 
 $start=time();
 

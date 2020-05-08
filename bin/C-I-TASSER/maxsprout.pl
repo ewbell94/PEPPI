@@ -9,6 +9,7 @@ if (@ARGV != 2) {
 }
 
 $lib="/nfs/amino-library";
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if (!-d "$lib");
 
 #############
 #############
@@ -17,8 +18,15 @@ $lib="/nfs/amino-library";
 $outdir=$1;
 $bindir="$lib/bin/maxsprout";
 $tag=int(rand()*10000000000);
-$WORKDIR = "/tmp/$tag";
+
+
+$WORKDIR="/scratch/$ENV{USER}/$ENV{SLURM_JOBID}";
+$WORKDIR="/tmp/$ENV{USER}/$tag" if (!-d "$WORKDIR" || ! "$ENV{SLURM_JOBID}");
+
+
+#$WORKDIR = "/tmp/$tag";
 #############
+$ENV{LD_LIBRARY_PATH}="$bindir:$ENV{LD_LIBRARY_PATH}";
 #############
 #############
 `mkdir -p $WORKDIR`;
@@ -29,6 +37,10 @@ my $OUTFILE = $ARGV[1];
 my $READBRK = "$bindir/readbrk";
 my $BUILDBACKBONE = "$bindir/buildbackbone";
 my $DGLPLIST = "$bindir/dglp.list";
+
+`ccp $bindir/dglp.list $DGLPLIST`;
+`sed -i 's/\\/nfs\\/amino-library/\\/oasis\\/projects\\/nsf\\/mia181\\/zhanglab\\/library/g' -i $DGLPLIST`;
+
 my $TORSO = "$bindir/torso2";
 my $File_torso_fort71 = "$bindir/fort.71";
 my $File_torso_fort72 = "$bindir/fort.72";
@@ -117,6 +129,7 @@ sub runMaxSprout($$) {
     system("cd $WORKDIR;cp $File_torso_fort81 ./fort.81");
 
     # extract chain sub files
+    `sed -i 's/\\/library\\/yzhang/\\/oasis\\/projects\\/nsf\\/mia181\\/zhanglab\\/library/g' -i ./fort.71`;
 
     $PDB = pdbExtractChain($file_pdb);
 

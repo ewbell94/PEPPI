@@ -209,7 +209,7 @@ foreach $F(@FF){
 	printf "$data_dir/$a.dat exist, neglect the job\n";
 	goto pos1;
     }
-=pod
+=pod    
     ######### check whether the job is running ##########
     if($jobname=~/record\/(\S+)/){
 	$jobname1=$1;
@@ -224,7 +224,7 @@ foreach $F(@FF){
     #exit();
     
   pos42:;
-    $bsub=`/nfs/amino-home/zhanglabs/bin/qsub -q $Q $jobname`;
+    $bsub=`qsub -q $Q $jobname`;
     chomp($bsub);
     if(length $bsub ==0){
 	sleep(20);

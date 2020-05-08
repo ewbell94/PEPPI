@@ -247,7 +247,7 @@ while($line=<rank>){
 	$sequence="";
 	$LT=0;
 	while($line=<a>){
-	    if($line=~/Num Res  Missing   SS    Core/){
+	    if($line=~/Num Res  Missing /){
 		while($line=<a>){
 		    if($line=~/(\S+)\s+(\S+)\s+(\d+)/){
 			$LT++;

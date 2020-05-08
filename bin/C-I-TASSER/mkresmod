@@ -1,4 +1,16 @@
 #!/usr/bin/perl
+#SBATCH --job-name="!TAG!"
+#SBATCH --output="!OUTFILE!"
+#SBATCH --error="!ERRFILE!"
+#SBATCH --partition=!#
+#SBATCH --nodes=1
+#SBATCH --mem=!MEM!
+#SBATCH --ntasks-per-node=1
+#SBATCH -t !WALLTIME!
+#SBATCH -A !ACCOUNT!
+
+
+
 #PBS -e !ERRFILE!
 #PBS -o !OUTFILE!
 #PBS -l !WALLTIME!
@@ -17,6 +29,10 @@ use Math::Trig;
 $bindir="!BINDIR!";
 $lib="/nfs/amino-library";
 
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if(!-d "$lib");
+$home="$lib" if (!-d "$home");
+
+
 ############################################################
 $o="!O!";
 $s="!S!";
@@ -33,8 +49,10 @@ $n_ita_sort=!NITASORT!; #number of ita closc for sorting
 
 ################# directories #############################
 $random=int(rand()*10000000000);
-$work_dir="/tmp/$random";
+#$work_dir="/tmp/$random";
 #$work_dir="/tmp/yzhang/$tag";
+$work_dir="/scratch/$ENV{USER}/$ENV{SLURM_JOBID}";
+$work_dir="/tmp/$ENV{USER}/$random" if (!-d "$work_dir" || ! "$ENV{SLURM_JOBID}");
 `/bin/mkdir -p $work_dir`;
 chdir "$work_dir";
 `/bin/rm -f $work_dir/*`;
@@ -121,29 +139,50 @@ $t="!T!";
     ); #from /nfs/amino-home/zhng/plot/threading/rst44.pl
 
 %temp_name=(
-
-
-    "HHWb"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "HHWm"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "HHWam"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "HHW"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "MUS"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "HHWa"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "QQQ"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "HHP"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "JJJb"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "IIIe"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "NNNd"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "IIIj"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "VVV"=>"/nfs/amino-library/SP3/!TEMPLATE_NAME!.pdb",
-    "PRC"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "RAPM"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "MAP"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
-    "CET"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "HHWb"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "HHWm"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "HHWam"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "HHW"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "MUS"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "HHWa"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "QQQ"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "HHP"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "JJJb"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "IIIe"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "NNNd"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "IIIj"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "VVV"=>"$lib/SP3/!TEMPLATE_NAME!.pdb",
+    "PRC"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "RAPM"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "MAP"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
+    "CET"=>"$lib/PDB/!TEMPLATE_NAME!.pdb",
     
-    "OOO"=>"/nfs/amino-library/local/PROSPECTOR_LIB/pdb/!TEMPLATE_NAME!.pdb",
-    "SPX"=>"/nfs/amino-library/SPARKX/PDB/!TEMPLATE_NAME!",
-    "FF3"=>"/nfs/amino-library/FFAS3D/pdb12/!TEMPLATE_NAME!.pdb",
+    "OOO"=>"$lib/local/PROSPECTOR_LIB/pdb/!TEMPLATE_NAME!.pdb",
+    "SPX"=>"$lib/SPARKX/PDB/!TEMPLATE_NAME!",
+    "FF3"=>"$lib/FFAS3D/pdb12/!TEMPLATE_NAME!.pdb",
+
+
+    #"HHWb"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"HHWm"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"HHWam"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"HHW"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"MUS"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"HHWa"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"QQQ"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"HHP"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"JJJb"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"IIIe"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"NNNd"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"IIIj"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"VVV"=>"/nfs/amino-library/SP3/!TEMPLATE_NAME!.pdb",
+    #"PRC"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"RAPM"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"MAP"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    #"CET"=>"/PDB/!TEMPLATE_NAME!.pdb",
+    
+    #"OOO"=>"/nfs/amino-library/local/PROSPECTOR_LIB/pdb/!TEMPLATE_NAME!.pdb",
+    #"SPX"=>"/nfs/amino-library/SPARKX/PDB/!TEMPLATE_NAME!",
+    #"FF3"=>"/nfs/amino-library/FFAS3D/pdb12/!TEMPLATE_NAME!.pdb",
     
     "RAP3"=>"unknown", #from tgl but modified
     "RAP1"=>"unknown", #from tgl but modified

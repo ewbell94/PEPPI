@@ -7,6 +7,12 @@ $model{1}=$ARGV[0];
 $model{2}=$ARGV[1];
 $opt=$ARGV[2];
 
+
+$lib="/nfs/amino-library";
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if (! -d "$lib");
+
+
+
 for($i=1;$i<=2;$i++){
     if(!-s "$model{$i}"){
 	printf "without $model{$i}\n";
@@ -16,7 +22,8 @@ for($i=1;$i<=2;$i++){
 
 for($i=1;$i<=2;$i++){
     `cp $model{$i} _tmp_`;
-    `/nfs/amino-home/zhng/bin/hb _tmp_`;
+    `$lib/bin/hb _tmp_`;
+    #`/nfs/amino-home/zhng/bin/hb _tmp_`;
     if(-s "_tmp_\.hb2"){
 	open(tmp,"_tmp_.hb2");
 	$j=0;

@@ -1,0 +1,851 @@
+0.10 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.045     8     1      svmseq.dat   59.544
+   0.155     8     1     betacon.dat   86.946
+   0.125     8     2      psicov.dat   52.831
+   0.063     8     2       spcon.dat   63.480
+   0.105     8     2  metapsicov.dat   79.433
+   0.095     8     1     nnbayes.dat   74.485
+   0.095     8     2    nnbayesb.dat   82.002
+   0.295     8     2     gremlin.dat   51.797
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.064     8     1      svmseq.dat   94.867
+   0.145     8     1     betacon.dat   75.332
+   0.135     8     2      psicov.dat   52.690
+   0.115     8     2       spcon.dat  106.397
+   0.095     8     2  metapsicov.dat  110.646
+   0.055     8     1     nnbayes.dat  112.559
+   0.065     8     2    nnbayesb.dat  111.865
+   0.185     8     2     gremlin.dat   93.534
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.165     8     1      svmseq.dat   84.151
+   0.145     8     1     betacon.dat  114.498
+   0.145     8     2      psicov.dat  112.212
+   0.115     8     2       spcon.dat  317.178
+   0.135     8     2  metapsicov.dat  222.980
+   0.275     8     1     nnbayes.dat  242.138
+   0.105     8     2    nnbayesb.dat  224.643
+   0.045     8     2     gremlin.dat  259.382
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.085     8     1      svmseq.dat  477.979
+   0.145     8     1     betacon.dat  282.411
+   0.135     8     2      psicov.dat  242.486
+   0.115     8     2       spcon.dat  486.921
+   0.115     8     2  metapsicov.dat  461.845
+   0.225     8     1     nnbayes.dat  426.932
+   0.095     8     2    nnbayesb.dat  419.740
+   0.045     8     2     gremlin.dat  481.129
+0.15 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.064     8     1      svmseq.dat   59.429
+   0.225     8     1     betacon.dat   57.489
+   0.185     8     2      psicov.dat   24.370
+   0.115     8     2       spcon.dat   63.352
+   0.145     8     2  metapsicov.dat   61.281
+   0.135     8     1     nnbayes.dat   62.453
+   0.165     8     2    nnbayesb.dat   64.335
+   0.425     8     2     gremlin.dat   24.530
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.105     8     1      svmseq.dat   84.624
+   0.185     8     1     betacon.dat   55.550
+   0.165     8     2      psicov.dat   35.019
+   0.165     8     2       spcon.dat   76.718
+   0.155     8     2  metapsicov.dat   76.209
+   0.105     8     1     nnbayes.dat   89.226
+   0.095     8     2    nnbayesb.dat   90.223
+   0.345     8     2     gremlin.dat   36.077
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.205     8     1      svmseq.dat   53.031
+   0.185     8     1     betacon.dat   58.671
+   0.175     8     2      psicov.dat   76.384
+   0.205     8     2       spcon.dat  102.520
+   0.195     8     2  metapsicov.dat  149.092
+   0.355     8     1     nnbayes.dat  159.965
+   0.145     8     2    nnbayesb.dat  170.927
+   0.045     8     2     gremlin.dat  259.382
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.175     8     1      svmseq.dat  143.139
+   0.195     8     1     betacon.dat  169.749
+   0.175     8     2      psicov.dat  143.223
+   0.195     8     2       spcon.dat  219.905
+   0.175     8     2  metapsicov.dat  310.363
+   0.295     8     1     nnbayes.dat  286.900
+   0.135     8     2    nnbayesb.dat  324.411
+   0.355     8     2     gremlin.dat  145.600
+0.20 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.085     8     1      svmseq.dat   58.779
+   0.295     8     1     betacon.dat   41.625
+   0.215     8     2      psicov.dat   18.205
+   0.195     8     2       spcon.dat   43.772
+   0.205     8     2  metapsicov.dat   46.405
+   0.185     8     1     nnbayes.dat   52.116
+   0.225     8     2    nnbayesb.dat   54.706
+   0.475     8     2     gremlin.dat   19.324
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.165     8     1      svmseq.dat   42.776
+   0.205     8     1     betacon.dat   48.796
+   0.195     8     2      psicov.dat   25.542
+   0.205     8     2       spcon.dat   55.319
+   0.205     8     2  metapsicov.dat   61.197
+   0.155     8     1     nnbayes.dat   70.174
+   0.135     8     2    nnbayesb.dat   72.919
+   0.395     8     2     gremlin.dat   27.952
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.275     8     1      svmseq.dat   32.080
+   0.225     8     1     betacon.dat   32.276
+   0.205     8     2      psicov.dat   56.446
+   0.255     8     2       spcon.dat   61.676
+   0.245     8     2  metapsicov.dat  115.594
+   0.415     8     1     nnbayes.dat  124.018
+   0.215     8     2    nnbayesb.dat  124.771
+   0.045     8     2     gremlin.dat  259.382
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.205     8     1      svmseq.dat  111.892
+   0.235     8     1     betacon.dat  124.185
+   0.205     8     2      psicov.dat  106.252
+   0.235     8     2       spcon.dat  157.609
+   0.235     8     2  metapsicov.dat  232.347
+   0.355     8     1     nnbayes.dat  217.813
+   0.195     8     2    nnbayesb.dat  250.395
+   0.415     8     2     gremlin.dat  109.209
+0.225 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.145     8     1      svmseq.dat   38.186
+   0.305     8     1     betacon.dat   40.185
+   0.245     8     2      psicov.dat   14.259
+   0.215     8     2       spcon.dat   39.962
+   0.215     8     2  metapsicov.dat   44.644
+   0.215     8     1     nnbayes.dat   47.256
+   0.245     8     2    nnbayesb.dat   51.920
+   0.565     8     2     gremlin.dat   13.325
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.185     8     1      svmseq.dat   37.064
+   0.225     8     1     betacon.dat   43.631
+   0.215     8     2      psicov.dat   21.406
+   0.215     8     2       spcon.dat   51.990
+   0.245     8     2  metapsicov.dat   52.910
+   0.185     8     1     nnbayes.dat   60.598
+   0.155     8     2    nnbayesb.dat   66.264
+   0.455     8     2     gremlin.dat   21.915
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.305     8     1      svmseq.dat   26.591
+   0.245     8     1     betacon.dat   24.518
+   0.225     8     2      psicov.dat   48.043
+   0.275     8     2       spcon.dat   52.080
+   0.275     8     2  metapsicov.dat  101.709
+   0.445     8     1     nnbayes.dat  109.882
+   0.235     8     2    nnbayesb.dat  116.397
+   0.085     8     2     gremlin.dat  258.399
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.225     8     1      svmseq.dat   98.813
+   0.265     8     1     betacon.dat  102.799
+   0.225     8     2      psicov.dat   90.145
+   0.255     8     2       spcon.dat  137.869
+   0.265     8     2  metapsicov.dat  206.356
+   0.385     8     1     nnbayes.dat  192.196
+   0.215     8     2    nnbayesb.dat  232.901
+   0.435     8     2     gremlin.dat  100.485
+0.25 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.165     8     1      svmseq.dat   32.293
+   0.325     8     1     betacon.dat   37.008
+   0.275     8     2      psicov.dat   11.679
+   0.225     8     2       spcon.dat   38.456
+   0.255     8     2  metapsicov.dat   38.542
+   0.235     8     1     nnbayes.dat   44.219
+   0.285     8     2    nnbayesb.dat   46.907
+   0.595     8     2     gremlin.dat   11.844
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.205     8     1      svmseq.dat   32.899
+   0.265     8     1     betacon.dat   36.068
+   0.225     8     2      psicov.dat   19.731
+   0.245     8     2       spcon.dat   43.776
+   0.275     8     2  metapsicov.dat   48.050
+   0.215     8     1     nnbayes.dat   52.582
+   0.165     8     2    nnbayesb.dat   63.478
+   0.465     8     2     gremlin.dat   21.129
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.325     8     1      svmseq.dat   23.435
+   0.275     8     1     betacon.dat   17.090
+   0.235     8     2      psicov.dat   44.594
+   0.305     8     2       spcon.dat   41.647
+   0.325     8     2  metapsicov.dat   83.800
+   0.465     8     1     nnbayes.dat  101.956
+   0.275     8     2    nnbayesb.dat  103.364
+   0.435     8     2     gremlin.dat   53.470
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.255     8     1      svmseq.dat   84.011
+   0.295     8     1     betacon.dat   86.885
+   0.245     8     2      psicov.dat   78.178
+   0.275     8     2       spcon.dat  122.342
+   0.295     8     2  metapsicov.dat  184.912
+   0.405     8     1     nnbayes.dat  177.393
+   0.235     8     2    nnbayesb.dat  218.049
+   0.465     8     2     gremlin.dat   89.571
+0.275 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.195     8     1      svmseq.dat   27.128
+   0.355     8     1     betacon.dat   33.041
+   0.285     8     2      psicov.dat   11.000
+   0.245     8     2       spcon.dat   35.748
+   0.295     8     2  metapsicov.dat   34.077
+   0.255     8     1     nnbayes.dat   41.367
+   0.305     8     2    nnbayesb.dat   44.356
+   0.595     8     2     gremlin.dat   11.844
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.215     8     1      svmseq.dat   31.208
+   0.285     8     1     betacon.dat   33.147
+   0.245     8     2      psicov.dat   17.221
+   0.255     8     2       spcon.dat   41.665
+   0.285     8     2  metapsicov.dat   46.680
+   0.235     8     1     nnbayes.dat   47.569
+   0.195     8     2    nnbayesb.dat   56.091
+   0.495     8     2     gremlin.dat   18.997
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.405     8     1      svmseq.dat   14.916
+   0.295     8     1     betacon.dat   13.485
+   0.255     8     2      psicov.dat   39.203
+   0.335     8     2       spcon.dat   33.902
+   0.335     8     2  metapsicov.dat   80.981
+   0.495     8     1     nnbayes.dat   91.173
+   0.295     8     2    nnbayesb.dat   97.434
+   0.465     8     2     gremlin.dat   48.059
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.285     8     1      svmseq.dat   72.891
+   0.305     8     1     betacon.dat   83.004
+   0.255     8     2      psicov.dat   73.384
+   0.295     8     2       spcon.dat  109.651
+   0.325     8     2  metapsicov.dat  168.052
+   0.425     8     1     nnbayes.dat  164.484
+   0.265     8     2    nnbayesb.dat  198.835
+   0.495     8     2     gremlin.dat   80.469
+0.30 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.205     8     1      svmseq.dat   25.963
+   0.385     8     1     betacon.dat   29.379
+   0.305     8     2      psicov.dat    9.844
+   0.275     8     2       spcon.dat   32.538
+   0.315     8     2  metapsicov.dat   32.394
+   0.275     8     1     nnbayes.dat   38.606
+   0.325     8     2    nnbayesb.dat   42.137
+   0.605     8     2     gremlin.dat   11.482
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.255     8     1      svmseq.dat   25.793
+   0.305     8     1     betacon.dat   30.538
+   0.255     8     2      psicov.dat   16.180
+   0.285     8     2       spcon.dat   36.133
+   0.315     8     2  metapsicov.dat   43.026
+   0.255     8     1     nnbayes.dat   43.335
+   0.215     8     2    nnbayesb.dat   51.914
+   0.515     8     2     gremlin.dat   17.837
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.405     8     1      svmseq.dat   14.916
+   0.305     8     1     betacon.dat   12.275
+   0.275     8     2      psicov.dat   34.935
+   0.355     8     2       spcon.dat   29.922
+   0.365     8     2  metapsicov.dat   73.376
+   0.515     8     1     nnbayes.dat   84.634
+   0.355     8     2    nnbayesb.dat   83.911
+   0.495     8     2     gremlin.dat   43.569
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.315     8     1      svmseq.dat   63.693
+   0.335     8     1     betacon.dat   72.165
+   0.275     8     2      psicov.dat   65.326
+   0.335     8     2       spcon.dat   90.849
+   0.335     8     2  metapsicov.dat  162.904
+   0.465     8     1     nnbayes.dat  140.908
+   0.295     8     2    nnbayesb.dat  181.391
+   0.515     8     2     gremlin.dat   75.193
+0.325 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.215     8     1      svmseq.dat   25.033
+   0.395     8     1     betacon.dat   28.144
+   0.315     8     2      psicov.dat    9.375
+   0.295     8     2       spcon.dat   30.711
+   0.335     8     2  metapsicov.dat   30.637
+   0.295     8     1     nnbayes.dat   35.820
+   0.335     8     2    nnbayesb.dat   41.005
+   0.615     8     2     gremlin.dat   11.058
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.285     8     1      svmseq.dat   22.677
+   0.325     8     1     betacon.dat   28.345
+   0.285     8     2      psicov.dat   13.698
+   0.305     8     2       spcon.dat   33.088
+   0.355     8     2  metapsicov.dat   38.816
+   0.295     8     1     nnbayes.dat   36.129
+   0.235     8     2    nnbayesb.dat   48.288
+   0.535     8     2     gremlin.dat   16.726
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.435     8     1      svmseq.dat   12.821
+   0.335     8     1     betacon.dat    9.206
+   0.295     8     2      psicov.dat   31.132
+   0.375     8     2       spcon.dat   26.515
+   0.385     8     2  metapsicov.dat   68.636
+   0.545     8     1     nnbayes.dat   76.149
+   0.375     8     2    nnbayesb.dat   80.302
+   0.505     8     2     gremlin.dat   42.269
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.325     8     1      svmseq.dat   60.911
+   0.365     8     1     betacon.dat   63.202
+   0.295     8     2      psicov.dat   58.203
+   0.355     8     2       spcon.dat   83.149
+   0.375     8     2  metapsicov.dat  144.879
+   0.485     8     1     nnbayes.dat  130.703
+   0.315     8     2    nnbayesb.dat  171.622
+   0.555     8     2     gremlin.dat   65.531
+0.35 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.225     8     1      svmseq.dat   24.156
+   0.425     8     1     betacon.dat   25.387
+   0.365     8     2      psicov.dat    7.433
+   0.355     8     2       spcon.dat   26.593
+   0.355     8     2  metapsicov.dat   29.139
+   0.315     8     1     nnbayes.dat   33.717
+   0.365     8     2    nnbayesb.dat   37.494
+   0.625     8     2     gremlin.dat   10.700
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.295     8     1      svmseq.dat   21.768
+   0.345     8     1     betacon.dat   26.308
+   0.295     8     2      psicov.dat   12.990
+   0.345     8     2       spcon.dat   27.841
+   0.375     8     2  metapsicov.dat   36.890
+   0.325     8     1     nnbayes.dat   31.964
+   0.255     8     2    nnbayesb.dat   44.699
+   0.555     8     2     gremlin.dat   15.532
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.485     8     1      svmseq.dat    9.822
+   0.375     8     1     betacon.dat    6.499
+   0.305     8     2      psicov.dat   29.819
+   0.405     8     2       spcon.dat   22.252
+   0.405     8     2  metapsicov.dat   64.541
+   0.565     8     1     nnbayes.dat   70.820
+   0.395     8     2    nnbayesb.dat   76.595
+   0.535     8     2     gremlin.dat   38.717
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.395     8     1      svmseq.dat   45.524
+   0.395     8     1     betacon.dat   55.630
+   0.305     8     2      psicov.dat   55.656
+   0.375     8     2       spcon.dat   76.474
+   0.385     8     2  metapsicov.dat  140.735
+   0.505     8     1     nnbayes.dat  121.350
+   0.355     8     2    nnbayesb.dat  153.285
+   0.585     8     2     gremlin.dat   59.972
+0.375 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.265     8     1      svmseq.dat   21.304
+   0.445     8     1     betacon.dat   23.671
+   0.385     8     2      psicov.dat    6.886
+   0.365     8     2       spcon.dat   25.926
+   0.375     8     2  metapsicov.dat   27.752
+   0.335     8     1     nnbayes.dat   31.619
+   0.395     8     2    nnbayesb.dat   34.164
+   0.665     8     2     gremlin.dat    9.310
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.325     8     1      svmseq.dat   19.356
+   0.365     8     1     betacon.dat   24.402
+   0.305     8     2      psicov.dat   12.426
+   0.375     8     2       spcon.dat   24.528
+   0.395     8     2  metapsicov.dat   35.096
+   0.355     8     1     nnbayes.dat   28.441
+   0.275     8     2    nnbayesb.dat   41.642
+   0.575     8     2     gremlin.dat   14.655
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.525     8     1      svmseq.dat    7.901
+   0.395     8     1     betacon.dat    5.467
+   0.315     8     2      psicov.dat   28.477
+   0.475     8     2       spcon.dat   15.310
+   0.445     8     2  metapsicov.dat   57.388
+   0.595     8     1     nnbayes.dat   63.487
+   0.445     8     2    nnbayesb.dat   68.450
+   0.565     8     2     gremlin.dat   35.284
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.405     8     1      svmseq.dat   43.783
+   0.415     8     1     betacon.dat   51.383
+   0.315     8     2      psicov.dat   53.162
+   0.405     8     2       spcon.dat   67.421
+   0.405     8     2  metapsicov.dat  133.221
+   0.525     8     1     nnbayes.dat  112.774
+   0.375     8     2    nnbayesb.dat  145.363
+   0.595     8     2     gremlin.dat   58.285
+0.40 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.285     8     1      svmseq.dat   20.114
+   0.485     8     1     betacon.dat   20.621
+   0.395     8     2      psicov.dat    6.594
+   0.435     8     2       spcon.dat   22.148
+   0.405     8     2  metapsicov.dat   25.723
+   0.365     8     1     nnbayes.dat   28.442
+   0.415     8     2    nnbayesb.dat   31.942
+   0.715     8     2     gremlin.dat    7.902
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.395     8     1      svmseq.dat   14.513
+   0.415     8     1     betacon.dat   20.477
+   0.315     8     2      psicov.dat   11.916
+   0.395     8     2       spcon.dat   22.585
+   0.455     8     2  metapsicov.dat   30.470
+   0.395     8     1     nnbayes.dat   24.281
+   0.305     8     2    nnbayesb.dat   37.065
+   0.585     8     2     gremlin.dat   14.305
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.635     8     1      svmseq.dat    4.000
+   0.415     8     1     betacon.dat    4.665
+   0.325     8     2      psicov.dat   27.263
+   0.535     8     2       spcon.dat   11.281
+   0.465     8     2  metapsicov.dat   54.084
+   0.625     8     1     nnbayes.dat   57.075
+   0.475     8     2    nnbayesb.dat   64.125
+   0.595     8     2     gremlin.dat   32.576
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.425     8     1      svmseq.dat   40.622
+   0.435     8     1     betacon.dat   47.552
+   0.335     8     2      psicov.dat   48.606
+   0.445     8     2       spcon.dat   57.676
+   0.445     8     2  metapsicov.dat  119.760
+   0.565     8     1     nnbayes.dat   97.511
+   0.395     8     2    nnbayesb.dat  137.318
+   0.625     8     2     gremlin.dat   53.676
+0.425 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.305     8     1      svmseq.dat   19.085
+   0.495     8     1     betacon.dat   19.880
+   0.415     8     2      psicov.dat    6.125
+   0.455     8     2       spcon.dat   21.197
+   0.435     8     2  metapsicov.dat   23.829
+   0.425     8     1     nnbayes.dat   23.459
+   0.455     8     2    nnbayesb.dat   27.735
+   0.725     8     2     gremlin.dat    7.643
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.415     8     1      svmseq.dat   13.426
+   0.435     8     1     betacon.dat   19.106
+   0.335     8     2      psicov.dat   10.928
+   0.435     8     2       spcon.dat   19.013
+   0.475     8     2  metapsicov.dat   28.960
+   0.415     8     1     nnbayes.dat   22.536
+   0.335     8     2    nnbayesb.dat   33.086
+   0.625     8     2     gremlin.dat   12.757
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.655     8     1      svmseq.dat    3.465
+   0.445     8     1     betacon.dat    3.678
+   0.335     8     2      psicov.dat   26.082
+   0.555     8     2       spcon.dat   10.194
+   0.485     8     2  metapsicov.dat   51.282
+   0.655     8     1     nnbayes.dat   51.314
+   0.505     8     2    nnbayesb.dat   60.286
+   0.625     8     2     gremlin.dat   30.219
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.485     8     1      svmseq.dat   31.841
+   0.485     8     1     betacon.dat   39.498
+   0.355     8     2      psicov.dat   44.729
+   0.465     8     2       spcon.dat   53.569
+   0.475     8     2  metapsicov.dat  110.204
+   0.585     8     1     nnbayes.dat   90.384
+   0.445     8     2    nnbayesb.dat  118.919
+   0.625     8     2     gremlin.dat   53.676
+0.45 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.325     8     1      svmseq.dat   18.122
+   0.505     8     1     betacon.dat   19.246
+   0.415     8     2      psicov.dat    6.125
+   0.465     8     2       spcon.dat   20.699
+   0.445     8     2  metapsicov.dat   23.290
+   0.445     8     1     nnbayes.dat   21.940
+   0.475     8     2    nnbayesb.dat   25.801
+   0.725     8     2     gremlin.dat    7.643
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.505     8     1      svmseq.dat    9.225
+   0.495     8     1     betacon.dat   15.579
+   0.375     8     2      psicov.dat    9.249
+   0.445     8     2       spcon.dat   18.169
+   0.485     8     2  metapsicov.dat   28.347
+   0.445     8     1     nnbayes.dat   19.997
+   0.345     8     2    nnbayesb.dat   31.913
+   0.625     8     2     gremlin.dat   12.757
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.695     8     1      svmseq.dat    2.601
+   0.475     8     1     betacon.dat    2.913
+   0.345     8     2      psicov.dat   25.090
+   0.575     8     2       spcon.dat    9.252
+   0.505     8     2  metapsicov.dat   48.706
+   0.675     8     1     nnbayes.dat   47.717
+   0.545     8     2    nnbayesb.dat   55.422
+   0.635     8     2     gremlin.dat   29.454
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.515     8     1      svmseq.dat   28.183
+   0.495     8     1     betacon.dat   38.025
+   0.375     8     2      psicov.dat   41.272
+   0.475     8     2       spcon.dat   51.590
+   0.495     8     2  metapsicov.dat  104.805
+   0.635     8     1     nnbayes.dat   75.022
+   0.465     8     2    nnbayesb.dat  112.409
+   0.685     8     2     gremlin.dat   45.701
+0.475 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.345     8     1      svmseq.dat   17.345
+   0.525     8     1     betacon.dat   18.085
+   0.435     8     2      psicov.dat    5.693
+   0.475     8     2       spcon.dat   20.267
+   0.465     8     2  metapsicov.dat   22.208
+   0.485     8     1     nnbayes.dat   19.203
+   0.475     8     2    nnbayesb.dat   25.801
+   0.735     8     2     gremlin.dat    7.421
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.545     8     1      svmseq.dat    7.559
+   0.505     8     1     betacon.dat   15.036
+   0.385     8     2      psicov.dat    8.928
+   0.465     8     2       spcon.dat   16.761
+   0.515     8     2  metapsicov.dat   26.335
+   0.505     8     1     nnbayes.dat   15.495
+   0.365     8     2    nnbayesb.dat   29.761
+   0.665     8     2     gremlin.dat   11.510
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.695     8     1      svmseq.dat    2.601
+   0.475     8     1     betacon.dat    2.913
+   0.365     8     2      psicov.dat   23.185
+   0.665     8     2       spcon.dat    5.967
+   0.525     8     2  metapsicov.dat   46.031
+   0.705     8     1     nnbayes.dat   42.894
+   0.565     8     2    nnbayesb.dat   53.052
+   0.685     8     2     gremlin.dat   26.064
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.545     8     1      svmseq.dat   24.851
+   0.505     8     1     betacon.dat   36.671
+   0.395     8     2      psicov.dat   38.276
+   0.555     8     2       spcon.dat   38.430
+   0.515     8     2  metapsicov.dat   99.834
+   0.655     8     1     nnbayes.dat   69.611
+   0.475     8     2    nnbayesb.dat  108.956
+   0.705     8     2     gremlin.dat   43.347
+0.50 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.395     8     1      svmseq.dat   15.230
+   0.595     8     1     betacon.dat   13.892
+   0.455     8     2      psicov.dat    5.319
+   0.585     8     2       spcon.dat   15.596
+   0.485     8     2  metapsicov.dat   21.097
+   0.485     8     1     nnbayes.dat   19.203
+   0.485     8     2    nnbayesb.dat   24.912
+   0.745     8     2     gremlin.dat    7.191
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.575     8     1      svmseq.dat    6.407
+   0.515     8     1     betacon.dat   14.505
+   0.395     8     2      psicov.dat    8.570
+   0.475     8     2       spcon.dat   16.016
+   0.555     8     2  metapsicov.dat   23.886
+   0.515     8     1     nnbayes.dat   14.767
+   0.415     8     2    nnbayesb.dat   24.575
+   0.685     8     2     gremlin.dat   10.901
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.715     8     1      svmseq.dat    2.214
+   0.495     8     1     betacon.dat    2.563
+   0.435     8     2      psicov.dat   18.267
+   0.675     8     2       spcon.dat    5.675
+   0.545     8     2  metapsicov.dat   43.558
+   0.735     8     1     nnbayes.dat   37.857
+   0.585     8     2    nnbayesb.dat   50.636
+   0.705     8     2     gremlin.dat   24.833
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.565     8     1      svmseq.dat   22.687
+   0.515     8     1     betacon.dat   35.395
+   0.435     8     2      psicov.dat   33.409
+   0.575     8     2       spcon.dat   35.546
+   0.555     8     2  metapsicov.dat   89.871
+   0.675     8     1     nnbayes.dat   64.405
+   0.495     8     2    nnbayesb.dat  102.874
+   0.715     8     2     gremlin.dat   42.158
+0.525 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.415     8     1      svmseq.dat   14.559
+   0.605     8     1     betacon.dat   13.411
+   0.485     8     2      psicov.dat    4.813
+   0.595     8     2       spcon.dat   15.222
+   0.565     8     2  metapsicov.dat   17.381
+   0.505     8     1     nnbayes.dat   17.985
+   0.505     8     2    nnbayesb.dat   22.936
+   0.775     8     2     gremlin.dat    6.561
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.585     8     1      svmseq.dat    6.090
+   0.525     8     1     betacon.dat   13.958
+   0.405     8     2      psicov.dat    8.274
+   0.545     8     2       spcon.dat   11.922
+   0.575     8     2  metapsicov.dat   22.696
+   0.525     8     1     nnbayes.dat   14.174
+   0.435     8     2    nnbayesb.dat   22.670
+   0.695     8     2     gremlin.dat   10.646
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.775     8     1      svmseq.dat    1.243
+   0.505     8     1     betacon.dat    2.386
+   0.435     8     2      psicov.dat   18.267
+   0.705     8     2       spcon.dat    4.774
+   0.575     8     2  metapsicov.dat   39.974
+   0.765     8     1     nnbayes.dat   33.449
+   0.605     8     2    nnbayesb.dat   48.282
+   0.715     8     2     gremlin.dat   24.199
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.605     8     1      svmseq.dat   18.930
+   0.595     8     1     betacon.dat   25.846
+   0.445     8     2      psicov.dat   32.364
+   0.655     8     2       spcon.dat   26.143
+   0.575     8     2  metapsicov.dat   84.883
+   0.695     8     1     nnbayes.dat   59.619
+   0.545     8     2    nnbayesb.dat   88.721
+   0.725     8     2     gremlin.dat   40.878
+0.55 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.425     8     1      svmseq.dat   14.139
+   0.615     8     1     betacon.dat   12.950
+   0.515     8     2      psicov.dat    4.345
+   0.595     8     2       spcon.dat   15.222
+   0.575     8     2  metapsicov.dat   16.780
+   0.575     8     1     nnbayes.dat   14.129
+   0.525     8     2    nnbayesb.dat   21.126
+   0.785     8     2     gremlin.dat    6.335
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.645     8     1      svmseq.dat    4.342
+   0.615     8     1     betacon.dat    9.818
+   0.415     8     2      psicov.dat    8.023
+   0.555     8     2       spcon.dat   11.375
+   0.595     8     2  metapsicov.dat   21.556
+   0.555     8     1     nnbayes.dat   12.457
+   0.445     8     2    nnbayesb.dat   21.670
+   0.705     8     2     gremlin.dat   10.374
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.785     8     1      svmseq.dat    1.140
+   0.515     8     1     betacon.dat    2.246
+   0.455     8     2      psicov.dat   17.193
+   0.835     8     2       spcon.dat    1.930
+   0.595     8     2  metapsicov.dat   37.707
+   0.785     8     1     nnbayes.dat   30.461
+   0.635     8     2    nnbayesb.dat   44.867
+   0.735     8     2     gremlin.dat   22.890
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.645     8     1      svmseq.dat   15.478
+   0.605     8     1     betacon.dat   24.883
+   0.475     8     2      psicov.dat   29.455
+   0.675     8     2       spcon.dat   24.147
+   0.585     8     2  metapsicov.dat   82.681
+   0.715     8     1     nnbayes.dat   54.825
+   0.565     8     2    nnbayesb.dat   83.479
+   0.755     8     2     gremlin.dat   37.832
+0.575 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.535     8     1      svmseq.dat   10.534
+   0.635     8     1     betacon.dat   11.963
+   0.575     8     2      psicov.dat    3.517
+   0.635     8     2       spcon.dat   13.712
+   0.585     8     2  metapsicov.dat   16.331
+   0.615     8     1     nnbayes.dat   12.269
+   0.565     8     2    nnbayesb.dat   17.797
+   0.795     8     2     gremlin.dat    6.109
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.665     8     1      svmseq.dat    3.782
+   0.625     8     1     betacon.dat    9.382
+   0.435     8     2      psicov.dat    7.447
+   0.675     8     2       spcon.dat    6.243
+   0.635     8     2  metapsicov.dat   19.445
+   0.635     8     1     nnbayes.dat    8.450
+   0.475     8     2    nnbayesb.dat   19.024
+   0.785     8     2     gremlin.dat    8.324
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.795     8     1      svmseq.dat    1.045
+   0.515     8     1     betacon.dat    2.246
+   0.475     8     2      psicov.dat   16.210
+   0.845     8     2       spcon.dat    1.794
+   0.625     8     2  metapsicov.dat   34.662
+   0.795     8     1     nnbayes.dat   29.185
+   0.675     8     2    nnbayesb.dat   40.340
+   0.765     8     2     gremlin.dat   21.240
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.665     8     1      svmseq.dat   13.885
+   0.615     8     1     betacon.dat   23.895
+   0.505     8     2      psicov.dat   27.080
+   0.745     8     2       spcon.dat   17.391
+   0.625     8     2  metapsicov.dat   74.184
+   0.745     8     1     nnbayes.dat   47.788
+   0.595     8     2    nnbayesb.dat   75.315
+   0.785     8     2     gremlin.dat   34.889
+0.60 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.555     8     1      svmseq.dat    9.916
+   0.655     8     1     betacon.dat   11.053
+   0.595     8     2      psicov.dat    3.328
+   0.655     8     2       spcon.dat   12.935
+   0.605     8     2  metapsicov.dat   15.599
+   0.645     8     1     nnbayes.dat   11.117
+   0.575     8     2    nnbayesb.dat   16.842
+   0.855     8     2     gremlin.dat    4.874
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.675     8     1      svmseq.dat    3.535
+   0.655     8     1     betacon.dat    8.181
+   0.495     8     2      psicov.dat    6.262
+   0.765     8     2       spcon.dat    3.384
+   0.645     8     2  metapsicov.dat   18.992
+   0.655     8     1     nnbayes.dat    7.581
+   0.475     8     2    nnbayesb.dat   19.024
+   0.795     8     2     gremlin.dat    8.131
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.985     8     1      svmseq.dat    0.004
+   0.525     8     1     betacon.dat    2.106
+   0.505     8     2      psicov.dat   14.934
+   0.865     8     2       spcon.dat    1.531
+   0.635     8     2  metapsicov.dat   33.604
+   0.825     8     1     nnbayes.dat   25.074
+   0.705     8     2    nnbayesb.dat   36.752
+   0.805     8     2     gremlin.dat   19.194
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.685     8     1      svmseq.dat   12.481
+   0.635     8     1     betacon.dat   21.928
+   0.525     8     2      psicov.dat   25.504
+   0.765     8     2       spcon.dat   15.761
+   0.635     8     2  metapsicov.dat   72.024
+   0.775     8     1     nnbayes.dat   41.422
+   0.615     8     2    nnbayesb.dat   70.290
+   0.815     8     2     gremlin.dat   32.074
+0.625 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.555     8     1      svmseq.dat    9.916
+   0.705     8     1     betacon.dat    9.045
+   0.595     8     2      psicov.dat    3.328
+   0.765     8     2       spcon.dat    9.063
+   0.645     8     2  metapsicov.dat   13.907
+   0.645     8     1     nnbayes.dat   11.117
+   0.615     8     2    nnbayesb.dat   13.480
+   0.895     8     2     gremlin.dat    4.050
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.685     8     1      svmseq.dat    3.329
+   0.695     8     1     betacon.dat    6.658
+   0.515     8     2      psicov.dat    5.888
+   0.775     8     2       spcon.dat    3.182
+   0.655     8     2  metapsicov.dat   18.473
+   0.675     8     1     nnbayes.dat    6.746
+   0.505     8     2    nnbayesb.dat   16.733
+   0.845     8     2     gremlin.dat    6.934
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.985     8     1      svmseq.dat    0.004
+   0.575     8     1     betacon.dat    1.521
+   0.615     8     2      psicov.dat   10.894
+   0.875     8     2       spcon.dat    1.362
+   0.685     8     2  metapsicov.dat   28.620
+   0.835     8     1     nnbayes.dat   23.716
+   0.715     8     2    nnbayesb.dat   35.666
+   0.825     8     2     gremlin.dat   18.112
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.695     8     1      svmseq.dat   11.806
+   0.675     8     1     betacon.dat   18.332
+   0.585     8     2      psicov.dat   21.199
+   0.795     8     2       spcon.dat   13.255
+   0.665     8     2  metapsicov.dat   65.851
+   0.795     8     1     nnbayes.dat   37.352
+   0.665     8     2    nnbayesb.dat   58.227
+   0.835     8     2     gremlin.dat   30.054
+0.65 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.565     8     1      svmseq.dat    9.607
+   0.725     8     1     betacon.dat    8.271
+   0.595     8     2      psicov.dat    3.328
+   0.815     8     2       spcon.dat    7.063
+   0.665     8     2  metapsicov.dat   13.051
+   0.705     8     1     nnbayes.dat    8.887
+   0.625     8     2    nnbayesb.dat   12.682
+   0.905     8     2     gremlin.dat    3.885
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.695     8     1      svmseq.dat    3.103
+   0.715     8     1     betacon.dat    5.909
+   0.525     8     2      psicov.dat    5.736
+   0.795     8     2       spcon.dat    2.680
+   0.695     8     2  metapsicov.dat   16.432
+   0.685     8     1     nnbayes.dat    6.302
+   0.585     8     2    nnbayesb.dat   11.362
+   0.855     8     2     gremlin.dat    6.716
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.985     8     1      svmseq.dat    0.004
+   0.575     8     1     betacon.dat    1.521
+   0.615     8     2      psicov.dat   10.894
+   0.885     8     2       spcon.dat    1.259
+   0.705     8     2  metapsicov.dat   26.867
+   0.855     8     1     nnbayes.dat   21.136
+   0.735     8     2    nnbayesb.dat   33.201
+   0.835     8     2     gremlin.dat   17.565
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.785     8     1      svmseq.dat    6.580
+   0.705     8     1     betacon.dat   15.863
+   0.615     8     2      psicov.dat   19.457
+   0.855     8     2       spcon.dat    8.654
+   0.695     8     2  metapsicov.dat   60.024
+   0.825     8     1     nnbayes.dat   31.451
+   0.695     8     2    nnbayesb.dat   51.062
+   0.855     8     2     gremlin.dat   27.881
+0.675 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.595     8     1      svmseq.dat    8.730
+   0.735     8     1     betacon.dat    7.835
+   0.625     8     2      psicov.dat    2.987
+   0.825     8     2       spcon.dat    6.709
+   0.695     8     2  metapsicov.dat   11.973
+   0.715     8     1     nnbayes.dat    8.475
+   0.675     8     2    nnbayesb.dat    9.077
+   0.905     8     2     gremlin.dat    3.885
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.765     8     1      svmseq.dat    1.769
+   0.725     8     1     betacon.dat    5.555
+   0.585     8     2      psicov.dat    4.810
+   0.795     8     2       spcon.dat    2.680
+   0.715     8     2  metapsicov.dat   15.436
+   0.705     8     1     nnbayes.dat    5.594
+   0.615     8     2    nnbayesb.dat    9.642
+   0.855     8     2     gremlin.dat    6.716
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.985     8     1      svmseq.dat    0.004
+   0.585     8     1     betacon.dat    1.414
+   0.645     8     2      psicov.dat    9.973
+   0.905     8     2       spcon.dat    1.025
+   0.705     8     2  metapsicov.dat   26.867
+   0.905     8     1     nnbayes.dat   14.963
+   0.755     8     2    nnbayesb.dat   30.794
+   0.935     8     2     gremlin.dat   11.075
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.815     8     1      svmseq.dat    5.144
+   0.725     8     1     betacon.dat   14.270
+   0.645     8     2      psicov.dat   17.703
+   0.885     8     2       spcon.dat    6.708
+   0.705     8     2  metapsicov.dat   58.065
+   0.845     8     1     nnbayes.dat   27.838
+   0.705     8     2    nnbayesb.dat   48.790
+   0.935     8     2     gremlin.dat   19.136
+0.70 = minimum accuracy
+   short = contact order: [6-11], [12,24], [25-inf]
+   0.665     8     1      svmseq.dat    6.854
+   0.745     8     1     betacon.dat    7.465
+   0.635     8     2      psicov.dat    2.888
+   0.855     8     2       spcon.dat    5.503
+   0.715     8     2  metapsicov.dat   11.211
+   0.725     8     1     nnbayes.dat    8.129
+   0.685     8     2    nnbayesb.dat    8.369
+   0.935     8     2     gremlin.dat    3.309
+   medm = contact order: [6-11], [12,24], [25-inf]
+   0.985     8     1      svmseq.dat    0.012
+   0.735     8     1     betacon.dat    5.234
+   0.615     8     2      psicov.dat    4.395
+   0.945     8     2       spcon.dat    0.334
+   0.725     8     2  metapsicov.dat   14.938
+   0.715     8     1     nnbayes.dat    5.252
+   0.655     8     2    nnbayesb.dat    7.461
+   0.935     8     2     gremlin.dat    4.752
+   long = contact order: [6-11], [12,24], [25-inf]
+   0.985     8     1      svmseq.dat    0.004
+   0.585     8     1     betacon.dat    1.414
+   0.655     8     2      psicov.dat    9.656
+   0.905     8     2       spcon.dat    1.025
+   0.765     8     2  metapsicov.dat   21.789
+   0.915     8     1     nnbayes.dat   13.617
+   0.775     8     2    nnbayesb.dat   28.527
+   0.955     8     2     gremlin.dat    9.503
+   all = contact order: [6-11], [12,24], [25-inf]
+   0.985     8     1      svmseq.dat    0.329
+   0.735     8     1     betacon.dat   13.480
+   0.665     8     2      psicov.dat   16.600
+   0.895     8     2       spcon.dat    5.963
+   0.765     8     2  metapsicov.dat   46.970
+   0.865     8     1     nnbayes.dat   24.328
+   0.735     8     2    nnbayesb.dat   42.292
+   0.945     8     2     gremlin.dat   17.626

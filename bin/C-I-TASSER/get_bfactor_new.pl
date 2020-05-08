@@ -22,6 +22,8 @@ $nc_max = 5; #cluculate bfactor for 5 clusters
 $dcut   = 5; #cutoff for decoy numbers in a cluster
 
 $lib="/nfs/amino-library";
+$lib="/oasis/projects/nsf/mia181/zhanglab/library" if (!-d "$lib");
+
 
 my $bindir="$lib/bin/bfactor"; #where the rmsdf, stride, and svm programs are located
 

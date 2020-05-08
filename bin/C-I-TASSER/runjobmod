@@ -1,4 +1,14 @@
 #!/bin/tcsh -f
+#SBATCH --job-name="!TAG!"
+#SBATCH --output="!OUTFILE!"
+#SBATCH --error="!ERRFILE!"
+#SBATCH --partition=!Q!
+#SBATCH --nodes=1
+#SBATCH --mem=!MEM!
+#SBATCH --ntasks-per-node=1
+#SBATCH -t !WALLTIME!
+#SBATCH -A !ACCOUNT!
+
 #PBS -e !ERRFILE!
 #PBS -o !OUTFILE!
 #PBS -l !WALLTIME!

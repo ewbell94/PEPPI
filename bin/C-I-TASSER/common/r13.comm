@@ -1,0 +1,800 @@
+GLY GLY
+  0.07  -0.07 
+GLY ALA
+ -0.01   0.01 
+GLY SER
+  0.34  -0.25 
+GLY CYS
+  0.19  -0.16 
+GLY VAL
+  0.28  -0.22 
+GLY THR
+  0.31  -0.24 
+GLY ILE
+  0.33  -0.25 
+GLY PRO
+  1.65  -0.59 
+GLY MET
+  0.04  -0.04 
+GLY ASP
+  0.14  -0.12 
+GLY ASN
+  0.12  -0.11 
+GLY LEU
+  0.03  -0.03 
+GLY LYS
+  0.23  -0.19 
+GLY GLU
+  0.04  -0.04 
+GLY GLN
+  0.10  -0.09 
+GLY ARG
+  0.22  -0.18 
+GLY HIS
+  0.11  -0.10 
+GLY PHE
+  0.09  -0.09 
+GLY TYR
+  0.21  -0.17 
+GLY TRP
+  0.26  -0.21 
+ALA GLY
+ -0.22   0.28 
+ALA ALA
+ -0.41   0.72 
+ALA SER
+ -0.19   0.24 
+ALA CYS
+ -0.16   0.19 
+ALA VAL
+ -0.16   0.19 
+ALA THR
+ -0.11   0.13 
+ALA ILE
+ -0.20   0.24 
+ALA PRO
+  1.20  -0.53 
+ALA MET
+ -0.41   0.71 
+ALA ASP
+ -0.21   0.27 
+ALA ASN
+ -0.26   0.36 
+ALA LEU
+ -0.31   0.45 
+ALA LYS
+ -0.36   0.56 
+ALA GLU
+ -0.41   0.70 
+ALA GLN
+ -0.37   0.58 
+ALA ARG
+ -0.40   0.68 
+ALA HIS
+ -0.25   0.34 
+ALA PHE
+ -0.20   0.25 
+ALA TYR
+ -0.23   0.30 
+ALA TRP
+ -0.28   0.39 
+SER GLY
+ -0.19   0.24 
+SER ALA
+ -0.31   0.45 
+SER SER
+  0.01  -0.01 
+SER CYS
+ -0.08   0.09 
+SER VAL
+ -0.10   0.11 
+SER THR
+ -0.02   0.02 
+SER ILE
+ -0.13   0.15 
+SER PRO
+  1.02  -0.50 
+SER MET
+ -0.28   0.39 
+SER ASP
+ -0.19   0.23 
+SER ASN
+ -0.09   0.09 
+SER LEU
+ -0.31   0.46 
+SER LYS
+ -0.20   0.26 
+SER GLU
+ -0.32   0.48 
+SER GLN
+ -0.25   0.34 
+SER ARG
+ -0.21   0.26 
+SER HIS
+ -0.18   0.22 
+SER PHE
+ -0.19   0.23 
+SER TYR
+ -0.15   0.18 
+SER TRP
+ -0.28   0.39 
+CYS GLY
+  0.13  -0.11 
+CYS ALA
+ -0.26   0.35 
+CYS SER
+ -0.04   0.04 
+CYS CYS
+  0.20  -0.16 
+CYS VAL
+  0.29  -0.22 
+CYS THR
+ -0.00  -0.00 
+CYS ILE
+  0.07  -0.06 
+CYS PRO
+  0.89  -0.46 
+CYS MET
+  0.14  -0.12 
+CYS ASP
+ -0.10   0.11 
+CYS ASN
+ -0.10   0.11 
+CYS LEU
+ -0.11   0.13 
+CYS LYS
+ -0.13   0.15 
+CYS GLU
+ -0.17   0.20 
+CYS GLN
+ -0.24   0.31 
+CYS ARG
+ -0.16   0.19 
+CYS HIS
+ -0.26   0.35 
+CYS PHE
+  0.13  -0.12 
+CYS TYR
+  0.04  -0.04 
+CYS TRP
+  0.21  -0.18 
+VAL GLY
+  0.13  -0.12 
+VAL ALA
+ -0.11   0.12 
+VAL SER
+  0.05  -0.04 
+VAL CYS
+  0.38  -0.28 
+VAL VAL
+  0.75  -0.42 
+VAL THR
+  0.25  -0.20 
+VAL ILE
+  0.61  -0.38 
+VAL PRO
+  0.99  -0.49 
+VAL MET
+  0.07  -0.07 
+VAL ASP
+ -0.02   0.02 
+VAL ASN
+  0.03  -0.03 
+VAL LEU
+  0.25  -0.20 
+VAL LYS
+ -0.17   0.20 
+VAL GLU
+ -0.17   0.21 
+VAL GLN
+ -0.17   0.20 
+VAL ARG
+ -0.14   0.16 
+VAL HIS
+  0.06  -0.06 
+VAL PHE
+  0.42  -0.30 
+VAL TYR
+  0.25  -0.20 
+VAL TRP
+  0.14  -0.12 
+THR GLY
+  0.12  -0.11 
+THR ALA
+ -0.20   0.24 
+THR SER
+  0.13  -0.12 
+THR CYS
+ -0.08   0.08 
+THR VAL
+  0.20  -0.17 
+THR THR
+  0.29  -0.22 
+THR ILE
+  0.09  -0.08 
+THR PRO
+  1.12  -0.51 
+THR MET
+ -0.23   0.30 
+THR ASP
+ -0.09   0.10 
+THR ASN
+ -0.03   0.03 
+THR LEU
+ -0.13   0.16 
+THR LYS
+ -0.08   0.09 
+THR GLU
+ -0.19   0.23 
+THR GLN
+ -0.11   0.13 
+THR ARG
+ -0.08   0.09 
+THR HIS
+  0.02  -0.02 
+THR PHE
+ -0.04   0.04 
+THR TYR
+  0.12  -0.10 
+THR TRP
+  0.03  -0.03 
+ILE GLY
+  0.12  -0.11 
+ILE ALA
+ -0.18   0.22 
+ILE SER
+ -0.04   0.04 
+ILE CYS
+  0.24  -0.19 
+ILE VAL
+  0.67  -0.40 
+ILE THR
+  0.06  -0.05 
+ILE ILE
+  0.53  -0.35 
+ILE PRO
+  0.95  -0.48 
+ILE MET
+  0.10  -0.09 
+ILE ASP
+ -0.10   0.11 
+ILE ASN
+ -0.11   0.12 
+ILE LEU
+  0.20  -0.17 
+ILE LYS
+ -0.19   0.24 
+ILE GLU
+ -0.25   0.33 
+ILE GLN
+ -0.24   0.31 
+ILE ARG
+ -0.22   0.28 
+ILE HIS
+  0.04  -0.04 
+ILE PHE
+  0.28  -0.22 
+ILE TYR
+  0.07  -0.06 
+ILE TRP
+  0.11  -0.10 
+PRO GLY
+ -0.03   0.03 
+PRO ALA
+ -0.24   0.32 
+PRO SER
+ -0.14   0.17 
+PRO CYS
+ -0.15   0.18 
+PRO VAL
+ -0.01   0.01 
+PRO THR
+ -0.09   0.10 
+PRO ILE
+ -0.04   0.04 
+PRO PRO
+  1.34  -0.55 
+PRO MET
+ -0.19   0.24 
+PRO ASP
+ -0.22   0.29 
+PRO ASN
+ -0.24   0.32 
+PRO LEU
+ -0.16   0.18 
+PRO LYS
+ -0.04   0.04 
+PRO GLU
+ -0.25   0.34 
+PRO GLN
+ -0.16   0.20 
+PRO ARG
+ -0.09   0.10 
+PRO HIS
+ -0.23   0.30 
+PRO PHE
+ -0.14   0.17 
+PRO TYR
+ -0.12   0.14 
+PRO TRP
+ -0.23   0.29 
+MET GLY
+ -0.05   0.06 
+MET ALA
+ -0.34   0.52 
+MET SER
+ -0.08   0.09 
+MET CYS
+  0.18  -0.15 
+MET VAL
+  0.16  -0.14 
+MET THR
+ -0.08   0.09 
+MET ILE
+  0.15  -0.13 
+MET PRO
+  0.94  -0.48 
+MET MET
+ -0.27   0.36 
+MET ASP
+ -0.15   0.18 
+MET ASN
+ -0.14   0.17 
+MET LEU
+ -0.12   0.13 
+MET LYS
+ -0.24   0.32 
+MET GLU
+ -0.29   0.41 
+MET GLN
+ -0.36   0.57 
+MET ARG
+ -0.36   0.57 
+MET HIS
+ -0.11   0.13 
+MET PHE
+  0.18  -0.15 
+MET TYR
+  0.03  -0.02 
+MET TRP
+ -0.07   0.08 
+ASP GLY
+ -0.33   0.50 
+ASP ALA
+ -0.39   0.66 
+ASP SER
+ -0.38   0.63 
+ASP CYS
+ -0.26   0.35 
+ASP VAL
+ -0.12   0.14 
+ASP THR
+ -0.26   0.35 
+ASP ILE
+ -0.19   0.24 
+ASP PRO
+  1.29  -0.55 
+ASP MET
+ -0.41   0.71 
+ASP ASP
+ -0.24   0.32 
+ASP ASN
+ -0.37   0.61 
+ASP LEU
+ -0.37   0.60 
+ASP LYS
+ -0.33   0.49 
+ASP GLU
+ -0.29   0.42 
+ASP GLN
+ -0.38   0.62 
+ASP ARG
+ -0.40   0.67 
+ASP HIS
+ -0.22   0.28 
+ASP PHE
+ -0.31   0.45 
+ASP TYR
+ -0.15   0.18 
+ASP TRP
+ -0.26   0.35 
+ASN GLY
+ -0.17   0.20 
+ASN ALA
+ -0.32   0.48 
+ASN SER
+ -0.08   0.08 
+ASN CYS
+  0.04  -0.04 
+ASN VAL
+ -0.01   0.01 
+ASN THR
+  0.05  -0.05 
+ASN ILE
+ -0.22   0.29 
+ASN PRO
+  1.41  -0.56 
+ASN MET
+ -0.22   0.28 
+ASN ASP
+ -0.18   0.22 
+ASN ASN
+ -0.21   0.26 
+ASN LEU
+ -0.33   0.50 
+ASN LYS
+ -0.19   0.24 
+ASN GLU
+ -0.21   0.26 
+ASN GLN
+ -0.21   0.26 
+ASN ARG
+ -0.16   0.18 
+ASN HIS
+ -0.16   0.19 
+ASN PHE
+ -0.11   0.12 
+ASN TYR
+ -0.10   0.11 
+ASN TRP
+ -0.14   0.17 
+LEU GLY
+  0.00  -0.00 
+LEU ALA
+ -0.29   0.41 
+LEU SER
+ -0.16   0.19 
+LEU CYS
+  0.11  -0.10 
+LEU VAL
+  0.21  -0.18 
+LEU THR
+ -0.11   0.12 
+LEU ILE
+  0.26  -0.20 
+LEU PRO
+  0.81  -0.44 
+LEU MET
+ -0.18   0.22 
+LEU ASP
+ -0.19   0.24 
+LEU ASN
+ -0.28   0.39 
+LEU LEU
+ -0.08   0.08 
+LEU LYS
+ -0.31   0.46 
+LEU GLU
+ -0.35   0.55 
+LEU GLN
+ -0.35   0.54 
+LEU ARG
+ -0.31   0.45 
+LEU HIS
+ -0.22   0.28 
+LEU PHE
+  0.05  -0.05 
+LEU TYR
+ -0.05   0.05 
+LEU TRP
+  0.08  -0.08 
+LYS GLY
+ -0.16   0.19 
+LYS ALA
+ -0.24   0.31 
+LYS SER
+  0.04  -0.04 
+LYS CYS
+ -0.00  -0.00 
+LYS VAL
+  0.04  -0.04 
+LYS THR
+  0.22  -0.18 
+LYS ILE
+ -0.10   0.12 
+LYS PRO
+  1.39  -0.56 
+LYS MET
+ -0.30   0.43 
+LYS ASP
+  0.08  -0.08 
+LYS ASN
+ -0.12   0.14 
+LYS LEU
+ -0.28   0.40 
+LYS LYS
+ -0.11   0.12 
+LYS GLU
+ -0.09   0.10 
+LYS GLN
+ -0.12   0.14 
+LYS ARG
+ -0.16   0.19 
+LYS HIS
+ -0.16   0.20 
+LYS PHE
+ -0.23   0.30 
+LYS TYR
+ -0.02   0.02 
+LYS TRP
+ -0.15   0.18 
+GLU GLY
+ -0.25   0.33 
+GLU ALA
+ -0.41   0.72 
+GLU SER
+ -0.04   0.05 
+GLU CYS
+ -0.29   0.41 
+GLU VAL
+ -0.24   0.32 
+GLU THR
+ -0.01   0.01 
+GLU ILE
+ -0.30   0.43 
+GLU PRO
+  1.22  -0.53 
+GLU MET
+ -0.43   0.78 
+GLU ASP
+ -0.01   0.01 
+GLU ASN
+ -0.18   0.22 
+GLU LEU
+ -0.40   0.69 
+GLU LYS
+ -0.21   0.26 
+GLU GLU
+ -0.24   0.32 
+GLU GLN
+ -0.31   0.45 
+GLU ARG
+ -0.26   0.35 
+GLU HIS
+ -0.13   0.15 
+GLU PHE
+ -0.32   0.48 
+GLU TYR
+ -0.27   0.37 
+GLU TRP
+ -0.25   0.33 
+GLN GLY
+ -0.13   0.14 
+GLN ALA
+ -0.33   0.51 
+GLN SER
+  0.01  -0.01 
+GLN CYS
+ -0.15   0.17 
+GLN VAL
+ -0.02   0.02 
+GLN THR
+  0.04  -0.04 
+GLN ILE
+ -0.20   0.25 
+GLN PRO
+  1.28  -0.54 
+GLN MET
+ -0.30   0.43 
+GLN ASP
+  0.02  -0.02 
+GLN ASN
+ -0.05   0.05 
+GLN LEU
+ -0.35   0.54 
+GLN LYS
+ -0.29   0.42 
+GLN GLU
+ -0.07   0.07 
+GLN GLN
+ -0.32   0.48 
+GLN ARG
+ -0.24   0.32 
+GLN HIS
+ -0.17   0.20 
+GLN PHE
+ -0.12   0.13 
+GLN TYR
+ -0.08   0.09 
+GLN TRP
+ -0.02   0.03 
+ARG GLY
+ -0.07   0.07 
+ARG ALA
+ -0.29   0.41 
+ARG SER
+  0.04  -0.03 
+ARG CYS
+ -0.11   0.12 
+ARG VAL
+ -0.01   0.01 
+ARG THR
+  0.16  -0.14 
+ARG ILE
+ -0.02   0.02 
+ARG PRO
+  1.42  -0.56 
+ARG MET
+ -0.24   0.32 
+ARG ASP
+ -0.10   0.11 
+ARG ASN
+ -0.07   0.08 
+ARG LEU
+ -0.25   0.33 
+ARG LYS
+ -0.16   0.19 
+ARG GLU
+ -0.24   0.31 
+ARG GLN
+ -0.29   0.40 
+ARG ARG
+ -0.11   0.12 
+ARG HIS
+ -0.08   0.08 
+ARG PHE
+ -0.12   0.13 
+ARG TYR
+ -0.08   0.09 
+ARG TRP
+ -0.30   0.43 
+HIS GLY
+ -0.04   0.04 
+HIS ALA
+ -0.18   0.22 
+HIS SER
+  0.03  -0.03 
+HIS CYS
+ -0.17   0.21 
+HIS VAL
+  0.04  -0.04 
+HIS THR
+  0.01  -0.01 
+HIS ILE
+  0.01  -0.01 
+HIS PRO
+  0.91  -0.47 
+HIS MET
+ -0.15   0.18 
+HIS ASP
+ -0.10   0.12 
+HIS ASN
+ -0.01   0.01 
+HIS LEU
+ -0.20   0.24 
+HIS LYS
+ -0.12   0.14 
+HIS GLU
+ -0.09   0.10 
+HIS GLN
+ -0.20   0.25 
+HIS ARG
+ -0.22   0.28 
+HIS HIS
+ -0.02   0.02 
+HIS PHE
+ -0.03   0.03 
+HIS TYR
+  0.00  -0.00 
+HIS TRP
+ -0.18   0.22 
+PHE GLY
+  0.01  -0.01 
+PHE ALA
+ -0.08   0.08 
+PHE SER
+ -0.07   0.08 
+PHE CYS
+  0.32  -0.24 
+PHE VAL
+  0.35  -0.26 
+PHE THR
+  0.11  -0.10 
+PHE ILE
+  0.34  -0.25 
+PHE PRO
+  1.00  -0.49 
+PHE MET
+  0.09  -0.09 
+PHE ASP
+ -0.07   0.08 
+PHE ASN
+ -0.11   0.12 
+PHE LEU
+  0.13  -0.11 
+PHE LYS
+ -0.22   0.28 
+PHE GLU
+ -0.27   0.38 
+PHE GLN
+ -0.25   0.34 
+PHE ARG
+ -0.20   0.25 
+PHE HIS
+ -0.04   0.04 
+PHE PHE
+  0.12  -0.10 
+PHE TYR
+  0.17  -0.14 
+PHE TRP
+  0.32  -0.24 
+TYR GLY
+ -0.02   0.02 
+TYR ALA
+ -0.14   0.16 
+TYR SER
+  0.05  -0.05 
+TYR CYS
+  0.58  -0.37 
+TYR VAL
+  0.27  -0.21 
+TYR THR
+  0.07  -0.07 
+TYR ILE
+  0.27  -0.21 
+TYR PRO
+  1.04  -0.50 
+TYR MET
+ -0.05   0.05 
+TYR ASP
+ -0.09   0.10 
+TYR ASN
+ -0.05   0.05 
+TYR LEU
+  0.05  -0.05 
+TYR LYS
+ -0.22   0.28 
+TYR GLU
+ -0.17   0.21 
+TYR GLN
+ -0.24   0.32 
+TYR ARG
+ -0.15   0.18 
+TYR HIS
+ -0.14   0.16 
+TYR PHE
+  0.32  -0.24 
+TYR TYR
+  0.21  -0.17 
+TYR TRP
+  0.14  -0.13 
+TRP GLY
+ -0.10   0.12 
+TRP ALA
+ -0.16   0.19 
+TRP SER
+ -0.09   0.10 
+TRP CYS
+  0.25  -0.20 
+TRP VAL
+  0.09  -0.08 
+TRP THR
+  0.01  -0.01 
+TRP ILE
+  0.11  -0.10 
+TRP PRO
+  0.94  -0.48 
+TRP MET
+  0.05  -0.05 
+TRP ASP
+ -0.00  -0.00 
+TRP ASN
+ -0.16   0.18 
+TRP LEU
+ -0.14   0.16 
+TRP LYS
+ -0.21   0.26 
+TRP GLU
+ -0.21   0.26 
+TRP GLN
+ -0.25   0.34 
+TRP ARG
+ -0.18   0.22 
+TRP HIS
+ -0.21   0.27 
+TRP PHE
+  0.09  -0.08 
+TRP TYR
+ -0.03   0.03 
+TRP TRP
+ -0.00  -0.00 
