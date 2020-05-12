@@ -1,0 +1,137 @@
+#!/usr/bin/perl
+#PBS -e !ERRFILE!
+#PBS -o !OUTFILE!
+#PBS -l !WALLTIME!
+#PBS -l !NODE!
+
+use Math::Trig;
+
+##### report node -------->
+`hostname`=~/(\S+)/;
+$node=$1;
+printf "hostname: $node\n";
+$time=`date`;
+printf "starting time: $time";
+$pwd=`pwd`;
+printf "pwd: $pwd";
+#^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+$user="!USER!";
+if($user eq "yzhang_test"){
+    $user="zhng";
+}
+
+################# directories #############################
+$s="!S!";
+$o="!O!";
+$s1="protein";
+$data_dir="!DATA_DIR!/$s";  #for seq.txt
+$work_dir="/tmp/$user/!TAG!";
+$bindir1="!BIN_DIR!";
+$cont_dir="/nfs/amino-home/zhng/local_library";
+$bindir="$cont_dir/DNCON2"; ##DNCON2 path
+
+################ working directory ########################
+`/bin/rm -fr $work_dir`;
+`/bin/mkdir -p $work_dir`;
+chdir "$work_dir";
+`mkdir -p $work_dir/input`;
+`mkdir -p $work_dir/output`;
+`mkdir -p /tmp/$user/tmp/scratch`;# Do not delete this folder
+`mkdir -p /tmp/$user/tmp/acc20`; # Do not delete this folder
+`mkdir -p /tmp/$user/tmp/acc5`; # Do not delete this folder
+`mkdir -p /tmp/$user/tmp/homo`; # Do not delete this folder
+`mkdir -p /tmp/$user/tmp/pro`; # Do not delete this folder
+`mkdir -p /tmp/$user/tmp/ss5`; # Do not delete this folder
+`mkdir -p /tmp/$user/tmp/ss8`; # Do not delete this folder
+
+################ make fasta sequence file #################
+@seqtxts=`cat $data_dir/seq.txt`;
+$sequence="";
+foreach $seqtxt(@seqtxts){
+    goto pos6 if($seqtxt=~/\>/);
+    $seqtxt=~s/\s//mg;
+    $seqtxt=~s/\n//mg;
+    $sequence=$sequence.$seqtxt;
+  pos6:;
+}
+$Lch=length $sequence;
+open(seq,">$work_dir/input/protein.fasta");
+printf seq ">protein\n";
+for($i=1;$i<=$Lch;$i++){
+    $a=substr($sequence,$i-1,1);
+    printf seq "$a";
+    $seqQ{$i}=$a;   #only for check
+    #$log{$i,$seqQ{$i}}++;
+    if($i==int($i/60)*60){
+	printf seq "\n";
+    }
+}
+printf seq "\n";
+close(seq);
+########## prepare sequence for NN-BYES:
+
+######### Copy MSA to tmp ############
+#$aln="$data_dir/MSA/protein_uniclust_metaclust_tara.aln";
+$aln="$data_dir/MSA/!MSA!";
+if (-s "$aln"){
+    `/bin/cp $aln $work_dir/input/protein.aln`;
+}else{
+    printf "error: $aln does not exist!\n";
+    exit();
+}
+
+
+########### run dncon2 #######################
+print "\n------------- run DNCON2 -----------------\n";
+system("$bindir/dncon2-v1.0.sh $work_dir/input/protein.fasta $work_dir/output/ $work_dir/input/ > $work_dir/output/protein.log"); ## final run
+
+## generate protein.colstats && neff based on 0.8 id cut-off ##
+print "\n-------------  obtain neff -----------------\n";
+`$bindir1/bin/alnstats $work_dir/output/alignments/protein.aln $work_dir/output/alignments/protein.colstats $work_dir/output/alignments/protein.pairstats`;
+$neff=`head -3 $work_dir/output/alignments/protein.colstats|tail -1`;
+$neff_len=$neff/sqrt($Lch);
+
+##############sort output ------>
+print "\n-------------  sort comtact map of DNCON -----------------\n";
+open(a,"$work_dir/output/protein.rr.raw");
+$n=0;
+while($line=<a>){
+    if($line=~/(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/){
+        if (($2-$1)>=6){
+	    $n++;
+	    $I{$n}=$1;
+	    $J{$n}=$2;
+	    $conf{$n}=$5;
+        }
+    }
+}
+close(a);
+
+@conf_keys=sort{$conf{$b}<=>$conf{$a}} keys %conf;
+open(b,">dncon.dat");
+printf b "%3d\t%8.4f\n",$n,$neff_len;
+#print b "$n\n";
+for($i=1;$i<=$n;$i++){
+    $k=$conf_keys[$i-1];
+    printf b "%5d %5d %8.3f\n",$I{$k},$J{$k},$conf{$k};
+}
+close(b);
+
+############## Copy result back to output ##########
+print "\n-------------  copy output files back -----------------\n";
+`/bin/cp dncon.dat $data_dir/dncon.dat`;
+#`/bin/cp $work_dir/output/protein.log $data_dir/dncon_protein.log`;
+print "DNCON is complete now\n\n";
+
+#exit();
+
+################# endding procedure ######################
+
+$time=`date`;
+printf "ending time: $time";
+`sync`;
+`sync`;
+sleep(1);
+`rm -rf $work_dir`;
+exit();

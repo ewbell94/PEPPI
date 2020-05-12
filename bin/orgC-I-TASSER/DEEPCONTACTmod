@@ -1,0 +1,142 @@
+#!/usr/bin/perl
+#PBS -e !ERRFILE!
+#PBS -o !OUTFILE!
+#PBS -l !WALLTIME!
+#PBS -l !NODE!
+
+use Math::Trig;
+
+##### report node -------->
+`hostname`=~/(\S+)/;
+$node=$1;
+printf "hostname: $node\n";
+$time=`date`;
+printf "starting time: $time";
+$pwd=`pwd`;
+printf "pwd: $pwd";
+#^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+################# directories #############################
+$s="!S!";
+$o="!O!";
+$s1="protein"; 
+$data_dir="!DATA_DIR!/$s";  #for seq.txt 
+$work_dir="/tmp/!USER!/!TAG!";
+$bindir1="!BIN_DIR!";
+$cont_dir="!CON_DIR!"; ## path for all the contact programs
+$bindir="$cont_dir/deepcontact/deepcontact-master"; ##deepcontact path
+$python="/nfs/amino-library/anaconda/bin/python";
+
+################ working directory ########################
+`/bin/rm -fr $work_dir`;
+`/bin/mkdir -p $work_dir`;
+chdir "$work_dir";
+
+################ make fasta sequence file #################
+@seqtxts=`cat $data_dir/seq.txt`;
+$sequence="";
+foreach $seqtxt(@seqtxts){
+    goto pos6 if($seqtxt=~/\>/);
+    $seqtxt=~s/\s//mg;
+    $seqtxt=~s/\n//mg;
+    $sequence=$sequence.$seqtxt;
+  pos6:;
+}
+$Lch=length $sequence;
+open(seq,">protein.fasta");
+printf seq ">protein\n";
+for($i=1;$i<=$Lch;$i++){
+    $a=substr($sequence,$i-1,1);
+    printf seq "$a";
+    $seqQ{$i}=$a;   #only for check
+    #$log{$i,$seqQ{$i}}++;
+    if($i==int($i/60)*60){
+	printf seq "\n";
+    }
+}
+printf seq "\n";
+close(seq);
+
+######### Copy MSA to tmp ############
+#$aln="$data_dir/MSA/protein_uniclust_metaclust_tara.aln";
+$aln="$data_dir/MSA/!MSA!";
+if (-s "$aln"){
+    `/bin/cp $aln protein.aln`;
+}else{
+    printf "error: $aln does not exist!\n";
+    exit();
+}
+
+########### run deepcontact #######################
+printf "\n------------- run deepcontact -------------------\n";
+system("$python $bindir/data-processing/run_pipeline.py protein.fasta $work_dir"); ## data_processing
+$time=`date`;
+printf "data-processing finish time: $time";
+system("$python $bindir/deepcontact/make_pred.py $work_dir/protein.fasta $work_dir $work_dir/protein.out");
+
+## generate protein.colstats && neff based on 0.8 id cut-off ##
+printf "\n-------- calculate neff ------------------>\n";
+`$bindir1/bin/alnstats protein.aln protein.colstats protein.pairstats`;
+$neff=`head -3 protein.colstats|tail -1`;
+$neff_len=$neff/sqrt($Lch);
+
+##############sort output ------>
+print "\n---------- sort output for \'deepcontact.dat\'\n";
+open(out,">./deepcontact.out");
+$m=0;
+open (cp, "./protein.out");
+while($maps=<cp>){
+    chomp($maps);
+    @contact_maps=split(/\s+/,$maps);
+    for($i=$m+1;$i<$Lch;$i++){
+	$cscore1=$contact_maps[$i];
+	$predicted_residue11=$m+1;
+	$predicted_residue22=$i+1;
+	printf out ("%3d %8d %8.3f\n",$predicted_residue11,$predicted_residue22,$cscore1);
+    }
+    $m++;
+}
+close(out);
+close(cp);
+
+############ sort output ----------->
+open(a,"./deepcontact.out");
+$n=0;
+undef %conf;
+while($line=<a>){
+  if($line=~/(\S+)\s+(\S+)\s+(\S+)/){
+    if (($2-$1)>=6){
+      $n++;
+      $I{$n}=$1;
+      $J{$n}=$2;
+      $conf{$n}=$3;
+    }
+  }
+}
+close(a);
+
+@conf_keys=sort{$conf{$b}<=>$conf{$a}} keys %conf;
+open(b,">deepcontact.dat");
+printf b "%3d\t%8.4f\n",$n,$neff_len;
+#print b "$n\n";
+for($i=1;$i<=$n;$i++){
+    $k=$conf_keys[$i-1];
+    printf b "%5d %5d %8.3f\n",$I{$k},$J{$k},$conf{$k};
+}
+close(b);
+
+############## Copy result back to output ##########
+printf "\n-------- copy results back -------------->\n";
+`/bin/cp deepcontact.dat $data_dir/deepcontact.dat`;
+print "DeepContact is complete now\n\n";
+
+
+################# endding procedure ######################
+
+$time=`date`;
+printf "ending time: $time";
+`sync`;
+`sync`;
+sleep(1);
+`rm -rf $work_dir`;
+exit();

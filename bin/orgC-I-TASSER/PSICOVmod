@@ -1,0 +1,122 @@
+#!/usr/bin/perl
+#PBS -e !ERRFILE!
+#PBS -o !OUTFILE!
+#PBS -l !WALLTIME!
+#PBS -l !NODE!
+
+use Math::Trig;
+
+########### setup  the environment and Working DIRectory ###
+$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin";
+$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
+
+##### report node -------->
+`hostname`=~/(\S+)/;
+$node=$1;
+printf "hostname: $node\n";
+$time=`date`;
+printf "starting time: $time";
+$pwd=`pwd`;
+printf "pwd: $pwd";
+#^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+################# directories #############################
+$s="!S!";
+$o="!O!";
+$data_dir="!DATA_DIR!/$s";  #for seq.txt and init.dat
+$work_dir="/tmp/!USER!/!TAG!";
+$psicov_dir="/nfs/amino-library/contact/psicov";
+$blastdir="/nfs/amino-library/blast/bin"; #blast always uses local
+$bindir1="!BIN_DIR!";
+
+################ working directory ########################
+`/bin/rm -fr $work_dir`;
+`/bin/mkdir -p $work_dir`;
+chdir "$work_dir";
+
+################ make fasta sequence file #################
+@seqtxts=`cat $data_dir/seq.txt`;
+$sequence="";
+foreach $seqtxt(@seqtxts){
+    goto pos6 if($seqtxt=~/\>/);
+    $seqtxt=~s/\s//mg;
+    $seqtxt=~s/\n//mg;
+    $sequence=$sequence.$seqtxt;
+  pos6:;
+}
+$Lch=length $sequence;
+open(seq,">protein.seq");
+printf seq ">protein\n";
+for($i=1;$i<=$Lch;$i++){
+    $a=substr($sequence,$i-1,1);
+    printf seq "$a";
+    $seqQ{$i}=$a;   #only for check
+    #$log{$i,$seqQ{$i}}++;
+    if($i==int($i/60)*60){
+	printf seq "\n";
+    }
+}
+printf seq "\n";
+close(seq);
+
+######### Copy MSA to tmp ############
+#$aln="$data_dir/MSA/protein_uniref90_metaclust.aln";
+$aln="$data_dir/MSA/!MSA!";
+if (-s "$aln"){
+    `/bin/cp $aln protein.aln`;
+}else{
+    printf "error: $aln does not exist!\n";
+}
+
+## generate protein.colstats && neff based on 0.8 id cut-off ##
+printf "\n----------- calculate neff ----------------\n";
+`$bindir1/bin/alnstats protein.aln protein.colstats protein.pairstats`;
+$neff=`head -3 protein.colstats|tail -1`;
+$neff_len=$neff/sqrt($Lch);
+
+############### run psicov -------------------->
+printf "\n----------- run psicov ----------------\n";
+#$psicov="$psicov_dir/psicov -p -r 0.001"; #fast mode
+$psicov="$psicov_dir/psicov -p -d 0.03";  #slow mode
+
+system("$psicov protein.aln > protein.map");
+if(-s "protein.map" <10){
+    printf "\n----------- psicov.dat cannot be created because of too few homologous sequences --------\n";
+    `rm -rf $work_dir`;
+    exit();
+    system("$psicov_dir/$psicov -o protein.aln > protein.map");
+}
+
+############ sort output ----------->
+printf "\n------------ sort output of psicov -------------->\n";
+open(a,"protein.map");
+$n=0;
+while($line=<a>){
+    if($line=~/(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/){
+	$n++;
+	$I{$n}=$1;
+	$J{$n}=$2;
+	$conf{$n}=$5;
+    }
+}
+close(a);
+open(a,">psicov.dat");
+printf a "%3d\t%8.4f\n",$n,$neff_len;
+for($i=1;$i<=$n;$i++){
+    printf a "%5d %5d %8.3f\n",$I{$i},$J{$i},$conf{$i};
+}
+close(a);
+
+############## Copy result back to output ##########
+printf "\n------------ copy results back -------------->\n";
+`/bin/cp psicov.dat $data_dir/psicov.dat`;
+`/bin/cp psicov.dat $data_dir/psicov.NNB`; #for NN-BAYES (not used)
+
+################# endding procedure ######################
+`rm -rf $work_dir`;
+$time=`date`;
+printf "ending time: $time";
+`sync`;
+`sync`;
+sleep(1);
+exit();

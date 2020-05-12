@@ -1,0 +1,2281 @@
+#!/usr/bin/perl
+#PBS -e !ERRFILE!
+#PBS -o !OUTFILE!
+#PBS -l !WALLTIME!
+use Math::Trig;
+
+### this file was copied from '/home/yzhang/pdbinput/mkrestraint/mkinputmod_i'
+
+###########################################################
+#
+# This script consists of two steps:
+# Step1: make init_all$o.dat
+# Step2: generate comb$o.dat from init_all$o.dat
+#
+###########################################################
+
+$bindir="!BINDIR!";
+$lib="/nfs/amino-library";
+
+############################################################
+$o="!O!";
+$s="!S!";
+$tag="!TAG!";
+$datadir="!DATADIR!";
+$initall="init_all.dat"; #init_all$o.dat
+$librarydir="!LIBRARYDIR!"; #$lib
+
+####### sort template ##########
+$sort="!SORT!";
+$n_qua_sort=!NQUASORT!; #number of qua closc for sorting
+$n_ros_sort=!NROSSORT!; #number of ros closc for sorting
+$n_ita_sort=!NITASORT!; #number of ita closc for sorting
+
+################# directories #############################
+$random=int(rand()*10000000000);
+$work_dir="/tmp/$random";
+#$work_dir="/tmp/yzhang/$tag";
+`/bin/mkdir -p $work_dir`;
+chdir "$work_dir";
+`/bin/rm -f $work_dir/*`;
+
+
+############################################################
+undef %Tcheck;
+$Tcheck{"XXXa"}="QQQ GGGd XXXa XXXb XXXe";
+$Tcheck{"XXXb"}="QQQ GGGd XXXa XXXb XXXe";
+$Tcheck{"XXXe"}="QQQ GGGd XXXa XXXb XXXe";
+$Tcheck{"GGGd"}="QQQ GGGd XXXa XXXb XXXe";
+$Tcheck{"VVV"}="WWW VVV UUU";
+$Tcheck{"UUU"}="WWW VVV UUU";
+$Tcheck{"mgen"}="nfold mgen";
+$Tcheck{"sam04"}="san02 sam04";
+
+@stands=qw(
+
+	   SPX
+           HHW
+	   FF3
+	   MUS
+	   RAP3
+
+	   QQQ
+	   NNNd
+	   JJJb
+	   VVV
+	   IIIe
+	   HHP
+           ffas
+	   );
+
+$t="!T!";
+%INIT=(
+
+"MUS"=>"init$t.MUS",
+"QQQ"=>"init$t.QQQ",
+"GGGd"=>"init$t.GGGd",
+"JJJb"=>"init$t.JJJb",
+"NNNd"=>"init$t.NNNd",
+
+"SPX"=>"init$t.SPX",
+"VVV"=>"init$t.VVV",
+"WWW"=>"init$t.WWW",
+"BBB"=>"init$t.BBB",
+"OOO"=>"init$t.OOO",
+
+"FF3"=>"init$t.FF3",
+"RRR3"=>"init$t.RRR3",
+"PRC"=>"init$t.PRC",
+"FRM"=>"init$t.FRM",
+"pgen"=>"init$t.pgen",
+
+"RAP1"=>"init$t.RAP1",
+"RAP2"=>"init$t.RAP2",
+"RAP3"=>"init$t.RAP3",
+
+"HHP"=>"init$t.HHP",
+"IIIe"=>"init$t.IIIe",
+"IIIj"=>"init$t.IIIj",
+
+"HHW"=>"init$t.HHW",
+"HHWm"=>"init$t.HHWm",
+"HHWa"=>"init$t.HHWa",
+"HHWam"=>"init$t.HHWam",
+"HHWb"=>"init$t.HHWb",
+
+"mgen"=>"init$t.mgen",
+"phyre2"=>"init$t.phyre2",
+
+"hhpred"=>"init$t.hhpred",
+"ffas"=>"init$t.ffas",
+"ffas3d"=>"init$t.ffas3d",
+
+    "RAPM"=>"init$t.RAPM",
+    "MAP"=>"init$t.MAP",
+    "CET"=>"init$t.CET",
+
+    "RQ"=>"init!ORQ!.RQ",
+    "RQ_hum"=>"init!ORQ!.RQ_hum",
+    
+    "NOT"=>"init!ORQ!.NOT",
+    ); #from /nfs/amino-home/zhng/plot/threading/rst44.pl
+
+%temp_name=(
+
+
+    "HHWb"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "HHWm"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "HHWam"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "HHW"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "MUS"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "HHWa"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "QQQ"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "HHP"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "JJJb"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "IIIe"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "NNNd"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "IIIj"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "VVV"=>"/nfs/amino-library/SP3/!TEMPLATE_NAME!.pdb",
+    "PRC"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "RAPM"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "MAP"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    "CET"=>"/nfs/amino-library/PDB/!TEMPLATE_NAME!.pdb",
+    
+    "OOO"=>"/nfs/amino-library/local/PROSPECTOR_LIB/pdb/!TEMPLATE_NAME!.pdb",
+    "SPX"=>"/nfs/amino-library/SPARKX/PDB/!TEMPLATE_NAME!",
+    "FF3"=>"/nfs/amino-library/FFAS3D/pdb12/!TEMPLATE_NAME!.pdb",
+    
+    "RAP3"=>"unknown", #from tgl but modified
+    "RAP1"=>"unknown", #from tgl but modified
+    "BBB"=>"unknown", #XML format
+    "WWW"=>"unknown", #template regenerated from modeller
+    "pgen"=>"unknown", #non-standard PDB form
+    
+    "ffas3d"=>"server",
+    "ffas"=>"server",
+    "mgen"=>"server",
+    "phyre2"=>"server",
+    "hhpred"=>"server",
+    
+    
+    ); #from /nfs/amino-home/zhng/pdbinput/threading/check_pdbdir.pl; if none, it means unknown
+
+%zscore0=(
+
+    'MUS'=>6.1,
+    'QQQ'=>6.0,
+    'GGGd'=>12.5,
+    'JJJb'=>8.7,
+    'NNNd'=>7.6,
+    
+    'SPX'=>6.9,
+    'VVV'=>8,
+    'WWW'=>7.0,
+    'BBB'=>4.5,
+    'OOO'=>25,
+
+    'FF3'=>38,
+    'RRR3'=>18,
+    'PRC'=>47,
+    'FRM'=>4.6,
+    'pgen'=>8.3,
+    
+    'RAP1'=>7.8,
+    'RAP2'=>7.0,
+    'RAP3'=>7.5,
+    #'RAPM'=>6.5, #take average i_good
+    
+    'HHP'=>20,
+    'IIIe'=>12.5,
+    'IIIj'=>18,
+    
+    'HHW'=>83,
+    'HHWm'=>83,
+    'HHWa'=>85,
+    'HHWam'=>83,
+    'HHWb'=>83,
+
+    #'MAP'=>4, #take average i_good
+    #'CET'=>5.6,
+    
+    #server ----->
+    'mgen'=>7.2,
+    'phyre2'=>97.8,
+    'hhpred'=>90,
+    'ffas'=>16,
+    'ffas3d'=>37,
+    
+    "RQ"=>-1,
+    "RQ_hum"=>-1,
+    ); #from /nfs/amino-home/zhng/plot/threading/rst44.pl
+
+##############################################################
+# Step1: make init_all$o.dat from init*.QQQ
+
+$n_top=20;  #pick up n_top template in each set
+########### get Lch ########
+open(rmsinp,"$datadir/rmsinp");
+<rmsinp>=~/\S+\s+(\S+)/;
+$Lch=$1;
+close(rmsinp);
+open(seqdat,"$datadir/seq.dat");
+for($i=1;$i<=$Lch;$i++){
+    <seqdat>=~/\S+\s+(\S+)/;
+    $seqQ{$i}=$1;
+}
+close(seqdat);
+
+#####################################################
+####### get average n_good0 and type_tmp -------->
+$n=0;
+$n_good0=0;
+undef %i_good0;
+foreach $stand(@stands){
+    if(-s "$datadir/$INIT{$stand}"){
+	$n++;
+	open(init,"$datadir/$INIT{$stand}");
+	<init>=~/(\S+)/;
+	$Nt=$1;
+	for($i=1;$i<=$Nt;$i++){
+	    $line=<init>;
+	    if($line=~/(\S+)\s+(\S+)/){
+		$La=$1;
+		$z=$2;
+		if($z>=$zscore0{$stand}){
+		    $n_good0++;
+		    $i_good0{$stand}++;
+		}
+		for($j=1;$j<=$La+1;$j++){
+		    <init>;
+		}
+	    }
+	}
+	close(init);
+    }
+}
+### if multiple hits by one algorithm ---->
+$max_allow_for1=2;
+foreach $stand(@stands){
+    if($i_good0{$stand} == $n_good0 && $n_good0 >$max_allow_for1){
+	$i_good0{$stand}=$max_allow_for1;
+    }
+}
+$n_good0=0;
+foreach $stand(@stands){
+    if($i_good0{$stand} >3){
+	$i_good0{$stand}=3;
+    }
+    $n_good0+=$i_good0{$stand};
+}
+$n_good0=($n_good0+0.11)/($n+0.1);
+$n_gooda=int($n_good0);
+if($n_good0>=1){
+    $type_tmp="easy-medm";
+}else{
+    $type_tmp="hard";
+}
+printf "n_gooda=$n_gooda, n_good=$n_good0, n=$n, type_tmp=$type_tmp\n";
+
+######### redefine templates to use
+if($type_tmp ne "hard"){
+    $M=!Me!; #15
+    %NAME=(
+	1=>"!QUATYPE!",
+	2=>"!ROSTYPE!",
+	
+	3=>"HHWb",
+	4=>"SPX",
+	5=>"FF3",
+	6=>"HHW",
+	7=>"MUS",
+
+	8=>"RAP3",
+	9=>"HHP",
+	10=>"JJJb",
+	11=>"IIIe",
+	12=>"HHWm",
+	13=>"BBB",
+	
+	14=>"WWW",
+	15=>"PRC",#<---stop
+	);
+}else{
+    $M=!Mh!; #17
+    %NAME=(
+	1=>"!QUATYPE!",
+	2=>"!ROSTYPE!",
+	
+	3=>"HHWb",
+	4=>"SPX",
+	5=>"FF3",
+	6=>"HHW",
+	7=>"MUS",
+
+	8=>"RAP3",
+	9=>"HHP",
+	10=>"JJJb",
+	11=>"IIIe",
+	12=>"VVV", #
+
+	13=>"BBB",
+	14=>"WWW",
+	15=>"HHWm",
+	16=>"RRR3", #
+	17=>"PRC",#<---stop
+	);
+}
+
+#####################################################
+#####################################################
+undef %mark_rd;
+ pos33:;
+###### initialization ################
+$num_temp=0;  #number of templates
+$n_good=0;  #total number of good templates
+undef %nscore;
+undef %i_good; #number of good templates (zscore>zscore0 && L_ali>Lch/2)
+undef %N_temp;
+
+########## read templates #############
+$M0=0;
+for($m=1;$m<=$M;$m++){
+    $initdat="$datadir/$INIT{$NAME{$m}}";
+    if($INIT{$NAME{$m}}!~/\S/){
+	printf "init.$NAME{$m} is not defined\n";
+	exit();
+    }
+    if(!-s "$initdat"){
+	printf "$datadir without init: $initdat\n";
+	goto pos1x;
+    }
+    if($mark_rd{$m} eq "bad"){ #significent template is redundent
+	printf "$datadir $NAME{$m} is not considered because of redundent\n";
+	goto pos1x;
+    }
+    
+    ######## read template ---------->
+    #printf "$initdat\n";
+    open(initdat,"$initdat");
+    if(<initdat>=~/(\S+)/){
+	$N_tmp=$1;
+    }
+    $k=0;
+    $N_tmp=$n_top if($N_tmp>$n_top);
+    for($i=1;$i<=$N_tmp;$i++){
+	$line=<initdat>;
+	$L_ali_tmp=0;
+	if($line=~/(\S+)\s+(\S+)\s+\d+\s+(\S+)/){
+	    $L_ali_tmp=$1;
+	    $zscore_tmp=$2;
+	    #printf "$zscore_tmp ----- $NAME{$m}\n";
+	    $template_tmp=$3;
+	    for($j=1;$j<=$L_ali_tmp;$j++){
+		$line_tmp{$j}=<initdat>;
+	    }
+	    <initdat>;
+	}
+	###### check redundent ###########
+	if($NAME{$m}){
+	    $rundent="no";
+	    for($i1=1;$i1<=$m-1;$i1++){ #program 
+		if($Tcheck{$NAME{$m}}=~/$NAME{$i1}/){
+		    for($i2=1;$i2<=$N_temp{$i1};$i2++){ #template
+			if($template_tmp eq $template_nameT{$i1,$i2}){
+			    if($L_ali_tmp==$L_aliT{$i1,$i2}){
+				$i3=0;
+				for($j=1;$j<=$L_ali_tmp;$j++){
+				    $a1=$line_tmp{$j};
+				    $a2=$LINET{$i1,$i2,$j};
+				    if($a1 eq $a2){
+					$i3++;
+				    }
+				}
+				if($i3 == $L_ali_tmp){
+				    $rundent="yes";
+				    printf "$NAME{$i1},$i2 <---> $NAME{$m},$i,$template_tmp <---redundent\n";
+				    goto pos31;
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	  pos31:;
+	    if($rundent eq "yes"){
+		# if it is an easy target, after we remove the significant hit, the low-rank templates
+		#    will spoil the template. Therefore we need to delete the whole entry
+		if($zscore_tmp>$zscore0{$NAME{$m}} && $type_tmp eq "easy-medm" && $i==1){
+		    $mark_rd{$m}="bad";
+		    printf "$NAME{$m} is removed\n";
+		    goto pos33;
+		}
+		# if it is a hard target, we just remove redundent but use lower rank templates
+		goto pos32;
+	    }
+	}
+	###### check redundent finished ######
+	
+	if($L_ali_tmp>0){
+	    $k++;
+	    $num_temp++;
+	    $sign{$k}="bad";
+	    $L_aliT{$m,$k}=$L_ali_tmp;
+	    $zscoreT{$m,$k}=$zscore_tmp;
+	    $template_nameT{$m,$k}=$template_tmp;
+	    if($zscore0{$NAME{$m}}>0){
+		#printf "$NAME{$m}: $zscoreT{$m,$k}>$zscore0{$NAME{$m}})\n";
+		if($zscoreT{$m,$k}>$zscore0{$NAME{$m}}){
+		    $sign{$k}="good";
+		    $i_good{$m}++;
+		    $n_good++;
+		}
+	    }else{
+		if($i<=$n_gooda){
+		    $sign{$k}="good";
+		    $i_good{$m}++;
+		    $n_good++;
+		}
+	    }
+	    if($NAME{$m}=~/ROS/ ||$NAME{$m}=~/QUA/ ||$NAME{$m}=~/RQ/){ #
+		if($i==1 && $sign{$k} ne "good"){
+		    $sign{$k}="good";
+		    $i_good{$m}++;
+		    $n_good++;
+		}
+	    }
+	    $mar="new"; #only report one
+	    for($j=1;$j<=$L_aliT{$m,$k};$j++){
+		$line=$line_tmp{$j};
+		$res=substr($line,22,4);
+		$res=~s/\s//mg;
+		$a=substr($line,17,3);
+		if($a ne $seqQ{$res}){
+		    printf "$s - $NAME{$m} warning: $a ne $seqQ{$res}, convert $a to $seqQ{$res}\n";
+		    if($mar eq "new"){
+			printf "$s $NAME{$m}-$i-$res warning: $a ne $seqQ{$res}, convert $a to $seqQ{$res}\n";
+			$mar="old";
+		    }
+		    $a=$seqQ{$res};
+		}
+		$LINET{$m,$k,$j}=substr($line,0,17).$a.substr($line,20);
+	    }
+	}
+      pos32:;
+    }
+    close(initdat);
+    $N_temp{$m}=$k;
+    $M0++ if($N_temp{$m}>0);
+    
+    ######## upgrade good templates ------------->
+    $j=0;
+    for($i=1;$i<=$N_temp{$m};$i++){
+	if($sign{$i} eq "good"){
+	    $j++;
+	    $L_ali{$m,$j}=$L_aliT{$m,$i};
+	    $zscore{$m,$j}=$zscoreT{$m,$i};
+	    $template_name{$m,$j}=$template_nameT{$m,$i};
+	    for($k=1;$k<=$L_aliT{$m,$i};$k++){
+		$LINE{$m,$j,$k}=$LINET{$m,$i,$k};
+	    }
+	}
+    }
+    for($i=1;$i<=$N_temp{$m};$i++){
+	if($sign{$i} eq "bad"){
+	    $j++;
+	    $L_ali{$m,$j}=$L_aliT{$m,$i};
+	    $zscore{$m,$j}=$zscoreT{$m,$i};
+	    $template_name{$m,$j}=$template_nameT{$m,$i};
+	    for($k=1;$k<=$L_aliT{$m,$i};$k++){
+		$LINE{$m,$j,$k}=$LINET{$m,$i,$k};
+	    }
+	}
+    }
+  pos1x:;
+}
+
+printf "ori: ";
+for($i=1;$i<=$M;$i++){
+    printf " %4s",substr($NAME{$i},0,4);
+}
+printf "\n";
+printf "     ";
+for($i=1;$i<=$M;$i++){
+    printf "   %2d",$N_temp{$i};
+}
+printf "\n";
+printf "     ";
+for($i=1;$i<=$M;$i++){
+    printf "   %2d",$i_good{$i};
+}
+printf "\n";
+### if multiple hits by one algorithm ---->
+$max_allow_for1=2;
+for($m=1;$m<=$M;$m++){
+    if($i_good{$m} == $n_good && $n_good >$max_allow_for1){
+	$i_good{$m}=$max_allow_for1;
+	$n_good=$max_allow_for1;
+    }
+}
+### if multiple hits only by III servers ---->
+$max_allow_for1=2;
+$III_good=0;
+for($m=1;$m<=$M;$m++){
+    if($NAME{$m}=~/III/ || $NAME{$m}=~/HHP/ || $NAME{$m}=~/hhp/){
+	$III_good+=$i_good{$m};
+    }
+}
+if(($n_good>1 && $III_good==$n_good) || $type_tmp eq "hard"){ #only hit by III
+    printf "$s -================\n";
+    $n_good=0;
+    for($m=1;$m<=$M;$m++){
+	#if($NAME{$m}=~/III/){
+	    if($i_good{$m} >$max_allow_for1){
+		$i_good{$m}=$max_allow_for1;
+	    }
+	#}
+	$n_good+=$i_good{$m};
+    }
+}
+####### rule out single OOO (allow only 1) -------->
+$n_server_good=0;
+for($m=1;$m<=$M;$m++){
+    if($i_good{$m}>0){
+	$n_server_good++;
+    }
+}
+if($n_server_good <=4){
+    $n_good=0;
+    for($m=1;$m<=$M;$m++){
+	if($NAME{$m}=~/OOO/){
+	    if($i_good{$m}>0){
+		$i_good{$m}=0;
+	    }
+	}else{
+	    if($i_good{$m}>1){
+		$i_good{$m}=1;
+	    }
+	}
+	$n_good+=$i_good{$m};
+    }
+}
+for($m=1;$m<=$M;$m++){
+    if($NAME{$m}=~/OOO/){
+	if($i_good{$m}>$n_gooda){
+	    $i_good{$m}=$n_gooda;
+	}
+    }
+}
+### maximum 5 for each server ----------->
+$n_good=0;
+$n_max=5;
+for($m=1;$m<=$M;$m++){
+    if($i_good{$m}>$n_max){
+	$i_good{$m}=$n_max;
+    }
+    $n_good+=$i_good{$m};
+}
+
+######## decide type of targets ##########
+$M1=$M0/4.9;
+if($n_good>=$M0){
+    $type="easy";
+}elsif($n_good >=$M1){
+    $type="medm";
+}else{
+    $type="hard";
+}
+## adjust type based on number of good servers:
+$M_eff=0; # number of servers which has zscore0>0
+$M_eff_good=0; # number of servers which has hit
+for($m=1;$m<=$M;$m++){
+    if($N_temp{$m}>0 && $zscore0{$NAME{$m}}>0){
+	$M_eff++;
+	if($zscore{$m,1}>$zscore0{$NAME{$m}}){
+	    $M_eff_good++;
+	}
+    }
+}
+if($M_eff>10){
+    $M_cut1=$M_eff/1.5+2;
+    $M_cut2=4;
+}else{
+    $M_cut1=$M_eff/2+2;
+    $M_cut2=$M_eff/2-1;
+}
+$M_cut1=$M_eff if($M_cut1>$M_eff);
+$M_cut2=1 if($M_cut2<1);
+if($M_eff_good>=$M_cut1 || $n_good>$M0){
+    $type="easy";
+}elsif($M_eff_good<$M_cut2){
+    $type="hard";
+}else{
+    $type="medm";
+}
+printf "n_good=$n_good, M0=$M0, M_eff=$M_eff, M_eff_good=$M_eff_good, M_cut1=$M_cut1, M_cut2=$M_cut2\n";
+###^^^^###
+printf "$type:";
+for($i=1;$i<=$M;$i++){
+    printf " %4s",substr($NAME{$i},0,4);
+}
+printf "\n";
+printf "     ";
+for($i=1;$i<=$M;$i++){
+    printf "   %2d",$i_good{$i};
+}
+printf "\n";
+
+###### decide rule of collecting template ------->
+$n_sg=0;  #number of servers with good templates
+$n_sg_ros=0;
+for($m=1;$m<=$M;$m++){
+    if($i_good{$m}>0){
+	$n_sg++;
+	if($NAME{$m}=~/ROS/ ||$NAME{$m}=~/QUA/ ||$NAME{$m}=~/RQ/){
+	    $n_sg_ros++;
+	}
+    }
+}
+$rule="SEQ"; #templates taken sequentially
+if($type eq "easy"){
+    if($n_sg <= $M0/2){
+	$rule="SEL"; # templates taken selectively
+    }
+}
+if($type eq "medm"){
+    $rule="SEL";
+}
+if($type eq "hard"){
+    #printf "n_sg=$n_sg\n";
+    if($n_sg-$n_sg_ros >=2){
+	$rule="SEL"; # templates taken selectively
+    }
+}
+if($hard=~/\=$s\=/){
+    $type="hard";
+    $rule="SEQ";
+}
+
+############## rule out FFF only medium ##########
+printf "$s: type=%5s, n_good=%2d, M0=%2d, M1_for_medm=%3.1f, n_sg=%2d rule=%3s\n",
+    $type,$n_good,$M0,$M1,$n_sg,$rule;
+
+##################################################
+##### output "init_all.dat"------->
+##################################################
+open(initall,">$initall");
+printf initall "%3d %4s %3d %3d %5s\n",
+    $num_temp,$type,$n_good,$M0,$rule;
+if($rule eq "SEQ"){ # template sequentially
+    $i_temp=0;
+    for($i=1;$i<=$n_top;$i++){
+	for($m=1;$m<=$M;$m++){
+	    if($i<=$N_temp{$m}){
+		$i_temp++;
+		printf initall "%8d %8.3f %3d %6s %5s\n",
+		$L_ali{$m,$i},$zscore{$m,$i},$i_temp,
+		$template_name{$m,$i},$NAME{$m};
+		for($j=1;$j<=$L_ali{$m,$i};$j++){
+		    printf initall "$LINE{$m,$i,$j}";
+		}
+		printf initall "TER\n";
+	    }
+	}
+    }
+}else{ #templates taken selectively
+    ####### output good templates:
+    $i_temp=0;
+    for($i=1;$i<=$n_top;$i++){
+	for($m=1;$m<=$M;$m++){
+	    if($i<=$N_temp{$m}){
+		if($i<=$i_good{$m}){
+		    $i_temp++;
+		    printf initall "%8d %8.3f %3d %6s %5s\n",
+		    $L_ali{$m,$i},$zscore{$m,$i},$i_temp,
+		    $template_name{$m,$i},$NAME{$m};
+		    for($j=1;$j<=$L_ali{$m,$i};$j++){
+			printf initall "$LINE{$m,$i,$j}";
+		    }
+		    printf initall "TER\n";
+		}
+	    }
+	}
+    }
+    ####### bad templates:
+    # re-order the bad templates:
+    undef %kM;
+    for($m=1;$m<=$M;$m++){
+	$k=0;
+	for($i=1;$i<=$N_temp{$m};$i++){
+	    if($i>$i_good{$m}){
+		$k++;
+		$kk{$m,$k}=$i;
+	    }
+	}
+	$kM{$m}=$k;
+    }
+    # output bad template in the order of m=1,M
+    for($k=1;$k<=$n_top;$k++){
+	for($m=1;$m<=$M;$m++){
+	    if($k<=$kM{$m}){
+		$i=$kk{$m,$k};
+		$i_temp++;
+		printf initall "%8d %8.3f %3d %6s %5s\n",
+		$L_ali{$m,$i},$zscore{$m,$i},$i_temp,
+		$template_name{$m,$i},$NAME{$m};
+		for($j=1;$j<=$L_ali{$m,$i};$j++){
+		    printf initall "$LINE{$m,$i,$j}";
+		}
+		printf initall "TER\n";
+	    }
+	}
+    }
+}
+close(initall);
+
+#goto pos102;
+##################################################################
+########### check multiple domain proteins ----------------->
+##################################################################
+open(init,"$initall");
+<init>=~/(\d+)\s+(\S+)\s+(\S+)\s+(\S+)/;
+$Nt=$1;
+$type=$2;
+$n_good=$3;
+$M0=$4;
+for($i=1;$i<=$Nt;$i++){
+    <init>=~/(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/;
+    $L_ali{$i}=$1;
+    $zscore{$i}=$2;
+    $template{$i}=$4;
+    $ori{$i}=$5;
+    for($j=1;$j<=$L_ali{$i};$j++){
+	$line=<init>;
+	$LINE{$i,$j}=$line;
+	$res{$i,$j}=substr($line,22,4);
+    }
+    <init>;
+}
+close(init);
+######### judge whether it is 2 domain ------------------->
+$ngap=0;
+$nfull=0;
+$nstrong=0;
+$M2=$M0/2;
+$M3=$M0/3;
+$M4=$M0/4;
+$L_gap=80;
+undef %II;
+for($i=1;$i<=$M0*2;$i++){
+    $z0=$zscore0{$ori{$i}};
+    $II{$ori{$i}}++;
+    if($z0>0 && $zscore{$i}>$z0 && $II{$ori{$i}}<=2){ # strong hit
+	$nstrong++;
+	$L_N=1;
+	for($j=1;$j<=11;$j++){
+	    if($res{$i,$j}>$L_gap){
+		$L_N=$res{$i,$j};
+		goto pos20;
+	    }
+	}
+      pos20:;
+	$L_C=$Lch;
+	for($j=$L_ali{$i};$j>=$L_ali{$i}-10;$j--){
+	    $a=$Lch-$res{$i,$j};
+	    if($Lch-$res{$i,$j}>$L_gap){
+		$L_C=$res{$i,$j};
+		goto pos21;
+	    }
+	}
+      pos21:;
+	if($L_N>1 && $L_C==$Lch){
+	    $ngap++;
+	    $tgap{$ngap}="N";
+	    $lgap{$ngap}=$L_N;
+	    $ii{$ngap}=$i;
+	    $origin{$ngap}=$ori{$i};
+	}elsif($L_N==1 && $L_C<$Lch){
+	    $ngap++;
+	    $tgap{$ngap}="C";
+	    $lgap{$ngap}=$L_C;
+	    $ii{$ngap}=$i;
+	    $origin{$ngap}=$ori{$i};
+	    #}elsif($L_N>1 && $L_C<$Lch){
+	    #$ngap++;
+	    #$tgap{$ngap}="N";
+	    #$lgap{$ngap}=$L_N;
+	    #$ii{$ngap}=$i;
+	    #$origin{$ngap}=$ori{$i};
+	    #$ngap++;
+	    #$tgap{$ngap}="C";
+	    #$lgap{$ngap}=$L_C;
+	    #$ii{$ngap}=$i;
+	    #$origin{$ngap}=$ori{$i};
+	}else{
+	    $nfull++;
+	}
+    }
+}
+printf "\#_of_strong_hit=$nstrong, n_full=$nfull, n_gap=$ngap\n";
+for($i=1;$i<=$ngap;$i++){
+    printf "%2d gap_terminal=$tgap{$i} gap_location=%3d by $origin{$i}\n",
+    $i,$lgap{$i};
+}
+###### find out the best linkage point--------->
+undef %lgapa;
+for($i=1;$i<=$ngap;$i++){
+    for($j=1;$j<=$ngap;$j++){
+	$lgapa{$i}+=abs($lgap{$i}-$lgap{$j});
+    }
+}
+@lgapa_keys=sort{$lgapa{$a}<=>$lgapa{$b}} keys %lgapa;
+$lgap{$lgapa_keys[0]}=~/(\d+)/;
+$n_link=$1;
+$domain2="no";
+printf "M0/M2/M3=$M0/$M2/$M3 - $nstrong - $nfull\n";
+if($nstrong>$M2){
+    if($nfull<$nstrong/2){
+	$domain2="yes";
+    }
+}
+printf "domain2=$domain2\n\n";
+
+########## re-order init.dat ------------------------->
+if($domain2 eq "yes"){
+    $seqdat="$datadir/seq.dat";
+    printf "------ n_link_old=%3d-------------\n",$n_link;
+    if(-s "$seqdat"){
+	open(seqdat,"$seqdat");
+	while($line=<seqdat>){
+	    if($line=~/(\d+)\s+(\S+)\s+(\S+)/){
+		$seq3{$1}=$3;
+	    }
+	}
+	close(seqdat);
+	for($i=0;$i<=20;$i++){
+	    $k=$n_link-$i;
+	    if($seq3{$k} eq "1"){
+		$n_link=$k;
+		goto pos30;
+	    }
+	    $k=$n_link+$i;
+	    if($seq3{$k} eq "1"){
+		$n_link=$k;
+		goto pos30;
+	    }
+	}
+      pos30:;
+    }
+    printf "------ $s  2 domain proteins: %3d-------------\n",$n_link;
+    $mk="C";
+    $mk="N"	if($res{1,1}<$L_gap);
+    undef %used;
+    undef %term;
+    for($i=1;$i<=$Nt;$i++){
+	$n_N=0;
+	$n_C=0;
+	for($j=1;$j<=$L_ali{$i};$j++){
+	    if($res{$i,$j}<$n_link){
+		$n_N++;
+	    }else{
+		$n_C++;
+	    }
+	}
+	if($n_N>$n_link/2 && $n_C>($Lch-$n_link)/2){
+	    $term{$i}="F";
+	}
+	if($n_N>$n_link/2 && $n_C<($Lch-$n_link)/4){
+	    $term{$i}="N";
+	}
+	if($n_N<$n_link/4 && $n_C>($Lch-$n_link)/2){
+	    $term{$i}="C";
+	}
+	#printf "$i $ori{$i} $term{$i}\n";
+    }
+    undef %II;
+    for($i=1;$i<=$Nt;$i++){
+	$z0=$zscore0{$ori{$i}}; #*0.75;
+	$II{$ori{$i}}++;
+	if($z0>0 && $zscore{$i}>$z0 && $II{$ori{$i}}<=4){
+	    $strong{$i}="yes";
+	}else{
+	    $strong{$i}="no";
+	}
+	if($type eq "easy" && $II{$ori{$i}}==1){ #to keep sequencial for easy
+	    $strong{$i}="yes";
+	}
+    }
+    for($i=1;$i<=$Nt;$i++){
+	for($j=1;$j<=$Nt;$j++){
+	    if($used{$j} ne "used" && $strong{$j} eq "yes"){
+		if($mk eq "N"){
+		    if($term{$j} eq "N" || $term{$j} eq "F"){
+			$kk{$i}=$j;
+			$used{$j}="used";
+			$mk="C"; #want C next
+			goto pos7;
+		    }
+		}
+		if($mk eq "C"){
+		    if($term{$j} eq "C" || $term{$j} eq "F"){
+			$kk{$i}=$j;
+			$used{$j}="used";
+			$mk="N"; #want N next
+			goto pos7;
+		    }
+		}
+	    }
+	}
+	goto pos8; # no alternative to go further
+      pos7:;
+    }
+  pos8:;
+    $k=$i;
+    for($i=$k;$i<=$Nt;$i++){
+	for($j=1;$j<=$Nt;$j++){
+	    if($used{$j} ne "used"){
+		$kk{$i}=$j;
+		$used{$j}="used";
+		goto pos9;
+	    }
+	}
+      pos9:;
+    }
+    
+    ########### output new init.dat -------------------->
+    open(init,">$initall");
+    printf init "%3d %4s %3d %3d   domain2=$domain2, n_link=$n_link\n",
+    $Nt,$type,$n_good,$M0;
+    for($i=1;$i<=$Nt;$i++){
+	$k=$kk{$i};
+	printf init "%8d %8.3f %3d %6s %5s\n",
+	$L_ali{$k},$zscore{$k},$i,$template{$k},$ori{$k};
+	for($j=1;$j<=$L_ali{$k};$j++){
+	    print init "$LINE{$k,$j}";
+	}
+	print init "TER\n";
+    }
+    close(init);
+}
+ pos102:;
+
+###################################################################
+########## sort templates based on TM-score to quark ##############
+###################################################################
+if($sort eq "yes"){
+    ######## read from old init:
+    open(init,"$initall");
+    $line=<init>;
+    $line=~/(\d+)/;
+    $Nt=$1;
+    $head=$line;
+    for($i=1;$i<=$Nt;$i++){
+	$line=<init>;
+	$line=~/(\S+)/;
+	$L_ali{$i}=$1;
+	$head1{$i}=$line;
+	#printf "$i $head1{$i}";
+	for($j=1;$j<=$L_ali{$i}+1;$j++){
+	    $LINE{$i,$j}=<init>;
+	}
+    }
+    close(init);
+    
+    ######## output models by QUA and ROS ############
+    $initRQ="$datadir/$INIT{$NAME{1}}";
+    #`cp $initRQ ./`;
+    open(rq,"$initRQ");
+    <rq>=~/(\d+)/;
+    $nt_rq=$1;
+    $nt_qua=0;
+    $nt_ros=0;
+    $nt_ita=0;
+    for($i=1;$i<=$nt_rq;$i++){
+	$line=<rq>;
+	if($line=~/ROS/ || $line=~/R\S/){ #head must list original name in init*.RQ, e.g. RW3, QE6 etc
+	    $nt_ros++;
+	    $outn="_tmp.ROS$nt_ros.pdb";
+	}elsif($line=~/IT/){ #head must list original name in init*.RQ, i.e. IT2
+	    $nt_ita++;
+	    $outn="_tmp.ITA$nt_ita.pdb";
+	}else{
+	    $nt_qua++;
+	    $outn="_tmp.QUA$nt_qua.pdb";
+	}
+	if($line=~/(\d+)/){
+	    $L=$1;
+	}
+	#print "$L, $line";
+	open(a,">$outn");
+	for($j=1;$j<=$L+1;$j++){
+	    $line=<rq>;
+	    print a "$line";
+	}
+	close(a);
+    }
+    close(rq);
+    
+    ######### sort TMscore to quark:
+    undef %TMB;
+    $n_threading=0;
+    for($i=1;$i<=$Nt;$i++){
+	# this head1 is from init_all, head must be RQ, ROS, QUA etc
+	if($head1{$i}=~/ROS/ || $head1{$i}=~/QUA/ || $head1{$i}=~/RQ/){
+	    goto pos5a;
+	}
+	
+	######### generate single threading model:
+	$n_threading++;
+	$head1_th{$n_threading}=$head1{$i};
+	$L_ali_th{$n_threading}=$L_ali{$i};
+	$tmp="_tmp_$s\_$o\_$i";
+	open(tmp,">$tmp");
+	for($j=1;$j<=$L_ali_th{$n_threading};$j++){
+	    $LINE_th{$n_threading,$j}=$LINE{$i,$j};	    
+	    print tmp "$LINE_th{$n_threading,$j}";
+	}
+	close(tmp);
+	
+	#printf "$i, $n_threading, $L_ali_th{$n_threading}, $head1_th{$n_threading}\n";
+
+	############ TM-score to quark
+	undef %TM;
+	$nq=0;
+	for($j=1;$j<=$n_qua_sort;$j++){
+	    $quark="_tmp.QUA$j.pdb";
+	    if(-s "$quark"){
+		$rst=`$bindir/TMscore $tmp $quark`;
+		if($rst=~/TM-score    =\s*(\S+)/){
+		    $nq++;
+		    $TM{$nq}=$1;
+		}
+	    }
+	}
+	for($j=1;$j<=$n_ros_sort;$j++){
+	    $quark="_tmp.ROS$j.pdb";
+	    if(-s "$quark"){
+		$rst=`$bindir/TMscore $tmp $quark`;
+		if($rst=~/TM-score    =\s*(\S+)/){
+		    $nq++;
+		    $TM{$nq}=$1;
+		}
+	    }
+	}
+	for($j=1;$j<=$n_ita_sort;$j++){
+	    $quark="_tmp.ITA$j.pdb";
+	    if(-s "$quark"){
+		$rst=`$bindir/TMscore $tmp $quark`;
+		if($rst=~/TM-score    =\s*(\S+)/){
+		    $nq++;
+		    $TM{$nq}=$1;
+		}
+	    }
+	}
+	@TM_keys=sort{$TM{$b}<=>$TM{$a}} keys %TM;
+	$TMB{$n_threading}=$TM{$TM_keys[0]};
+	`rm $tmp`;
+      pos5a:;
+    }
+    @TMB_keys=sort{$TMB{$b}<=>$TMB{$a}} keys %TMB;
+    
+    ###### modify rank so that only 3 templates can be promoted from each threading
+    undef %score3;
+    undef %n_promote;
+    for($i=1;$i<=$n_threading;$i++){
+	$k=$TMB_keys[$i-1]; #orignal rank
+	$from="none";
+	if($head1_th{$k}=~/(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/){
+	    $I=$3; #original rank;
+	    $from=$5;
+	}else{
+	    printf "warning: head is incorrect, for $s, $head1_th{$k}\n";
+	    exit();
+	}
+	#printf "from=$from, n_promote=$n_promote{$from}\n";
+	if($n_promote{$from}<3){ # only promote top 3 for each threading
+	    $n_promote{$from}++;
+	    $score3{$k}=$i;      #promoted score using rank based on TMB
+	}else{
+	    $score3{$k}=$I+100000; #non-promoted score using rank based on original
+	}
+    }
+    @score3_keys=sort{$score3{$a}<=>$score3{$b}} keys %score3;
+    
+    ########### output new init.dat -------------------->
+    open(init,">$initall");
+    printf init "$head";
+    $m=-1;
+    for($i=1;$i<=$Nt;$i++){
+	# this head1 is from init_all, head must be RQ, ROS, QUA etc
+	if($head1{$i}=~/ROS/ || $head1{$i}=~/QUA/ || $head1{$i}=~/RQ/){
+	    printf init "$head1{$i}";
+	    for($j=1;$j<=$L_ali{$i};$j++){
+		print init "$LINE{$i,$j}";
+	    }
+	    print init "TER\n";
+	}else{
+	    $m++;
+	    $k=$score3_keys[$m];
+	    printf init "$head1_th{$k}";
+	    for($j=1;$j<=$L_ali_th{$k};$j++){
+		print init "$LINE_th{$k,$j}";
+	    }
+	    print init "TER\n";
+	}
+    }
+    close(init);
+}
+
+#^^^^^^^^^^^^^^^ init_all$o.dat is done ^^^^^^^^^^^^^^^^^^^^^^
+
+##############################################################
+# Step2: make comb$o.dat from init_all.dat
+
+open(temp,"$initall");
+<temp>=~/(\S+)\s+(\S+)/;
+$type=$2;
+close(temp);
+
+#chunk-------->
+$usechunk="!USECHUNK!"; #yes, use chunk for comb.dat; no, not use chunk for comb.dat
+$init1="!INIT1!"; #chunks
+$m_top=!MTOP!;
+$mag=!MAG!;
+$n_int_CHU=!NINTCHU!; #take one distance each 10 residues
+$M0_CHU=!M0CHU!; #number of chunk_template used to extract distL.dat
+
+#ROS---------->
+$useROS="no"; #ROS cannot be used in additional comb because of redundancy
+$init2="!INIT2!"; #ROS
+$m_top2=!MTOP2!;
+$mag2=!MAG2!;
+$n_int_CHU2=!NINTCHU2!; #take one distance each 10 residues
+$M0_CHU2=!M0CHU2!; #number of ROS_templates used to extract distL.dat
+$NROS=!NROS!;
+
+#chunk_T------->
+$usechunk_T="no";
+$init3="!INIT3!"; #chunk_T
+$m_top3=!MTOP3!; #top 10 models at each chunk_T position
+$mag3=!MAG3!; #no use
+$n_int_CHU3=!NINTCHU3!; #take one distance each 10 residues
+$M0_CHU3=!M0CHU3!; #number of chunkT_templates used to extract distL.dat
+$Z_cut=!ZCUT!;
+
+@AA=qw(
+       GLY
+       ALA
+       SER
+       CYS
+       VAL
+       THR
+       ILE
+       PRO
+       MET
+       ASP
+       ASN
+       LEU
+       LYS
+       GLU
+       GLN
+       ARG
+       HIS
+       PHE
+       TYR
+       TRP
+       );
+
+############# read side-chain parameters ###############
+$ka1{GLY}=0.000;  $kb1{GLY}=0.000;  $kc1{GLY}=0.000; $ka2{GLY}=0.000;  $kb2{GLY}=0.000;  $kc2{GLY}=0.000; 
+$ka1{ALA}=0.249;  $kb1{ALA}=-1.118; $kc1{ALA}=0.976; $ka2{ALA}=0.113;  $kb2{ALA}=-0.736; $kc2{ALA}=1.294; 
+$ka1{SER}=0.169;  $kb1{SER}=-1.369; $kc1{SER}=1.103; $ka2{SER}=0.227;  $kb2{SER}=-0.966; $kc2{SER}=1.427; 
+$ka1{CYS}=-0.073; $kb1{CYS}=-1.201; $kc1{CYS}=1.476; $ka2{CYS}=0.084;  $kb2{CYS}=-0.738; $kc2{CYS}=1.712; 
+$ka1{VAL}=0.274;  $kb1{VAL}=-1.162; $kc1{VAL}=1.480; $ka2{VAL}=0.093;  $kb2{VAL}=-0.583; $kc2{VAL}=1.799; 
+$ka1{THR}=0.090;  $kb1{THR}=-1.296; $kc1{THR}=1.346; $ka2{THR}=0.070;  $kb2{THR}=-0.854; $kc2{THR}=1.633; 
+$ka1{ILE}=0.100;  $kb1{ILE}=-1.363; $kc1{ILE}=1.769; $ka2{ILE}=-0.105; $kb2{ILE}=-0.601; $kc2{ILE}=2.135; 
+$ka1{PRO}=-0.743; $kb1{PRO}=-1.563; $kc1{PRO}=0.438; $ka2{PRO}=-0.980; $kb2{PRO}=-1.183; $kc2{PRO}=0.976; 
+$ka1{MET}=-0.049; $kb1{MET}=-1.246; $kc1{MET}=2.308; $ka2{MET}=0.094;  $kb2{MET}=-0.723; $kc2{MET}=2.610; 
+$ka1{ASP}=-0.221; $kb1{ASP}=-1.249; $kc1{ASP}=1.769; $ka2{ASP}=0.334;  $kb2{ASP}=-0.664; $kc2{ASP}=1.992; 
+$ka1{ASN}=-0.357; $kb1{ASN}=-1.096; $kc1{ASN}=1.849; $ka2{ASN}=0.097;  $kb2{ASN}=-0.699; $kc2{ASN}=1.962; 
+$ka1{LEU}=-0.057; $kb1{LEU}=-1.161; $kc1{LEU}=2.128; $ka2{LEU}=0.003;  $kb2{LEU}=-0.393; $kc2{LEU}=2.400; 
+$ka1{LYS}=0.027;  $kb1{LYS}=-1.616; $kc1{LYS}=2.597; $ka2{LYS}=-0.019; $kb2{LYS}=-0.745; $kc2{LYS}=2.972; 
+$ka1{GLU}=-0.013; $kb1{GLU}=-1.554; $kc1{GLU}=2.219; $ka2{GLU}=0.101;  $kb2{GLU}=-0.793; $kc2{GLU}=2.684; 
+$ka1{GLN}=-0.086; $kb1{GLN}=-1.439; $kc1{GLN}=2.296; $ka2{GLN}=0.041;  $kb2{GLN}=-0.707; $kc2{GLN}=2.666; 
+$ka1{ARG}=0.113;  $kb1{ARG}=-1.932; $kc1{ARG}=2.933; $ka2{ARG}=-0.020; $kb2{ARG}=-0.998; $kc2{ARG}=3.394; 
+$ka1{HIS}=-0.221; $kb1{HIS}=-1.138; $kc1{HIS}=2.165; $ka2{HIS}=-0.133; $kb2{HIS}=-0.598; $kc2{HIS}=2.363; 
+$ka1{PHE}=0.111;  $kb1{PHE}=-0.984; $kc1{PHE}=2.447; $ka2{PHE}=-0.363; $kb2{PHE}=-0.632; $kc2{PHE}=2.507; 
+$ka1{TYR}=0.128;  $kb1{TYR}=-1.035; $kc1{TYR}=2.604; $ka2{TYR}=-0.375; $kb2{TYR}=-0.601; $kc2{TYR}=2.706; 
+$ka1{TRP}=0.476;  $kb1{TRP}=-1.156; $kc1{TRP}=2.541; $ka2{TRP}=-0.058; $kb2{TRP}=-0.427; $kc2{TRP}=2.894; 
+########################################################
+
+############# read cut-off from concut.comm ############
+open(concut,"$librarydir/common/contact.comm");
+########## read <cut>------------->
+<concut>;
+foreach $A(@AA){
+    <concut>=~/\S+\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/;
+    $i=0;
+    foreach $a(@AA){
+	$i++;
+	$cut=$$i;
+	$cutoff{$A,$a}=$cut;
+    }
+}
+########## read <delta>------------->
+<concut>;
+foreach $A(@AA){
+    <concut>=~/\S+\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/;
+    $i=0;
+    foreach $a(@AA){
+	$i++;
+	$dev=$$i;
+	$cutoff{$A,$a}=$cutoff{$A,$a}+2.5*$dev;
+    }
+}
+close(concut);
+########################################################
+
+open(temp,"$initall");
+<temp>;
+if(<temp>=~/\S+\s+(\S+)\s+\S+\s+\S+\s+(\S+)/){
+    $zscore1=$1;
+    $T1=$2;
+}
+close(temp);
+
+###########################################################
+############# LOMETS templates ############################
+############# read templates ##############################
+###########################################################
+open(temp,"$initall");
+<temp>=~/(\S+)\s+(\S+)\s+(\S+)/;
+$n_temp=$1;
+$type=$2;
+$n_good=$3; #only useful for medium targets
+if($type eq "easy"){
+    $n_top=20;
+}elsif($type eq "medm"){
+    $n_top=30;
+    if($zscore0{$T1} > 0){
+	$n_top=$n_good if($zscore1>(3*$zscore0{$T1}));
+    }
+}else{
+    $n_top=50;
+}
+$n_temp=$n_top if($n_temp>$n_top); #number of templates in use
+printf "$s $type----n_temp=$n_temp\n";
+$n_temp0=$n_temp;
+$n_temp=0;
+$n_ros=0;
+for($j=1;$j<=1000;$j++){
+    #1######### read CA from template ################
+    undef %mk;
+    $line=<temp>;
+    $head=$line;
+    if($line=~/\S/){
+	printf "            nt=$j $line";
+    }else{
+	printf "end of reading of init_all.dat\n";
+	goto pos2c;
+    }
+    $threading_format="yes";
+    $ori="unknown";
+    if($line=~/(\S+)\s+\S+\s+\S+\s+(\S+)\s+(\S+)/){
+	$L_ali=$1;
+	$template_name=$2;
+	$template_name=~s/\@//mg;
+	$ori=$3;
+    }elsif($line=~/(\S+)\s+\S+\s+\S+\s+(\S+)/){
+	$L_ali=$1;
+	$template_name=$2;
+	$template_name=~s/\@//mg;
+	$ori="unknown";
+    }
+    for($k=1;$k<=$L_ali;$k++){
+	$line=<temp>;
+	$i_res{$k}=substr($line,22,4); #order number of target residues
+	$i_res{$k}=~s/\s//mg;
+	$seq{$i_res{$k}}=substr($line,17,3); #real aa
+	$mk{$i_res{$k}}=1;
+	$xc{$i_res{$k}}=substr($line,30,8);
+	$yc{$i_res{$k}}=substr($line,38,8);
+	$zc{$i_res{$k}}=substr($line,46,8);
+	if(substr($line,54,9)=~/(\d+)\s+\S\S\S/){
+	    $j_res{$k}=$1;    #order number of template residues
+	    $j_res{$k}=~s/\s//mg;
+	}else{
+	    $threading_format="no"; #if threading_format is no, we will calculate side-chain
+	}
+    }
+    <temp>;
+    
+    #####
+    if($ori=~/RQ/){
+	$n_ros++;
+	goto pos30a if($n_ros>$NROS);
+    }
+    if($j>$n_temp0){
+	if($ori!~/ROS/ && $ori!~/QUA/ && $ori!~/RQ/){
+	    goto pos30a;
+	}
+    }
+    $n_temp++;
+    printf "$n_temp n_ros=$n_ros --- $head";
+    #####
+    
+    #1a####### if template is not from threading or from server, calculate SG/CB ################
+    $mark5="yes"; # extract template from library
+    if($temp_name{$ori} eq "server" || $temp_name{$ori} eq "unknown" || $temp_name{$ori}!~/\S+/){
+	$mark5="no";
+    }
+    if($zscore0{$ori} == -1 || $ori eq "unknown" || $threading_format eq "no"){ # this template is not from threading
+	$mark5="no";
+    }
+  pos1a:;
+    if($mark5 eq "no"){
+        for($k=1;$k<=$L_ali;$k++){
+	    $xx{$k}=$xc{$i_res{$k}};
+	    $yy{$k}=$yc{$i_res{$k}};
+	    $zz{$k}=$zc{$i_res{$k}};
+	    $seq1{$k}=$seq{$i_res{$k}}; #SG cutoff, use query AA instead template dueto unknown T
+	    $j_res{$k}=$k;    #order number of template residues,for contact cutoff 
+	}
+	$xx{0}=$xx{1}+($xx{2}-$xx{3});
+	$yy{0}=$yy{1}+($yy{2}-$yy{3});
+	$zz{0}=$zz{1}+($zz{2}-$zz{3});
+	$xx{$L_ali+1}=$xx{$L_ali}+($xx{$L_ali-1}-$xx{$L_ali-2});
+	$yy{$L_ali+1}=$yy{$L_ali}+($yy{$L_ali-1}-$yy{$L_ali-2});
+	$zz{$L_ali+1}=$zz{$L_ali}+($zz{$L_ali-1}-$zz{$L_ali-2});
+	for($k=1;$k<=$L_ali;$k++){
+	    ($xg{$k},$yg{$k},$zg{$k})=
+		sidechain($xx{$k-1},$yy{$k-1},$zz{$k-1},
+			  $xx{$k},$yy{$k},$zz{$k},
+			  $xx{$k+1},$yy{$k+1},$zz{$k+1},
+			  $seq{$i_res{$k}});
+	}
+	goto pos1;
+    }
+    
+    #2######## read sidechain from PDB library ########################
+    undef %n_atom;
+    $pdbfile=$temp_name{$ori};
+    $pdbfile=~s/\!TEMPLATE_NAME\!/$template_name/mg;
+    if(!-s "$pdbfile"){
+	printf "warning: $ori --- $pdbfile doesnot exist or not threading format (we will regenerate side-chain from Ca)!!\n";
+	printf "$line";
+	$mark5="no";
+	goto pos1a;
+    }
+    
+    open(pdb,"$pdbfile");
+    while($line=<pdb>){
+	$record=substr($line,0,4);
+	if($record eq "ATOM"){
+	    $atom=substr($line,12,4);
+	    $atom=~s/\s//g;
+	    $atom=~s/\d+//g;
+	    if($atom eq "CA"){    ####### for checking
+		$Lt=substr($line,22,4);
+		$Lt=~s/\s//mg;
+		$seq1{$Lt}=substr($line,17,3); #for SG contact cutoff, using template AA
+	    }
+	    ####### record SG aotms------------->
+	    if($atom ne "C"){
+		if($atom ne "CA"){
+		    if($atom ne "N"){
+			if($atom ne "O"){
+			    if(substr($atom,0,1) ne "H"){
+				$Lt=substr($line,22,4);
+				$Lt=~s/\s//mg;
+				$n_atom{$Lt}++;
+				$x{$Lt,$n_atom{$Lt}}=substr($line,30,8);
+				$y{$Lt,$n_atom{$Lt}}=substr($line,38,8);
+				$z{$Lt,$n_atom{$Lt}}=substr($line,46,8);
+			    }
+			}
+		    }
+		}
+	    }
+	    ####### SG atoms done ####################
+	}
+    }
+    close(pdb);
+
+    #3######## calculate SG center of mass ############
+    for($k=1;$k<=$L_ali;$k++){
+	if($n_atom{$j_res{$k}}<1){
+	    $xg{$k}=$xc{$i_res{$k}};
+	    $yg{$k}=$yc{$i_res{$k}};
+	    $zg{$k}=$zc{$i_res{$k}};
+	}else{
+	    $xg{$k}=0;
+	    $yg{$k}=0;
+	    $zg{$k}=0;
+	    for($ii=1;$ii<=$n_atom{$j_res{$k}};$ii++){
+		$xg{$k}+=$x{$j_res{$k},$ii};
+		$yg{$k}+=$y{$j_res{$k},$ii};
+		$zg{$k}+=$z{$j_res{$k},$ii};
+	    }
+	    $xg{$k}/=$n_atom{$j_res{$k}};
+	    $yg{$k}/=$n_atom{$j_res{$k}};
+	    $zg{$k}/=$n_atom{$j_res{$k}};
+	}
+    }
+    
+  pos1:;
+    #4######## collect SG contacts for COMB.dat #######################
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    if(($i_res{$q}-$i_res{$p})>=1){
+		$dis=sqrt(($xg{$p}-$xg{$q})**2+
+			  ($yg{$p}-$yg{$q})**2+
+			  ($zg{$p}-$zg{$q})**2);
+		if($dis<$cutoff{$seq1{$j_res{$p}},$seq1{$j_res{$q}}}){ #cutoff based on AA on template
+		    $freq_COMB{$i_res{$p},$i_res{$q}}++;
+		}
+	    }
+	}
+    }
+
+    #5######## collect SG contacts for PAR.dat #######################
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    if(($i_res{$q}-$i_res{$p})>=1){
+		$freq0_PAR{$i_res{$p},$i_res{$q}}++;
+		$dis=sqrt(($xg{$p}-$xg{$q})**2+
+			  ($yg{$p}-$yg{$q})**2+
+			  ($zg{$p}-$zg{$q})**2);
+		if($dis<$cutoff{$seq1{$j_res{$p}},$seq1{$j_res{$q}}}){ #cutoff based on AA on template
+		    $freq_PAR{$i_res{$p},$i_res{$q}}++;
+		}
+	    }
+	}
+    }
+    
+    #6##### collect distance for short range dist for DIST.dat ##############
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    if(($i_res{$q}-$i_res{$p})<=6){
+		##### check all between residues are aligned --->
+		for($m=$i_res{$p};$m<=$i_res{$q};$m++){
+		    goto pos2 if($mk{$m}!=1);
+		}
+		#### check without gaps between ----------------->
+		for($m=$i_res{$p}+1;$m<=$i_res{$q};$m++){
+		    $dis=sqrt(($xc{$m-1}-$xc{$m})**2+
+			      ($yc{$m-1}-$yc{$m})**2+
+			      ($zc{$m-1}-$zc{$m})**2);
+		    goto pos2 if($dis>4.1);
+		}
+		$dis=sqrt(($xc{$i_res{$p}}-$xc{$i_res{$q}})**2+
+			  ($yc{$i_res{$p}}-$yc{$i_res{$q}})**2+
+			  ($zc{$i_res{$p}}-$zc{$i_res{$q}})**2);
+		$ndist{$i_res{$p},$i_res{$q}}++;
+		$dist{$i_res{$p},$i_res{$q},$ndist{$i_res{$p},$i_res{$q}}}=$dis;
+	      pos2:;
+	    }
+	}
+    }
+
+    #7######## collect distance for CA-contact for COMBCA.dat DISTL.dat #######
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    $dis=sqrt(($xc{$i_res{$p}}-$xc{$i_res{$q}})**2+
+		      ($yc{$i_res{$p}}-$yc{$i_res{$q}})**2+
+		      ($zc{$i_res{$p}}-$zc{$i_res{$q}})**2);
+	    $ndistA{$i_res{$p},$i_res{$q}}++;
+	    $distA{$i_res{$p},$i_res{$q},$ndistA{$i_res{$p},$i_res{$q}}}=$dis;
+	    $ndistA_CHU0{$i_res{$p},$i_res{$q}}++;
+	    $distA_CHU0{$i_res{$p},$i_res{$q},$ndistA_CHU0{$i_res{$p},$i_res{$q}}}=$dis;
+	}
+    }
+  pos30a:;
+}
+ pos2c:;
+close(temp);
+
+###########################################################
+############# CHUNK templates #############################
+############# templates from init1=init.CHU ###############
+###########################################################
+if(!-s "$datadir/$init1" || $usechunk eq "no"){
+    $n_temp1=0;
+    goto pos61;
+}
+open(temp,"$datadir/$init1");
+<temp>=~/(\S+)/;
+$ntmp=$1;
+$n_temp1=0;
+for($j=1;$j<=$ntmp;$j++){
+    #1_1######### read CA and SG from init1 ################
+    $line=<temp>;
+    print "chunk $line";
+    if($line=~/(\S+)\s+(\S+)\s+\S+\s+\S+\s+CHU_(\d+)/){
+	$L_ali=$1;
+	$ratio=$2;
+	$order=$3; #order number of the model for this chunk
+	$weight=$ratio*$mag;
+	$weight=1;
+    }
+    undef %mk1;
+    for($k=1;$k<=$L_ali;$k++){
+	$line=<temp>;
+	$i_res{$k}=substr($line,22,4); #order number of target residues
+	$i_res{$k}=~s/\s//mg;
+	$seq{$i_res{$k}}=substr($line,17,3); #real aa
+	$mk1{$i_res{$k}}=1;
+	$xc{$i_res{$k}}=substr($line,30,8);
+	$yc{$i_res{$k}}=substr($line,38,8);
+	$zc{$i_res{$k}}=substr($line,46,8);
+	$xg{$k}=substr($line,63,8);
+	$yg{$k}=substr($line,71,8);
+	$zg{$k}=substr($line,79,8);
+	$seq1{$k}=$seq{$i_res{$k}}; #SG cutoff, use query AA instead template dueto unknown T
+	$j_res{$k}=$k;    #order number of template residues,for contact cutoff 
+	#printf "$j,$k $xg{$k} $yg{$k} $zg{$k}\n";
+    }
+    <temp>;
+    
+    if($order>$m_top){
+	goto pos1c;
+    }
+    printf "^----------this chunk used------------^\n";
+    
+    $n_temp1++;
+    #4_1######## collect SG contacts for COMB.dat #######################
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    if(($i_res{$q}-$i_res{$p})>=1){
+		$freq0_COMB{$i_res{$p},$i_res{$q}}+=$weight; #total number of i-j happened
+		$dis=sqrt(($xg{$p}-$xg{$q})**2+
+			  ($yg{$p}-$yg{$q})**2+
+			  ($zg{$p}-$zg{$q})**2);
+		if($dis<$cutoff{$seq1{$j_res{$p}},$seq1{$j_res{$q}}}){
+		    $freq_COMB{$i_res{$p},$i_res{$q}}+=$weight;
+		}
+	    }
+	}
+    }
+    
+    #5_1######## collect SG contacts for PAR.dat #######################
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    if(($i_res{$q}-$i_res{$p})>=1){
+		$freq0_PAR{$i_res{$p},$i_res{$q}}+=$weight;
+		$dis=sqrt(($xg{$p}-$xg{$q})**2+
+			  ($yg{$p}-$yg{$q})**2+
+			  ($zg{$p}-$zg{$q})**2);
+		if($dis<$cutoff{$seq1{$j_res{$p}},$seq1{$j_res{$q}}}){
+		    $freq_PAR{$i_res{$p},$i_res{$q}}+=$weight;
+		}
+	    }
+	}
+    }
+    
+    #6_1##### collect distance for short range dist for DIST.dat ##############
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    if(($i_res{$q}-$i_res{$p})<=6){
+		##### check all between residues are aligned --->
+		for($m=$i_res{$p};$m<=$i_res{$q};$m++){
+		    goto pos2a if($mk1{$m}!=1);
+		}
+		#### check without gaps between ----------------->
+		for($m=$i_res{$p}+1;$m<=$i_res{$q};$m++){
+		    $dis=sqrt(($xc{$m-1}-$xc{$m})**2+
+			      ($yc{$m-1}-$yc{$m})**2+
+			      ($zc{$m-1}-$zc{$m})**2);
+		    goto pos2a if($dis>4.1);
+		}
+		$dis=sqrt(($xc{$i_res{$p}}-$xc{$i_res{$q}})**2+
+			  ($yc{$i_res{$p}}-$yc{$i_res{$q}})**2+
+			  ($zc{$i_res{$p}}-$zc{$i_res{$q}})**2);
+		for($k=1;$k<=$weight+0.5;$k++){
+		    $ndist{$i_res{$p},$i_res{$q}}++;
+		    $ndist_CHU{$i_res{$p},$i_res{$q}}++;
+		    $dist{$i_res{$p},$i_res{$q},$ndist{$i_res{$p},$i_res{$q}}}=$dis;
+		}
+	      pos2a:;
+	    }
+	}
+    }
+    
+    #7_1######## collect distance for CA-contact for COMBCA.dat DISTL.dat #######
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    $dis=sqrt(($xc{$i_res{$p}}-$xc{$i_res{$q}})**2+
+		      ($yc{$i_res{$p}}-$yc{$i_res{$q}})**2+
+		      ($zc{$i_res{$p}}-$zc{$i_res{$q}})**2);
+	    for($k=1;$k<=$weight+0.5;$k++){
+		#printf "$j $p,$q,$k--$weight  $dis $i_res{$q}-$i_res{$p}\n";
+		$ndistA{$i_res{$p},$i_res{$q}}++;
+		$distA{$i_res{$p},$i_res{$q},$ndistA{$i_res{$p},$i_res{$q}}}=$dis;
+		$ndistA_CHU{$i_res{$p},$i_res{$q}}++;
+		$distA_CHU{$i_res{$p},$i_res{$q},$ndistA_CHU{$i_res{$p},$i_res{$q}}}=$dis;
+	    }
+	}
+    }
+  pos1c:;
+}
+close(temp);
+pos61:;
+
+###########################################################
+############### ROS templates #############################
+############# templates from init2=init.ROS ###############
+###########################################################
+if(!-s "$datadir/$init2" || $useROS eq "no"){
+    $n_temp2=0;
+    goto pos62;
+}
+open(temp,"$datadir/$init2");
+<temp>=~/(\S+)/;
+$ntmp=$1;
+$ntmp=$m_top2 if($ntmp>$m_top2);
+$n_temp2=0;
+for($j=1;$j<=$ntmp;$j++){
+    #1_2######### read CA and SG from init2 ################
+    $line=<temp>;
+    print "ROS $line";
+    printf "^----------this chunk used------------^\n";
+    if($line=~/(\S+)\s+(\S+)/){
+	$L_ali=$1;
+	$ratio=$2;
+	$weight=$ratio*$mag2;
+	$weight=1;
+    }
+    undef %mk1;
+    for($k=1;$k<=$L_ali;$k++){
+	$line=<temp>;
+	$i_res{$k}=substr($line,22,4); #order number of target residues
+	$i_res{$k}=~s/\s//mg;
+	$seq{$i_res{$k}}=substr($line,17,3); #real aa
+	$mk1{$i_res{$k}}=1;
+	$xc{$i_res{$k}}=substr($line,30,8);
+	$yc{$i_res{$k}}=substr($line,38,8);
+	$zc{$i_res{$k}}=substr($line,46,8);
+    }
+    <temp>;
+    
+    #### calculate SG ------->
+    for($k=1;$k<=$L_ali;$k++){
+	$xx{$k}=$xc{$i_res{$k}};
+	$yy{$k}=$yc{$i_res{$k}};
+	$zz{$k}=$zc{$i_res{$k}};
+	$seq1{$k}=$seq{$i_res{$k}}; #SG cutoff, use query AA instead template dueto unknown T
+	$j_res{$k}=$k;    #order number of template residues,for contact cutoff 
+    }
+    $xx{0}=$xx{1}+($xx{2}-$xx{3});
+    $yy{0}=$yy{1}+($yy{2}-$yy{3});
+    $zz{0}=$zz{1}+($zz{2}-$zz{3});
+    $xx{$L_ali+1}=$xx{$L_ali}+($xx{$L_ali-1}-$xx{$L_ali-2});
+    $yy{$L_ali+1}=$yy{$L_ali}+($yy{$L_ali-1}-$yy{$L_ali-2});
+    $zz{$L_ali+1}=$zz{$L_ali}+($zz{$L_ali-1}-$zz{$L_ali-2});
+    for($k=1;$k<=$L_ali;$k++){
+	($xg{$k},$yg{$k},$zg{$k})=
+	    sidechain($xx{$k-1},$yy{$k-1},$zz{$k-1},
+		      $xx{$k},$yy{$k},$zz{$k},
+		      $xx{$k+1},$yy{$k+1},$zz{$k+1},
+		      $seq{$i_res{$k}});
+    }
+    ####
+    
+    $n_temp2++;
+    #4_2######## collect SG contacts for COMB.dat #######################
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    if(($i_res{$q}-$i_res{$p})>=1){
+		$freq0_COMB{$i_res{$p},$i_res{$q}}+=$weight; #total number of i-j happened
+		$dis=sqrt(($xg{$p}-$xg{$q})**2+
+			  ($yg{$p}-$yg{$q})**2+
+			  ($zg{$p}-$zg{$q})**2);
+		if($dis<$cutoff{$seq1{$j_res{$p}},$seq1{$j_res{$q}}}){
+		    $freq_COMB{$i_res{$p},$i_res{$q}}+=$weight;
+		}
+	    }
+	}
+    }
+    
+    #5_2######## collect SG contacts for PAR.dat #######################
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    if(($i_res{$q}-$i_res{$p})>=1){
+		$freq0_PAR{$i_res{$p},$i_res{$q}}+=$weight;
+		$dis=sqrt(($xg{$p}-$xg{$q})**2+
+			  ($yg{$p}-$yg{$q})**2+
+			  ($zg{$p}-$zg{$q})**2);
+		if($dis<$cutoff{$seq1{$j_res{$p}},$seq1{$j_res{$q}}}){
+		    $freq_PAR{$i_res{$p},$i_res{$q}}+=$weight;
+		}
+	    }
+	}
+    }
+    
+    goto pos2g; #no short range distance from ROS
+    #6_2##### collect distance for short range dist for DIST.dat ##############
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    if(($i_res{$q}-$i_res{$p})<=6){
+		##### check all between residues are aligned --->
+		for($m=$i_res{$p};$m<=$i_res{$q};$m++){
+		    goto pos2e if($mk1{$m}!=1);
+		}
+		#### check without gaps between ----------------->
+		for($m=$i_res{$p}+1;$m<=$i_res{$q};$m++){
+		    $dis=sqrt(($xc{$m-1}-$xc{$m})**2+
+			      ($yc{$m-1}-$yc{$m})**2+
+			      ($zc{$m-1}-$zc{$m})**2);
+		    goto pos2e if($dis>4.1);
+		}
+		$dis=sqrt(($xc{$i_res{$p}}-$xc{$i_res{$q}})**2+
+			  ($yc{$i_res{$p}}-$yc{$i_res{$q}})**2+
+			  ($zc{$i_res{$p}}-$zc{$i_res{$q}})**2);
+		for($k=1;$k<=$weight+0.5;$k++){
+		    $ndist{$i_res{$p},$i_res{$q}}++;
+		    $ndist_CHU{$i_res{$p},$i_res{$q}}++;
+		    $dist{$i_res{$p},$i_res{$q},$ndist{$i_res{$p},$i_res{$q}}}=$dis;
+		}
+	      pos2e:;
+	    }
+	}
+    }
+  pos2g:;
+    
+    #7_2######## collect distance for CA-contact for COMBCA.dat DISTL.dat #######
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    $dis=sqrt(($xc{$i_res{$p}}-$xc{$i_res{$q}})**2+
+		      ($yc{$i_res{$p}}-$yc{$i_res{$q}})**2+
+		      ($zc{$i_res{$p}}-$zc{$i_res{$q}})**2);
+	    for($k=1;$k<=$weight+0.5;$k++){
+		#printf "$j $p,$q,$k--$weight  $dis $i_res{$q}-$i_res{$p}\n";
+		$ndistA{$i_res{$p},$i_res{$q}}++;
+		$distA{$i_res{$p},$i_res{$q},$ndistA{$i_res{$p},$i_res{$q}}}=$dis;
+		$ndistA_CHU2{$i_res{$p},$i_res{$q}}++;
+		$distA_CHU2{$i_res{$p},$i_res{$q},$ndistA_CHU2{$i_res{$p},$i_res{$q}}}=$dis;
+	    }
+	}
+    }
+}
+close(temp);
+pos62:;
+
+###########################################################
+############### chunk_T templates #########################
+############# templates from init3=init.YYY ###############
+###########################################################
+if(!-s "$datadir/$init3" || $usechunk_T eq "no"){
+    $n_temp3=0;
+    goto pos63;
+}
+open(temp,"$datadir/$init3");
+<temp>=~/(\S+)/;
+$ntmp=$1;
+$n_temp3=0;
+for($j=1;$j<=$ntmp;$j++){
+    #1_3######### read CA and SG from init3 ################
+    $line=<temp>;
+    print "chunk_T $line";
+    if($line=~/(\S+)\s+(\S+)\s+\S+\s+\S+\s+CHU_(\d+)\_(\d+)\_(\d+)/){
+	$L_ali=$1;
+	$Z=$2;
+	$SS=$3; #how many SS in each chunk
+	$i_chunk=$4; #what chunk
+	$order=$5; #rank of the alignment for this chunk
+	$weight=$Z*$mag3;
+	$weight=1;
+    }
+    undef %mk1;
+    for($k=1;$k<=$L_ali;$k++){
+	$line=<temp>;
+	$i_res{$k}=substr($line,22,4); #order number of target residues
+	$i_res{$k}=~s/\s//mg;
+	$seq{$i_res{$k}}=substr($line,17,3); #real aa
+	$mk1{$i_res{$k}}=1;
+	$xc{$i_res{$k}}=substr($line,30,8);
+	$yc{$i_res{$k}}=substr($line,38,8);
+	$zc{$i_res{$k}}=substr($line,46,8);
+	$xg{$k}=substr($line,63,8);
+	$yg{$k}=substr($line,71,8);
+	$zg{$k}=substr($line,79,8);
+	$seq1{$k}=$seq{$i_res{$k}}; #SG cutoff, use query AA instead template dueto unknown T
+	$j_res{$k}=$k;    #order number of template residues,for contact cutoff 
+    }
+    <temp>;
+    
+    if($order>$m_top3 || $Z<$Z_cut){
+	goto pos1d;
+    }
+    printf "^----------this chunk used------------^\n";
+    
+    $n_temp3++;
+    #4_3######## collect SG contacts for COMB.dat #######################
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    if(($i_res{$q}-$i_res{$p})>=1){
+		$freq0_COMB{$i_res{$p},$i_res{$q}}+=$weight; #total number of i-j happened
+		$dis=sqrt(($xg{$p}-$xg{$q})**2+
+			  ($yg{$p}-$yg{$q})**2+
+			  ($zg{$p}-$zg{$q})**2);
+		if($dis<$cutoff{$seq1{$j_res{$p}},$seq1{$j_res{$q}}}){
+		    $freq_COMB{$i_res{$p},$i_res{$q}}+=$weight;
+		}
+	    }
+	}
+    }
+    
+    #5_3######## collect SG contacts for PAR.dat #######################
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    if(($i_res{$q}-$i_res{$p})>=1){
+		$freq0_PAR{$i_res{$p},$i_res{$q}}+=$weight;
+		$dis=sqrt(($xg{$p}-$xg{$q})**2+
+			  ($yg{$p}-$yg{$q})**2+
+			  ($zg{$p}-$zg{$q})**2);
+		if($dis<$cutoff{$seq1{$j_res{$p}},$seq1{$j_res{$q}}}){
+		    $freq_PAR{$i_res{$p},$i_res{$q}}+=$weight;
+		}
+	    }
+	}
+    }
+    
+    #6_3##### collect distance for short range dist for DIST.dat ##############
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    if(($i_res{$q}-$i_res{$p})<=6){
+		##### check all between residues are aligned --->
+		for($m=$i_res{$p};$m<=$i_res{$q};$m++){
+		    goto pos2d if($mk1{$m}!=1);
+		}
+		#### check without gaps between ----------------->
+		for($m=$i_res{$p}+1;$m<=$i_res{$q};$m++){
+		    $dis=sqrt(($xc{$m-1}-$xc{$m})**2+
+			      ($yc{$m-1}-$yc{$m})**2+
+			      ($zc{$m-1}-$zc{$m})**2);
+		    goto pos2d if($dis>4.1);
+		}
+		$dis=sqrt(($xc{$i_res{$p}}-$xc{$i_res{$q}})**2+
+			  ($yc{$i_res{$p}}-$yc{$i_res{$q}})**2+
+			  ($zc{$i_res{$p}}-$zc{$i_res{$q}})**2);
+		for($k=1;$k<=$weight+0.5;$k++){
+		    $ndist{$i_res{$p},$i_res{$q}}++;
+		    $ndist_CHU{$i_res{$p},$i_res{$q}}++;
+		    $dist{$i_res{$p},$i_res{$q},$ndist{$i_res{$p},$i_res{$q}}}=$dis;
+		}
+	      pos2d:;
+	    }
+	}
+    }
+    
+    #7_3######## collect distance for CA-contact for COMBCA.dat DISTL.dat #######
+    for($p=1;$p<=$L_ali;$p++){
+	for($q=$p+1;$q<=$L_ali;$q++){
+	    $dis=sqrt(($xc{$i_res{$p}}-$xc{$i_res{$q}})**2+
+		      ($yc{$i_res{$p}}-$yc{$i_res{$q}})**2+
+		      ($zc{$i_res{$p}}-$zc{$i_res{$q}})**2);
+	    for($k=1;$k<=$weight+0.5;$k++){
+		$ndistA{$i_res{$p},$i_res{$q}}++;
+		$distA{$i_res{$p},$i_res{$q},$ndistA{$i_res{$p},$i_res{$q}}}=$dis;
+		$ndistA_CHU3{$i_res{$p},$i_res{$q}}++;
+		$distA_CHU3{$i_res{$p},$i_res{$q},$ndistA_CHU3{$i_res{$p},$i_res{$q}}}=$dis;
+	    }
+	}
+    }
+  pos1d:;
+}
+close(temp);
+pos63:;
+
+##########################################################################
+#     output from init.dat and init1.dat and init2.dat and init3.dat     #
+##########################################################################
+
+###############################################
+########## output COMB.dat ####################
+###############################################
+$N_res=0;
+for($i=1;$i<=$Lch;$i++){
+    for($j=$i+5;$j<=$Lch;$j++){
+	$N_res++ if($freq_COMB{$i,$j}>=1);
+    }
+}
+open(comb,">comb.dat");
+printf comb "$N_res\n";
+for($i=1;$i<=$Lch;$i++){
+    for($j=$i+5;$j<=$Lch;$j++){
+	if($freq_COMB{$i,$j}>=1){
+	    $n_total=$n_temp+$freq0_COMB{$i,$j}; #n_temp from init.dat; freq0 from init1.dat
+	    printf comb "%10d %10d %10.3f %10d  %3d\n",
+	    $i,$j,$freq_COMB{$i,$j}/$n_total,$freq_COMB{$i,$j},$n_total;
+	}
+    }
+}
+close(comb);
+#^^^^^^^^^^^^ COMB.dat done ^^^^^^^^^^^^^^^^^^^^
+
+###############################################
+########## output PAR.dat #####################
+###############################################
+######### calculate <E> #######################
+$n_use=$n_temp+$n_temp1+$n_temp2+$n_temp3; #just for the unimportant normalization
+$N_a=0;
+$E_a=0;
+$n_use1=$n_use+1; #to make 0-contact is less than 1-contact
+for($i=1;$i<=$Lch;$i++){
+    for($j=$i+1;$j<=$Lch;$j++){
+	if($freq0_PAR{$i,$j}>0){ #non-gapped region
+	    $frequence=$freq_PAR{$i,$j}/($freq0_PAR{$i,$j}/$n_use1); #>1
+	    ### propose 1/n_use is to make E_contact < E_noncontact
+	    if($frequence>0){ #there is contact
+		$E{$i,$j}=-log($frequence); #always <0
+	    }else{
+		$E{$i,$j}=0;
+	    }
+	    $N_a++;
+	    $E_a+=$E{$i,$j};
+	    $mE{$i,$j}=1; #non-gapped region
+	}
+    }
+}
+$E_a/=$N_a;
+### shift E to <E> so that gapped region=0 #######
+for($i=1;$i<=$Lch;$i++){
+    for($j=$i;$j<=$Lch;$j++){
+	if($mE{$i,$j}==1){ #non-gapped region
+	    $E{$i,$j}-=$E_a;
+	}else{ #gapped region
+	    $E{$i,$j}=0;
+	}
+	$E{$j,$i}=$E{$i,$j};
+    }
+}
+#7##### output PAR.dat ###############################
+open(par,">par.dat");
+for($i=1;$i<=$Lch;$i++){
+    printf par "%5d  ================\n",$i;
+    $k=0;
+    for($j=1;$j<=$Lch;$j++){
+	$k++;
+	printf par " %8.3f",$E{$i,$j};
+	if($k==10){
+	    printf par "\n";
+	    $k=0;
+	}
+    }
+    printf par "\n" if($k!=0);
+}
+close(par);
+#^^^^^^^^^^^^ PAR.dat done ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+###############################################################
+########## output DIST.dat only from init.dat and init1.dat ###
+###############################################################
+$n_use=$n_temp; #only for cutoff
+if($n_temp1>1){
+    $n_use+=2;
+}
+if($n_temp3>1){
+    $n_use+=1;
+}
+if($n_use<=3){ #1-3
+    $ndist0=1;
+}elsif($n_use<=8){ #4-8
+    $ndist0=2;
+}elsif($n_use<=16){ #9-16
+    $ndist0=3;
+}elsif($n_use<=32){ #17-32
+    $ndist0=4;
+}else{
+    $ndist0=$n_use*(1.0/8.0);
+}
+printf "n_use=$n_use, ndist0=$ndist0\n";
+$N_res=0;
+for($i=1;$i<=$Lch;$i++){
+    $jm=$i+6;
+    $jm=$Lch if($jm>$Lch);
+    for($j=$i+2;$j<=$jm;$j++){
+	if($ndist{$i,$j}>=$ndist0){ #with CHUNK, dist exist for everywhere
+	    $dist_a=0;
+	    $dist2_a=0;
+	    for($k=1;$k<=$ndist{$i,$j};$k++){
+		$dist_a+=$dist{$i,$j,$k};
+		$dist2_a+=$dist{$i,$j,$k}**2;
+	    }
+	    $dist_a/=$ndist{$i,$j};
+	    $dist2_a/=$ndist{$i,$j};
+	    $delta2=$dist2_a-$dist_a**2;
+	    if($delta2 < 0.00001){
+		$delta=0;
+	    }else{
+		$delta=sqrt($dist2_a-$dist_a**2);
+	    }
+	    $N_res++;
+	    $I{$N_res}=$i;
+	    $J{$N_res}=$j;
+	    $DIST{$N_res}=$dist_a;
+	    $DELTA{$N_res}=$delta;
+	}
+    }
+}
+open(dist,">dist.dat");
+printf dist "$N_res\n";
+for($i=1;$i<=$N_res;$i++){
+    printf dist "%5d %5d %5d %8.3f %8.3f\n",
+    $I{$i},$J{$i},$ndist{$I{$i},$J{$i}},$DIST{$i},$DELTA{$i};
+}
+close($dist);
+#^^^^^^^^^^^^^ DIST.dat done ^^^^^^^^^^^^^^^^^^^^^
+
+###############################################
+####### output COMBCA.dat #####################
+###############################################
+for($i=1;$i<=$Lch;$i++){
+    for($j=$i+5;$j<=$Lch;$j++){
+	for($k=1;$k<=$ndistA{$i,$j};$k++){
+	    $ncont{$i,$j}++ if($distA{$i,$j,$k}<6.0);
+	}
+    }
+}
+$N_res=0;
+for($i=1;$i<=$Lch;$i++){
+    for($j=$i+5;$j<=$Lch;$j++){
+	$N_res++ if($ncont{$i,$j}>0);
+    }
+}
+open(combCA,">combCA.dat");
+printf combCA "$N_res\n";
+for($i=1;$i<=$Lch;$i++){
+    for($j=$i+5;$j<=$Lch;$j++){
+	if($ncont{$i,$j}>0){
+	    $conf=$ncont{$i,$j}/($n_temp+$ndist_CHU{$i,$j});
+	    #$conf=$ncont{$i,$j}/($ndist_CHU0{$i,$j}+$ndist_CHU{$i,$j}+$ndist_CHU2{$i,$j}+$ndist_CHU3{$i,$j}); ???
+	    printf combCA "%5d %5d %8.4f\n",$i,$j,$conf;
+	}
+    }
+}
+close(combCA);
+#^^^^^^^^^^^^^^^^ COMBCA.dat done ^^^^^^^^^^^^^^^
+
+###############################################
+####### output COMB8CA.dat ####################
+###############################################
+for($i=1;$i<=$Lch;$i++){
+    for($j=$i+5;$j<=$Lch;$j++){
+	for($k=1;$k<=$ndistA{$i,$j};$k++){
+	    $ncont8{$i,$j}++ if($distA{$i,$j,$k}<8.0);
+	}
+    }
+}
+$N_res=0;
+for($i=1;$i<=$Lch;$i++){
+    for($j=$i+5;$j<=$Lch;$j++){
+	$N_res++ if($ncont8{$i,$j}>0);
+    }
+}
+open(combCA,">comb8CA.dat");
+printf combCA "$N_res\n";
+for($i=1;$i<=$Lch;$i++){
+    for($j=$i+5;$j<=$Lch;$j++){
+	if($ncont8{$i,$j}>0){
+	    $conf=$ncont8{$i,$j}/($n_temp+$ndist_CHU{$i,$j});
+	    printf combCA "%5d %5d %8.4f\n",$i,$j,$conf;
+	}
+    }
+}
+close(combCA);
+#^^^^^^^^^^^^^^^^ COMBCA.dat done ^^^^^^^^^^^^^^^
+
+###############################################
+######## output DISTL.dat #####################
+###############################################
+$n_int=10; #take one distance each 10 residues
+$M0=4;  #number of templates used to extract distL.dat
+$N_res=0;
+for($i=1;$i<=$Lch;$i++){
+    for($j=$i+1;$j<=$Lch;$j++){
+	if(int(($j-$i)/$n_int)*$n_int == ($j-$i)){
+	    for($k=1;$k<=$ndistA_CHU0{$i,$j};$k++){
+		if($k<=$M0){
+		    $N_res++;
+		}
+	    }
+	}
+	if(int(($j-$i)/$n_int_CHU)*$n_int_CHU == ($j-$i)){
+	    for($k=1;$k<=$ndistA_CHU{$i,$j};$k++){
+		if($k<=$M0_CHU){
+		    $N_res++;
+		}
+	    }
+	}
+	if(int(($j-$i)/$n_int_CHU2)*$n_int_CHU2 == ($j-$i)){
+	    for($k=1;$k<=$ndistA_CHU2{$i,$j};$k++){
+		if($k<=$M0_CHU2){
+		    $N_res++;
+		}
+	    }
+	    for($k=1;$k<=$ndistA_CHU3{$i,$j};$k++){
+		if($k<=$M0_CHU3){
+		    $N_res++;
+		}
+	    }
+	}
+    }
+}
+open(DISTL,">distL.dat");
+printf DISTL "$N_res\n";
+for($i=1;$i<=$Lch;$i++){
+    for($j=$i+1;$j<=$Lch;$j++){
+	if(int(($j-$i)/$n_int)*$n_int == ($j-$i)){
+	    for($k=1;$k<=$ndistA_CHU0{$i,$j};$k++){
+		if($k<=$M0){
+		    printf DISTL "%5d %5d %8.3f\n",$i,$j,$distA_CHU0{$i,$j,$k};
+		}
+	    }
+	}
+	if(int(($j-$i)/$n_int_CHU)*$n_int_CHU == ($j-$i)){
+	    for($k=1;$k<=$ndistA_CHU{$i,$j};$k++){
+		if($k<=$M0_CHU){
+		    printf DISTL "%5d %5d %8.3f from chu\n",$i,$j,$distA_CHU{$i,$j,$k};
+		}
+	    }
+	}
+	if(int(($j-$i)/$n_int_CHU2)*$n_int_CHU2 == ($j-$i)){
+	    for($k=1;$k<=$ndistA_CHU2{$i,$j};$k++){
+		if($k<=$M0_CHU2){
+		    printf DISTL "%5d %5d %8.3f from ROS\n",$i,$j,$distA_CHU2{$i,$j,$k};
+		}
+	    }
+	    for($k=1;$k<=$ndistA_CHU3{$i,$j};$k++){
+		if($k<=$M0_CHU3){
+		    printf DISTL "%5d %5d %8.3f from chu_T\n",$i,$j,$distA_CHU3{$i,$j,$k};
+		}
+	    }
+	}
+    }
+}
+close(DISTL);
+#^^^^^^^^^^^^^^^^ DISTL.dat done ^^^^^^^^^^^^^^^
+
+# copy your file back ------------------->
+
+@FF=qw(
+       comb.dat
+       par.dat
+       dist.dat
+       combCA.dat
+       comb8CA.dat
+       distL.dat
+       );
+
+foreach $F(@FF){
+    if($F=~/(\S+)\.(\S+)/){
+	$f="$1$o.$2";
+	`cp $F $datadir/$f`;
+    }
+}
+`cp $initall $datadir/!INITALL!`;
+
+sleep(1);
+`rm -fr $work_dir`;
+
+exit();
+
+
+
+sub sidechain{
+    my($xm,$ym,$zm,$x,$y,$z,$xp,$yp,$zp,$seq)=@_;
+  wrong:
+    ########### Angle ##########################
+    my$a2=($xm-$x)**2+($ym-$y)**2+($zm-$z)**2;
+    my$b2=($xp-$x)**2+($yp-$y)**2+($zp-$z)**2;
+    my$c2=($xm-$xp)**2+($ym-$yp)**2+($zm-$zp)**2;
+    if($a2==0){
+	$xm+=0.001;
+	$ym+=0.001;
+	$zm+=0.001;
+	goto wrong;
+    }
+    if($b2==0){
+	$xp+=0.001;
+	$yp+=0.001;
+	$zp+=0.001;
+	goto wrong;
+    }
+    $cosc=($a2+$b2-$c2)/(2*sqrt($a2*$b2));
+    $angle=acos($cosc)/3.1415926*180;
+    
+    ############ vectors a,b,c#######################
+    $vxm=$x-$xm;
+    $vym=$y-$ym;
+    $vzm=$z-$zm;
+    $rm=sqrt($vxm*$vxm+$vym*$vym+$vzm*$vzm);
+    $vxm/=$rm;    #vi
+    $vym/=$rm;
+    $vzm/=$rm;
+    $vxp=$xp-$x;
+    $vyp=$yp-$y;
+    $vzp=$zp-$z;
+    $rp=sqrt($vxp*$vxp+$vyp*$vyp+$vzp*$vzp);
+    $vxp/=$rp;    #vj
+    $vyp/=$rp;
+    $vzp/=$rp;
+    $ax=$vxm+$vxp;
+    $ay=$vym+$vyp;
+    $az=$vzm+$vzp;
+    $aaa=sqrt($ax*$ax+$ay*$ay+$az*$az);
+    if($aaa==0){
+	$xm+=0.001;
+	$ym+=0.001;
+	$zm+=0.001;
+	goto wrong;
+    }
+    $ax/=$aaa;    #a=(vi+vj)/|vi+vj|
+    $ay/=$aaa;
+    $az/=$aaa;
+    $cx=$vxm-$vxp;
+    $cy=$vym-$vyp;
+    $cz=$vzm-$vzp;
+    $ccc=sqrt($cx*$cx+$cy*$cy+$cz*$cz);
+    if($ccc==0){
+	$xm+=0.001;
+	$ym+=0.001;
+	$zm+=0.001;
+	goto wrong;
+    }
+    $cx/=$ccc;    #c=(vi-vj)/|vi-vj|
+    $cy/=$ccc;
+    $cz/=$ccc;
+    $bx=$cy*$az-$cz*$ay;
+    $by=$cz*$ax-$cx*$az;
+    $bz=$cx*$ay-$cy*$ax;
+    $bbb=sqrt($bx*$bx+$by*$by+$bz*$bz);
+    if($bbb==0){
+	$xm+=0.001;
+	$ym+=0.001;
+	$zm+=0.001;
+	goto wrong;
+    }
+    $bx/=$bbb;    #c(x)a
+    $by/=$bbb;
+    $bz/=$bbb;
+
+    #######################################################################
+    ##
+    ## A=ka*a+kb*b+kc*c
+    ## when a,b,c are unitary and perpenticular-->
+    ## ka=A*a
+    ## kb=A*b
+    ## kc=A*c
+    ##
+    #######################################################################
+    if($angle < 105){
+	$xgp=$x+$ka1{$seq}*$ax+$kb1{$seq}*$bx+$kc1{$seq}*$cx;
+	$ygp=$y+$ka1{$seq}*$ay+$kb1{$seq}*$by+$kc1{$seq}*$cy;
+	$zgp=$z+$ka1{$seq}*$az+$kb1{$seq}*$bz+$kc1{$seq}*$cz;
+    }else{
+	$xgp=$x+$ka2{$seq}*$ax+$kb2{$seq}*$bx+$kc2{$seq}*$cx;
+	$ygp=$y+$ka2{$seq}*$ay+$kb2{$seq}*$by+$kc2{$seq}*$cy;
+	$zgp=$z+$ka2{$seq}*$az+$kb2{$seq}*$bz+$kc2{$seq}*$cz;
+    }
+    #printf "$xgp,$ygp,$zgp  $angle  *******\n";
+    return($xgp,$ygp,$zgp);
+}

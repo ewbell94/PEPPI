@@ -1,0 +1,352 @@
+#!/usr/bin/perl
+use Math::Trig;
+
+$home="/nfs/amino-home/zhng";
+$lib="/nfs/amino-library";
+
+########### setup  the environment and Working DIRectory ###
+$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin";
+$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
+
+############### GGGd ############################
+# 1, Blast setting is at GGGdmod
+#    use '$lib/nr/nr'
+# 2, To change template directory, one should modify
+#    $lib/MTX and DEP and summary
+################################################
+
+##### report node -------->
+`hostname`=~/(\S+)/;
+$node=$1;
+printf "hostname: $node\n";
+$time=`date`;
+printf "starting time: $time";
+$pwd=`pwd`;
+printf "pwd: $pwd";
+#^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+%ts=(
+     'GLY'=>'G',
+     'ALA'=>'A',
+     'VAL'=>'V',
+     'LEU'=>'L',
+     'ILE'=>'I',
+     'SER'=>'S',
+     'THR'=>'T',
+     'CYS'=>'C',
+     'MET'=>'M',
+     'PRO'=>'P',
+     'ASP'=>'D',
+     'ASN'=>'N',
+     'GLU'=>'E',
+     'GLN'=>'Q',
+     'LYS'=>'K',
+     'ARG'=>'R',
+     'HIS'=>'H',
+     'PHE'=>'F',
+     'TYR'=>'Y',
+     'TRP'=>'W',
+
+     'ASX'=>'B',
+     'GLX'=>'Z',
+     'UNK'=>'X',
+
+     'G'=>'GLY',
+     'A'=>'ALA',
+     'V'=>'VAL',
+     'L'=>'LEU',
+     'I'=>'ILE',
+     'S'=>'SER',
+     'T'=>'THR',
+     'C'=>'CYS',
+     'M'=>'MET',
+     'P'=>'PRO',
+     'D'=>'ASP',
+     'N'=>'ASN',
+     'E'=>'GLU',
+     'Q'=>'GLN',
+     'K'=>'LYS',
+     'R'=>'ARG',
+     'H'=>'HIS',
+     'F'=>'PHE',
+     'Y'=>'TYR',
+     'W'=>'TRP',
+
+     'a'=>'CYS',
+     'b'=>'CYS',
+     'c'=>'CYS',
+     'd'=>'CYS',
+     'e'=>'CYS',
+     'f'=>'CYS',
+     'g'=>'CYS',
+     'h'=>'CYS',
+     'i'=>'CYS',
+     'j'=>'CYS',
+     'k'=>'CYS',
+     'l'=>'CYS',
+     'm'=>'CYS',
+     'n'=>'CYS',
+     'o'=>'CYS',
+     'p'=>'CYS',
+     'q'=>'CYS',
+     'r'=>'CYS',
+     's'=>'CYS',
+     't'=>'CYS',
+     'u'=>'CYS',
+     'v'=>'CYS',
+     'w'=>'CYS',
+     'x'=>'CYS',
+     'y'=>'CYS',
+     'z'=>'CYS',
+
+     'B'=>'ASX',
+     'Z'=>'GLX',
+     'X'=>'CYS',
+    );
+
+@AA=qw(
+       C
+       M
+       F
+       I
+       L
+       V
+       W
+       Y
+       A
+       G
+       T
+       S
+       Q
+       N
+       E
+       D
+       H
+       R
+       K
+       P
+       );
+
+################# directories #############################
+$data_dir="!DATA_DIR!/!S!";  #for seq.txt and init.dat
+$work_dir="/tmp/!USER!/!TAG!";
+$libdir="!LIB_DIR!";
+$blastdir="$lib/blast/bin"; #blast always uses local
+$db="$lib/nr/nr";
+$zalignbin="$lib/bin/zalign";
+$bindir="$lib/pGenTHREADER/bin";
+$TDB="$lib/pGenTHREADER/tdb";
+$DATA="$lib/pGenTHREADER/data";
+$o="!O!";
+$idcut0="!ID_CUT!"; 
+$ntemp="!N_TEMP!";
+
+$ENV{'TDB_DIR'}="$TDB";
+$ENV{'THREAD_DIR'}="$DATA";
+
+################ working directory ########################
+`/bin/mkdir -p $work_dir`;
+chdir "$work_dir";
+#`/bin/rm -f $work_dir/*`;
+`cp $home/bin/align ./align`;
+
+################ make fasta sequence file #################
+@seqtxts=`cat $data_dir/seq.txt`;
+$sequence="";
+foreach $seqtxt(@seqtxts){
+    goto pos6 if($seqtxt=~/\>/);
+    $seqtxt=~s/\s//mg;
+    $seqtxt=~s/\n//mg;
+    $sequence=$sequence.$seqtxt;
+  pos6:;
+}
+$Lch=length $sequence;
+open(seq,">protein.seq");
+printf seq ">protein\n";
+for($i=1;$i<=$Lch;$i++){
+    $a=substr($sequence,$i-1,1);
+    printf seq "$a";
+    $seqQ{$i}=$a;   #only for check
+    #$log{$i,$seqQ{$i}}++;
+    if($i==int($i/60)*60){
+	printf seq "\n";
+    }
+}
+printf seq "\n";
+close(seq);
+
+#goto pos50;
+########### run 3-iteration psi-blast ==================>
+printf "running Psi-blast .....\n";
+#$PSIB/blastpgp -a 4 -F T -i $JOB.fsa -d $DB -t 1 -j 3 -v 5000 -b 0 -h 0.001 -C $JOB.chk -F T > /dev/null
+#`$blastdir/blastpgp -a 4  -b 1000 -j 3 -h 0.001 -d $db -i protein.seq -C psitmp.chk > blast.out`;
+system("$home/bin/blast+.pl protein.seq");
+`cp mtx psitmp.mtx`;
+
+########### make mtx ####################
+#`cp protein.seq psitmp.fasta`;
+#`echo psitmp.chk > psitmp.pn`;
+#`echo psitmp.fasta > psitmp.sn`;
+#`$blastdir/makemat -P psitmp`;
+
+########### run PSIPRED ####################
+$Pexecdir="$lib/bin/psipred/bin"; #psipred excutable file
+$Pdatadir="$lib/bin/psipred/data"; #psipred data file
+`$Pexecdir/psipred psitmp.mtx $Pdatadir/weights.dat $Pdatadir/weights.dat2 $Pdatadir/weights.dat3 $Pdatadir/weights.dat4 > protein.ss`;
+`$Pexecdir/psipass2 $Pdatadir/weights_p2.dat 1 1.0 1.0 protein.ss2 protein.ss > protein.horiz`;
+#$PSIP/psipred $JOB.iter3.mtx $PDATA/weights.dat $PDATA/weights.dat2 $PDATA/weights.dat3 $PDATA/weights.dat4 > $JOB.pgen.ss
+#$PSIP/psipass2 $PDATA/weights_p2.dat 1 1.0 1.0 $JOB.pgen.ss2 $JOB.pgen.ss > $JOB.horiz
+
+########### run further 3-iteration psi-blast ==========>
+#$PSIB/blastpgp -a 4 -F T -t 1 -i $JOB.fsa                   -d $DB -j 3 -v 5000 -b 0 -h 0.001 -C $JOB.chk -F T > /dev/null
+#$PSIB/blastpgp -a 4 -F T -t 1 -i $JOB.fsa -R $JOB.iter3.chk -d $DB -j 3 -v 5000 -b 0 -h 0.001 -C $JOB.chk > /dev/null
+#`mv psitmp.chk psitmp3.chk`;
+#`$blastdir/blastpgp -a 4 -b 1000 -j 3 -h 0.001 -d $db -i protein.seq -C psitmp.chk -R psitmp3.chk > blast.out`;
+system("$home/bin/blast+.pl protein.seq 6 10 0.001 1000");
+`cp psitmp.chk psitmp6.chk`;
+`cp mtx psitmp6.mtx`;
+
+##################make PSSM from 6th iteration ####################
+#`cp protein.seq psitmp.fasta`;
+#`echo psitmp.chk > psitmp.pn`;
+#`echo psitmp.fasta > psitmp.sn`;
+#`$blastdir/makemat -P psitmp`;
+
+############# Run PGenThreader process ------------>
+#$PGT/pseudo_bas -c11.0 -C20 -h0.2 -F$JOB.pgen.ss2 $JOB.iter6.mtx $JOB.pgen.pseudo $TDB/psichain.lst
+system("$bindir/pseudo_bas -c11.0 -C20 -h0.2 -Fprotein.ss2 psitmp6.mtx pgen.pseudo $TDB/psichain.lst");
+#`cp pgen.pseudo pgen1.pseudo`;
+
+########### sort scores into pgen.resulst (pgen.pseudo unchanged):
+#$PGT/svm_prob $JOB.pgen.pseudo | sort -k 2,2rn -k 6,6rn -k 5,5g  > $JOB.pgen.presults
+system("$bindir/svm_prob pgen.pseudo | sort -k 2,2rn -k 6,6rn -k 5,5g  > pgen.presults");
+
+########## output alignments (pgen.pseudo modified but pgen.presults unchanged):
+#$PGT/pseudo_bas -S -p -c11.0 -C20 -h0.2 -F$JOB.pgen.ss2 $JOB.iter6.mtx $JOB.pgen.pseudo $JOB.pgen.presults > $JOB.pgen.align
+system("$bindir/pseudo_bas -S -p -c11.0 -C20 -h0.2 -Fprotein.ss2 psitmp6.mtx pgen.pseudo pgen.presults > pgen.align");
+
+ pos50:;
+################ calculate Z-score ######################
+open(out,"pgen.presults");
+while($line=<out>){
+    if($line=~/(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/){
+	$q=$10;
+	$zscore{$q}=-log($3);
+    }
+}
+close(out);
+
+########### retrive alignment of init.dat --------->
+printf "retrive alignment file .....\n";
+open(rank,"pgen.align");
+open(init,">init.dat");
+$i_t=0;
+while($line=<rank>){
+    #printf "$i_t, $line";
+    ############# read alignment ----->
+    if($line=~/Alignment with\s+(\S+)\:/){
+	$template=$1;
+	#printf "$template\n";
+	$n_seq=0;
+	while($line=<rank>){
+	    if($line=~/$template\s+(\S+)/){
+		$n_seq++;
+		$seqT{$n_seq}=$1;
+		<rank>;
+		$line=<rank>;
+		if($line=~/^Query\s+(\S+)/){
+		    $seqQ{$n_seq}=$1;
+		}
+	    }
+	    if($line=~/Percentage Identity/){
+		goto pos2b;
+	    }
+	}
+      pos2b:;
+	$L_ali=0;
+	$kT=0;
+	$kQ=0;
+	for($i=1;$i<=$n_seq;$i++){
+	    $L=length $seqT{$i};
+	    for($j=1;$j<=$L;$j++){
+		$aT=substr($seqT{$i},$j-1,1);
+		$aQ=substr($seqQ{$i},$j-1,1);
+		$kT++ if($aT ne "-");
+		$kQ++ if($aQ ne "-");
+		if($aT ne "-" && $aQ ne "-"){
+		    $L_ali++;
+		    $resT{$L_ali}=$kT;
+		    $resQ{$L_ali}=$kQ;
+		    $ST{$L_ali}=$aT;  #AA of template
+		    $SQ{$L_ali}=$aQ;
+		}
+	    }
+	}
+	
+	######### original tdb file -------->
+	$tmp="$TDB/$template.tdb";
+	if(!-s "$tmp"){
+	    print "without $tmp!\n";
+	    goto pos2c;
+	}
+	open(a,"$tmp");
+	$sequence="";
+	$LT=0;
+	<a>;
+	while($line=<a>){
+	    if($line=~/(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/){
+		$LT++;
+		$sT{$LT}=$2;
+		$sequence.=$2;
+		$x{$LT}=$8;
+		$y{$LT}=$9;
+		$z{$LT}=$10;
+	    }
+	}
+	close(a);
+	
+	#printf "idcut=$idcut0\n";
+	############ check homology ##############
+	if($idcut0<0.999){
+	    $align_rst=`./align $sequence protein.seq 4`;
+	    if($align_rst=~/Identical length\:\s+(\d+)/){
+		$id=$1/$Lch;
+		goto pos2c if($id>=$idcut0);
+	    }
+	}
+	
+	########## output init.dat --------->
+	$i_t++;
+	printf init "%5d %8.3f %5d   %6s\n",
+	$L_ali,$zscore{$template},$i_t,$template;
+	for($j=1;$j<=$L_ali;$j++){
+	    $k=$resT{$j}; #order number on T
+	    printf init "ATOM  %5s  CA  %3s  %4d    %8.3f%8.3f%8.3f%5d %3s\n",
+	    $j,$ts{$SQ{$j}},$resQ{$j},
+	    $x{$k},$y{$k},$z{$k},
+	    $k,$ts{$sT{$k}};
+	    if($ST{$j} ne $sT{$k}){
+		printf "warning: $i_t, $template, $j,$k,$ST{$j}!=$sT{$k} --- error on alignment transfer!\n";
+	    }
+	}
+	printf init "TER\n";
+	goto pos3 if($i_t >= $ntemp);
+      pos2c:;
+    }
+}
+ pos3:;
+close(init);
+
+open(init1,">init1.dat");
+printf init1 "%5d %5d (N_temp, Lch)\n",$i_t,$Lch;
+close(init1);
+`cat init.dat >>init1.dat`;
+
+`/bin/cp init1.dat            $data_dir/init$o\.pgen`;
+
+################# endding procedure ######################
+sleep(1);
+`rm -fr $work_dir`;
+
+exit();
+
