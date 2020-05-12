@@ -1,0 +1,109 @@
+#!/usr/bin/perl
+#PBS -e !ERRFILE!
+#PBS -o !OUTFILE!
+#PBS -l !WALLTIME!
+#PBS -l !NODE!
+
+use Math::Trig;
+
+##### report node -------->
+`hostname`=~/(\S+)/;
+$node=$1;
+printf "hostname: $node\n";
+$time=`date`;
+printf "starting time: $time";
+$pwd=`pwd`;
+printf "pwd: $pwd";
+#^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+################# directories #############################
+$s="!S!";
+$o="!O!";
+$s1="protein"; 
+$data_dir="!DATA_DIR!/$s";  #for seq.txt 
+$work_dir="/tmp/!USER!/!TAG!";
+$bindir1="!BIN_DIR!";
+$cont_dir="!CON_DIR!"; ## path for all the contact programs
+$python="/nfs/amino-home/zhng/local_library/anaconda3/bin/python3"; #python path
+
+################ working directory ########################
+`/bin/rm -fr $work_dir`;
+`/bin/mkdir -p $work_dir`;
+chdir "$work_dir";
+
+################ make fasta sequence file #################
+@seqtxts=`cat $data_dir/seq.txt`;
+$sequence="";
+foreach $seqtxt(@seqtxts){
+    goto pos6 if($seqtxt=~/\>/);
+    $seqtxt=~s/\s//mg;
+    $seqtxt=~s/\n//mg;
+    $sequence=$sequence.$seqtxt;
+  pos6:;
+}
+$Lch=length $sequence;
+
+`ln -s $cont_dir/ResTriplet .`; # symbolic link at tmp
+
+######### Copy MSA to tmp ############
+#$aln="$data_dir/MSA/protein_uniclust_metaclust_tara.aln";
+$aln="$data_dir/MSA/!MSA!";
+if (-s "$aln"){
+    `/bin/cp $aln protein.aln`;
+}else{
+    printf "error: $aln does not exist!\n";
+    exit();
+}
+
+## generate protein.colstats && neff based on 0.8 id cut-off ##
+printf "\n----------- calculate neff ---------------------\n";
+`$bindir1/bin/alnstats protein.aln protein.colstats protein.pairstats`;
+$neff=`head -3 protein.colstats|tail -1`;
+$neff_len=$neff/sqrt($Lch);
+
+########### run ResTriplet #######################
+printf "\n-------------- run ResTriplet -------------------\n";
+chdir "$work_dir/ResTriplet";
+system("export OMP_NUM_THREADS=1; $python deeppre.py $work_dir/protein.aln $work_dir/protein.out"); 
+
+############ sort output ----------->
+printf "\n------------- sort output of ResTriplet.dat -----------\n";
+chdir "$work_dir";
+open(a,"$work_dir/protein.out");
+$n=0;
+undef %conf;
+while($line=<a>){
+  if($line=~/(\S+)\s+(\S+)\s+(\S+)/){
+    if (($2-$1)>=6){
+      $n++;
+      $I{$n}=$1;
+      $J{$n}=$2;
+      $conf{$n}=$3;
+    }
+  }
+}
+close(a);
+@conf_keys=sort{$conf{$b}<=>$conf{$a}} keys %conf;
+open(b,">$work_dir/ResTriplet.dat");
+printf b "%3d\t%8.4f\n",$n,$neff_len;
+#print b "$n\n";
+for($i=1;$i<=$n;$i++){
+    $k=$conf_keys[$i-1];
+    printf b "%5d %5d %8.3f\n",$I{$k},$J{$k},$conf{$k};
+}
+close(b);
+
+############## Copy result back to output ##########
+printf "\n ----------- copy results back --------------\n";
+`/bin/cp ResTriplet.dat $data_dir/restriplet.dat`;
+print "ResTriplet is complete now\n\n";
+
+################# endding procedure ######################
+
+$time=`date`;
+printf "ending time: $time";
+`sync`;
+`sync`;
+sleep(1);
+`rm -rf $work_dir`;
+exit();

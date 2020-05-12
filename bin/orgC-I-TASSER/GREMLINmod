@@ -1,0 +1,83 @@
+#!/usr/bin/perl
+#PBS -e !ERRFILE!
+#PBS -o !OUTFILE!
+#PBS -l !WALLTIME!
+#PBS -l !NODE!
+
+##### report node -------->
+`hostname`=~/(\S+)/;
+$node=$1;
+printf "hostname: $node\n";
+$time=`date`;
+printf "starting time: $time";
+$pwd=`pwd`;
+printf "pwd: $pwd";
+#^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+$s="!S!";
+$o="!O!";
+
+my $infile="!DATA_DIR!/$s/seq.txt"; 
+
+#### setup matlab runtime environment #####
+# MCR dynamic library path
+my $MCR_LIBRARY_PATH="/nfs/amino-library/local/MATLAB/R2015b/sys/os/glnxa64:/nfs/amino-library/local/MATLAB/R2015b/bin/glnxa64:/nfs/amino-library/local/MATLAB/R2015b/runtime/glnxa64";
+
+my $gremlindir="/nfs/amino-library/contact/gremlin/2.01"; # gremlin binary path
+my $blastdir="/nfs/amino-library/blast/bin"; #blastpgp path
+$data_dir="!DATA_DIR!/$s";  #for seq.txt and init.dat
+$work_dir="/tmp/!USER!/!TAG!";
+$bindir2="!BIN_DIR!";
+$bindir="$bindir2/bin";
+my $outfile="$work_dir/gremlin.dat";
+
+################ working directory ########################
+`/bin/rm -fr $work_dir`;
+`/bin/mkdir -p $work_dir`;
+chdir "$work_dir";
+
+`/bin/cp $data_dir/seq.txt ./`;
+
+######### Copy MSA to tmp ############
+#$aln="$data_dir/MSA/protein_uniclust_metaclust_tara.aln";
+$aln="$data_dir/MSA/!MSA!";
+if (-s "$aln"){
+    `/bin/cp $aln protein.aln`;
+}else{
+    printf "error: $aln does not exist!\n";
+    exit();
+}
+
+############### run gremlin -------------------->
+# to avoid library incompatibility, LD_LIBRARY_PATH is set right before gremlin
+$ENV{LD_LIBRARY_PATH}="$MCR_LIBRARY_PATH:$ENV{LD_LIBRARY_PATH}";
+print "\n------- run gremlin ------------------>\n";
+system("$gremlindir/gremlin protein.aln $outfile verbose 1"); 
+
+
+##########################################################################################
+# To rescale gremlin output file
+# input:
+#     seq.txt
+#     gremlin.dat
+#
+# output:
+#     gremlin3.dat
+###########################################################################################
+print "\n------- rescale gremlin confidence score ------------------>\n";
+system("$bindir/modify_gremlin_merged.pl $work_dir gremlin protein.aln $bindir2");
+
+############## Copy result back to output ##########
+print "\n------- copy files back ------------------>\n";
+`/bin/cp $work_dir/gremlin3.dat $data_dir/gremlin.dat`;
+`/bin/cp $work_dir/gremlin.NNB $data_dir/gremlin.NNB`;
+
+################# endding procedure ######################
+`rm -rf $work_dir`;
+$time=`date`;
+printf "ending time: $time";
+`sync`;
+`sync`;
+sleep(1);
+
+exit();

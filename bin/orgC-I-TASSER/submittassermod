@@ -1,0 +1,401 @@
+#!/usr/bin/perl
+#PBS -e !ERRFILE!
+#PBS -o !OUTFILE!
+#PBS -l !WALLTIME!
+
+use Math::Trig;
+
+########### setup  the environment and Working DIRectory ###
+$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin";
+$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
+
+##### report node -------->
+`hostname`=~/(\S+)/;
+$node=$1;
+printf "hostname: $node\n";
+$time=`date`;
+printf "starting time: $time";
+$pwd=`pwd`;
+printf "pwd: $pwd";
+#^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+$oc=""; #version for contact
+$tag="!TAG!";
+$s="!S!";
+$user="!USER!";
+$I="!I!";
+$T="!T!";
+$type="!TYPE!";
+$svmseq="!SVMSEQ!";
+$Wcon="!WCON!";
+$fWcon="!FWCON!";
+
+$inputdir="!INPUTDIR!";
+$outputdir="!OUTPUTDIR!";
+$commondir="!COMMONDIR!";
+$bindir="!BINDIR!";
+
+################# directories #############################
+$work_dir="/tmp/$user/$tag";
+`/bin/mkdir -p $work_dir`;
+chdir "$work_dir";
+`/bin/rm -f $work_dir/*`;
+
+#### finalizing svmseq, fWcon ----------------------->
+if($svmseq eq "yes"){ # reset contact list based on type/length etc
+    $svmseq="restriplet,tripletres,nebconB_rspr,nebconB,bayes,respre,resplm,deepplm,nebconA,dncon,deepcontact,deepcov,metapsicov2,metapsicov,ccmpred,gremlin,freecontact"; # 13p + nebconB_rspr + resplm + tripletres + respletres
+    $fWcon=1; # Wcon=fWcon*Wcon
+    if($type eq "very" || $type eq "hard"){
+	$fWcon=0.75;
+    }elsif($type eq "easy"){
+	$fWcon=1;
+    }elsif($type eq "triv"){
+	$fWcon=1.25;
+    }else{
+	printf "warning: type=$tpye is not defined!!!\n";
+    }
+}
+
+############ calculate neff -------------->
+$neff_a=0;
+$n_neff=0;
+if($svmseq ne "no" && $svmseq=~/\S+/){
+    @progs=split(",",$svmseq);
+    foreach $prog(@progs){
+	$file="$inputdir/$prog.dat$oc";
+	if(-s "$file"){
+	    open(a,"$file");
+	    $line=<a>;
+	    if($line=~/(\S+)\s+(\S+)/){
+		$neff_a+=$2;
+		$n_neff++;
+	    }
+	    close(a);
+	}
+    }
+    $neff_a=$neff_a/$n_neff;
+}
+$neff=$neff_a;
+printf "neff=$neff, n_neff=$n_neff\n";
+
+######### obtain protein length ------------->
+if(!-s "$inputdir/rmsinp"){
+    printf "error, $inputdir/rmsinp not exist!\n";
+}
+open(rmsinp,"$inputdir/rmsinp");
+<rmsinp>=~/(\d+)\s+(\d+)/;
+$Lch=$2;
+close(rmsinp);
+
+####### set annealing parameter ----------------->
+$ifa=-1; # weight is gradually decreased
+if($type eq "very"){
+    $ifa=0; #no weight is changed during similation
+}
+
+############ set pair-interaction cutoff -------------->
+$Cr20=150;
+if($type eq "triv" || $type eq "easy"){
+    $Cr20=250; # needed for better GHA
+}
+    
+###### weight parameters for "comb.dat", "combCA.dat", "comb8CA.dat", "pair1.dat/par1.dat"  ############
+$aw4=0.5;  # weight for pair1/par
+if($svmseq ne "no" && $svmseq=~/\S+/){ # there is contact.map
+    if($type eq "very"){
+	$aw1=2;  # weight for comb.dat
+	$aw2=1;  # weight for combCA.dat
+	$er6=0.75;  # weight for distL.dat
+	$aLx=1;
+    }elsif($type eq "hard"){
+	$aw1=1.5;
+	$aw2=1;
+	$er6=0.75;
+	$aLx=0.75;
+    }elsif($type eq "easy"){
+	$aw1=1;
+	$aw2=1;
+	$er6=1.25;
+	$aLx=0.125;
+    }else{
+	$aw1=1;
+	$aw2=2;
+	$er6=1.75;
+	$aLx=0.125;
+    }
+}else{ # no contact map
+    if($type eq "very"){
+	$aw1=3.0;
+	$aw2=1;
+	$er6=0.75;
+    }elsif($type eq "hard"){
+	$aw1=2.5;
+	$aw2=1;
+	$er6=0.75;
+    }elsif($type eq "easy"){
+	$aw1=1.5;
+	$aw2=4;
+	$er6=1.25;
+    }else{
+	$aw1=1.0;
+	$aw2=4;
+	$er6=1.75;
+    }
+}
+ 
+################## set dwell and fw based on neff and Lch --------------------------------->
+if($neff<=0){ # there is no neff provided, parameter for all proteins
+    $fw=1; # height of positive QUARK potential for svmseq
+    if($Lch<200){
+	$dwell=6;
+    }elsif($Lch<250){
+	$dwell=8;
+    }else{
+	$dwell=10;
+    }
+}elsif($neff<50){ # difficult for NebCon
+    $fw=1; # height of positive QUARK potential for svmseq
+    if($Lch<100){
+	$dwell=2;
+    }elsif($Lch<200){
+	$dwell=6;
+    }else{
+	$dwell=8;
+    }
+}else{ # neff >50
+    $fw=2; # height of positive QUARK potential for svmseq
+    if($Lch<100){
+	$dwell=6;
+    }elsif($Lch<120){
+	$dwell=8;
+    }else{
+	$dwell=10;
+    }
+}
+
+####################### reset svmseq and Wcon ----------------------->
+#### Wcon:
+if($Wcon eq "combine"){ # tuned by 230b1-230g5
+    $Wcon=4; # for all
+    if($neff>50){
+	if($type eq "triv"){
+	    $Wcon=0.62;
+	}elsif($type eq "easy"){
+	    $Wcon=1.25;
+	}elsif($type eq "hard"){
+	    $Wcon=6.25;
+	}elsif($type eq "very"){
+	    $Wcon=5;
+	}
+    }else{
+	if($type eq "triv"){
+	    $Wcon=0.62;
+	}elsif($type eq "easy"){
+	    $Wcon=1.5;
+	}elsif($type eq "hard"){
+	    $Wcon=3;
+	}elsif($type eq "very"){
+	    $Wcon=3.75;
+	}
+    }
+}
+$Wcon=$Wcon*$fWcon;
+printf "-------------- summary of parameters ------------------------------->\n";
+printf "type=$type, neff=$neff, Lch=$Lch, dwell=$dwell, aLx=$aLx,fWcon=$fWcon, Wcon=$Wcon\n\n";
+
+################# copy program ###########################
+`/bin/cp -f $bindir/cas ./cas_$tag`;
+
+################# copy common files ######################
+`/bin/cp -f $commondir/contact.comm .`;
+`/bin/cp -f $commondir/profile3.comm .`;
+`/bin/cp -f $commondir/quasi3.comm .`;
+`/bin/cp -f $commondir/sidechain.comm .`;
+`/bin/cp -f $commondir/r13.comm .`;
+`/bin/cp -f $commondir/r14.comm .`;
+`/bin/cp -f $commondir/r14h.comm .`;
+`/bin/cp -f $commondir/r14e.comm .`;
+`/bin/cp -f $commondir/r15.comm .`;
+`/bin/cp -f $commondir/r15h.comm .`;
+`/bin/cp -f $commondir/r15e.comm .`;
+`/bin/cp -f $commondir/conf27.comm ./conf.comm`; # for contact.map not for cas.f
+
+########### copy protein specifical input files ##########
+if(-s "$inputdir/seq.com"){
+    `/bin/cp -f $inputdir/seq.com ./seq.dat`;
+    `/bin/cp -f $inputdir/seq.com.ss ./seq.dat.ss`;
+}else{
+    `/bin/cp -f $inputdir/seq.dat ./seq.dat`;
+    `/bin/cp -f $inputdir/seq.dat ./seq.dat.ss`;
+}
+#`/bin/cp -f $inputdir/!SEQDAT! ./seq.dat`;
+#`/bin/cp -f $inputdir/!SEQDAT!.ss ./seq.dat.ss`;
+`/bin/cp -f $inputdir/rmsinp .`;
+if(-s "$inputdir/CA"){
+    `/bin/cp -f $inputdir/CA .`;
+    `/bin/cp -f $inputdir/pdb.pdb .`;
+}
+`/bin/cp -f $inputdir/!COMB! ./comb.dat`;
+`/bin/cp -f $inputdir/!COMBCA! ./combCA.dat`;
+`/bin/cp -f $inputdir/!DIST! ./dist.dat`;
+`/bin/cp -f $inputdir/!DISTL! ./distL.dat`;
+`/bin/cp -f $inputdir/!EXP!  ./exp.dat`;
+`/bin/cp -f $inputdir/!INIT! ./init.dat`;
+`/bin/cp -f $inputdir/!PAR!  ./par.dat`;
+
+`/bin/cp -f $inputdir/pair1.dat ./pair1.dat`;
+`/bin/cp -f $inputdir/pair3.dat ./pair3.dat`;
+
+####### decide if we need to reduce contact_weight for easy beta protein------->
+if($svmseq ne "no" && $svmseq=~/\S+/){
+    $rst=`$bindir/seqSS.pl seq.dat`;
+    if($rst=~/class=\s+(\S+)/){
+	$class=$1;
+    }
+    print "neff=$neff, class=$class, type=$type, svmseq=yes\n";
+    if($neff >50 && $class eq "b" && ($type eq "easy" || $type eq "triv")){
+	print " ----------> original wcon=$Wcon, dwell=$dwell\n";
+	###### following parameters taken from /nfs/amino-home/zhng/protein9/235v13
+	$Wcon/=10; 
+	$dwell/=10;
+	if($dwell<2){
+	    $dwell=2;
+	}
+	print " ==========> wcon and dwell are updated to wcon=$Wcon, dwell=$dwell\n";
+	printf "-------------- summary of parameters ------------------------------->\n";
+	printf "type=$type, neff=$neff, Lch=$Lch, dwell=$dwell, aLx=$aLx,fWcon=$fWcon, Wcon=$Wcon\n\n";
+    }
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+######################################################
+######## create 'contact.map' ---------------------->
+######################################################
+print "svmseq= $svmseq \n";
+if($svmseq ne "no" && $svmseq=~/\S+/){
+    print "--------------\n";
+    #---1------>
+    if($Wcon!~/\S/){
+	printf "error, Wcon is empty\n";
+	exit();
+    }
+    #---2------>
+    if($Lch<1){
+	printf "error, Lch=0\n";
+	exit();
+    }
+    #---3------>
+    $confcomm="conf.comm";
+    if(!-s "$confcomm"){
+	print "error, $confcomm not exist!\n";
+	exit();
+    }
+    #---4------>
+    @progs=split(",",$svmseq);
+    foreach $prog(@progs){
+	$file="$inputdir/$prog.dat$oc";
+	if(-s "$file"){
+	    `cp $file ./$prog.dat`;
+	}
+    }
+    #---5------>
+    #---------- new aLo setting --------------------->
+    if($aLx!~/\S/){
+	print "error, aLx=$aLx is not defined!\n";
+	exit();
+    }
+    $aLo1=$aLx+0;   # mimimum L/aLo1 contacts from type-1 contacts (deepcov etc), no old
+    $aLo2=$aLx+1;   # mimimum L/aLo2 contacts from type-2 contacts (deepcov etc), no old
+    $aLo3=$aLx+3.5; # mimimum L/aLo3 contacts from type-3 contacts (ccmpred etc), old=3,4,3,4, ~old type1
+    $aLo4=$aLx+6.5; # mimimum L/aLo4 contacts from type-4 contacts (spcon etc),   old=7,7,7,4, ~old type2
+    
+    printf "aLo1,2,3,4=$aLo1,$aLo2,$aLo3,$aLo4\n";
+    print "$bindir/mk_contactmap.pl $Wcon $Lch $confcomm $svmseq $aLo1 $aLo2 $aLo3 $aLo4\n";
+    system("$bindir/mk_contactmap.pl $Wcon $Lch $confcomm $svmseq $aLo1 $aLo2 $aLo3 $aLo4");
+    #exit();
+}
+#^^^^^^^^^^^^^^ contact.map is completed ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+################# make in.dd ##############################
+$ithr0=$I;
+$random=300+$I;
+$ncycle=!NCYCLE!;
+$nrun=!NRUN!; #=1
+$ncycle=int($ncycle/$nrun)+1;
+$inmod=`cat $bindir/in.mod`;
+$inmod=~s/\$HOUR\$/!HOUR!/mg;
+$inmod=~s/\$RANDOM\$/$random/mg;
+$inmod=~s/\$NCYCLE\$/$ncycle/mg;
+$inmod=~s/\$NRUN\$/$nrun/mg;
+$inmod=~s/\$SWITCH\$/!SWITCH!/mg;
+$inmod=~s/\$ITHR0\$/$ithr0/mg;
+$inmod=~s/\$IFA\$/$ifa/mg;
+
+$inmod=~s/\$AW1\$/$aw1/mg;
+$inmod=~s/\$AW2\$/$aw2/mg;
+$inmod=~s/\$AW4\$/$aw4/mg;
+$inmod=~s/\$CR20\$/$Cr20/mg;
+$inmod=~s/\$ER6\$/$er6/mg;
+$inmod=~s/\$DWELL\$/$dwell/mg;
+$inmod=~s/\$FW\$/$fw/mg;
+
+open(indd,">in.dd");
+print indd "$inmod\n";
+close(indd);
+
+########## the following should be neglected in CASP since no need to copy (copying can cost issue)
+######## Copy initial useful stuffs back to output ########
+`/bin/mkdir -p $outputdir`;
+`/bin/cp -f in.dd $outputdir/in!I!!T!.dd`;
+
+######## report node ###################################
+`hostname`=~/(\S+)/;
+$node=$1;
+$time=`date`;
+chop($time);
+$pwd=`pwd`;
+chop($pwd);
+print "hostname: $node\n";
+print "starting time: $time\n";
+printf "pwd: $pwd\n";
+system("echo hostname: \"$node\" > $outputdir/node_$tag");
+system("echo starting time: \"$time\" >> $outputdir/node_$tag");
+system("echo pwd: \"$pwd\" >> $outputdir/node_$tag");
+
+############# run job #################
+system("./cas_$tag");
+
+##########################################
+# sometime the disk may fail but the results are still generated at $HOME
+# Here we check whether the output are at $work_dir ------->
+$output_file="$work_dir/rep1.tra";
+if(!-s "$output_file"){
+    exit();
+}
+
+############# gzip trajectories ################
+`/usr/bin/bzip2 rep*.tra`;
+
+############## Copy stuff back to output ##########
+`/bin/cp -f out.d       $outputdir/out$I$T`;
+for($j=1;$j<=16;$j++){
+    if(-s "rep$j\.tra.bz2"){
+	`/bin/cp -f rep$j\.tra.bz2 $outputdir/rep$j\.tra$I$T.bz2`;
+    }
+}
+
+if($I==1){
+if(-s "contact.map"){
+    `/bin/cp -f contact.map $outputdir/contact.$T.map`;
+}
+}
+
+################# endding procedure ######################
+$time=`date`;
+printf "ending time: $time";
+`sync`;
+`sync`;
+sleep(1);
+`rm -fr $work_dir`;
+
+exit();

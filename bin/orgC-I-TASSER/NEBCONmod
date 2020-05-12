@@ -1,0 +1,305 @@
+#!/usr/bin/perl
+#PBS -e !ERRFILE!
+#PBS -o !OUTFILE!
+#PBS -l !WALLTIME!
+#PBS -l !NODE!
+
+########################################################
+# Step-1: run run_nebcon_old.pl
+# Step-2: run run_nebcon256_8.pl
+# Step-3: run run_nebcon256_7.pl
+# Step-4: run run_nebcon256_9.pl
+# Step-5: run run_nebcon722.pl
+# Step-6: run combined_pred.pl
+########################################################
+
+use Math::Trig;
+
+########### setup  the environment and Working DIRectory ###
+#$ENV{'PATH'}="/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/pgi/linux86/bin";
+#$ENV{'LD_LIBRARY_PATH'}="/usr/local/lib:/usr/lib:/lib";
+
+$start=time();
+
+##### report node -------->
+`hostname`=~/(\S+)/;
+$node=$1;
+printf "hostname: $node\n";
+$time=`date`;
+printf "starting time: $time";
+$pwd=`pwd`;
+printf "pwd: $pwd";
+#^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+################# directories #############################
+$s="!S!";
+$o="!O!";
+#$o1="66"; # for NeBcon combination
+$o1=$o; # for NeBcon combination
+$s1="protein"; #for NN-BAYES
+$data_dir="!DATA_DIR!/$s";  #for seq.txt 
+$datadir=$data_dir;
+$work_dir="/tmp/!USER!/!TAG!";
+$psicov_dir="/nfs/amino-library/contact/psicov";
+$cont_dir="!CON_DIR!";
+$blastdir="/nfs/amino-library/blast/bin"; #blast always uses local
+$bindir2="!BIN_DIR!"; #/nfs/amino-home/zhng/pdbinput/contact/bin
+$bindir="!BINDIR!"; #location of C-I-TASSER package
+
+################ working directory ########################
+`/bin/rm -fr $work_dir`;
+`/bin/mkdir -p $work_dir`;
+chdir "$work_dir";
+
+################ make fasta sequence file #################
+@seqtxts=`cat $data_dir/seq.txt`;
+$sequence="";
+foreach $seqtxt(@seqtxts){
+    goto pos6 if($seqtxt=~/\>/);
+    $seqtxt=~s/\s//mg;
+    $seqtxt=~s/\n//mg;
+    $sequence=$sequence.$seqtxt;
+  pos6:;
+}
+$Lch=length $sequence;
+open(seq,">protein.seq");
+printf seq ">protein\n";
+for($i=1;$i<=$Lch;$i++){
+    $a=substr($sequence,$i-1,1);
+    printf seq "$a";
+    $seqQ{$i}=$a;   #only for check
+    #$log{$i,$seqQ{$i}}++;
+    if($i==int($i/60)*60){
+	printf seq "\n";
+    }
+}
+printf seq "\n";
+close(seq);
+########## prepare sequence for NN-BYES:
+open(seq,">seq.txt");
+printf seq "$sequence\n";
+close(seq);
+
+########### make ss and solv prediction -------------->
+printf "\n------------- predict SS and Solve ----------->\n";
+$o2="";
+system("$bindir2/runpsisolvpred protein.seq");
+`mkdir -p $data_dir/MSA`;
+`cp $work_dir/protein.ss2  $data_dir/MSA/protein.ss$o2`;
+`cp $work_dir/protein.solv $data_dir/MSA/protein.solv$o2`;
+
+######### Copy MSA to tmp ############
+$aln="$data_dir/MSA/!MSA!";
+printf "\n------------- copy $aln to protein.aln ----------->\n";
+if (-s "$aln"){
+    `/bin/cp $aln protein.aln`;
+}else{
+    printf "error: $aln does not exist!\n";
+    exit();
+}
+
+## Neff -->
+printf "\n------------- obtain neff ----------->\n";
+`$bindir2/bin/alnstats protein.aln protein.colstats protein.pairstats`;
+$neff=`head -3 protein.colstats|tail -1`; 
+$neff_len=$neff/sqrt($Lch);
+
+
+####################################################################
+#                    NeBcon
+####################################################################
+print "\n --------------Let's start NeBcon ....\n";
+
+printf "\n ----------check if other contact-map completed -----------\n";
+############### run NeBcon ------------------->
+
+@FF=qw(
+   DEEPCOV
+   DEEPPRE2
+   RESPRE
+
+   DEEPPLM
+   GREMLIN
+   METAPSICOV
+
+   METAPSICOV2
+   RICMAP
+   DNCON
+); #delete DEEPCONTACT & SPCON
+
+$nF=0;
+foreach $F(@FF){
+    $nF++;
+}
+
+pos10:;
+$k_com=0;
+$k_run=0;
+$k_mis=0;
+$qzy=`$bindir/qzy`;
+foreach $F(@FF){
+    $a=lc($F);
+    ######### original:
+    $file1="$data_dir/$a.dat"; # original contact-map
+    print "$file1\n"; # original contact-map
+    if($F eq "GREMLIN"){
+	$file1="$data_dir/$a.NNB"; # original contact-map
+    }
+    ######### used by run_nebcon.pl
+    $file2="$a.map"; #used by run_nebcon.pl
+    if($F eq "DEEPPRE2"){
+	$file2="deeppre.map"; #used by run_nebcon.pl
+    }
+    
+    if(-s "$file1"){
+        $k_com++;
+	if(!-s "$file2"){
+	    `cp $file1 $file2`;
+	}
+    }else{
+	#$jobname=substr($F,0,3).substr($F,-3)."\_$o1\_$s"; # taken from mk_contact.pl
+	$jobname="$F\_$s"; # taken from mk_contact.pl
+	if($qzy=~/$jobname/){
+	    $k_run++;
+	    print "$file1 is running ....\n";
+	}else{
+	    $k_mis++;
+	    print "$file1 is missing ....\n";
+        }
+    }
+}
+$time=runhour($start);
+if($k_run==0 || $k_com == $nF || $time >6){
+    open(report,">>$datadir/status_report");
+    print report "NEBCON: $k_com completed, $k_run running, $k_mis missed, time=$time hours, let's go to NeBcon\n";
+    close(report);
+}else{
+    open(report,">>$datadir/status_report");
+    print report "NEBCON: $k_com completed, $k_run running, $k_mis missed, let's wait for 2 minutes\n";
+    close(report);
+    
+    sleep(120);
+    goto pos10;
+}
+if(-s "deepcov.map"){ # DEEPCOV completed
+    `cp $data_dir/deepcov_covar.dat deepcov_covar.map`;
+}
+
+print "\n ---------- copy SS for NeBcon ---------->\n";
+if (-s "$data_dir/MSA/protein.ss$o2"){
+    `cp $data_dir/MSA/protein.ss$o2 ./protein.ss`;
+}else{
+    print "Error: No SS file available\n";
+    exit();
+}
+
+print "\n ---------- copy SA for NeBcon ---------->\n";
+if (-s "$data_dir/MSA/protein.solv$o2"){
+    `cp $data_dir/MSA/protein.solv$o2 ./protein.solv`;
+}else{
+    print "Error: No SA file available\n";
+    exit();
+}
+
+############ NeBcon to combine differnt predictors ###############
+# Usage:  run_nebcon*.pl neff
+#     1, run_nebcon*.pl must be run after contacts from all other predictors are generated
+#     2, all input/output files must be in the current directory
+# input
+#     seq.txt
+#     protein.ss       
+#     protein.solv     
+#     protein.colstats  (from protein.aln)
+#     protein.pairstats (from protein.aln)
+#
+#     respre.map
+#     deepcov.map
+#     deepcov_covar.map (by DEEPCOV)
+#     deepplm.map
+#     deeppre.map
+#     dncon.map
+#     gremlin.map
+#     metapsicov.map
+#     ricmap.map (short only)
+# output
+#     CA.contact    (CA contact)
+#     CB.contact    (CA contact)
+####################################################################
+
+@ff=qw(
+     seq.txt
+     protein.ss
+     protein.solv
+     protein.colstats
+
+     deepcov.map
+     deepcov_covar.map
+     deepplm.map
+     deeppre.map
+     respre.map
+     dncon.map
+     gremlin.map
+     metapsicov.map
+     metapsicov2.map
+     ricmap.map
+);
+
+printf "\n------- check files before NeBcon -------------\n";
+foreach $f(@ff){
+    if(-s "$f"){
+	printf "$f is ok\n";
+    }else{
+	printf "warning: $f does not exist!\n";
+    }
+}
+printf "\n------- run_nebcon.pl -------------\n";
+print "\n\n$bindir2/run_nebcon_old.pl $neff_len $bindir2\n";
+system("$bindir2/run_nebcon_old.pl $neff_len $bindir2");  # old NN for CA and CB with 256 features
+
+print "\n\n$bindir2/run_nebcon256_8.pl $neff_len $bindir2\n";
+system("$bindir2/run_nebcon256_8.pl $neff_len $bindir2"); # new NN for 8A CA & CB with 256 features
+
+print "\n\n$bindir2/run_nebcon256_7.pl $neff_len $bindir2\n";
+system("$bindir2/run_nebcon256_7.pl $neff_len $bindir2"); # new NN for 7A CA & CB with 256 features
+
+print "\n\n$bindir2/run_nebcon256_9.pl $neff_len $bindir2\n";
+system("$bindir2/run_nebcon256_9.pl $neff_len $bindir2"); # new NN for 9A CA & CB with 256 features
+
+print "\n\n$bindir2/run_nebcon722.pl $neff_len $bindir2\n";
+system("$bindir2/run_nebcon722.pl $neff_len $bindir2");   # new NN for 8A CA & CB with 722 features
+
+printf "combine maps from different models ......\n\n";
+system("$bindir2/combined_pred.pl $neff_len $bindir2"); # combining predictions
+
+## copy back final outputs --->
+`/bin/cp CA_Bayes.contact $data_dir/bayes.dat`; # this not only on CA
+`/bin/cp CA8.256.722.dat $data_dir/nebconA.dat`; # Final contact map for CA-CA contact
+`/bin/cp CB8.256.722.dat $data_dir/nebconB.dat`; # Final contact map for CB-CB contact
+`/bin/cp CB_respre.dat $data_dir/nebconB_rspr.dat`; # Final contact map combining NeBcon CB-CB contacts and respre.dat
+
+`/bin/cp CA8.contact $data_dir/nebconA8.dat`;
+`/bin/cp CA7.contact $data_dir/nebconA7.dat`;
+`/bin/cp CA9.contact $data_dir/nebconA9.dat`;
+
+`/bin/cp CB8.contact $data_dir/nebconB8.dat`;
+`/bin/cp CB7.contact $data_dir/nebconB7.dat`;
+`/bin/cp CB9.contact $data_dir/nebconB9.dat`;
+
+print "^^^^^^^^^^^^^^^^^^^NeBcon is complete!^^^^^^^^^^^^^^^^^^^^^\n\n";
+
+################# endding procedure ######################
+
+$time=`date`;
+printf "ending time: $time";
+`sync`;
+`sync`;
+sleep(1);
+`rm -rf $work_dir`;
+exit();
+
+sub runhour{
+    my($time1)=@_;
+    $time2=time();
+    $time=($time2-$time1)/3600;
+    return($time);
+}
