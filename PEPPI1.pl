@@ -38,9 +38,9 @@ if (!$infastaB){
 
 #DO NOT EDIT BENEATH THIS LINE
 
-if (system("squeue > /dev/null")){
-    die "Must be connected to cluster to run.\n";
-}
+#if (system("squeue > /dev/null")){
+    #die "Must be connected to cluster to run.\n";
+#}
 
 my $peppidir= "/home/ewbell/PEPPI";
 my $maxjobs=300;

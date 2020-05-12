@@ -16,12 +16,12 @@ print `mkdir $outdir/$pairname/NEWDB`;
 #User-set parameters
 my $bindir="$peppidir/bin"; #location of program binaries
 my $springout="$outdir/$pairname/NEWDB"; #location of program output
-my $dbdir="/nfs/amino-home/ewbell/SPRINGDB"; #location of SPRING database
+my $dbdir="/home/ewbell/SPRINGDB"; #location of SPRING database
 my $complexlist="$dbdir/70CDHITstruct.txt";
 my $maxmodels=1; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
-my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
-my $dimerdb="/nfs/amino-home/ewbell/SPRINGDB/70CDHITstruct.db"; #location of dimer chain template database for HHsearch threading
+my $uniprotdb="/oasis/projects/nsf/mia181/zhanglab/library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
+my $dimerdb="$dbdir/70CDHITstruct.db"; #location of dimer chain template database for HHsearch threading
 my $zmin=2.0; #Minimum Z-score for reporting templates; if none are found satisfying this threshold, zmin is set to -5
 my $hhdir="$outdir/../hhr"; #location of hhr files of previously run HHsearch results
 
