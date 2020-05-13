@@ -173,7 +173,7 @@ sub tmSearch{
 	if (!$homoflag){
 	    $tm1=TMalign("$dbdir/monomers/$chains[1].pdb","$tempdir/$prot1.pdb");
 	    $tm2=TMalign("$dbdir/monomers/$chains[0].pdb","$tempdir/$prot2.pdb");
-	    $combinedTM=2/(1/$tms1[1]+1/$tm2);
+	    $combinedTM=2/(1/$tm1+1/$tm2);
 	    @topush=("$chains[1]-$chains[0]",$combinedTM);
 	    push(@complextm,\@topush);
 	}
