@@ -24,6 +24,7 @@ my $user=`whoami`;
 chomp($user);
 my $homothresh=0.9;
 my $topscore=0.0;
+my $benchthresh=0.3;
 
 if (-e "$tmout/res.txt"){
     print "TMSEARCH has already been run!\n";
@@ -162,7 +163,13 @@ sub tmSearch{
 	print $line;
 	chomp($line);
 	my @chains=split("-",$line);
-
+	if ($benchmarkflag){
+	    my $idf=2/(1/getSeqID("$tempdir/$prot1.fasta","$tempdir/$chains[0].pdb")+1/getSeqID("$tempdir/$prot2.fasta","$tempdir/$chains[1].pdb"));
+	    my $idb=2/(1/getSeqID("$tempdir/$prot2.fasta","$tempdir/$chains[0].pdb")+1/getSeqID("$tempdir/$prot1.fasta","$tempdir/$chains[1].pdb"))
+	    my $seqid=max($idf,$idb);
+	    next if ($seqid >= $benchthresh);
+	}
+	
 	my $tm1=TMalign("$dbdir/monomers/$chains[0].pdb","$tempdir/$prot1.pdb");
 	my $tm2=TMalign("$dbdir/monomers/$chains[1].pdb","$tempdir/$prot2.pdb");
 	my $combinedTM=2/(1/$tm1+1/$tm2);
