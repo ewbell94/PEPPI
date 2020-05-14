@@ -164,8 +164,8 @@ sub tmSearch{
 	chomp($line);
 	my @chains=split("-",$line);
 	if ($benchmarkflag){
-	    my $idf=2/(1/getSeqID("$tempdir/$prot1.fasta","$tempdir/$chains[0].pdb")+1/getSeqID("$tempdir/$prot2.fasta","$tempdir/$chains[1].pdb"));
-	    my $idb=2/(1/getSeqID("$tempdir/$prot2.fasta","$tempdir/$chains[0].pdb")+1/getSeqID("$tempdir/$prot1.fasta","$tempdir/$chains[1].pdb"))
+	    my $idf=2/(1/getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$chains[0].pdb")+1/getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$chains[1].pdb"));
+	    my $idb=2/(1/getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$chains[0].pdb")+1/getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$chains[1].pdb"));
 	    my $seqid=max($idf,$idb);
 	    next if ($seqid >= $benchthresh);
 	}
