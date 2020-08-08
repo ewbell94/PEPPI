@@ -1,0 +1,138 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use List::Util qw(min);
+
+my $peppidir="!PEPPIDIR!";
+my $outdir="!OUTDIR!/PPI";
+my $pairname="!PAIRNAME!";
+my $user=`whoami`;
+chomp($user);
+
+my $randomTag=int(rand(1000000));
+my $blastdb="/mnt/a/PPIseq/100.fasta";
+my $interactfile="/mnt/a/PPIseq/ints.txt";
+=pod
+my $tempdir="/tmp/$user/PEPPI_SEQ_$pairname\_$randomTag";
+if (! -e "$tempdir"){
+    print `mkdir -p $tempdir`;
+} else {
+    print `rm -rf $tempdir/*`;
+}
+=cut
+
+my $maxtargets=500;
+my $tophits=100;
+my @chains=split("-",$pairname);
+
+print `mkdir $outdir/$pairname/SEQ`;
+open(my $resfile,">","$outdir/$pairname/SEQ/res.txt");
+print `date`;
+#print `cp $peppidir/lib/STRING/STRINGseqsv11.db* $tempdir/`;
+print `sync`;
+
+blastSearch();
+
+sub blastSearch{
+    my $blast1res=`$peppidir/bin/blastp -query $outdir/$pairname/$chains[0].seq -db $blastdb -max_target_seqs $maxtargets -evalue 1e10 -outfmt "6 sseqid nident qlen slen"`;
+    print $blast1res;
+    if ($blast1res eq ""){
+	print "BLAST for sequence A returned no hits in database.\n";
+	print $resfile "?\n";
+	#print `rm -rf $tempdir`;
+	exit(1);
+    }
+    print "\n";
+    
+    my $blast2res=`$peppidir/bin/blastp -query $outdir/$pairname/$chains[1].seq -db $blastdb -max_target_seqs $maxtargets -evalue 1e10 -outfmt "6 sseqid nident qlen slen"`;
+    print $blast2res;
+    if ($blast2res eq ""){
+	print "BLAST for sequence B returned no hits in STRING.\n";
+	print $resfile "?\n";
+	#print `rm -rf $tempdir`;
+	exit(1);
+    }
+    print "\n";
+    #print `rm -rf $tempdir`;
+    
+    my @ids1=extractID($blast1res);
+    my @ids2=extractID($blast2res);
+    my @results=();
+    
+    for my $i (0..scalar(@ids1)-1){
+	my $id1=$ids1[$i][0];
+	for my $j (0..scalar(@ids2)-1){
+	    
+	    my $id2=$ids2[$j][0];
+	    next if (getDB($id1) ne getDB($id2));
+	    print "$id1 $id2\n";
+	    my $grepline=`fgrep "$id1" $interactfile | fgrep "$id2" | head -1`;
+	    if ($grepline ne ""){
+		print "Dimer found!\n";
+		my @parts=split(' ',$grepline);
+		my $firstid="";
+		my $secondid="";
+		if ($id1 eq $parts[0]){
+		    $firstid=$parts[0];
+		    $secondid=$parts[1];
+		} else {
+		    $firstid=$parts[1];
+		    $secondid=$parts[0];
+		}
+		my $seqid1=$ids1[$i][1];
+		my $seqid2=$ids2[$j][1];
+		my @topush=($firstid,$secondid,2/(1/$seqid1+1/$seqid2),$seqid1,$seqid2);
+		push(@results,\@topush);
+	    }
+	}
+    }
+    @results=sort{$b->[2]<=>$a->[2]} @results;
+    open(my $summary,">","$outdir/$pairname/SEQ/SearchSummary.txt");
+    for my $i (0..min(scalar(@results),$tophits)-1){
+	print $summary "$results[$i][0]\t$results[$i][1]\t$results[$i][2]\t$results[$i][3]\t$results[$i][4]\n";
+    }
+    if (scalar(@results)>0){
+	print $resfile "$results[0][2]\n";
+    } else {
+	print $resfile "?\n";
+    }
+}
+
+sub psiNW{
+    print "Done\n";
+}
+
+sub getDB{
+    my $query=$_[0];
+    if (substr($query,0,6) eq "INTACT"){
+	return "IntAct";
+    } elsif (substr($query,0,4) eq "DIP-"){
+	return "DIP";
+    } elsif (substr($query,-2,1) eq ":"){
+	return "PDB";
+    } else {
+	return "BioGRID";
+    }
+}
+sub extractID{
+    my $blastres=$_[0];
+    my @blines=split("\n",$blastres);
+    my @ids=();
+    for my $i (0..scalar(@blines)-1){
+	my @bparts=split(" ",$blines[$i]);
+	my $skipflag=0;
+	for my $j (0..scalar(@ids)-1){
+	    if ($bparts[0] eq $ids[$j][0]){
+		$skipflag=1;
+		last;
+	    }
+	}
+	next if ($skipflag);
+	my $seqid=min($bparts[1]/$bparts[2],$bparts[1]/$bparts[3]);
+	my @pair=($bparts[0],$seqid);
+	push(@ids,\@pair);
+    }
+
+    return @ids;
+}
