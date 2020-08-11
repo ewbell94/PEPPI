@@ -37,12 +37,12 @@ if (!$infastaB){
 }
 
 #DO NOT EDIT BENEATH THIS LINE
-=pod
+
 if (system("squeue > /dev/null")){
     die "Must be connected to cluster to run.\n";
 }
-=cut
-my $peppidir= "~/git/PEPPI";
+
+my $peppidir= "/nfs/amino-home/ewbell/PEPPI";
 my $maxjobs=300;
 
 #Organize sequences

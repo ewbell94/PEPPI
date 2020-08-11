@@ -11,18 +11,21 @@ my $user=`whoami`;
 chomp($user);
 
 my $randomTag=int(rand(1000000));
-my $blastdb="/mnt/a/PPIseq/100.fasta";
-my $interactfile="/mnt/a/PPIseq/ints.txt";
-=pod
+my $blastdb="$peppidir/lib/SEQ/100.fasta";
+my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02";
+my $blitsdb="$peppidir/lib/SEQ/hhblitsdb/db";
+my $interactfile="$peppidir/lib/SEQ/ints.txt";
+my $aliasfile="$peppidir/lib/SEQ/100.fasta.clstr.aliases";
+
 my $tempdir="/tmp/$user/PEPPI_SEQ_$pairname\_$randomTag";
 if (! -e "$tempdir"){
     print `mkdir -p $tempdir`;
 } else {
     print `rm -rf $tempdir/*`;
 }
-=cut
+print `cp $interactfile $tempdir/ints.txt`;
 
-my $maxtargets=500;
+my $maxtargets=200;
 my $tophits=100;
 my @chains=split("-",$pairname);
 
@@ -30,9 +33,13 @@ print `mkdir $outdir/$pairname/SEQ`;
 open(my $resfile,">","$outdir/$pairname/SEQ/res.txt");
 print `date`;
 #print `cp $peppidir/lib/STRING/STRINGseqsv11.db* $tempdir/`;
-print `sync`;
 
-blastSearch();
+#blastSearch();
+psiNW();
+
+print `sync`;
+#print `rm -rf $tempdir`;
+print `date`;
 
 sub blastSearch{
     my $blast1res=`$peppidir/bin/blastp -query $outdir/$pairname/$chains[0].seq -db $blastdb -max_target_seqs $maxtargets -evalue 1e10 -outfmt "6 sseqid nident qlen slen"`;
@@ -40,7 +47,7 @@ sub blastSearch{
     if ($blast1res eq ""){
 	print "BLAST for sequence A returned no hits in database.\n";
 	print $resfile "?\n";
-	#print `rm -rf $tempdir`;
+	print `rm -rf $tempdir`;
 	exit(1);
     }
     print "\n";
@@ -50,11 +57,10 @@ sub blastSearch{
     if ($blast2res eq ""){
 	print "BLAST for sequence B returned no hits in STRING.\n";
 	print $resfile "?\n";
-	#print `rm -rf $tempdir`;
+	print `rm -rf $tempdir`;
 	exit(1);
     }
     print "\n";
-    #print `rm -rf $tempdir`;
     
     my @ids1=extractID($blast1res);
     my @ids2=extractID($blast2res);
@@ -67,7 +73,7 @@ sub blastSearch{
 	    my $id2=$ids2[$j][0];
 	    next if (getDB($id1) ne getDB($id2));
 	    print "$id1 $id2\n";
-	    my $grepline=`fgrep "$id1" $interactfile | fgrep "$id2" | head -1`;
+	    my $grepline=`fgrep "$id1" $tempdir/ints.txt | fgrep "$id2" | head -1`;
 	    if ($grepline ne ""){
 		print "Dimer found!\n";
 		my @parts=split(' ',$grepline);
@@ -100,7 +106,10 @@ sub blastSearch{
 }
 
 sub psiNW{
-    print "Done\n";
+    print `$peppidir/bin/hhsuite/bin/hhblits -i $outdir/$pairname/$chains[0].seq -oa3m $tempdir/$chains[0].a3m -d $uniprotdb -n 2 -e 0.001`;
+    print `$peppidir/bin/hhsuite/bin/hhblits -i $outdir/$pairname/$chains[1].seq -oa3m $tempdir/$chains[1].a3m -d $uniprotdb -n 2 -e 0.001`;
+    print `$peppidir/bin/hhsuite/bin/hhblits -i $tempdir/$chains[0].a3m -d $blitsdb`;
+    print `$peppidir/bin/hhsuite/bin/hhblits -i $tempdir/$chains[1].a3m -d $blitsdb`;
 }
 
 sub getDB{
@@ -119,6 +128,16 @@ sub extractID{
     my $blastres=$_[0];
     my @blines=split("\n",$blastres);
     my @ids=();
+
+    my %aliases=();
+    open(my $aliasfp,"<","$aliasfile");
+    while (my $line=<$aliasfp>){
+	chomp($line);
+	my @bigparts=split(";",$line);
+	my @littleparts=split(",",$bigparts[1]);
+	$aliases{$bigparts[0]}=\@littleparts;
+    }
+
     for my $i (0..scalar(@blines)-1){
 	my @bparts=split(" ",$blines[$i]);
 	my $skipflag=0;
@@ -130,8 +149,10 @@ sub extractID{
 	}
 	next if ($skipflag);
 	my $seqid=min($bparts[1]/$bparts[2],$bparts[1]/$bparts[3]);
-	my @pair=($bparts[0],$seqid);
-	push(@ids,\@pair);
+	for my $alias (@{$aliases{$bparts[0]}}){
+	    my @pair=($alias,$seqid);
+	    push(@ids,\@pair);
+	}
     }
 
     return @ids;
