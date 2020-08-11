@@ -124,7 +124,7 @@ if (openhandle($fastaout)){
     print "Input fasta file 2 was empty.  Exiting...\n";
     exit(1);
 }
-
+=pod
 print `mkdir $outdir/hhr`;
 print `mkdir $outdir/model`;
 for my $ind (1..$i){
@@ -147,7 +147,7 @@ for my $ind (1..$i){
     }
 
 }
-
+=cut
 my $peppi2 = `cat $peppidir/bin/PEPPI2temp.pl`;
 $peppi2=~s/\!PEPPIDIR\!/$peppidir/;
 $peppi2=~s/\!OUTDIR\!/$outdir/;
