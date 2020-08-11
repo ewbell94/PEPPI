@@ -57,11 +57,7 @@ for my $i (0..scalar(@protsA)-1){
     }
 }
 
-<<<<<<< HEAD
-my @supported=("TMSEARCH");
-=======
 my @supported=("SEQ");
->>>>>>> master
 my @intset=();
 #my @supported=("COTHPPI");
 for my $int (glob("$outdir/PPI/*/")){
@@ -117,12 +113,6 @@ sub submitBatch{
 	print "Queue is currently full, waiting for submission...\n";
 	sleep(60);
     }
-<<<<<<< HEAD
     print `sbatch -A mia322 --partition shared -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
     
-=======
-    print `sbatch -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
-
-    #print `$peppidir/bin/multiwrapper.pl $args`;
->>>>>>> master
 }

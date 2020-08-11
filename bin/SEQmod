@@ -34,11 +34,11 @@ open(my $resfile,">","$outdir/$pairname/SEQ/res.txt");
 print `date`;
 #print `cp $peppidir/lib/STRING/STRINGseqsv11.db* $tempdir/`;
 
-#blastSearch();
-psiNW();
+blastSearch();
+#psiNW();
 
 print `sync`;
-#print `rm -rf $tempdir`;
+print `rm -rf $tempdir`;
 print `date`;
 
 sub blastSearch{
