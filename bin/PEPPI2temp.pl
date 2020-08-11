@@ -57,7 +57,7 @@ for my $i (0..scalar(@protsA)-1){
     }
 }
 
-my @supported=("OLDSPRING");
+my @supported=("SEQ");
 my @intset=();
 #my @supported=("COTHPPI");
 for my $int (glob("$outdir/PPI/*/")){
@@ -108,11 +108,12 @@ sub submitBatch{
     my @intset=@{$_[0]};
     my $args=join(",",@supported);
     $args="$args ".join(",",@intset);
-    
+
     while (`squeue -u $user | wc -l`-1 >= $maxjobs){
 	print "Queue is currently full, waiting for submission...\n";
 	sleep(60);
     }
     print `sbatch -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
-   
+
+    #print `$peppidir/bin/multiwrapper.pl $args`;
 }
