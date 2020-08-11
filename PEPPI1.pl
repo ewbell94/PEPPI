@@ -43,7 +43,7 @@ if (!$infastaB){
 #}
 
 my $peppidir= "/home/ewbell/PEPPI";
-my $maxjobs=300;
+my $maxjobs=1000;
 
 #Organize sequences
 print `mkdir $outdir` if (!-e "$outdir");

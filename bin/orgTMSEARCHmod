@@ -1,0 +1,254 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use List::Util qw(min max);
+
+my $peppidir="!PEPPIDIR!";
+my $outdir="!OUTDIR!/PPI";
+my $pairname="!PAIRNAME!";
+my $benchmarkflag=!BENCHMARK!;
+
+#User-set parameters
+my $bindir="$peppidir/bin"; #location of program binaries
+my $tmout="$outdir/$pairname/TMSEARCH"; #location of program output
+my $dbdir="/home/ewbell/SPRINGDB"; #location of SPRING database
+my $complexlist="$dbdir/70CDHITstruct.txt";
+my $tophits=100;
+my $maxmodels=3; #maximum number of model pdb files to make
+my $modeldir="$outdir/../model"; #location of hhr files of previously run HHsearch results
+
+#DO NOT CHANGE BENEATH THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING
+#Processed parameters
+my $user=`whoami`;
+chomp($user);
+my $homothresh=0.9;
+my $topscore=0.0;
+my $benchthresh=0.3;
+my $wtmweight=5;
+
+if (-e "$tmout/res.txt"){
+    print "TMSEARCH has already been run!\n";
+    exit(2);
+}
+
+print `mkdir $tmout`;
+
+my @qseqs=split("-",$pairname);
+my @domainPairs=();
+my $m=1;
+while (-e "$outdir/$pairname/$qseqs[0]\_$m.seq"){
+    my $n=1;
+    while (-e "$outdir/$pairname/$qseqs[1]\_$n.seq"){
+	my @domainPair=("$qseqs[0]\_$m","$qseqs[1]\_$n");
+	push(@domainPairs,\@domainPair);
+	$n++;
+    }
+    $m++;
+}
+
+my $randomTag=int(rand(1000000));
+my $tempdir="/tmp/$user/PEPPI_TMSEARCH_$qseqs[0]-$qseqs[1]\_$randomTag";
+if (! -e "$tempdir"){
+    print `mkdir -p $tempdir`;
+} else {
+    print `rm -rf $tempdir/*`;
+}
+chdir("$tempdir");
+
+for my $pointer (@domainPairs){
+    #Read in arguments and process input
+    my @qdoms = @{$pointer};
+    my $prot1file="$outdir/$pairname/$qdoms[0].seq";
+    my $prot2file="$outdir/$pairname/$qdoms[1].seq";
+    my $prot1=$qdoms[0];
+    my $prot2=$qdoms[1];
+
+    my $outputdir="$tmout/$qdoms[0]-$qdoms[1]";
+    print `mkdir $outputdir`;
+    if (! -e "$prot1file" || ! -e "$prot2file"){
+	print "Protein sequence files were not found!\n";
+	next;
+    }
+    
+    
+    #Make working directory
+    print `cp $prot1file $tempdir/$prot1.fasta`;
+    print `cp $prot2file $tempdir/$prot2.fasta`;
+    my $homoflag=(getSeqID("$tempdir/$prot1.fasta","$tempdir/$prot2.fasta") >= $homothresh);
+    
+#Copy HHR files or run HHsearch
+    if (-e "$modeldir/$prot1.pdb"){
+	print `cp $modeldir/$prot1.pdb $tempdir`;
+    } else {
+	print "Model not found for $prot1.\n";
+	exit(4);
+    }
+
+    if (-e "$modeldir/$prot2.pdb"){
+	print `cp $modeldir/$prot2.pdb $tempdir`;
+    } else {
+	print "Model not found for $prot2.\n";
+	exit(4);
+    }
+
+    
+    my @dimerTemplates=tmSearch($prot1,$prot2,$homoflag);
+    
+    open(my $domainres,">","$outputdir/SearchSummary.txt");
+    for my $i (0..$tophits-1){
+	print $domainres "$dimerTemplates[$i][0]\t$dimerTemplates[$i][1]\n";
+    }
+    close($domainres);
+    
+    $topscore=$dimerTemplates[0][1] if ($dimerTemplates[0][1] > $topscore);
+#Create and score models from selected dimer templates
+
+    for my $i (0..$maxmodels-1){
+	constructModel($prot1,$prot2,$dimerTemplates[$i][0]);
+	print `cp $tempdir/model.pdb $outputdir/model$i.pdb`;
+    }
+    print `sync`;
+    print `rm -rf $tempdir/*`;
+}
+
+print `rm -rf $tempdir`;
+open(my $resfile,">","$tmout/res.txt");
+
+if ($topscore==0.0){
+    print $resfile "?\n";
+} else {
+    print $resfile "$topscore\n";
+}
+
+sub getSeqID{
+    my $fname1=$_[0];
+    my $fname2=$_[1];
+    return 0.0 if (! -f $fname1 || ! -f $fname2);
+    my $NWresult;
+    if ($fname2=~/\.fasta/){
+	$NWresult=`$bindir/NWalign $fname1 $fname2`;
+    } elsif ($fname2=~/\.pdb/){
+	$NWresult=`$bindir/NWalign $fname1 $fname2 2`;
+    } else {
+	return 0.0;
+    }
+    $NWresult=~/Identical length:\s+(\d+)/;
+    my $idcount=$1;
+    $NWresult=~/Length of sequence 1:\s+(\d+).*\nLength of sequence 2:\s+(\d+)/;
+    my $seq1len=$1;
+    my $seq2len=$2;
+    $idcount=1 if ($idcount==0);
+    return min($idcount/$seq1len,$idcount/$seq2len) if ($fname2=~/\.fasta/);
+    return $idcount/$seq1len if ($fname2=~/\.pdb/);
+    return 0.0;
+}
+
+sub TMalign{
+    my $template=$_[0];
+    my $query=$_[1];
+    my $tmres=`$bindir/TMalign $template $query`;
+    $tmres=~/TM-score= (.*) \(if normalized by length of Chain_2/;
+    return $1;
+}
+
+sub wTMalign{
+    my $templateA=$_[0];
+    my $templateB=$_[1];
+    my $queryApdb=$_[2];
+    my $queryBpdb=$_[3];
+    
+    my $templateApdb="$dbdir/monomers/$templateA.pdb";
+    my $templateBpdb="$dbdir/monomers/$templateB.pdb";
+    
+    my $irescpx;
+    my $iresA;
+    my $iresB;
+    if (-e "$dbdir/ires/$templateA-$templateB.ires"){
+	open($irescpx,"<","$dbdir/ires/$templateA-$templateB.ires");
+	open($iresA,">","$tempdir/A.ires");
+	open($iresB,">","$tempdir/B.ires");
+    } else {
+	open($irescpx,"<","$dbdir/ires/$templateB-$templateA.ires");
+	open($iresA,">","$tempdir/B.ires");
+	open($iresB,">","$tempdir/A.ires");
+    }
+
+    while (my $line=<$irescpx>){
+	last if ($line=~/TER/);
+	print $iresA $line;
+    }
+    while (my $line=<$irescpx>){
+	last if ($line=~/TER/);
+	print $iresB $line;
+    }
+    close($irescpx);
+    close($iresA);
+    close($iresB);
+
+    my $tmresA=`$bindir/wTMalign $queryApdb $templateApdb -w A.ires -W $wtmweight`;
+    $tmresA=~/wTM-score= (.*) \(norm/;
+    my $tmA=$1;
+
+    my $tmresB=`$bindir/wTMalign $queryBpdb $templateBpdb -w B.ires -W $wtmweight`;
+    $tmresB=~/wTM-score= (.*) \(norm/;
+    my $tmB=$1;
+
+    return 2/(1/$tmA+1/$tmB);
+}
+
+sub tmSearch{
+    print "Fetching dimers\n";
+    my $prot1=$_[0];
+    my $prot2=$_[1];
+    my $homoflag=$_[2];
+
+    open(my $complexfile,"<",$complexlist);
+    my @complextm=();
+    
+    while (my $line=<$complexfile>){
+	print $line;
+	chomp($line);
+	my @chains=split("-",$line);
+	if ($benchmarkflag){
+	    my $idf=2/(1/getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$chains[0].pdb")+1/getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$chains[1].pdb"));
+	    my $idb=2/(1/getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$chains[0].pdb")+1/getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$chains[1].pdb"));
+	    my $seqid=max($idf,$idb);
+	    next if ($seqid >= $benchthresh);
+	}
+	
+	#my $tm1=TMalign("$dbdir/monomers/$chains[0].pdb","$tempdir/$prot1.pdb");
+	#my $tm2=TMalign("$dbdir/monomers/$chains[1].pdb","$tempdir/$prot2.pdb");
+	#my $combinedTM=2/(1/$tm1+1/$tm2);
+	my $combinedTM=wTMalign("$chains[0]","$chains[1]","$tempdir/$prot1.pdb","$tempdir/$prot2.pdb");
+	my @topush=("$chains[0]-$chains[1]",$combinedTM);
+	push(@complextm,\@topush);
+	
+
+	if (!$homoflag){
+	    #$tm1=TMalign("$dbdir/monomers/$chains[1].pdb","$tempdir/$prot1.pdb");
+	    #$tm2=TMalign("$dbdir/monomers/$chains[0].pdb","$tempdir/$prot2.pdb");
+	    #$combinedTM=2/(1/$tm1+1/$tm2);
+	    my $combinedTM=wTMalign("$chains[1]","$chains[0]","$tempdir/$prot1.pdb","$tempdir/$prot2.pdb");
+	    @topush=("$chains[1]-$chains[0]",$combinedTM);
+	    push(@complextm,\@topush);
+	}
+
+    }
+
+    @complextm=sort{$b->[1]<=>$a->[1]} @complextm;
+    
+    return @complextm;
+}
+
+sub constructModel{
+    my $prot1=$_[0];
+    my $prot2=$_[1];
+    my @chains=split("-",$_[2]);
+    `$bindir/TMalign $tempdir/$prot1.pdb $dbdir/monomers/$chains[0].pdb -o $tempdir/out`;
+    print `grep "^ATOM.* A .*" $tempdir/out_all_atm > $tempdir/model.pdb`;
+    print `echo "TER" >> $tempdir/model.pdb`;
+    `$bindir/TMalign $dbdir/monomers/$chains[1].pdb $tempdir/$prot2.pdb -o $tempdir/out`;
+    print `grep "^ATOM.* B .*" $tempdir/out_all_atm >> $tempdir/model.pdb`;
+    print `echo "TER" >> $tempdir/model.pdb`;
+}
