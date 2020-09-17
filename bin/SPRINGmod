@@ -6,21 +6,22 @@ use Scalar::Util qw(looks_like_number);
 use List::Util qw(min);
 use POSIX qw(floor);
 
-my $peppidir="!PEPPIDIR!"; #Location of PEPPI program files (used for binary programs)
-my $outdir="!OUTDIR!/PPI"; #Location of PPI pair files
-my $pairname="!PAIRNAME!"; #Name of PPI to run in
-my $benchmarkflag=!BENCHMARK!; #Set to 1 to run in "benchmark mode" (templates < 30% seq id removed), otherwise 0
+my $peppidir="!PEPPIDIR!";
+my $outdir="!OUTDIR!/PPI";
+my $pairname="!PAIRNAME!";
+my $benchmarkflag=!BENCHMARK!;
 
-print `mkdir $outdir/$pairname/SPRING`;
+print `mkdir $outdir/$pairname/NEWDB`;
 
 #User-set parameters
 my $bindir="$peppidir/bin"; #location of program binaries
-my $springout="$outdir/$pairname/SPRING"; #location of program output
-my $dbdir="/nfs/amino-home/liuzi/lz_program/TACOS/database"; #location of SPRING database
-my $maxmodels=3; #maximum number of model pdb files to make
+my $springout="$outdir/$pairname/NEWDB"; #location of program output
+my $dbdir="/nfs/amino-home/ewbell/SPRINGDB"; #location of SPRING database
+my $complexlist="$dbdir/70CDHITstruct.txt";
+my $maxmodels=1; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
-my $dimerdb="/nfs/amino-library/DIMERDB/HHsearch/hhm.db"; #location of dimer chain template database for HHsearch threading
+my $dimerdb="/nfs/amino-home/ewbell/SPRINGDB/70CDHITstruct.db"; #location of dimer chain template database for HHsearch threading
 my $zmin=2.0; #Minimum Z-score for reporting templates; if none are found satisfying this threshold, zmin is set to -5
 my $hhdir="$outdir/../hhr"; #location of hhr files of previously run HHsearch results
 
@@ -30,21 +31,19 @@ my $user=`whoami`;
 chomp($user);
 $ENV{'HHLIB'}="$bindir/hhsuite/"; #necessary for proper function of HHsearch
 my @weights=(1,12.0,-1.4); #weights for SPRING score calculation
-my $homothresh=0.9; #interchain sequence id threshold for detecting homodimers
+my $homothresh=0.9; #
 my $seqmax=1500; #maximum allowable length of input sequences; sequences longer than this will be truncated
 my $minmono=5000; #number of monomer templates for dimer matching
-my $dimercount=100; #number of dimers to be assembled
+my $dimercount=200; #number of dimers to be assembled
 my $topcount=$dimercount;
 my $topscore=-100.0;
 
-#Check if SPRING has already produced a result
 if (-e "$springout/res.txt"){
     print "SPRING has already been run!\n";
     exit(2);
 }
 
-#Read in the list of complexes from the database
-open(my $complexfile,"<","$dbdir/pdb/ComplexList.txt");
+open(my $complexfile,"<",$complexlist);
 my %complexlist=(); #Find all potential partner chains given some core chain
 while (my $line=<$complexfile>){
     chomp($line);
@@ -55,30 +54,30 @@ while (my $line=<$complexfile>){
 	my @value=($chains[1]);
 	$complexlist{$chains[0]}=\@value;
     }
+
+    if (exists($complexlist{$chains[1]})){
+	push(@{$complexlist{$chains[1]}},$chains[0]);
+    } else {
+	my @value=($chains[0]);
+	$complexlist{$chains[1]}=\@value;
+    }
 }
 close($complexfile);
 
-#Read the "index" file from the database
-#
-#This file can be interpreted as follows: if the monomer chain in the left column is hit, add the right and
-#middle column to consideration for finding dimers
-open(my $indexfile,"<","$dbdir/SPRING/index.txt");
+open(my $indexfile,"<",$complexlist);
 my %forwardindex=(); #Search for the HHsearch template of a given chain
 my %reverseindex=(); #Search for chains assigned to a given HHsearch template
 while (my $line=<$indexfile>){
     chomp($line);
-    my @parts=split(' ',$line);
-    $forwardindex{"$parts[0]/$parts[1]"}=$parts[2];
-    if (exists($reverseindex{$parts[2]})){
-	push(@{$reverseindex{$parts[2]}},"$parts[0]/$parts[1]");
-    } else {
-	my @value=("$parts[0]/$parts[1]");
-	$reverseindex{$parts[2]}=\@value;
+    my @parts=split('-',$line);
+    for my $p (@parts){
+	$forwardindex{$p}=$p;
+	my @value=($p);
+	$reverseindex{$p}=\@value;
     }
 }
 close($indexfile);
 
-#Given the set of domains, run SPRING between all possible pairs
 my @qseqs=split("-",$pairname);
 my @domainPairs=();
 my $m=1;
@@ -92,8 +91,7 @@ while (-e "$outdir/$pairname/$qseqs[0]\_$m.seq"){
     $m++;
 }
 
-#Establish working directory
-my $randomTag=int(rand(1000000)); #This is to prevent multiple instances from deleting eachother's directories
+my $randomTag=int(rand(1000000));
 my $tempdir="/tmp/$user/PEPPI_SPRING_$qseqs[0]-$qseqs[1]\_$randomTag";
 if (! -e "$tempdir"){
     print `mkdir -p $tempdir`;
@@ -102,16 +100,14 @@ if (! -e "$tempdir"){
 }
 chdir("$tempdir");
 
-#For each pair of domains, run SPRING
 for my $pointer (@domainPairs){
-    
-    #Sanitize input
+    #Read in arguments and process input
     my @qdoms = @{$pointer};
     my $prot1file="$outdir/$pairname/$qdoms[0].seq";
     my $prot2file="$outdir/$pairname/$qdoms[1].seq";
     my $prot1=$qdoms[0];
     my $prot2=$qdoms[1];
-    
+
     my $outputdir="$springout/$qdoms[0]-$qdoms[1]";
     print `mkdir $outputdir`;
     if (! -e "$prot1file" || ! -e "$prot2file"){
@@ -119,31 +115,32 @@ for my $pointer (@domainPairs){
 	next;
     }
     
+    
+    #Make working directory
+    
+    
     print `cp $prot1file $tempdir/$prot1.fasta`;
     print `cp $prot2file $tempdir/$prot2.fasta`;
+    my $homoflag=(getSeqID("$tempdir/$prot1.fasta","$tempdir/$prot2.fasta") >= $homothresh);
     
-    #Copy HHR files or run HHsearch
+#Copy HHR files or run HHsearch
     print "Running HHsearch\n";
-    if (-e "$hhdir/$prot1.hhr"){
-	print `cp $hhdir/$prot1.hhr $tempdir`;
+    if (-e "$hhdir/$prot1\_new.hhr"){
+	print `cp $hhdir/$prot1\_new.hhr $tempdir`;
     } else {
 	makeHHR($prot1);
-	if (! -e "$tempdir/$prot1.hhr"){
+	if (! -e "$tempdir/$prot1\_new.hhr"){
 	    print "HHsearch failed for $prot1.\n";
 	    exit(4);
-	} else {
-	    print `cp $tempdir/$prot1.hhr $outputdir/$prot1.hhr`;
 	}
     }
-    if (-e "$hhdir/$prot2.hhr"){
-	print `cp $hhdir/$prot2.hhr $tempdir`;
+    if (-e "$hhdir/$prot2\_new.hhr"){
+	print `cp $hhdir/$prot2\_new.hhr $tempdir`;
     } else {
 	makeHHR($prot2);
-	if (! -e "$tempdir/$prot2.hhr"){
+	if (! -e "$tempdir/$prot2\_new.hhr"){
 	    print "HHsearch failed for $prot2.\n";
 	    exit(4);
-	} else {
-	    print `cp $tempdir/$prot2.hhr $outputdir/$prot2.hhr`;
 	}
     }
     
@@ -152,52 +149,36 @@ for my $pointer (@domainPairs){
     my @prot1hits=fetchHits($prot1);
     my @prot2hits=fetchHits($prot2);
     
-    #Store dfire 
+    #Store dfire and complex list
+    
+    
     #open(my $dfirefile,"<","$bindir/dfire.txt");
     #open(my $dfirefile,"<","$bindir/newdfire.txt");
     #my @dfire=<$dfirefile>;
     #chomp(@dfire);
     #close($dfirefile);
     
-    #Search for dimer templates given monomeric hits
-    my @dimerTemplates=fetchDimers(\@prot1hits,\@prot2hits,\%complexlist);
     
-    #Flip the sequence order and search for more dimer templates if the chains are nonidentical
-    if (getSeqID("$tempdir/$prot1.fasta","$tempdir/$prot2.fasta") < $homothresh){
-	my @flippedTemplates=fetchDimers(\@prot2hits,\@prot1hits,\%complexlist);
-	for my $i (0..scalar(@flippedTemplates)-1){
-	    my $dupflag=0;
-	    for my $j (0..scalar(@dimerTemplates)-1){
-		if ($dimerTemplates[$j][0] eq $flippedTemplates[$i][1] && $dimerTemplates[$j][1] eq $flippedTemplates[$i][0]){
-		    $dupflag=1;
-		    last;
-		}
-	    }
-	    if (!$dupflag){
-		my @flipped=($flippedTemplates[$i][1],$flippedTemplates[$i][0],$flippedTemplates[$i][2]);
-		push(@dimerTemplates,\@flipped);
-	    } else {
-		print "Duplicate purged: $flippedTemplates[$i][0] $flippedTemplates[$i][1]\n";
-	    }
-	}
-    }
     
-    #Order dimer templates by Z-score
+#Search for dimer templates given monomeric hits
+    my @dimerTemplates=fetchDimers(\@prot1hits,\@prot2hits,\%complexlist,$homoflag);
+    
+#Flip the sequence order and search for more dimer templates if the chains are nonidentical
     @dimerTemplates=sort{$b->[2]<=>$a->[2]} @dimerTemplates;
     
-    #Create and score models from selected dimer templates
+#Create and score models from selected dimer templates
     
     print "Constructing models\n";
     
     constructMonomer($prot1,$prot1hits[0][0]);
-    print `cp $tempdir/$prot1.pdb $outputdir/$prot1.pdb`;
+    #print `cp $tempdir/$prot1.pdb $outputdir/$prot1.pdb`;
     constructMonomer($prot2,$prot2hits[0][0]);
-    print `cp $tempdir/$prot2.pdb $outputdir/$prot2.pdb`;
+    #print `cp $tempdir/$prot2.pdb $outputdir/$prot2.pdb`;
     
-    my $hhr1head=`head $tempdir/$prot1.hhr`;
+    my $hhr1head=`head $tempdir/$prot1\_new.hhr`;
     $hhr1head=~/Match_columns\s+(\d+)/;
     my $seq1len=$1;
-    my $hhr2head=`head $tempdir/$prot2.hhr`;
+    my $hhr2head=`head $tempdir/$prot2\_new.hhr`;
     $hhr2head=~/Match_columns\s+(\d+)/;
     my $seq2len=$1;
     
@@ -205,7 +186,7 @@ for my $pointer (@domainPairs){
 	print "No dimer templates found!\n";
 	exit(0);
     }
-
+#print "$seq1len,$seq2len\n";
     my @dimerModels=();
     for my $i (0..min(scalar(@dimerTemplates)-1,$dimercount-1)){
 	print "$dimerTemplates[$i][0]-$dimerTemplates[$i][1]\n";
@@ -214,14 +195,11 @@ for my $pointer (@domainPairs){
 	push(@dimerModels,\@model);
     }
     
-    #Sort dimer models by SPRINGscore and write TemplateSummary.txt
     @dimerModels=sort{$b->[2][0]<=>$a->[2][0]} @dimerModels;
     
     my $domainscore=$dimerModels[0][2][0];
     $topscore=$domainscore if ($domainscore>$topscore);
 
-    #The template summary file is formatted as follows:
-    #ChainAname    ChainBname   SPRINGscore    Z-score    TM-score    DCOMPLEX
     print "Writing output\n";
     open(my $summary,">","$outputdir/TemplateSummary.txt");
     for my $i (0..min(scalar(@dimerModels)-1,$topcount-1)){
@@ -231,14 +209,15 @@ for my $pointer (@domainPairs){
 	print $summary sprintf("%s\t%s\t%.3f\t%.3f\t%.3f\t%.3f\n",$dimerModels[$i][0],$dimerModels[$i][1],$dimerModels[$i][2][0],$dimerModels[$i][2][1],$dimerModels[$i][2][2],$dimerModels[$i][2][3]);
     }
     close($summary);
-
+    
+    #print `tar -zcf $tempdir/pdb.tar.gz $tempdir/*-*.pdb`;
+    #print `cp $tempdir/pdb.tar.gz $outputdir/`;
     print `sync`;
     print `rm -rf $tempdir/*`;
 }
 
-#Clean temporary directory and collect top-scoring domain pair
 print `rm -rf $tempdir`;
-open(my $resfile,">","$outdir/$pairname/SPRING/res.txt");
+open(my $resfile,">","$outdir/$pairname/NEWDB/res.txt");
 
 if ($topscore==-100.0){
     print $resfile "?\n";
@@ -246,7 +225,6 @@ if ($topscore==-100.0){
     print $resfile "$topscore\n";
 }
 
-#getSeqID returns the sequence identity of two chains using the NWalign program
 sub getSeqID{
     my $fname1=$_[0];
     my $fname2=$_[1];
@@ -269,25 +247,26 @@ sub getSeqID{
     return 0.0;
 }
 
-#makeHHR threads a query sequence through DIMERDB using HHsearch
 sub makeHHR{
     my $prot=$_[0];
+    print `cp $dimerdb $tempdir/`;
     print `$bindir/hhsuite/bin/hhblits -i $tempdir/$prot.fasta -oa3m $tempdir/$prot.a3m -d $uniprotdb -n 2 -e 0.001`;
     print `$bindir/hhsuite/scripts/addss.pl $tempdir/$prot.a3m`;
     print `$bindir/hhsuite/bin/hhmake -i $tempdir/$prot.a3m -id 90 -diff 100 -cov 0 -qid 0`;
-    print `$bindir/hhsuite/bin/hhsearch -i $tempdir/$prot.hhm -d $dimerdb -id 90 -diff 100 -cov 0 -qid 0 -e 0.001 -p 20 -E 0.01 -Z 30000 -z 20000 -B 30000 -b 20000`;
-    print `cp $tempdir/$prot.hhr $hhdir/$prot.hhr`;
+    print `$bindir/hhsuite/bin/hhsearch -i $tempdir/$prot.hhm -d $tempdir/*.db -id 90 -diff 100 -cov 0 -qid 0 -e 0.001 -p 20 -E 0.01 -Z 30000 -z 20000 -B 30000 -b 20000`;
+    print `mv $tempdir/$prot.hhr $tempdir/$prot\_new.hhr`;
+    print `cp $tempdir/$prot\_new.hhr $hhdir/$prot\_new.hhr`;
 }
 
-#fetchHits reads an HHsearch results and retrieves the top monomers and their corresponding Z-scores
 sub fetchHits{
     my $prot=$_[0];
     my @templates=();
     my @scores=();
-    open(my $hhrfile,"<","$tempdir/$prot.hhr");
+    open(my $hhrfile,"<","$tempdir/$prot\_new.hhr");
     while (my $line=<$hhrfile>){
 	if (substr($line,0,1) eq ">"){
-	    my $target=substr($line,1,5);
+	    chomp($line);
+	    (my $target=$line)=~s/>//g;
 	    next if (grep(/$target/,@templates));
 	    push(@templates,$target);
 	    my $scoreline=<$hhrfile>;
@@ -320,7 +299,7 @@ sub fetchHits{
     my $i=0;
     while(scalar(@outlist) < $minmono && $i < scalar(@pairs)){
 	if ($scut<1.0){
-	    push(@outlist,$pairs[$i]) if (getSeqID("$tempdir/$prot.fasta","$dbdir/pdb/chains/".substr($pairs[$i][0],1,2)."/$pairs[$i][0].pdb") < $scut);
+	    push(@outlist,$pairs[$i]) if (getSeqID("$tempdir/$prot.fasta","$dbdir/monomers/$pairs[$i][0].pdb") < $scut);
 	} else {
 	    push(@outlist,$pairs[$i]);
 	}
@@ -329,12 +308,12 @@ sub fetchHits{
     return @outlist;
 }
 
-#fetchDimers retrieves potential dimer templates given the two chains' monomer hits
 sub fetchDimers{
     print "Fetching dimers\n";
     my @prot1list=@{$_[0]};
     my @prot2list=@{$_[1]};
     my %complexlist=%{$_[2]};
+    my $homoflag=$_[3];
     my @dimerlist=();
     for my $i (0..scalar(@prot1list)-1){
 	next if (!exists($reverseindex{$prot1list[$i][0]}));
@@ -348,6 +327,16 @@ sub fetchDimers{
 		my $prot2hit=$forwardindex{$partner};
 		for my $j (0..scalar(@prot2list)-1){
 		    if ($prot2list[$j][0] eq $prot2hit){
+			if ($homoflag){
+			    my $redundflag=0;
+			    for my $n (0..scalar(@dimerlist)){
+				if ($dimerlist[$n][1] eq $biomol1 && $dimerlist[$n][0] eq $partner){
+				    $redundflag=1;
+				    last;
+				}
+			    }
+			    last if ($redundflag);
+			}
 			my $zscore=min($prot1list[$i][1],$prot2list[$j][1]);
 			my @dimerpair=($biomol1,$partner,$zscore);
 			push(@dimerlist,\@dimerpair);
@@ -360,7 +349,6 @@ sub fetchDimers{
     return @dimerlist;
 }
 
-#constructMonomer will build a model of the top-ranked monomer for a given chain (for superposition)
 sub constructMonomer{
     my $query=$_[0];
     my $template=$_[1];
@@ -373,7 +361,7 @@ sub constructMonomer{
     
     my @alignment=();
     my @qaa=();
-    open(my $hhresultfile,"<","$tempdir/$query.hhr");
+    open(my $hhresultfile,"<","$tempdir/$query\_new.hhr");
     my $readflag=0;
     while (my $line=<$hhresultfile>){
 	if ($line=~/>$template/){
@@ -438,7 +426,7 @@ sub constructMonomer{
     close($hhresultfile);
     
     open(my $modelout,">","$tempdir/$query.pdb");
-    open(my $tempin,"<","$dbdir/pdb/chains/$templatesub/$template.pdb");
+    open(my $tempin,"<","$dbdir/monomers/$template.pdb");
     my $i=1;
     while (my $line=<$tempin>){
 	next if (substr($line,0,4) ne "ATOM" || substr($line,12,4) ne " CA ");
@@ -461,7 +449,6 @@ sub constructMonomer{
     close($tempin);
 }
 
-#constructModel will construct and score a dimer model given two monomer structures and a dimer template
 sub constructModel{
     my $prot1=$_[0];
     my $prot2=$_[1];
@@ -478,8 +465,7 @@ sub constructModel{
     (my $dimer2name=$dimer2temp)=~s/\//_/g;
     open(my $modelfile,">","$tempdir/$dimer1name-$dimer2name.pdb");
     
-    #Construct the model by superposition; store the TM-score result
-    my $TM1result=`$bindir/TMalign "$tempdir/$prot1.pdb" "$dbdir/pdb/PDBall/$dimer1sub/$dimer1temp.pdb" -L $seq1len -o $tempdir/out`;
+    my $TM1result=`$bindir/TMalign "$tempdir/$prot1.pdb" "$dbdir/monomers/$dimer1temp.pdb" -L $seq1len -o $tempdir/out`;
     #print "$TM1result\n";
     print `grep "^ATOM.* A .*" $tempdir/out > $tempdir/temp1.pdb`;
     $TM1result=~/TM-score= (.*) \(if scaled/;
@@ -497,7 +483,7 @@ sub constructModel{
     print $modelfile "TER\n";
     close($supfile);
 
-    my $TM2result=`$bindir/TMalign "$tempdir/$prot2.pdb" "$dbdir/pdb/PDBall/$dimer2sub/$dimer2temp.pdb" -L $seq2len -o $tempdir/out`;
+    my $TM2result=`$bindir/TMalign "$tempdir/$prot2.pdb" "$dbdir/monomers/$dimer2temp.pdb" -L $seq2len -o $tempdir/out`;
     #print "$TM2result\n";
     print `grep "^ATOM.* A .*" $tempdir/out > $tempdir/temp2.pdb`;
     $TM2result=~/TM-score= (.*) \(if scaled/;
@@ -526,13 +512,58 @@ sub constructModel{
 	print $modelfile $connectline;
     }
     close($modelfile);
+=pod
+    my %aminocode=('ALA'=>0,'CYS'=>1,'ASP'=>2,'GLU'=>3,'PHE'=>4,
+		   'GLY'=>5,'HIS'=>6,'ILE'=>7,'LYS'=>8,'LEU'=>9,
+		   'MET'=>10,'ASN'=>11,'PRO'=>12,'GLN'=>13,'ARG'=>14,
+		   'SER'=>15,'THR'=>16,'VAL'=>17,'TRP'=>18,'TYR'=>19,
+		   'BBB'=>20,'ZZZ'=>20,'XYZ'=>20);
+    
+    my @Acoord=();
+    my @Aseq=();
+    my @Bcoord=();
+    my @Bseq=();   
+    
+    open($modelfile,"<","$tempdir/temp1.pdb");
+    while (my $line=<$modelfile>){
+	if ($line=~/^ATOM/){
+	    my @coord=(substr($line,30,8),substr($line,38,8),substr($line,46,8));
+	    push(@Acoord,\@coord);
+	    push(@Aseq,substr($line,17,3));
+	}
+    }
+    close($modelfile);
 
-    #run DCOMPLEX to evaluate the interface energy
+    open($modelfile,"<","$tempdir/temp2.pdb");
+    while (my $line=<$modelfile>){
+	if ($line=~/^ATOM/){
+	    my @coord=(substr($line,30,8),substr($line,38,8),substr($line,46,8));
+	    push(@Bcoord,\@coord);
+	    push(@Bseq,substr($line,17,3));
+	}
+    }
+    close($modelfile);
+    
+
+    my $dfire=0.0;
+    for my $i (0..scalar(@Acoord)-1){
+	for my $j (0..scalar(@Bcoord)-1){
+	    my $dist=0.0;
+	    for my $n (0..2){
+		$dist+=($Acoord[$i][$n]-$Bcoord[$j][$n])**2;
+	    }
+	    $dist=$dist**(0.5);
+	    if ($dist < 10.0){
+		my $index=$aminocode{$Aseq[$i]}*21*20+$aminocode{$Bseq[$j]}*20+floor($dist*2.0);
+		$dfire+=$dfire[$index];
+		#print "$Aseq[$i]$i,$Bseq[$j]$j($dist):$dfire[$index]\n";
+	    }
+	}
+    }
+=cut
     my $dfire=`$bindir/dcomplex $tempdir/$dimer1name-$dimer2name.pdb A B`;
     #$dfire=-4.7 if (!looks_like_number($dfire));
     print "$dfire";
-
-    #compile scores and calculate SPRINGscore
     my $tmscore=min($tm1score,$tm2score);
     my $springscore=$weights[0]*$zscore+$weights[1]*$tmscore+$weights[2]*$dfire;
     #print "$zscore,$tmscore,$dfire,$springscore\n\n";

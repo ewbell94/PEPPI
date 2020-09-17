@@ -57,7 +57,7 @@ for my $i (0..scalar(@protsA)-1){
     }
 }
 
-my @supported=("SEQ");
+my @supported=("SEQ","STRING","NEWDB");
 my @intset=();
 #my @supported=("COTHPPI");
 for my $int (glob("$outdir/PPI/*/")){
