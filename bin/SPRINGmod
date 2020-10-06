@@ -11,11 +11,11 @@ my $outdir="!OUTDIR!/PPI";
 my $pairname="!PAIRNAME!";
 my $benchmarkflag=!BENCHMARK!;
 
-print `mkdir $outdir/$pairname/NEWDB`;
+print `mkdir $outdir/$pairname/SPRING`;
 
 #User-set parameters
 my $bindir="$peppidir/bin"; #location of program binaries
-my $springout="$outdir/$pairname/NEWDB"; #location of program output
+my $springout="$outdir/$pairname/SPRING"; #location of program output
 my $dbdir="/nfs/amino-home/ewbell/SPRINGDB"; #location of SPRING database
 my $complexlist="$dbdir/70CDHITstruct.txt";
 my $maxmodels=1; #maximum number of model pdb files to make
@@ -125,20 +125,20 @@ for my $pointer (@domainPairs){
     
 #Copy HHR files or run HHsearch
     print "Running HHsearch\n";
-    if (-e "$hhdir/$prot1\_new.hhr"){
-	print `cp $hhdir/$prot1\_new.hhr $tempdir`;
+    if (-e "$hhdir/$prot1.hhr"){
+	print `cp $hhdir/$prot1.hhr $tempdir`;
     } else {
 	makeHHR($prot1);
-	if (! -e "$tempdir/$prot1\_new.hhr"){
+	if (! -e "$tempdir/$prot1.hhr"){
 	    print "HHsearch failed for $prot1.\n";
 	    exit(4);
 	}
     }
-    if (-e "$hhdir/$prot2\_new.hhr"){
-	print `cp $hhdir/$prot2\_new.hhr $tempdir`;
+    if (-e "$hhdir/$prot2.hhr"){
+	print `cp $hhdir/$prot2.hhr $tempdir`;
     } else {
 	makeHHR($prot2);
-	if (! -e "$tempdir/$prot2\_new.hhr"){
+	if (! -e "$tempdir/$prot2.hhr"){
 	    print "HHsearch failed for $prot2.\n";
 	    exit(4);
 	}
@@ -175,10 +175,10 @@ for my $pointer (@domainPairs){
     constructMonomer($prot2,$prot2hits[0][0]);
     #print `cp $tempdir/$prot2.pdb $outputdir/$prot2.pdb`;
     
-    my $hhr1head=`head $tempdir/$prot1\_new.hhr`;
+    my $hhr1head=`head $tempdir/$prot1.hhr`;
     $hhr1head=~/Match_columns\s+(\d+)/;
     my $seq1len=$1;
-    my $hhr2head=`head $tempdir/$prot2\_new.hhr`;
+    my $hhr2head=`head $tempdir/$prot2.hhr`;
     $hhr2head=~/Match_columns\s+(\d+)/;
     my $seq2len=$1;
     
@@ -217,7 +217,7 @@ for my $pointer (@domainPairs){
 }
 
 print `rm -rf $tempdir`;
-open(my $resfile,">","$outdir/$pairname/NEWDB/res.txt");
+open(my $resfile,">","$outdir/$pairname/SPRING/res.txt");
 
 if ($topscore==-100.0){
     print $resfile "?\n";
@@ -254,15 +254,15 @@ sub makeHHR{
     print `$bindir/hhsuite/scripts/addss.pl $tempdir/$prot.a3m`;
     print `$bindir/hhsuite/bin/hhmake -i $tempdir/$prot.a3m -id 90 -diff 100 -cov 0 -qid 0`;
     print `$bindir/hhsuite/bin/hhsearch -i $tempdir/$prot.hhm -d $tempdir/*.db -id 90 -diff 100 -cov 0 -qid 0 -e 0.001 -p 20 -E 0.01 -Z 30000 -z 20000 -B 30000 -b 20000`;
-    print `mv $tempdir/$prot.hhr $tempdir/$prot\_new.hhr`;
-    print `cp $tempdir/$prot\_new.hhr $hhdir/$prot\_new.hhr`;
+    print `mv $tempdir/$prot.hhr $tempdir/$prot.hhr`;
+    print `cp $tempdir/$prot.hhr $hhdir/$prot.hhr`;
 }
 
 sub fetchHits{
     my $prot=$_[0];
     my @templates=();
     my @scores=();
-    open(my $hhrfile,"<","$tempdir/$prot\_new.hhr");
+    open(my $hhrfile,"<","$tempdir/$prot.hhr");
     while (my $line=<$hhrfile>){
 	if (substr($line,0,1) eq ">"){
 	    chomp($line);
@@ -352,7 +352,7 @@ sub fetchDimers{
 sub constructMonomer{
     my $query=$_[0];
     my $template=$_[1];
-    my $templatesub=substr($template,1,2);
+
     my %onetothree=('A'=>"ALA",'C'=>"CYS",'D'=>"ASP",'E'=>"GLU",'F'=>"PHE",
 		    'G'=>"GLY",'H'=>"HIS",'I'=>"ILE",'K'=>"LYS",'L'=>"LEU",
 		    'M'=>"MET",'N'=>"ASN",'P'=>"PRO",'Q'=>"GLN",'R'=>"ARG",
@@ -361,7 +361,7 @@ sub constructMonomer{
     
     my @alignment=();
     my @qaa=();
-    open(my $hhresultfile,"<","$tempdir/$query\_new.hhr");
+    open(my $hhresultfile,"<","$tempdir/$query.hhr");
     my $readflag=0;
     while (my $line=<$hhresultfile>){
 	if ($line=~/>$template/){

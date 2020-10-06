@@ -38,6 +38,12 @@ if (!$infastaB){
 
 #DO NOT EDIT BENEATH THIS LINE
 
+my $startdir=`pwd`;
+chomp($startdir);
+$infastaA=$startdir."/".$infastaA if (!($infastaA=~/^\//));
+$infastaB=$startdir."/".$infastaB if (!($infastaB=~/^\//));
+$outdir=$startdir."/".$outdir if (!($outdir=~/^\//));
+
 if (system("squeue > /dev/null")){
     die "Must be connected to cluster to run.\n";
 }
@@ -124,30 +130,30 @@ if (openhandle($fastaout)){
     print "Input fasta file 2 was empty.  Exiting...\n";
     exit(1);
 }
-=pod
+
 print `mkdir $outdir/hhr`;
 print `mkdir $outdir/model`;
 for my $ind (1..$i){
-    if (! -e "$outdir/model/prot$ind.pdb"){
-	my $args="-o $outdir/fasta -t prot$ind";
-	$args="$args -b" if ($benchmarkflag);
-	$args="$args -d" if ($domaindiv);
-	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
-	    sleep(60);
-	}
-	#print `sbatch -o $outdir/fasta/prot$ind/out_makeModel.log $peppidir/bin/makeModel.pl $args`;
-    }
-
-
     if (! -e "$outdir/hhr/prot$ind.hhr"){
 	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
 	    sleep(60);
 	}
 	print `sbatch -o $outdir/fasta/prot$ind/out_makeHHR.log $peppidir/bin/makeHHR.pl -o $outdir/fasta -t prot$ind`;
     }
-
 }
-=cut
+
+for my $ind (1..$i){
+    if (! -e "$outdir/model/prot$ind.pdb"){
+	my $args="-o $outdir/fasta -t prot$ind";
+	$args="$args -b" if ($benchmarkflag);
+	$args="$args -d" if ($domaindiv);
+	while (`squeue -u $user | grep "makeHHR" | wc -l` > 0 || `squeue -u $user | wc -l`-1 >= $maxjobs){
+	    sleep(60);
+	}
+	print `sbatch -o $outdir/fasta/prot$ind/out_makeModel.log $peppidir/bin/makeModel.pl $args`;
+    }
+}
+
 my $peppi2 = `cat $peppidir/bin/PEPPI2temp.pl`;
 $peppi2=~s/\!PEPPIDIR\!/$peppidir/;
 $peppi2=~s/\!OUTDIR\!/$outdir/;

@@ -1,0 +1,74 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use List::Util qw(min);
+
+my $peppidir="!PEPPIDIR!";
+my $outdir="!OUTDIR!/PPI";
+my $pairname="!PAIRNAME!";
+my $user=`whoami`;
+chomp($user);
+
+my $randomTag=int(rand(1000000));
+my $prismloc="/nfs/amino-home/ewbell/PRISM/PRISM.tar.gz";
+
+my $tempdir="/tmp/$user/PRISM_$pairname\_$randomTag";
+if (! -e "$tempdir"){
+    print `mkdir -p $tempdir`;
+} else {
+    print `rm -rf $tempdir/*`;
+}
+my @chains=split(",",$pairname);
+(my $realchainA=`cat $outdir/../protcodeA.csv`)=~s/.*,\"//; 
+(my $realchainB=`cat $outdir/../protcodeB.csv`)=~s/.*,\"//;
+$realchainA=~s/:.*//;
+$realchainB=~s/:.*//; 
+chomp($realchainA);
+chomp($realchainB);
+print "$realchainA,$realchainB\n";
+
+print `date`;
+print `cp $prismloc $tempdir/`;
+chdir($tempdir);
+print `tar -zxvf ./PRISM.tar.gz`;
+chdir("$tempdir/PRISM_protocol/0-SurfaceExtraction");
+print `echo "1ABC" > ./PDB.list`;
+print `cat /nfs/amino-home/ewbell/SPRINGDB/monomers/$realchainA.pdb > ./PDB/1abc.pdb`;
+print `cat /nfs/amino-home/ewbell/SPRINGDB/monomers/$realchainB.pdb >> ./PDB/1abc.pdb`;
+print `echo "END" >> ./PDB/1abc.pdb`;
+print `sed -i "/TER/d" ./PDB/1abc.pdb`;
+
+my $currdir=`pwd`;
+chomp($currdir);
+print `python surfaceExtractor.py $currdir/PDB $currdir 1 1`;
+if (!-f "all_pdbs.paths"){
+    print "Surface extraction was not completed successfully.\n";
+    exit(1);
+}
+print `cp all_pdbs.paths ../1-Prediction/PATHS`;
+chdir("../1-Prediction");
+
+$currdir=`pwd`;
+chomp($currdir);
+print `python structuralAlignment.py $currdir/TEMPLATE $currdir 1 1063`;
+if (!-e "MULTIPROT_OUTPUT"){
+    print "Multiprot alignment was not run.\n";
+    exit(2);
+}
+
+chdir("../2-DistanceCalculation");
+print `python TransformationFiltering.py 1 1063`;
+chdir("../6-FiberDock");
+print `python FlexibleRefinement.py 1 1063`;
+
+print `mkdir $outdir/$pairname/PRISM`;
+print `cp -r ENERGIES $outdir/$pairname/PRISM`;
+
+open(my $resfile,">","$outdir/$pairname/PRISM/res.txt");
+#print `cp $peppidir/lib/STRING/STRINGseqsv11.db* $tempdir/`;
+
+print `sync`;
+print `rm -rf $tempdir`;
+print `date`;
+
