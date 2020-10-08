@@ -134,23 +134,15 @@ if (openhandle($fastaout)){
 print `mkdir $outdir/hhr`;
 print `mkdir $outdir/model`;
 for my $ind (1..$i){
-    if (! -e "$outdir/hhr/prot$ind.hhr"){
-	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
-	    sleep(60);
-	}
-	print `sbatch -o $outdir/fasta/prot$ind/out_makeHHR.log $peppidir/bin/makeHHR.pl -o $outdir/fasta -t prot$ind`;
-    }
-}
-
-for my $ind (1..$i){
-    if (! -e "$outdir/model/prot$ind.pdb"){
+    if (! -e "$outdir/hhr/prot$ind.hhr" || ! -e "$outdir/model/prot$ind.pdb"){
 	my $args="-o $outdir/fasta -t prot$ind";
 	$args="$args -b" if ($benchmarkflag);
 	$args="$args -d" if ($domaindiv);
-	while (`squeue -u $user | grep "makeHHR" | wc -l` > 0 || `squeue -u $user | wc -l`-1 >= $maxjobs){
+
+	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
 	    sleep(60);
 	}
-	print `sbatch -o $outdir/fasta/prot$ind/out_makeModel.log $peppidir/bin/makeModel.pl $args`;
+	print `sbatch -o $outdir/fasta/prot$ind/out_makeHHR.log $peppidir/bin/makeHHR.pl $args`;
     }
 }
 
