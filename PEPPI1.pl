@@ -77,7 +77,7 @@ while (my $line=<$fastaf>){
 	print `mkdir $fastadir/prot$i`;
 	$line=~s/^>//;
 	print $protcode "prot$i,\"$line\"\n";
-	open($fastaout,">","$fastadir/prot$i/seq.fasta");
+	open($fastaout,">","$fastadir/prot$i/prot$i.fasta");
 	print $fastaout ">prot$i\n";
     } else {
 	$seq="$seq$line";
@@ -110,7 +110,7 @@ while (my $line=<$fastaf>){
 	    $i++;
 	    print `mkdir $fastadir/prot$i`;
 	    print $protcode "prot$i,\"$line\"\n";
-	    open($fastaout,">","$fastadir/prot$i/seq.fasta");
+	    open($fastaout,">","$fastadir/prot$i/prot$i.fasta");
 	    print $fastaout ">prot$i\n";
 	} else {
 	    print $protcode `grep -F "$line" $outdir/protcodeA.csv`;
@@ -134,7 +134,7 @@ if (openhandle($fastaout)){
 print `mkdir $outdir/hhr`;
 print `mkdir $outdir/model`;
 for my $ind (1..$i){
-    if (! -e "$outdir/hhr/prot$ind.hhr" || ! -e "$outdir/model/prot$ind.pdb"){
+    if (`ls $outdir/model/prot${ind}*.pdb | wc -l` == 0){
 	my $args="-o $outdir/fasta -t prot$ind";
 	$args="$args -b" if ($benchmarkflag);
 	$args="$args -d" if ($domaindiv);
@@ -142,7 +142,7 @@ for my $ind (1..$i){
 	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
 	    sleep(60);
 	}
-	print `sbatch -o $outdir/fasta/prot$ind/out_makeHHR.log $peppidir/bin/makeHHR.pl $args`;
+	print `sbatch -o $outdir/fasta/prot$ind/out_makeHHR_prot$ind.log $peppidir/bin/makeHHR.pl $args`;
     }
 }
 

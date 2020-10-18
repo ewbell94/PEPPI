@@ -4,10 +4,11 @@ from glob import glob
 
 lenlimit=10000
 outdir=argv[1]
-allprots=glob("%s/fasta/*/"%outdir)
+allprots=glob("%s/fasta/*"%outdir)
 
 def failWrite(prot):
-    fasta=open(prot+"seq.fasta")
+    name=prot.split("/")[-1]
+    fasta=open(prot+"/"+name+".fasta")
     fasta.readline()
     seq=""
     for line in fasta:
@@ -34,7 +35,8 @@ for prot in allprots:
         continue
 
     domains=fures.split(";")[:-1]
-    f=open(prot+"seq.fasta")
+    name=prot.split("/")[-1]
+    f=open(prot+"/"+name+".fasta")
     f.readline()
     seq=""
     for line in f:

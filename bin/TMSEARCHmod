@@ -150,11 +150,46 @@ sub TMalign{
     return $1;
 }
 
+sub fTMalign{
+    my $template=$_[0];
+    my $query=$_[1];
+    my $tmres=`$bindir/fTMalign $template $query -fast`;
+    $tmres=~/TM-score= (.*) \(if normalized by length of Chain_2/;
+    return $1;
+}
+
+sub getTMs{
+    my $prot=$_[0];
+    
+    (my $monolist=$complexlist)=~s/\.txt/\.mono/;
+    open(my $monofile,"<",$monolist);
+    my %tmscores=();
+    while (my $line=<$monofile>){
+	print "$line";
+	chomp($line);
+	if ($benchmarkflag && getSeqID("$tempdir/$prot.fasta","$dbdir/monomers/$line.pdb") > $benchthresh){
+	    $tmscores{$line}=1e-100;
+	} else {
+	    $tmscores{$line}=fTMalign("$dbdir/monomers/$line.pdb","$tempdir/$prot.pdb");
+	}
+    }
+
+    return \%tmscores;
+}
+
 sub tmSearch{
     print "Fetching dimers\n";
     my $prot1=$_[0];
     my $prot2=$_[1];
     my $homoflag=$_[2];
+
+    my %prot1tm=%{getTMs($prot1)};
+    my %prot2tm=();
+    if ($homoflag){
+	%prot2tm=%prot1tm;
+    } else{
+	%prot2tm=%{getTMs($prot2)};
+    }
 
     open(my $complexfile,"<",$complexlist);
     my @complextm=();
@@ -163,23 +198,17 @@ sub tmSearch{
 	print $line;
 	chomp($line);
 	my @chains=split("-",$line);
-	if ($benchmarkflag){
-	    my $idf=2/(1/getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$chains[0].pdb")+1/getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$chains[1].pdb"));
-	    my $idb=2/(1/getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$chains[0].pdb")+1/getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$chains[1].pdb"));
-	    my $seqid=max($idf,$idb);
-	    next if ($seqid >= $benchthresh);
-	}
 	
-	my $tm1=TMalign("$dbdir/monomers/$chains[0].pdb","$tempdir/$prot1.pdb");
-	my $tm2=TMalign("$dbdir/monomers/$chains[1].pdb","$tempdir/$prot2.pdb");
+	my $tm1=$prot1tm{$chains[0]};
+	my $tm2=$prot2tm{$chains[1]};
 	my $combinedTM=2/(1/$tm1+1/$tm2);
 	my @topush=("$chains[0]-$chains[1]",$combinedTM);
 	push(@complextm,\@topush);
 	
 
 	if (!$homoflag){
-	    $tm1=TMalign("$dbdir/monomers/$chains[1].pdb","$tempdir/$prot1.pdb");
-	    $tm2=TMalign("$dbdir/monomers/$chains[0].pdb","$tempdir/$prot2.pdb");
+	    $tm1=$prot1tm{$chains[1]};
+	    $tm2=$prot2tm{$chains[0]};
 	    $combinedTM=2/(1/$tm1+1/$tm2);
 	    @topush=("$chains[1]-$chains[0]",$combinedTM);
 	    push(@complextm,\@topush);
@@ -189,6 +218,16 @@ sub tmSearch{
 
     @complextm=sort{$b->[1]<=>$a->[1]} @complextm;
     
+    for my $i (0..$tophits*5-1){
+	my @chains=split("-",$complextm[$i][0]);
+	my $tm1=TMalign("$dbdir/monomers/$chains[0].pdb","$tempdir/$prot1.pdb");
+        my $tm2=TMalign("$dbdir/monomers/$chains[1].pdb","$tempdir/$prot2.pdb");
+        my $combinedTM=2/(1/$tm1+1/$tm2);
+	$complextm[$i][1]=$combinedTM;
+    }
+
+    @complextm=sort{$b->[1]<=>$a->[1]} @complextm;
+
     return @complextm;
 }
 

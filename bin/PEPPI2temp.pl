@@ -8,7 +8,7 @@ my $outdir="!OUTDIR!";
 my $maxjobs=!MAXJOBS!;
 my $nohomo=0;
 my $benchmarkflag=!BENCHMARKFLAG!;
-my $batchsize=5;
+my $batchsize=1;
 
 my $user=`whoami`;
 chomp($user);
@@ -16,13 +16,23 @@ chomp($user);
 my $singleflag=0;
 $singleflag=1 if (scalar(@ARGV) > 0 && $ARGV[0] eq "s");
 
-print `python $peppidir/bin/splitFUD.py $outdir`;
+#print `python $peppidir/bin/splitFUD.py $outdir`;
 
 my @protsA=();
 open(my $protcodeA,"<","$outdir/protcodeA.csv");
 while (my $line=<$protcodeA>){
     my @parts=split(",",$line);
     push(@protsA,"$parts[0]");
+    my @domains=treeSearch($parts[0],"$outdir/fasta/$parts[0]");
+    for my $i (0..scalar(@domains)-1){
+	my $n=$i+1;
+	#print `mv $outdir/fasta/$parts[0]/$domains[$i].fasta $outdir/fasta/$parts[0]/$parts[0]\_$n.fasta`;
+	print `cp $outdir/fasta/$parts[0]/$domains[$i].fasta $outdir/fasta/$parts[0]/$parts[0]\_$n.fasta`;
+	#print `mv $outdir/hhr/$domains[$i].hhr $outdir/hhr/$parts[0]\_$n.hhr`;
+	print `cp $outdir/hhr/$domains[$i].hhr $outdir/hhr/$parts[0]\_$n.hhr`;
+	#print `mv $outdir/model/$domains[$i].pdb $outdir/model/$parts[0]\_$n.pdb`;
+	print `cp $outdir/model/$domains[$i].pdb $outdir/model/$parts[0]\_$n.pdb`;
+    }
 }
 close($protcodeA);
 
@@ -31,33 +41,41 @@ open(my $protcodeB,"<","$outdir/protcodeB.csv");
 while (my $line=<$protcodeB>){
     my @parts=split(",",$line);
     push(@protsB,"$parts[0]");
+    my @domains=treeSearch($parts[0],"$outdir/fasta/$parts[0]");
+    for my $i (0..scalar(@domains)-1){
+        my $n=$i+1;
+        #print `mv $outdir/fasta/$parts[0]/$domains[$i].fasta $outdir/fasta/$parts[0]/$parts[0]\_$n.fasta`;
+	print `cp $outdir/fasta/$parts[0]/$domains[$i].fasta $outdir/fasta/$parts[0]/$parts[0]\_$n.fasta`;
+        #print `mv $outdir/hhr/$domains[$i].hhr $outdir/hhr/$parts[0]\_$n.hhr`;
+	print `cp $outdir/hhr/$domains[$i].hhr $outdir/hhr/$parts[0]\_$n.hhr`;
+        #print `mv $outdir/model/$domains[$i].pdb $outdir/model/$parts[0]\_$n.pdb`;
+	print `cp $outdir/model/$domains[$i].pdb $outdir/model/$parts[0]\_$n.pdb`;
+    }
 }
 close($protcodeB);
 
 print `mkdir $outdir/PPI`;
-#print `mkdir $outdir/hhr`;
-#print `mkdir $outdir/model`;
 for my $i (0..scalar(@protsA)-1){
     for my $j (0..scalar(@protsB)-1){
 	next if (-e "$outdir/PPI/$protsB[$j]-$protsA[$i]" || ($nohomo && $protsB[$j] eq $protsA[$i]));
 	my $pairdir="$outdir/PPI/$protsA[$i]-$protsB[$j]";
 	print `mkdir $pairdir`;
-	print `cp $outdir/fasta/$protsA[$i]/seq.fasta $pairdir/$protsA[$i].seq`;
+	#print `cp $outdir/fasta/$protsA[$i]/$protsA[$i].fasta $pairdir/$protsA[$i].seq`;
 	my $n=1;
-	while (-f "$outdir/fasta/$protsA[$i]/$n.fasta"){
-	    print `cp $outdir/fasta/$protsA[$i]/$n.fasta $pairdir/$protsA[$i]\_$n.seq`;
+	while (-f "$outdir/fasta/$protsA[$i]/$protsA[$i]\_$n.fasta"){
+	    print `cp $outdir/fasta/$protsA[$i]/$protsA[$i]\_$n.fasta $pairdir/$protsA[$i]\_$n.seq`;
 	    $n++;
 	}
-	print `cp $outdir/fasta/$protsB[$j]/seq.fasta $pairdir/$protsB[$j].seq`;
+	#print `cp $outdir/fasta/$protsB[$j]/$protsB[$j].fasta $pairdir/$protsB[$j].seq`;
 	$n=1;
-	while (-f "$outdir/fasta/$protsB[$j]/$n.fasta"){
-	    print `cp $outdir/fasta/$protsB[$j]/$n.fasta $pairdir/$protsB[$j]\_$n.seq`;
+	while (-f "$outdir/fasta/$protsB[$j]/$protsB[$j]\_$n.fasta"){
+	    print `cp $outdir/fasta/$protsB[$j]/$protsB[$j]\_$n.fasta $pairdir/$protsB[$j]\_$n.seq`;
 	    $n++;
 	}
     }
 }
 
-my @supported=("TMSEARCH");
+my @supported=("SPRING");
 my @intset=();
 #my @supported=("COTHPPI");
 for my $int (glob("$outdir/PPI/*/")){
@@ -108,7 +126,7 @@ sub submitBatch{
     my @intset=@{$_[0]};
     my $args=join(",",@supported);
     $args="$args ".join(",",@intset);
-
+    
     while (`squeue -u $user | wc -l`-1 >= $maxjobs){
 	print "Queue is currently full, waiting for submission...\n";
 	sleep(60);
@@ -116,4 +134,20 @@ sub submitBatch{
     print `sbatch -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
 
     #print `$peppidir/bin/multiwrapper.pl $args`;
+}
+
+sub treeSearch{
+    my $prot=$_[0];
+    my $dir=$_[1];
+    
+    my @domlist=();
+
+    if (`ls $dir/$prot\_A*.fasta 2> /dev/null | wc -l` > 0){
+	@domlist=treeSearch("$prot\_A",$dir);
+	@domlist=(@domlist,treeSearch("$prot\_B",$dir));
+    } else {
+	@domlist=($prot);
+    }
+    
+    return @domlist;
 }
