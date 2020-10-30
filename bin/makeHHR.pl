@@ -54,20 +54,22 @@ chdir($tempdir);
 
 print `cp $outdir/$sourcefasta/$target.fasta $tempdir/$target.fasta`;
 #makeHHR threads a query sequence through DIMERDB using HHsearch
-if (! -e "$hhdir/$target.hhr"){
+if (! -e "$hhdir/$target.hhr.gz"){
     print `$bindir/hhsuite/bin/hhblits -i $tempdir/$target.fasta -oa3m $tempdir/$target.a3m -d $uniprotdb -n 2 -e 0.001`;
     print `$bindir/hhsuite/scripts/addss.pl $tempdir/$target.a3m`;
     print `$bindir/hhsuite/bin/hhmake -i $tempdir/$target.a3m -id 90 -diff 100 -cov 0 -qid 0`;
     print `$bindir/hhsuite/bin/hhsearch -i $tempdir/$target.hhm -d $dimerdb -id 90 -diff 100 -cov 0 -qid 0 -e 0.001 -p 20 -E 0.01 -Z 30000 -z 20000 -B 30000 -b 20000`;
     print `cp $tempdir/$target.hhr $hhdir/$target.hhr`;
+    print `gzip $hhdir/$target.hhr`;
 }
 
-if (! -e "$hhdir/$target.hhr"){
+if (! -e "$hhdir/$target.hhr.gz"){
     print "HHsearch threading was not successful, creating trRosetta model\n";
     submitMakeModel($outdir,$target);
 }
 
-print `cp $hhdir/$target.hhr $tempdir/$target.hhr`;
+print `cp $hhdir/$target.hhr.gz $tempdir/$target.hhr.gz`;
+print `gzip -d $tempdir/$target.hhr.gz`;
 if ($domaindiv){
     my $domainbound=detectDomains($target,$benchflag,$zthresh);
     if ($domainbound > 0){

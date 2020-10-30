@@ -25,11 +25,12 @@ while (my $line=<$protcodeA>){
     push(@protsA,"$parts[0]");
     my @domains=treeSearch($parts[0],"$outdir/fasta/$parts[0]");
     for my $i (0..scalar(@domains)-1){
+	print "$domains[$i]\n";
 	my $n=$i+1;
 	#print `mv $outdir/fasta/$parts[0]/$domains[$i].fasta $outdir/fasta/$parts[0]/$parts[0]\_$n.fasta`;
 	print `cp $outdir/fasta/$parts[0]/$domains[$i].fasta $outdir/fasta/$parts[0]/$parts[0]\_$n.fasta`;
 	#print `mv $outdir/hhr/$domains[$i].hhr $outdir/hhr/$parts[0]\_$n.hhr`;
-	print `cp $outdir/hhr/$domains[$i].hhr $outdir/hhr/$parts[0]\_$n.hhr`;
+	print `cp $outdir/hhr/$domains[$i].hhr.gz $outdir/hhr/$parts[0]\_$n.hhr.gz`;
 	#print `mv $outdir/model/$domains[$i].pdb $outdir/model/$parts[0]\_$n.pdb`;
 	print `cp $outdir/model/$domains[$i].pdb $outdir/model/$parts[0]\_$n.pdb`;
     }
@@ -44,10 +45,11 @@ while (my $line=<$protcodeB>){
     my @domains=treeSearch($parts[0],"$outdir/fasta/$parts[0]");
     for my $i (0..scalar(@domains)-1){
         my $n=$i+1;
+	print "$domains[$i]\n";
         #print `mv $outdir/fasta/$parts[0]/$domains[$i].fasta $outdir/fasta/$parts[0]/$parts[0]\_$n.fasta`;
 	print `cp $outdir/fasta/$parts[0]/$domains[$i].fasta $outdir/fasta/$parts[0]/$parts[0]\_$n.fasta`;
         #print `mv $outdir/hhr/$domains[$i].hhr $outdir/hhr/$parts[0]\_$n.hhr`;
-	print `cp $outdir/hhr/$domains[$i].hhr $outdir/hhr/$parts[0]\_$n.hhr`;
+	print `cp $outdir/hhr/$domains[$i].hhr.gz $outdir/hhr/$parts[0]\_$n.hhr.gz`;
         #print `mv $outdir/model/$domains[$i].pdb $outdir/model/$parts[0]\_$n.pdb`;
 	print `cp $outdir/model/$domains[$i].pdb $outdir/model/$parts[0]\_$n.pdb`;
     }
@@ -57,16 +59,16 @@ close($protcodeB);
 print `mkdir $outdir/PPI`;
 for my $i (0..scalar(@protsA)-1){
     for my $j (0..scalar(@protsB)-1){
-	next if (-e "$outdir/PPI/$protsB[$j]-$protsA[$i]" || ($nohomo && $protsB[$j] eq $protsA[$i]));
+	next if ((-e "$outdir/PPI/$protsB[$j]-$protsA[$i]" && $protsA[$i] ne $protsB[$j]) || ($nohomo && $protsB[$j] eq $protsA[$i]));
 	my $pairdir="$outdir/PPI/$protsA[$i]-$protsB[$j]";
 	print `mkdir $pairdir`;
-	#print `cp $outdir/fasta/$protsA[$i]/$protsA[$i].fasta $pairdir/$protsA[$i].seq`;
+	print `cp $outdir/fasta/$protsA[$i]/$protsA[$i].fasta $pairdir/$protsA[$i].seq`;
 	my $n=1;
 	while (-f "$outdir/fasta/$protsA[$i]/$protsA[$i]\_$n.fasta"){
 	    print `cp $outdir/fasta/$protsA[$i]/$protsA[$i]\_$n.fasta $pairdir/$protsA[$i]\_$n.seq`;
 	    $n++;
 	}
-	#print `cp $outdir/fasta/$protsB[$j]/$protsB[$j].fasta $pairdir/$protsB[$j].seq`;
+	print `cp $outdir/fasta/$protsB[$j]/$protsB[$j].fasta $pairdir/$protsB[$j].seq`;
 	$n=1;
 	while (-f "$outdir/fasta/$protsB[$j]/$protsB[$j]\_$n.fasta"){
 	    print `cp $outdir/fasta/$protsB[$j]/$protsB[$j]\_$n.fasta $pairdir/$protsB[$j]\_$n.seq`;
@@ -75,7 +77,7 @@ for my $i (0..scalar(@protsA)-1){
     }
 }
 
-my @supported=("TMSEARCH");
+my @supported=("SPRING");
 my @intset=();
 #my @supported=("COTHPPI");
 for my $int (glob("$outdir/PPI/*/")){

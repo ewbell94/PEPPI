@@ -18,7 +18,7 @@ my $bindir="$peppidir/bin"; #location of program binaries
 my $springout="$outdir/$pairname/SPRING"; #location of program output
 my $dbdir="/nfs/amino-home/ewbell/SPRINGDB"; #location of SPRING database
 my $complexlist="$dbdir/70CDHITstruct.txt";
-my $maxmodels=1; #maximum number of model pdb files to make
+my $maxmodels=5; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
 my $dimerdb="/nfs/amino-home/ewbell/SPRINGDB/70CDHITstruct.db"; #location of dimer chain template database for HHsearch threading
@@ -30,7 +30,7 @@ my $hhdir="$outdir/../hhr"; #location of hhr files of previously run HHsearch re
 my $user=`whoami`;
 chomp($user);
 $ENV{'HHLIB'}="$bindir/hhsuite/"; #necessary for proper function of HHsearch
-my @weights=(1,12.0,-1.4); #weights for SPRING score calculation
+my @weights=(1,12.0,0.0); #weights for SPRING score calculation
 my $homothresh=0.9; #
 my $seqmax=1500; #maximum allowable length of input sequences; sequences longer than this will be truncated
 my $minmono=5000; #number of monomer templates for dimer matching
@@ -125,23 +125,19 @@ for my $pointer (@domainPairs){
     
 #Copy HHR files or run HHsearch
     print "Running HHsearch\n";
-    if (-e "$hhdir/$prot1.hhr"){
-	print `cp $hhdir/$prot1.hhr $tempdir`;
+    if (-e "$hhdir/$prot1.hhr.gz"){
+	print `cp $hhdir/$prot1.hhr.gz $tempdir`;
+	print `gzip -d $tempdir/$prot1.hhr.gz`;
     } else {
-	makeHHR($prot1);
-	if (! -e "$tempdir/$prot1.hhr"){
-	    print "HHsearch failed for $prot1.\n";
-	    exit(4);
-	}
+	print "$prot1 does not have an HHR file, run makeHHR on this target\n";
+	exit(4);
     }
-    if (-e "$hhdir/$prot2.hhr"){
-	print `cp $hhdir/$prot2.hhr $tempdir`;
+    if (-e "$hhdir/$prot2.hhr.gz"){
+	print `cp $hhdir/$prot2.hhr.gz $tempdir`;
+	print `gzip -d $tempdir/$prot2.hhr.gz`;
     } else {
-	makeHHR($prot2);
-	if (! -e "$tempdir/$prot2.hhr"){
-	    print "HHsearch failed for $prot2.\n";
-	    exit(4);
-	}
+	print "$prot2 does not have an HHR file, run makeHHR on this target\n";
+	exit(4);
     }
     
     #Fetch HHsearch hits from HHR files
@@ -245,17 +241,6 @@ sub getSeqID{
     return min($idcount/$seq1len,$idcount/$seq2len) if ($fname2=~/\.fasta/);
     return $idcount/$seq1len if ($fname2=~/\.pdb/);
     return 0.0;
-}
-
-sub makeHHR{
-    my $prot=$_[0];
-    print `cp $dimerdb $tempdir/`;
-    print `$bindir/hhsuite/bin/hhblits -i $tempdir/$prot.fasta -oa3m $tempdir/$prot.a3m -d $uniprotdb -n 2 -e 0.001`;
-    print `$bindir/hhsuite/scripts/addss.pl $tempdir/$prot.a3m`;
-    print `$bindir/hhsuite/bin/hhmake -i $tempdir/$prot.a3m -id 90 -diff 100 -cov 0 -qid 0`;
-    print `$bindir/hhsuite/bin/hhsearch -i $tempdir/$prot.hhm -d $tempdir/*.db -id 90 -diff 100 -cov 0 -qid 0 -e 0.001 -p 20 -E 0.01 -Z 30000 -z 20000 -B 30000 -b 20000`;
-    print `mv $tempdir/$prot.hhr $tempdir/$prot.hhr`;
-    print `cp $tempdir/$prot.hhr $hhdir/$prot.hhr`;
 }
 
 sub fetchHits{
