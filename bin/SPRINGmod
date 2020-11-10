@@ -18,7 +18,7 @@ my $bindir="$peppidir/bin"; #location of program binaries
 my $springout="$outdir/$pairname/SPRING"; #location of program output
 my $dbdir="/nfs/amino-home/ewbell/SPRINGDB"; #location of SPRING database
 my $complexlist="$dbdir/70CDHITstruct.txt";
-my $maxmodels=5; #maximum number of model pdb files to make
+my $maxmodels=1; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
 my $dimerdb="/nfs/amino-home/ewbell/SPRINGDB/70CDHITstruct.db"; #location of dimer chain template database for HHsearch threading
@@ -30,7 +30,7 @@ my $hhdir="$outdir/../hhr"; #location of hhr files of previously run HHsearch re
 my $user=`whoami`;
 chomp($user);
 $ENV{'HHLIB'}="$bindir/hhsuite/"; #necessary for proper function of HHsearch
-my @weights=(1,12.0,0.0); #weights for SPRING score calculation
+my @weights=(1,12.0,-1.4); #weights for SPRING score calculation
 my $homothresh=0.9; #
 my $seqmax=1500; #maximum allowable length of input sequences; sequences longer than this will be truncated
 my $minmono=5000; #number of monomer templates for dimer matching
@@ -213,6 +213,14 @@ for my $pointer (@domainPairs){
 }
 
 print `rm -rf $tempdir`;
+if ($topscore==-100.0){
+    print `echo "$pairname,?" >> $outdir/SPRINGres.txt`;
+} else {
+    print `echo "$pairname,$topscore" >> $outdir/SPRINGres.txt`;
+}
+print `rm -rf $outdir/$pairname`;
+print `sync`;
+=pod
 open(my $resfile,">","$outdir/$pairname/SPRING/res.txt");
 
 if ($topscore==-100.0){
@@ -220,6 +228,7 @@ if ($topscore==-100.0){
 } else {
     print $resfile "$topscore\n";
 }
+=cut
 
 sub getSeqID{
     my $fname1=$_[0];
