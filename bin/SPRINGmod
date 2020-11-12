@@ -23,7 +23,6 @@ my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for 
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
 my $dimerdb="/nfs/amino-home/ewbell/SPRINGDB/70CDHITstruct.db"; #location of dimer chain template database for HHsearch threading
 my $zmin=2.0; #Minimum Z-score for reporting templates; if none are found satisfying this threshold, zmin is set to -5
-my $hhdir="$outdir/../hhr"; #location of hhr files of previously run HHsearch results
 
 #DO NOT CHANGE BENEATH THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING
 #Processed parameters
@@ -125,15 +124,15 @@ for my $pointer (@domainPairs){
     
 #Copy HHR files or run HHsearch
     print "Running HHsearch\n";
-    if (-e "$hhdir/$prot1.hhr.gz"){
-	print `cp $hhdir/$prot1.hhr.gz $tempdir`;
+    if (-e "$outdir/../mono/$qseqs[0]/$prot1.hhr.gz"){
+	print `cp $outdir/../mono/$qseqs[0]/$prot1.hhr.gz $tempdir`;
 	print `gzip -d $tempdir/$prot1.hhr.gz`;
     } else {
 	print "$prot1 does not have an HHR file, run makeHHR on this target\n";
 	exit(4);
     }
-    if (-e "$hhdir/$prot2.hhr.gz"){
-	print `cp $hhdir/$prot2.hhr.gz $tempdir`;
+    if (-e "$outdir/../mono/$qseqs[1]/$prot2.hhr.gz"){
+	print `cp $outdir/../mono/$qseqs[1]/$prot2.hhr.gz $tempdir`;
 	print `gzip -d $tempdir/$prot2.hhr.gz`;
     } else {
 	print "$prot2 does not have an HHR file, run makeHHR on this target\n";
@@ -218,9 +217,7 @@ if ($topscore==-100.0){
 } else {
     print `echo "$pairname,$topscore" >> $outdir/SPRINGres.txt`;
 }
-print `rm -rf $outdir/$pairname`;
-print `sync`;
-=pod
+
 open(my $resfile,">","$outdir/$pairname/SPRING/res.txt");
 
 if ($topscore==-100.0){
@@ -228,7 +225,7 @@ if ($topscore==-100.0){
 } else {
     print $resfile "$topscore\n";
 }
-=cut
+print `sync`;
 
 sub getSeqID{
     my $fname1=$_[0];

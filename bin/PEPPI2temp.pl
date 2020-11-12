@@ -7,6 +7,7 @@ my $peppidir="!PEPPIDIR!";
 my $outdir="!OUTDIR!";
 my $maxjobs=!MAXJOBS!;
 my $nohomo=0;
+my $keepflag=0;
 my $benchmarkflag=!BENCHMARKFLAG!;
 my $batchsize=1;
 
@@ -23,16 +24,13 @@ open(my $protcodeA,"<","$outdir/protcodeA.csv");
 while (my $line=<$protcodeA>){
     my @parts=split(",",$line);
     push(@protsA,"$parts[0]");
-    my @domains=treeSearch($parts[0],"$outdir/fasta/$parts[0]");
+    my @domains=treeSearch($parts[0],"$outdir/mono/$parts[0]");
     for my $i (0..scalar(@domains)-1){
 	print "$domains[$i]\n";
 	my $n=$i+1;
-	#print `mv $outdir/fasta/$parts[0]/$domains[$i].fasta $outdir/fasta/$parts[0]/$parts[0]\_$n.fasta`;
-	print `cp $outdir/fasta/$parts[0]/$domains[$i].fasta $outdir/fasta/$parts[0]/$parts[0]\_$n.fasta`;
-	#print `mv $outdir/hhr/$domains[$i].hhr $outdir/hhr/$parts[0]\_$n.hhr`;
-	print `cp $outdir/hhr/$domains[$i].hhr.gz $outdir/hhr/$parts[0]\_$n.hhr.gz`;
-	#print `mv $outdir/model/$domains[$i].pdb $outdir/model/$parts[0]\_$n.pdb`;
-	print `cp $outdir/model/$domains[$i].pdb $outdir/model/$parts[0]\_$n.pdb`;
+	print `cp $outdir/mono/$parts[0]/$domains[$i].fasta $outdir/mono/$parts[0]/$parts[0]\_$n.fasta`;
+	print `cp $outdir/mono/$parts[0]/$domains[$i].hhr.gz $outdir/mono/$parts[0]/$parts[0]\_$n.hhr.gz`;
+	print `cp $outdir/mono/$parts[0]/$domains[$i].pdb $outdir/mono/$parts[0]/$parts[0]\_$n.pdb`;
     }
 }
 close($protcodeA);
@@ -42,19 +40,19 @@ open(my $protcodeB,"<","$outdir/protcodeB.csv");
 while (my $line=<$protcodeB>){
     my @parts=split(",",$line);
     push(@protsB,"$parts[0]");
-    my @domains=treeSearch($parts[0],"$outdir/fasta/$parts[0]");
+    my @domains=treeSearch($parts[0],"$outdir/mono/$parts[0]");
     for my $i (0..scalar(@domains)-1){
         my $n=$i+1;
 	print "$domains[$i]\n";
-        #print `mv $outdir/fasta/$parts[0]/$domains[$i].fasta $outdir/fasta/$parts[0]/$parts[0]\_$n.fasta`;
-	print `cp $outdir/fasta/$parts[0]/$domains[$i].fasta $outdir/fasta/$parts[0]/$parts[0]\_$n.fasta`;
-        #print `mv $outdir/hhr/$domains[$i].hhr $outdir/hhr/$parts[0]\_$n.hhr`;
-	print `cp $outdir/hhr/$domains[$i].hhr.gz $outdir/hhr/$parts[0]\_$n.hhr.gz`;
-        #print `mv $outdir/model/$domains[$i].pdb $outdir/model/$parts[0]\_$n.pdb`;
-	print `cp $outdir/model/$domains[$i].pdb $outdir/model/$parts[0]\_$n.pdb`;
+        print `cp $outdir/mono/$parts[0]/$domains[$i].fasta $outdir/mono/$parts[0]/$parts[0]\_$n.fasta`;
+	print `cp $outdir/mono/$parts[0]/$domains[$i].hhr.gz $outdir/mono/$parts[0]/$parts[0]\_$n.hhr.gz`;
+	print `cp $outdir/mono/$parts[0]/$domains[$i].pdb $outdir/mono/$parts[0]/$parts[0]\_$n.pdb`;
     }
 }
 close($protcodeB);
+
+my @supported=("SPRING");
+my @intset=();
 
 print `mkdir $outdir/PPI`;
 for my $i (0..scalar(@protsA)-1){
@@ -62,53 +60,42 @@ for my $i (0..scalar(@protsA)-1){
 	next if ((-e "$outdir/PPI/$protsB[$j]-$protsA[$i]" && $protsA[$i] ne $protsB[$j]) || ($nohomo && $protsB[$j] eq $protsA[$i]));
 	my $pairdir="$outdir/PPI/$protsA[$i]-$protsB[$j]";
 	print `mkdir $pairdir`;
-	print `cp $outdir/fasta/$protsA[$i]/$protsA[$i].fasta $pairdir/$protsA[$i].seq`;
+	print `cp $outdir/mono/$protsA[$i]/$protsA[$i].fasta $pairdir/$protsA[$i].seq`;
 	my $n=1;
-	while (-f "$outdir/fasta/$protsA[$i]/$protsA[$i]\_$n.fasta"){
-	    print `cp $outdir/fasta/$protsA[$i]/$protsA[$i]\_$n.fasta $pairdir/$protsA[$i]\_$n.seq`;
+	while (-f "$outdir/mono/$protsA[$i]/$protsA[$i]\_$n.fasta"){
+	    print `cp $outdir/mono/$protsA[$i]/$protsA[$i]\_$n.fasta $pairdir/$protsA[$i]\_$n.seq`;
 	    $n++;
 	}
-	print `cp $outdir/fasta/$protsB[$j]/$protsB[$j].fasta $pairdir/$protsB[$j].seq`;
+	print `cp $outdir/mono/$protsB[$j]/$protsB[$j].fasta $pairdir/$protsB[$j].seq`;
 	$n=1;
-	while (-f "$outdir/fasta/$protsB[$j]/$protsB[$j]\_$n.fasta"){
-	    print `cp $outdir/fasta/$protsB[$j]/$protsB[$j]\_$n.fasta $pairdir/$protsB[$j]\_$n.seq`;
+	while (-f "$outdir/mono/$protsB[$j]/$protsB[$j]\_$n.fasta"){
+	    print `cp $outdir/mono/$protsB[$j]/$protsB[$j]\_$n.fasta $pairdir/$protsB[$j]\_$n.seq`;
 	    $n++;
 	}
-    }
-}
 
-my @supported=("SPRING");
-my @intset=();
-#my @supported=("COTHPPI");
-for my $int (glob("$outdir/PPI/*/")){
-    my @parts=split("/",$int);
-    my $pairname=$parts[-1];
-    for my $prog (@supported){
-	my $modtext=`cat $peppidir/bin/${prog}mod`;
-	$modtext=~s/\!PEPPIDIR\!/$peppidir/;
-	$modtext=~s/\!OUTDIR\!/$outdir/;
-	$modtext=~s/\!PAIRNAME\!/$pairname/;
-	$modtext=~s/\!BENCHMARK\!/$benchmarkflag/;
-	open(my $jobscript,">","$int/$pairname-$prog.pl");
-	print $jobscript $modtext;
-	close($jobscript);
-	print `chmod +x $int/$pairname-$prog.pl`;
-	print `$int/$pairname-$prog.pl` if ($singleflag);
-=pod
-	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
-	    print "Queue is currently full, waiting for submission...\n";
-	    sleep(60);
-	}
-	my $jobname="PEPPI_$prog\_$pairname";
-	my $errloc="$int/err_$prog.log";
-	my $outloc="$int/out_$prog.log";
-	print `sbatch -J $jobname -o $outloc -e $errloc -t 20:00:00 $int/$pairname-$prog.pl`;
-=cut
-    }
-    push(@intset,$int) if (!$singleflag);
-    if (scalar(@intset) == $batchsize){
-	submitBatch(\@intset);
-	@intset=();
+	my $pairname="$protsA[$i]-$protsB[$j]";
+	my $int="$outdir/PPI/$pairname";
+	for my $prog (@supported){
+	    my $modtext=`cat $peppidir/bin/${prog}mod`;
+            $modtext=~s/\!PEPPIDIR\!/$peppidir/;
+            $modtext=~s/\!OUTDIR\!/$outdir/;
+            $modtext=~s/\!PAIRNAME\!/$pairname/;
+            $modtext=~s/\!BENCHMARK\!/$benchmarkflag/;
+            open(my $jobscript,">","$int/$pairname-$prog.pl");
+            print $jobscript $modtext;
+            close($jobscript);
+            print `chmod +x $int/$pairname-$prog.pl`;
+            print `$int/$pairname-$prog.pl` if ($singleflag);
+            while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+                print "Queue is currently full, waiting for submission...\n";
+                sleep(60);
+            }
+        }
+        push(@intset,$int) if (!$singleflag);
+        if (scalar(@intset) == $batchsize){
+            submitBatch(\@intset);
+            @intset=();
+        }
     }
 }
 
@@ -128,7 +115,7 @@ sub submitBatch{
     my @intset=@{$_[0]};
     my $args=join(",",@supported);
     $args="$args ".join(",",@intset);
-    
+    $args="$args $keepflag";
     while (`squeue -u $user | wc -l`-1 >= $maxjobs){
 	print "Queue is currently full, waiting for submission...\n";
 	sleep(60);

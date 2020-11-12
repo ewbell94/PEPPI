@@ -32,9 +32,10 @@ if (! -e "$tempdir"){
 }
 chdir($tempdir);
 
-print `cp $outdir/$s/seq.fasta $tempdir/$s.fasta`;
+(my $sourcefasta=$s)=~s/\_[AB]//g;
+print `cp $outdir/$sourcefasta/$s.fasta $tempdir/$s.fasta`;
 
-my $modeldir="$outdir/../model";
+my $modeldir="$outdir/$sourcefasta";
 
 modelSequence($s);
 

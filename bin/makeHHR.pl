@@ -32,8 +32,9 @@ GetOptions(
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
 my $springdb="/nfs/amino-home/ewbell/SPRINGDB/";
 my $dimerdb="$springdb/70CDHITstruct.db";
-my $hhdir="$outdir/../hhr";
-my $modeldir="$outdir/../model";
+(my $sourcefasta=$target)=~s/\_[AB]//g;
+my $hhdir="$outdir/$sourcefasta";
+my $modeldir=$hhdir;
 my $zthresh=3.8;
 my $homologthresh=0.3;
 
@@ -50,7 +51,6 @@ if (! -e "$tempdir"){
     print `rm -rf $tempdir/*`;
 }
 chdir($tempdir);
-(my $sourcefasta=$target)=~s/\_[AB]//g;
 
 print `cp $outdir/$sourcefasta/$target.fasta $tempdir/$target.fasta`;
 #makeHHR threads a query sequence through DIMERDB using HHsearch
@@ -129,9 +129,6 @@ sub splitDomains{
     print $fastB ">$target\_B\n";
     print $fastB substr($sequence,$boundary-1);
     close($fastB);
-
-    #print `rm -rf $hhrdir/$target.hhr`;
-    #print `rm -rf $outdir/$sourcefasta/$target.fasta`;
 
     while (`squeue -u $user | wc -l`-1 >= $maxjobs){
         sleep(60);

@@ -55,7 +55,7 @@ my $maxjobs=300;
 print `mkdir $outdir` if (!-e "$outdir");
 print `cp $infastaA $outdir/A.fasta`;
 print `cp $infastaB $outdir/B.fasta`;
-my $fastadir="$outdir/fasta";
+my $fastadir="$outdir/mono";
 print `mkdir $fastadir`;
 open(my $fastaf,"<","$infastaA");
 open(my $protcode,">","$outdir/protcodeA.csv");
@@ -131,18 +131,25 @@ if (openhandle($fastaout)){
     exit(1);
 }
 
-print `mkdir $outdir/hhr`;
-print `mkdir $outdir/model`;
+#print `mkdir $outdir/hhr`;
+#print `mkdir $outdir/model`;
 for my $ind (1..$i){
-    if (`ls $outdir/model/prot${ind}*.pdb | wc -l` == 0){
-	my $args="-o $outdir/fasta -t prot$ind";
+    if (`ls $fastadir/prot${ind}/*.pdb | wc -l` == 0){
+	my $args="-o $fastadir -t prot$ind";
 	$args="$args -b" if ($benchmarkflag);
 	$args="$args -d" if ($domaindiv);
 
 	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
 	    sleep(60);
 	}
-	print `sbatch -o $outdir/fasta/prot$ind/out_makeHHR_prot$ind.log $peppidir/bin/makeHHR.pl $args`;
+	print `sbatch -o $fastadir/prot$ind/out_makeHHR_prot$ind.log $peppidir/bin/makeHHR.pl $args`;
+    }
+    
+    if (! -s "$fastadir/prot$ind/prot$ind.seq"){
+	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+	    sleep(60);
+	}
+	print `sbatch -o $fastadir/prot$ind/out_seqSearch_prot$ind.log $peppidir/bin/seqSearch.pl -o $fastadir -t prot$ind`;
     }
 }
 
