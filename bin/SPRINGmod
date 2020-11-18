@@ -20,15 +20,12 @@ my $dbdir="/nfs/amino-home/ewbell/SPRINGDB"; #location of SPRING database
 my $complexlist="$dbdir/70CDHITstruct.txt";
 my $maxmodels=1; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
-my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
-my $dimerdb="/nfs/amino-home/ewbell/SPRINGDB/70CDHITstruct.db"; #location of dimer chain template database for HHsearch threading
 my $zmin=2.0; #Minimum Z-score for reporting templates; if none are found satisfying this threshold, zmin is set to -5
 
 #DO NOT CHANGE BENEATH THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING
 #Processed parameters
 my $user=`whoami`;
 chomp($user);
-$ENV{'HHLIB'}="$bindir/hhsuite/"; #necessary for proper function of HHsearch
 my @weights=(1,12.0,-1.4); #weights for SPRING score calculation
 my $homothresh=0.9; #
 my $seqmax=1500; #maximum allowable length of input sequences; sequences longer than this will be truncated
@@ -126,14 +123,14 @@ for my $pointer (@domainPairs){
     print "Running HHsearch\n";
     if (-e "$outdir/../mono/$qseqs[0]/$prot1.hhr.gz"){
 	print `cp $outdir/../mono/$qseqs[0]/$prot1.hhr.gz $tempdir`;
-	print `gzip -d $tempdir/$prot1.hhr.gz`;
+	print `gzip -f -d $tempdir/$prot1.hhr.gz`;
     } else {
 	print "$prot1 does not have an HHR file, run makeHHR on this target\n";
 	exit(4);
     }
     if (-e "$outdir/../mono/$qseqs[1]/$prot2.hhr.gz"){
 	print `cp $outdir/../mono/$qseqs[1]/$prot2.hhr.gz $tempdir`;
-	print `gzip -d $tempdir/$prot2.hhr.gz`;
+	print `gzip -f -d $tempdir/$prot2.hhr.gz`;
     } else {
 	print "$prot2 does not have an HHR file, run makeHHR on this target\n";
 	exit(4);
@@ -212,9 +209,7 @@ for my $pointer (@domainPairs){
 }
 
 print `rm -rf $tempdir`;
-if ($topscore==-100.0){
-    print `echo "$pairname,?" >> $outdir/SPRINGres.txt`;
-} else {
+if ($topscore!=-100.0){
     print `echo "$pairname,$topscore" >> $outdir/SPRINGres.txt`;
 }
 

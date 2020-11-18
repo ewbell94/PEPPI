@@ -134,7 +134,9 @@ if (openhandle($fastaout)){
 #print `mkdir $outdir/hhr`;
 #print `mkdir $outdir/model`;
 for my $ind (1..$i){
-    if (`ls $fastadir/prot${ind}/*.pdb | wc -l` == 0){
+    print "prot$ind\n";
+    if (`ls $fastadir/prot${ind}/*.hhr.gz | wc -l` == 0){
+	print "HHR\n";
 	my $args="-o $fastadir -t prot$ind";
 	$args="$args -b" if ($benchmarkflag);
 	$args="$args -d" if ($domaindiv);
@@ -145,7 +147,8 @@ for my $ind (1..$i){
 	print `sbatch -o $fastadir/prot$ind/out_makeHHR_prot$ind.log $peppidir/bin/makeHHR.pl $args`;
     }
     
-    if (! -s "$fastadir/prot$ind/prot$ind.seq"){
+    if (! -s "$fastadir/prot$ind/prot$ind.string" || ! -s "$fastadir/prot$ind/prot$ind.seq"){
+	print "SEQ\n";
 	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
 	    sleep(60);
 	}

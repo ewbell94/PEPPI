@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #SBATCH -t 5:00:00
 #SBATCH --mem=2G
-#SBATCH -J makeHHR.pl
+#SBATCH -J seqSearch.pl
 
 use strict;
 use warnings;

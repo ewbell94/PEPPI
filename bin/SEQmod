@@ -11,9 +11,8 @@ my $user=`whoami`;
 chomp($user);
 
 my $randomTag=int(rand(1000000));
-my $blastdb="$peppidir/lib/SEQ/100_psicquic.fasta";
-my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02";
-my $blitsdb="$peppidir/lib/SEQ/hhblitsdb/db";
+#my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02";
+#my $blitsdb="$peppidir/lib/SEQ/hhblitsdb/db";
 my $interactfile="$peppidir/lib/SEQ/psicquic.txt";
 my $aliasfile="$peppidir/lib/SEQ/100_psicquic.fasta.clstr.aliases";
 
@@ -32,7 +31,6 @@ my @chains=split("-",$pairname);
 print `mkdir $outdir/$pairname/SEQ`;
 open(my $resfile,">","$outdir/$pairname/SEQ/res.txt");
 print `date`;
-#print `cp $peppidir/lib/STRING/STRINGseqsv11.db* $tempdir/`;
 
 blastSearch();
 #psiNW();
@@ -42,21 +40,23 @@ print `rm -rf $tempdir`;
 print `date`;
 
 sub blastSearch{
-    my $blast1res=`$peppidir/bin/blastp -query $outdir/$pairname/$chains[0].seq -db $blastdb -max_target_seqs $maxtargets -evalue 1e10 -outfmt "6 sseqid nident qlen slen"`;
+    my $blast1res=`cat $outdir/../mono/$chains[0]/$chains[0].seq`;
     print $blast1res;
     if ($blast1res eq ""){
 	print "BLAST for sequence A returned no hits in database.\n";
 	print $resfile "0.0\n";
+	print `echo "$pairname,0.0" >> $outdir/SEQres.txt`;
 	print `rm -rf $tempdir`;
 	exit(1);
     }
     print "\n";
     
-    my $blast2res=`$peppidir/bin/blastp -query $outdir/$pairname/$chains[1].seq -db $blastdb -max_target_seqs $maxtargets -evalue 1e10 -outfmt "6 sseqid nident qlen slen"`;
+    my $blast2res=`cat $outdir/../mono/$chains[1]/$chains[1].seq`;
     print $blast2res;
     if ($blast2res eq ""){
 	print "BLAST for sequence B returned no hits in STRING.\n";
 	print $resfile "0.0\n";
+	print `echo "$pairname,0.0" >> $outdir/SEQres.txt`;
 	print `rm -rf $tempdir`;
 	exit(1);
     }
@@ -71,8 +71,6 @@ sub blastSearch{
 	my $firstgrep=`grep -P "$id1(\t|\$)" $tempdir/ints.txt`;
 	for my $j (0..scalar(@ids2)-1){
 	    my $id2=$ids2[$j][0];
-	    #next if (getDB($id1) ne getDB($id2));
-	    print "$id1 $id2\n";
 	    my $grepline="";
 	    if ($id1 eq $id2){
 		$grepline=`grep "$id1\\s$id2" $tempdir/ints.txt`;
@@ -105,30 +103,21 @@ sub blastSearch{
     }
     if (scalar(@results)>0){
 	print $resfile "$results[0][2]\n";
+	print `echo "$pairname,$results[0][2]" >> $outdir/SEQres.txt`;
     } else {
 	print $resfile "0.0\n";
+	print `echo "$pairname,0.0" >> $outdir/SEQres.txt`;
     }
 }
 
+=pod
 sub psiNW{
     print `$peppidir/bin/hhsuite/bin/hhblits -i $outdir/$pairname/$chains[0].seq -oa3m $tempdir/$chains[0].a3m -d $uniprotdb -n 2 -e 0.001`;
     print `$peppidir/bin/hhsuite/bin/hhblits -i $outdir/$pairname/$chains[1].seq -oa3m $tempdir/$chains[1].a3m -d $uniprotdb -n 2 -e 0.001`;
     print `$peppidir/bin/hhsuite/bin/hhblits -i $tempdir/$chains[0].a3m -d $blitsdb`;
     print `$peppidir/bin/hhsuite/bin/hhblits -i $tempdir/$chains[1].a3m -d $blitsdb`;
 }
-
-sub getDB{
-    my $query=$_[0];
-    if (substr($query,0,6) eq "INTACT"){
-	return "IntAct";
-    } elsif (substr($query,0,4) eq "DIP-"){
-	return "DIP";
-    } elsif (substr($query,-2,1) eq ":"){
-	return "PDB";
-    } else {
-	return "BioGRID";
-    }
-}
+=cut
 
 sub extractID{
     my $blastres=$_[0];
