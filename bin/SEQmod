@@ -11,11 +11,11 @@ my $user=`whoami`;
 chomp($user);
 
 my $randomTag=int(rand(1000000));
-my $blastdb="$peppidir/lib/SEQ/100.fasta";
+my $blastdb="$peppidir/lib/SEQ/100_psicquic.fasta";
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02";
 my $blitsdb="$peppidir/lib/SEQ/hhblitsdb/db";
-my $interactfile="$peppidir/lib/SEQ/ints.txt";
-my $aliasfile="$peppidir/lib/SEQ/100.fasta.clstr.aliases";
+my $interactfile="$peppidir/lib/SEQ/psicquic.txt";
+my $aliasfile="$peppidir/lib/SEQ/100_psicquic.fasta.clstr.aliases";
 
 my $tempdir="/tmp/$user/PEPPI_SEQ_$pairname\_$randomTag";
 if (! -e "$tempdir"){
@@ -46,7 +46,7 @@ sub blastSearch{
     print $blast1res;
     if ($blast1res eq ""){
 	print "BLAST for sequence A returned no hits in database.\n";
-	print $resfile "?\n";
+	print $resfile "0.0\n";
 	print `rm -rf $tempdir`;
 	exit(1);
     }
@@ -56,7 +56,7 @@ sub blastSearch{
     print $blast2res;
     if ($blast2res eq ""){
 	print "BLAST for sequence B returned no hits in STRING.\n";
-	print $resfile "?\n";
+	print $resfile "0.0\n";
 	print `rm -rf $tempdir`;
 	exit(1);
     }
@@ -68,12 +68,17 @@ sub blastSearch{
     
     for my $i (0..scalar(@ids1)-1){
 	my $id1=$ids1[$i][0];
+	my $firstgrep=`grep -P "$id1(\t|\$)" $tempdir/ints.txt`;
 	for my $j (0..scalar(@ids2)-1){
-	    
 	    my $id2=$ids2[$j][0];
-	    next if (getDB($id1) ne getDB($id2));
+	    #next if (getDB($id1) ne getDB($id2));
 	    print "$id1 $id2\n";
-	    my $grepline=`fgrep "$id1" $tempdir/ints.txt | fgrep "$id2" | head -1`;
+	    my $grepline="";
+	    if ($id1 eq $id2){
+		$grepline=`grep "$id1\\s$id2" $tempdir/ints.txt`;
+	    } else {
+		$grepline=`echo "$firstgrep" | grep -P "$id2(\t|\$)"`;
+	    }
 	    if ($grepline ne ""){
 		print "Dimer found!\n";
 		my @parts=split(' ',$grepline);
@@ -101,7 +106,7 @@ sub blastSearch{
     if (scalar(@results)>0){
 	print $resfile "$results[0][2]\n";
     } else {
-	print $resfile "?\n";
+	print $resfile "0.0\n";
     }
 }
 
@@ -124,6 +129,7 @@ sub getDB{
 	return "BioGRID";
     }
 }
+
 sub extractID{
     my $blastres=$_[0];
     my @blines=split("\n",$blastres);
