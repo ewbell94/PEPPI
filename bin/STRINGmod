@@ -25,11 +25,8 @@ my @chains=split("-",$pairname);
 print `mkdir $outdir/$pairname/STRING`;
 open(my $resfile,">","$outdir/$pairname/STRING/res.txt");
 print `date`;
-print `cp $peppidir/lib/STRING/STRINGseqsv11.db* $tempdir/`;
-print `sync`;
-print `date`;
 
-my $blast1res=`$peppidir/bin/blastp -query $outdir/$pairname/$chains[0].seq -db $tempdir/STRINGseqsv11.db -max_target_seqs $maxtargets -outfmt "6 sseqid nident qlen slen"`;
+my $blast1res=`cat $outdir/../mono/$chains[0]/$chains[0].string`;
 print $blast1res;
 if ($blast1res eq ""){
     print "BLAST for sequence A returned no hits in STRING.\n";
@@ -39,7 +36,7 @@ if ($blast1res eq ""){
 }
 print "\n";
 
-my $blast2res=`$peppidir/bin/blastp -query $outdir/$pairname/$chains[1].seq -db $tempdir/STRINGseqsv11.db -max_target_seqs $maxtargets -outfmt "6 sseqid nident qlen slen"`;
+my $blast2res=`cat $outdir/../mono/$chains[1]/$chains[1].string`;
 print $blast2res;
 if ($blast2res eq ""){
     print "BLAST for sequence B returned no hits in STRING.\n";
@@ -75,22 +72,6 @@ for my $i (0..scalar(@ids1)-1){
 	next if ($parts1[0] ne $parts2[0]);
 	print "$id1 $id2\n";
 	my $hashcode=`python $peppidir/bin/getHashcode.py $id1 $id2`*1;
-	#print `cp $peppidir/lib/STRING/$hashcode.txt $tempdir/STRINGlink.txt`;
-	#open (my $stringlink,"<","$tempdir/STRINGlink.txt");
-=pod
-	print "Starting stringlink search...\n";
-	open(my $stringlink,"<","$peppidir/lib/STRING/$hashcode.txt");
-	my $grepline="";
-	while (my $line=<$stringlink>){
-	    my @linesplit=split(" ",$line);
-	    if (($linesplit[0]==$id1 && $linesplit[1]==$id2) || ($linesplit[1]==$id1 && $linesplit[0]==$id2)){
-		$grepline=$line;
-		last;
-	    }
-	}
-	close($stringlink);
-=cut
-	#print `rm -rf $tempdir/STRINGlink.txt`;
 	my $grepline=`fgrep "$id1" $peppidir/lib/STRING/$hashcode.txt | fgrep "$id2" | head -1`;
 
 	if ($grepline ne ""){
@@ -101,6 +82,7 @@ for my $i (0..scalar(@ids1)-1){
 	    my $co=$parts[4]/1000.0; #co-occurrence
 	    my $ce=$parts[5]/1000.0; #co-expression
 	    print $resfile "$gn\n$gf\n$co\n$ce\n";
+	    print `echo "$pairname,$gn,$gf,$co,$ce" >> $outdir/STRINGres.txt`;
 	    exit(1);
 	}
     }

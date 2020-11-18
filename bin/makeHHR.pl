@@ -69,7 +69,7 @@ if (! -e "$hhdir/$target.hhr.gz"){
 }
 
 print `cp $hhdir/$target.hhr.gz $tempdir/$target.hhr.gz`;
-print `gzip -d $tempdir/$target.hhr.gz`;
+print `gzip -f -d $tempdir/$target.hhr.gz`;
 if ($domaindiv){
     my $domainbound=detectDomains($target,$benchflag,$zthresh);
     if ($domainbound > 0){
