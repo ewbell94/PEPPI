@@ -48,7 +48,7 @@ if (system("squeue > /dev/null")){
     die "Must be connected to cluster to run.\n";
 }
 
-my $peppidir= "/nfs/amino-home/ewbell/PEPPI";
+my $peppidir= "/home/ewbell/PEPPI";
 my $maxjobs=300;
 
 #Organize sequences
