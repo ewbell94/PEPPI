@@ -12,7 +12,9 @@ my $user=`whoami`;
 chomp($user);
 
 my $randomTag=int(rand(1000000));
-my $tempdir="/tmp/$user/PEPPI_STRING_$pairname\_$randomTag";
+my $jobid=`cat $outdir/$pairname/jobid.txt`;
+chomp($jobid);
+my $tempdir="/scratch/$user/job_$jobid/PEPPI_STRING_$pairname\_$randomTag";
 if (! -e "$tempdir"){
     print `mkdir -p $tempdir`;
 } else {

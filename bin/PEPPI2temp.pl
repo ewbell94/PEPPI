@@ -120,8 +120,11 @@ sub submitBatch{
 	print "Queue is currently full, waiting for submission...\n";
 	sleep(60);
     }
-    print `sbatch -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
-
+    my $jobid=`sbatch --parsable -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
+    for my $int (@intset){
+	print `echo "$jobid" > $int/jobid.txt`;
+    }
+    
     #print `$peppidir/bin/multiwrapper.pl $args`;
 }
 

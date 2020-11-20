@@ -16,7 +16,7 @@ print `mkdir $outdir/$pairname/SPRING`;
 #User-set parameters
 my $bindir="$peppidir/bin"; #location of program binaries
 my $springout="$outdir/$pairname/SPRING"; #location of program output
-my $dbdir="/nfs/amino-home/ewbell/SPRINGDB"; #location of SPRING database
+my $dbdir="/home/ewbell/SPRINGDB"; #location of SPRING database
 my $complexlist="$dbdir/70CDHITstruct.txt";
 my $maxmodels=1; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
@@ -88,7 +88,9 @@ while (-e "$outdir/$pairname/$qseqs[0]\_$m.seq"){
 }
 
 my $randomTag=int(rand(1000000));
-my $tempdir="/tmp/$user/PEPPI_SPRING_$qseqs[0]-$qseqs[1]\_$randomTag";
+my $jobid=`cat $outdir/$pairname/jobid.txt`;
+chomp($jobid);
+my $tempdir="/scratch/$user/job_$jobid/PEPPI_SPRING_$qseqs[0]-$qseqs[1]\_$randomTag";
 if (! -e "$tempdir"){
     print `mkdir -p $tempdir`;
 } else {
