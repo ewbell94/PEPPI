@@ -11,19 +11,6 @@ my $pairname="!PAIRNAME!";
 my $user=`whoami`;
 chomp($user);
 
-<<<<<<< HEAD
-my $randomTag=int(rand(1000000));
-my $jobid=`cat $outdir/$pairname/jobid.txt`;
-chomp($jobid);
-my $tempdir="/scratch/$user/job_$jobid/PEPPI_STRING_$pairname\_$randomTag";
-if (! -e "$tempdir"){
-    print `mkdir -p $tempdir`;
-} else {
-    print `rm -rf $tempdir/*`;
-}
-
-=======
->>>>>>> master
 my $seqid=0.9;
 my $maxtargets=100;
 my @chains=split("-",$pairname);
@@ -52,11 +39,22 @@ print "\n";
 my @ids1=extractID($blast1res);
 my @ids2=extractID($blast2res);
 
+my $randomTag=int(rand(1000000));
+my $jobid=`cat $outdir/$pairname/jobid.txt`;
+chomp($jobid);
+my $tempdir="/scratch/$user/job_$jobid/PEPPI_STRING_$pairname\_$randomTag";
+if (! -e "$tempdir"){
+    print `mkdir -p $tempdir`;
+} else {
+    print `rm -rf $tempdir/*`;
+}
+
 for my $i (0..scalar(@ids1)-1){
     my $id1=$ids1[$i][0];
     if ($ids1[$i][1] < $seqid){
 	print "Sequence A homology is too low\n";
 	print $resfile "?\n?\n?\n?\n";
+	print `rm -rf $tempdir`;
 	exit(1);
     }
     for my $j (0..scalar(@ids2)-1){
@@ -66,6 +64,7 @@ for my $i (0..scalar(@ids1)-1){
 	if ($id1 eq $id2){
 	    print "Homodimer detected.  Homodimers are not in the STRING database.\n";
 	    print $resfile "?\n?\n?\n?\n";
+	    print `rm -rf $tempdir`;
 	    exit(1);
 	}
 	next if ($ids2[$j][1] < $seqid);
@@ -74,7 +73,9 @@ for my $i (0..scalar(@ids1)-1){
 	next if ($parts1[0] ne $parts2[0]);
 	print "$id1 $id2\n";
 	my $hashcode=`python $peppidir/bin/getHashcode.py $id1 $id2`*1;
-	my $grepline=`fgrep "$id1" $peppidir/lib/STRING/$hashcode.txt | fgrep "$id2" | head -1`;
+	print `cp $peppidir/lib/STRING/$hashcode.txt.gz $tempdir/ints.txt.gz`;
+	print `gzip -f -d $tempdir/ints.txt.gz`;
+	my $grepline=`fgrep "$id1" $tempdir/ints.txt | fgrep "$id2" | head -1`;
 
 	if ($grepline ne ""){
 	    print "Dimer found!\n";
@@ -85,6 +86,7 @@ for my $i (0..scalar(@ids1)-1){
 	    my $ce=$parts[5]/1000.0; #co-expression
 	    print $resfile "$gn\n$gf\n$co\n$ce\n";
 	    print `echo "$pairname,$gn,$gf,$co,$ce" >> $outdir/STRINGres.txt`;
+	    print `rm -rf $tempdir`;
 	    exit(1);
 	}
     }
