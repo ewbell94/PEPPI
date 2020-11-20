@@ -11,6 +11,7 @@ my $pairname="!PAIRNAME!";
 my $user=`whoami`;
 chomp($user);
 
+<<<<<<< HEAD
 my $randomTag=int(rand(1000000));
 my $jobid=`cat $outdir/$pairname/jobid.txt`;
 chomp($jobid);
@@ -21,6 +22,8 @@ if (! -e "$tempdir"){
     print `rm -rf $tempdir/*`;
 }
 
+=======
+>>>>>>> master
 my $seqid=0.9;
 my $maxtargets=100;
 my @chains=split("-",$pairname);
@@ -33,7 +36,6 @@ print $blast1res;
 if ($blast1res eq ""){
     print "BLAST for sequence A returned no hits in STRING.\n";
     print $resfile "?\n?\n?\n?\n";
-    print `rm -rf $tempdir`;
     exit(1);
 }
 print "\n";
@@ -43,11 +45,9 @@ print $blast2res;
 if ($blast2res eq ""){
     print "BLAST for sequence B returned no hits in STRING.\n";
     print $resfile "?\n?\n?\n?\n";
-    print `rm -rf $tempdir`;
     exit(1);
 }
 print "\n";
-print `rm -rf $tempdir`;
 
 my @ids1=extractID($blast1res);
 my @ids2=extractID($blast2res);
