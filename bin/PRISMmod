@@ -54,7 +54,7 @@ chdir("../1-Prediction");
 
 $currdir=`pwd`;
 chomp($currdir);
-print `python structuralAlignment.py $currdir/TEMPLATE $currdir 1 1063`;
+print `python structuralAlignment.py $currdir/TEMPLATE $currdir 1 40000`;
 if (!-e "MULTIPROT_OUTPUT"){
     print "Multiprot alignment was not run.\n";
     exit(2);
@@ -69,9 +69,9 @@ for my $dir (glob("./MULTIPROT_OUTPUT/*")){
 }
 
 chdir("../2-DistanceCalculation");
-print `python TransformationFiltering.py 1 1063`;
+print `python TransformationFiltering.py 1 40000`;
 chdir("../6-FiberDock");
-print `python FlexibleRefinement.py 1 1063`;
+print `python FlexibleRefinement.py 1 40000`;
 
 print `mkdir $outdir/$pairname/PRISM`;
 print `cp -r ENERGIES $outdir/$pairname/PRISM`;

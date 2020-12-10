@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use List::Util qw(min);
+use Time::HiRes qw(time);
 
 my $peppidir="!PEPPIDIR!";
 my $outdir="!OUTDIR!/PPI";
@@ -22,7 +23,7 @@ if (! -e "$tempdir"){
 } else {
     print `rm -rf $tempdir/*`;
 }
-print `cp $interactfile $tempdir/ints.txt`;
+#print `cp $interactfile $tempdir/ints.txt`;
 
 my $maxtargets=200;
 my $tophits=100;
@@ -40,6 +41,7 @@ print `rm -rf $tempdir`;
 print `date`;
 
 sub blastSearch{
+    my $t0=time();
     my $blast1res=`cat $outdir/../mono/$chains[0]/$chains[0].seq`;
     print $blast1res;
     if ($blast1res eq ""){
@@ -65,33 +67,52 @@ sub blastSearch{
     my @ids1=extractID($blast1res);
     my @ids2=extractID($blast2res);
     my @results=();
-    
+
+    my $t1=time();
+    print "Total id extraction time: ".($t1-$t0)."\n";
+    open(my $complexfile,"<",$interactfile);
+    my %complexlist=(); #Find all potential partner chains given some core chain
+    while (my $line=<$complexfile>){
+	chomp($line);
+	my @chains=split(" ",$line);
+	if (exists($complexlist{$chains[0]})){
+	    push(@{$complexlist{$chains[0]}},$chains[1]);
+	} else {
+	    my @value=($chains[1]);
+	    $complexlist{$chains[0]}=\@value;
+	}
+
+	if (exists($complexlist{$chains[1]})){
+	    push(@{$complexlist{$chains[1]}},$chains[0]);
+	} else {
+	    my @value=($chains[0]);
+	    $complexlist{$chains[1]}=\@value;
+	}
+    }
+    close($complexfile);
+
     for my $i (0..scalar(@ids1)-1){
 	my $id1=$ids1[$i][0];
-	my $firstgrep=`grep -P "$id1(\t|\$)" $tempdir/ints.txt`;
+	my @partners=();
+	if (exists($complexlist{$id1})){
+	    @partners=@{$complexlist{$id1}};
+	} else {
+	    next;
+	}
 	for my $j (0..scalar(@ids2)-1){
 	    my $id2=$ids2[$j][0];
-	    my $grepline="";
-	    if ($id1 eq $id2){
-		$grepline=`grep "$id1\\s$id2" $tempdir/ints.txt`;
-	    } else {
-		$grepline=`echo "$firstgrep" | grep -P "$id2(\t|\$)"`;
-	    }
-	    if ($grepline ne ""){
-		print "Dimer found!\n";
-		my @parts=split(' ',$grepline);
-		my $firstid="";
-		my $secondid="";
-		if ($id1 eq $parts[0]){
-		    $firstid=$parts[0];
-		    $secondid=$parts[1];
-		} else {
-		    $firstid=$parts[1];
-		    $secondid=$parts[0];
+	    my $pflag=0;
+	    for my $partner (@partners){
+		if ($id2 eq $partner){
+		    $pflag=1;
+		    last;
 		}
+	    }
+	    if ($pflag){
+		print "Dimer found!\n";
 		my $seqid1=$ids1[$i][1];
 		my $seqid2=$ids2[$j][1];
-		my @topush=($firstid,$secondid,2/(1/$seqid1+1/$seqid2),$seqid1,$seqid2);
+		my @topush=($id1,$id2,2/(1/$seqid1+1/$seqid2),$seqid1,$seqid2);
 		push(@results,\@topush);
 	    }
 	}
@@ -108,6 +129,8 @@ sub blastSearch{
 	print $resfile "0.0\n";
 	print `echo "$pairname,0.0" >> $outdir/SEQres.txt`;
     }
+    my $t2=time();
+    print "Total search time: ".($t2-$t1)."\n";
 }
 
 =pod

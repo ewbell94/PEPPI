@@ -5,6 +5,7 @@ use warnings;
 use Scalar::Util qw(looks_like_number);
 use List::Util qw(min);
 use POSIX qw(floor);
+use Time::HiRes qw(time);
 
 my $peppidir="!PEPPIDIR!";
 my $outdir="!OUTDIR!/PPI";
@@ -30,7 +31,7 @@ my @weights=(1,12.0,-1.4); #weights for SPRING score calculation
 my $homothresh=0.9; #
 my $seqmax=1500; #maximum allowable length of input sequences; sequences longer than this will be truncated
 my $minmono=5000; #number of monomer templates for dimer matching
-my $dimercount=200; #number of dimers to be assembled
+my $dimercount=5; #number of dimers to be assembled
 my $topcount=$dimercount;
 my $topscore=-100.0;
 
@@ -97,6 +98,7 @@ if (! -e "$tempdir"){
 chdir("$tempdir");
 
 for my $pointer (@domainPairs){
+    my $t0=time();
     #Read in arguments and process input
     my @qdoms = @{$pointer};
     my $prot1file="$outdir/$pairname/$qdoms[0].seq";
@@ -110,7 +112,6 @@ for my $pointer (@domainPairs){
 	print "Protein sequence files were not found!\n";
 	next;
     }
-    
     
     #Make working directory
     
@@ -135,12 +136,15 @@ for my $pointer (@domainPairs){
 	print "$prot2 does not have an HHR file, run makeHHR on this target\n";
 	exit(4);
     }
-    
+
     #Fetch HHsearch hits from HHR files
     print "Fetching HHsearch hits\n";
     my @prot1hits=fetchHits($prot1);
     my @prot2hits=fetchHits($prot2);
+
     
+    my $t1=time();
+    print "Total HHsearch time: ".($t1-$t0)."\n";
     #Store dfire and complex list
     
     
@@ -159,7 +163,8 @@ for my $pointer (@domainPairs){
     @dimerTemplates=sort{$b->[2]<=>$a->[2]} @dimerTemplates;
     
 #Create and score models from selected dimer templates
-    
+    my $t2=time();
+    print "Total mapping time: ".($t2-$t1)."\n";
     print "Constructing models\n";
     
     constructMonomer($prot1,$prot1hits[0][0]);
@@ -167,6 +172,9 @@ for my $pointer (@domainPairs){
     constructMonomer($prot2,$prot2hits[0][0]);
     #print `cp $tempdir/$prot2.pdb $outputdir/$prot2.pdb`;
     
+    my $t3=time();
+    print "Total monomer model time: ".($t3-$t2)."\n";
+
     my $hhr1head=`head $tempdir/$prot1.hhr`;
     $hhr1head=~/Match_columns\s+(\d+)/;
     my $seq1len=$1;
@@ -202,6 +210,8 @@ for my $pointer (@domainPairs){
     }
     close($summary);
     
+    my $t4=time();
+    print "Total scoring time: ".($t4-$t3)."\n";
     #print `tar -zcf $tempdir/pdb.tar.gz $tempdir/*-*.pdb`;
     #print `cp $tempdir/pdb.tar.gz $outputdir/`;
     print `sync`;
@@ -246,6 +256,8 @@ sub getSeqID{
 
 sub fetchHits{
     my $prot=$_[0];
+
+=pod
     my @templates=();
     my @scores=();
     open(my $hhrfile,"<","$tempdir/$prot.hhr");
@@ -273,12 +285,22 @@ sub fetchHits{
 	$std+=($score-$meanval)**2/scalar(@scores);
     }
     $std=$std**(0.5);
-    
+
     my @pairs=();
     for my $i (0..scalar(@templates)-1){
 	my @pair=($templates[$i],($scores[$i]-$meanval)/$std);
 	push(@pairs,\@pair);
     }
+=cut
+    print `$bindir/Zextractor $tempdir/$prot.hhr > $tempdir/Zpairs.txt`;
+    open(my $zpairs,"<","$tempdir/Zpairs.txt");
+    my @pairs=();
+    while (my $line=<$zpairs>){
+	my @pair=split(" ",$line);
+	push(@pairs,\@pair);
+    }
+    close($zpairs);
+
     @pairs=sort{$b->[1]<=>$a->[1]} @pairs;
     
     my @outlist=();
@@ -295,6 +317,41 @@ sub fetchHits{
 }
 
 sub fetchDimers{
+    my @prot1list=@{$_[0]};
+    my @prot2list=@{$_[1]};
+    my %complexlist=%{$_[2]};
+    my $homoflag=$_[3];
+    my @dimerlist=();
+    for my $i (0..scalar(@prot1list)-1){
+	my @prot1complexes=@{$complexlist{$prot1list[$i][0]}};
+	for my $j (0..scalar(@prot2list)-1){
+	    next if (substr($prot1list[$i][0],0,4) ne substr($prot2list[$j][0],0,4));
+	    for my $partner (@prot1complexes){
+		if ($partner eq $prot2list[$j][0]){
+		    if ($homoflag){
+			my $redundflag=0;
+			for my $n (0..scalar(@dimerlist)-1){
+			    if ($dimerlist[$n][1] eq $prot1list[$i][0] && $dimerlist[$n][0] eq $prot2list[$j][0]){
+				$redundflag=1;
+				last;
+			    }
+			}
+			last if ($redundflag);
+		    }
+		    my $zscore=min($prot1list[$i][1],$prot2list[$j][1]);
+		    my @dimerpair=($prot1list[$i][0],$prot2list[$j][0],$zscore);
+		    push(@dimerlist,\@dimerpair);
+		    last;
+		}
+	    }
+	}
+    }
+    
+    return @dimerlist;
+}
+
+=pod
+sub fetchDimers{
     print "Fetching dimers\n";
     my @prot1list=@{$_[0]};
     my @prot2list=@{$_[1]};
@@ -304,9 +361,9 @@ sub fetchDimers{
     for my $i (0..scalar(@prot1list)-1){
 	next if (!exists($reverseindex{$prot1list[$i][0]}));
 	my @prot1hits=@{$reverseindex{$prot1list[$i][0]}};
-	print "$prot1list[$i][0]\n";
+	#print "$prot1list[$i][0]\n";
 	for my $biomol1 (@prot1hits){
-	    next if ($biomol1=~/_1_/);
+	    #next if ($biomol1=~/_1_/);
 	    my @prot1complexes=@{$complexlist{$biomol1}};
 	    for my $partner (@prot1complexes){
 		next if (!exists($forwardindex{$partner}));
@@ -315,7 +372,7 @@ sub fetchDimers{
 		    if ($prot2list[$j][0] eq $prot2hit){
 			if ($homoflag){
 			    my $redundflag=0;
-			    for my $n (0..scalar(@dimerlist)){
+			    for my $n (0..scalar(@dimerlist)-1){
 				if ($dimerlist[$n][1] eq $biomol1 && $dimerlist[$n][0] eq $partner){
 				    $redundflag=1;
 				    last;
@@ -334,6 +391,7 @@ sub fetchDimers{
     }
     return @dimerlist;
 }
+=cut
 
 sub constructMonomer{
     my $query=$_[0];

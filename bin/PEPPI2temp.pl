@@ -7,7 +7,7 @@ my $peppidir="!PEPPIDIR!";
 my $outdir="!OUTDIR!";
 my $maxjobs=!MAXJOBS!;
 my $nohomo=0;
-my $keepflag=0;
+my $keepflag=1;
 my $benchmarkflag=!BENCHMARKFLAG!;
 my $batchsize=1;
 
@@ -51,7 +51,7 @@ while (my $line=<$protcodeB>){
 }
 close($protcodeB);
 
-my @supported=("SPRING");
+my @supported=("PRISM");
 my @intset=();
 
 print `mkdir $outdir/PPI`;
@@ -85,7 +85,7 @@ for my $i (0..scalar(@protsA)-1){
             print $jobscript $modtext;
             close($jobscript);
             print `chmod +x $int/$pairname-$prog.pl`;
-            print `$int/$pairname-$prog.pl` if ($singleflag);
+            print `$int/$pairname-$prog.pl > $int/out_$prog.log 2> $int/err_$prog.log` if ($singleflag);
             while (`squeue -u $user | wc -l`-1 >= $maxjobs){
                 print "Queue is currently full, waiting for submission...\n";
                 sleep(60);
