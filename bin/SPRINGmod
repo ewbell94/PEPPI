@@ -31,7 +31,7 @@ my @weights=(1,12.0,-1.4); #weights for SPRING score calculation
 my $homothresh=0.9; #
 my $seqmax=1500; #maximum allowable length of input sequences; sequences longer than this will be truncated
 my $minmono=5000; #number of monomer templates for dimer matching
-my $dimercount=5; #number of dimers to be assembled
+my $dimercount=10; #number of dimers to be assembled
 my $topcount=$dimercount;
 my $topscore=-100.0;
 
@@ -39,7 +39,7 @@ if (-e "$springout/res.txt"){
     print "SPRING has already been run!\n";
     exit(2);
 }
-
+=pod
 open(my $complexfile,"<",$complexlist);
 my %complexlist=(); #Find all potential partner chains given some core chain
 while (my $line=<$complexfile>){
@@ -74,7 +74,7 @@ while (my $line=<$indexfile>){
     }
 }
 close($indexfile);
-
+=cut
 my @qseqs=split("-",$pairname);
 my @domainPairs=();
 my $m=1;
@@ -137,17 +137,29 @@ for my $pointer (@domainPairs){
 	exit(4);
     }
 
-    #Fetch HHsearch hits from HHR files
-    print "Fetching HHsearch hits\n";
-    my @prot1hits=fetchHits($prot1);
-    my @prot2hits=fetchHits($prot2);
-
-    
     my $t1=time();
     print "Total HHsearch time: ".($t1-$t0)."\n";
-    #Store dfire and complex list
+    #Fetch HHsearch hits from HHR files
+    print "Fetching HHsearch hits\n";
+    #my @prot1hits=fetchHits($prot1);
+    #my @prot2hits=fetchHits($prot2);
+
+    print `$bindir/dimerMapper $tempdir/$prot1.hhr $tempdir/$prot2.hhr > $tempdir/dimers.txt`;
     
-    
+    open(my $mapres,"<","$tempdir/dimers.txt");
+    my $prot1top=<$mapres>;
+    my $prot2top=<$mapres>;
+    chomp($prot1top);
+    chomp($prot2top);
+    my @dimerTemplates=();
+
+    while(my $line=<$mapres>){
+	chomp($line);
+	my @dimer=split(" ",$line);
+	next if ($benchmarkflag && (getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$dimer[0].pdb") >= $scut || getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$dimer[1].pdb") >= $scut));
+	push(@dimerTemplates,\@dimer);
+    }
+    close($mapres);
     #open(my $dfirefile,"<","$bindir/dfire.txt");
     #open(my $dfirefile,"<","$bindir/newdfire.txt");
     #my @dfire=<$dfirefile>;
@@ -155,21 +167,20 @@ for my $pointer (@domainPairs){
     #close($dfirefile);
     
     
-    
 #Search for dimer templates given monomeric hits
-    my @dimerTemplates=fetchDimers(\@prot1hits,\@prot2hits,\%complexlist,$homoflag);
+    #my @dimerTemplates=fetchDimers(\@prot1hits,\@prot2hits,\%complexlist,$homoflag);
     
 #Flip the sequence order and search for more dimer templates if the chains are nonidentical
-    @dimerTemplates=sort{$b->[2]<=>$a->[2]} @dimerTemplates;
+    #@dimerTemplates=sort{$b->[2]<=>$a->[2]} @dimerTemplates;
     
 #Create and score models from selected dimer templates
     my $t2=time();
     print "Total mapping time: ".($t2-$t1)."\n";
     print "Constructing models\n";
     
-    constructMonomer($prot1,$prot1hits[0][0]);
+    constructMonomer($prot1,$prot1top);
     #print `cp $tempdir/$prot1.pdb $outputdir/$prot1.pdb`;
-    constructMonomer($prot2,$prot2hits[0][0]);
+    constructMonomer($prot2,$prot2top);
     #print `cp $tempdir/$prot2.pdb $outputdir/$prot2.pdb`;
     
     my $t3=time();
@@ -253,11 +264,11 @@ sub getSeqID{
     return $idcount/$seq1len if ($fname2=~/\.pdb/);
     return 0.0;
 }
-
+=pod
 sub fetchHits{
     my $prot=$_[0];
 
-=pod
+
     my @templates=();
     my @scores=();
     open(my $hhrfile,"<","$tempdir/$prot.hhr");
@@ -291,7 +302,9 @@ sub fetchHits{
 	my @pair=($templates[$i],($scores[$i]-$meanval)/$std);
 	push(@pairs,\@pair);
     }
-=cut
+    
+    @pairs=sort{$b->[1]<=>$a->[1]} @pairs;
+
     print `$bindir/Zextractor $tempdir/$prot.hhr > $tempdir/Zpairs.txt`;
     open(my $zpairs,"<","$tempdir/Zpairs.txt");
     my @pairs=();
@@ -301,8 +314,6 @@ sub fetchHits{
     }
     close($zpairs);
 
-    @pairs=sort{$b->[1]<=>$a->[1]} @pairs;
-    
     my @outlist=();
     my $i=0;
     while(scalar(@outlist) < $minmono && $i < scalar(@pairs)){
@@ -350,7 +361,7 @@ sub fetchDimers{
     return @dimerlist;
 }
 
-=pod
+
 sub fetchDimers{
     print "Fetching dimers\n";
     my @prot1list=@{$_[0]};
@@ -391,8 +402,8 @@ sub fetchDimers{
     }
     return @dimerlist;
 }
-=cut
 
+=cut
 sub constructMonomer{
     my $query=$_[0];
     my $template=$_[1];
