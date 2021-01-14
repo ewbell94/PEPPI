@@ -31,6 +31,7 @@ while (my $line=<$protcodeA>){
 	print `cp $outdir/mono/$parts[0]/$domains[$i].fasta $outdir/mono/$parts[0]/$parts[0]\_$n.fasta`;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].hhr.gz $outdir/mono/$parts[0]/$parts[0]\_$n.hhr.gz`;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].pdb $outdir/mono/$parts[0]/$parts[0]\_$n.pdb`;
+	print `cp $outdir/mono/$parts[0]/$domains[$i].tm $outdir/mono/$parts[0]/$parts[0]\_$n.tm`;
     }
 }
 close($protcodeA);
@@ -47,6 +48,7 @@ while (my $line=<$protcodeB>){
         print `cp $outdir/mono/$parts[0]/$domains[$i].fasta $outdir/mono/$parts[0]/$parts[0]\_$n.fasta`;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].hhr.gz $outdir/mono/$parts[0]/$parts[0]\_$n.hhr.gz`;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].pdb $outdir/mono/$parts[0]/$parts[0]\_$n.pdb`;
+	print `cp $outdir/mono/$parts[0]/$domains[$i].tm $outdir/mono/$parts[0]/$parts[0]\_$n.tm`;
     }
 }
 close($protcodeB);
@@ -85,7 +87,7 @@ for my $i (0..scalar(@protsA)-1){
             print $jobscript $modtext;
             close($jobscript);
             print `chmod +x $int/$pairname-$prog.pl`;
-            print `$int/$pairname-$prog.pl` if ($singleflag);
+            print `$int/$pairname-$prog.pl > $int/out_$prog.log 2> $int/err_$prog.log` if ($singleflag);
             while (`squeue -u $user | wc -l`-1 >= $maxjobs){
                 print "Queue is currently full, waiting for submission...\n";
                 sleep(60);

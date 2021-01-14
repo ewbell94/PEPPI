@@ -15,7 +15,7 @@ my $tmout="$outdir/$pairname/TMSEARCH"; #location of program output
 my $dbdir="/nfs/amino-home/ewbell/SPRINGDB"; #location of SPRING database
 my $complexlist="$dbdir/70CDHITstruct.txt";
 my $tophits=100;
-my $maxmodels=3; #maximum number of model pdb files to make
+my $maxmodels=1; #maximum number of model pdb files to make
 my $modeldir="$outdir/../model"; #location of hhr files of previously run HHsearch results
 
 #DO NOT CHANGE BENEATH THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING
@@ -74,23 +74,11 @@ for my $pointer (@domainPairs){
     #Make working directory
     print `cp $prot1file $tempdir/$prot1.fasta`;
     print `cp $prot2file $tempdir/$prot2.fasta`;
+    print `cp $outdir/../mono/$qseqs[0]/$prot1.pdb $tempdir/$prot1.pdb`;
+    print `cp $outdir/../mono/$qseqs[1]/$prot2.pdb $tempdir/$prot2.pdb`;
     my $homoflag=(getSeqID("$tempdir/$prot1.fasta","$tempdir/$prot2.fasta") >= $homothresh);
     
 #Copy HHR files or run HHsearch
-    if (-e "$modeldir/$prot1.pdb"){
-	print `cp $modeldir/$prot1.pdb $tempdir`;
-    } else {
-	print "Model not found for $prot1.\n";
-	exit(4);
-    }
-
-    if (-e "$modeldir/$prot2.pdb"){
-	print `cp $modeldir/$prot2.pdb $tempdir`;
-    } else {
-	print "Model not found for $prot2.\n";
-	exit(4);
-    }
-
     
     my @dimerTemplates=tmSearch($prot1,$prot2,$homoflag);
     
@@ -142,38 +130,18 @@ sub getSeqID{
     return 0.0;
 }
 
-sub TMalign{
-    my $template=$_[0];
-    my $query=$_[1];
-    my $tmres=`$bindir/TMalign $template $query`;
-    $tmres=~/TM-score= (.*) \(if normalized by length of Chain_2/;
-    return $1;
-}
-
-sub fTMalign{
-    my $template=$_[0];
-    my $query=$_[1];
-    my $tmres=`$bindir/fTMalign $template $query -fast`;
-    $tmres=~/TM-score= (.*) \(if normalized by length of Chain_2/;
-    return $1;
-}
-
 sub getTMs{
     my $prot=$_[0];
     
-    (my $monolist=$complexlist)=~s/\.txt/\.mono/;
-    open(my $monofile,"<",$monolist);
     my %tmscores=();
-    while (my $line=<$monofile>){
-	print "$line";
+    (my $basename=$prot)=~s/_.*//;
+    print "$basename/$prot\n";
+    open(my $tmfile,"<","$outdir/../mono/$basename/$prot.tm");
+    while (my $line=<$tmfile>){
 	chomp($line);
-	if ($benchmarkflag && getSeqID("$tempdir/$prot.fasta","$dbdir/monomers/$line.pdb") > $benchthresh){
-	    $tmscores{$line}=1e-100;
-	} else {
-	    $tmscores{$line}=fTMalign("$dbdir/monomers/$line.pdb","$tempdir/$prot.pdb");
-	}
+	my @parts=split(" ",$line);
+	$tmscores{$parts[0]}=$parts[1];
     }
-
     return \%tmscores;
 }
 
@@ -214,16 +182,6 @@ sub tmSearch{
 	    push(@complextm,\@topush);
 	}
 
-    }
-
-    @complextm=sort{$b->[1]<=>$a->[1]} @complextm;
-    
-    for my $i (0..$tophits*5-1){
-	my @chains=split("-",$complextm[$i][0]);
-	my $tm1=TMalign("$dbdir/monomers/$chains[0].pdb","$tempdir/$prot1.pdb");
-        my $tm2=TMalign("$dbdir/monomers/$chains[1].pdb","$tempdir/$prot2.pdb");
-        my $combinedTM=2/(1/$tm1+1/$tm2);
-	$complextm[$i][1]=$combinedTM;
     }
 
     @complextm=sort{$b->[1]<=>$a->[1]} @complextm;

@@ -48,8 +48,13 @@ if (system("squeue > /dev/null")){
     die "Must be connected to cluster to run.\n";
 }
 
+<<<<<<< HEAD
 my $peppidir= "/home/ewbell/PEPPI";
 my $maxjobs=300;
+=======
+my $peppidir= "/nfs/amino-home/ewbell/PEPPI";
+my $maxjobs=500;
+>>>>>>> master
 
 #Organize sequences
 print `mkdir $outdir` if (!-e "$outdir");
@@ -133,10 +138,14 @@ if (openhandle($fastaout)){
 
 #print `mkdir $outdir/hhr`;
 #print `mkdir $outdir/model`;
+<<<<<<< HEAD
 =pod
+=======
+
+>>>>>>> master
 for my $ind (1..$i){
     print "prot$ind\n";
-    if (`ls $fastadir/prot${ind}/*.hhr.gz | wc -l` == 0){
+    if (`ls $fastadir/prot${ind}/*.tm | wc -l` == 0){
 	print "HHR\n";
 	my $args="-o $fastadir -t prot$ind";
 	$args="$args -b" if ($benchmarkflag);
