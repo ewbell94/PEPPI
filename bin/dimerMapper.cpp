@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const string complexfile="/nfs/amino-home/ewbell/SPRINGDB/70CDHITstruct.txt";
+const string complexfile="/home/ewbell/SPRINGDB/70CDHITstruct.txt";
 const int maxmono=5000;
 
 struct namedScore{
@@ -64,8 +64,8 @@ vector<namedScore> fetchHits(string hhrfilename){
       }
       templates.push_back(target);
       getline(hhrfile,line);
-      //double score=atof(line.substr(line.find("Sum_probs=")+10).c_str());
-      double score=atof(line.substr(line.find("Score=")+6,6).c_str());
+      double score=atof(line.substr(line.find("Sum_probs=")+10).c_str());
+      //double score=atof(line.substr(line.find("Score=")+6,6).c_str());
       //cout<<line<<endl<<score<<endl;
       total+=score;
       scores.push_back(score);

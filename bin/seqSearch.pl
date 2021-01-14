@@ -12,8 +12,8 @@ my $outdir="";
 ######### Needed changes ended #################################
 
 my $target="";
-my $bindir="/nfs/amino-home/ewbell/PEPPI/bin";
-my $libdir="/nfs/amino-home/ewbell/PEPPI/lib";
+my $bindir="/home/ewbell/PEPPI/bin";
+my $libdir="/home/ewbell/PEPPI/lib";
 
 GetOptions(
     "outdir=s" => \$outdir,
