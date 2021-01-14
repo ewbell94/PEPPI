@@ -40,7 +40,7 @@ my @ids1=extractID($blast1res);
 my @ids2=extractID($blast2res);
 
 my $randomTag=int(rand(1000000));
-my $jobid=`cat $outdir/$pairname/jobid.txt`;
+my $jobid=`head -1 $outdir/$pairname/jobid.txt`;
 chomp($jobid);
 my $tempdir="/scratch/$user/job_$jobid/PEPPI_STRING_$pairname\_$randomTag";
 if (! -e "$tempdir"){

@@ -133,6 +133,7 @@ if (openhandle($fastaout)){
 
 #print `mkdir $outdir/hhr`;
 #print `mkdir $outdir/model`;
+=pod
 for my $ind (1..$i){
     print "prot$ind\n";
     if (`ls $fastadir/prot${ind}/*.hhr.gz | wc -l` == 0){
@@ -155,7 +156,7 @@ for my $ind (1..$i){
 	print `sbatch -o $fastadir/prot$ind/out_seqSearch_prot$ind.log $peppidir/bin/seqSearch.pl -o $fastadir -t prot$ind`;
     }
 }
-
+=cut
 my $peppi2 = `cat $peppidir/bin/PEPPI2temp.pl`;
 $peppi2=~s/\!PEPPIDIR\!/$peppidir/;
 $peppi2=~s/\!OUTDIR\!/$outdir/;

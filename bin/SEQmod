@@ -16,7 +16,7 @@ my $randomTag=int(rand(1000000));
 my $interactfile="$peppidir/lib/SEQ/psicquic.txt";
 my $aliasfile="$peppidir/lib/SEQ/100_psicquic.fasta.clstr.aliases";
 
-my $jobid=`cat $outdir/$pairname/jobid.txt`;
+my $jobid=`head -1 $outdir/$pairname/jobid.txt`;
 chomp($jobid);
 my $tempdir="/scratch/$user/job_$jobid/PEPPI_SEQ_$pairname\_$randomTag";
 if (! -e "$tempdir"){

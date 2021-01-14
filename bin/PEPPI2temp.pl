@@ -7,9 +7,9 @@ my $peppidir="!PEPPIDIR!";
 my $outdir="!OUTDIR!";
 my $maxjobs=!MAXJOBS!;
 my $nohomo=0;
-my $keepflag=0;
+my $keepflag=1;
 my $benchmarkflag=!BENCHMARKFLAG!;
-my $batchsize=1;
+my $batchsize=50;
 
 my $user=`whoami`;
 chomp($user);
@@ -51,7 +51,7 @@ while (my $line=<$protcodeB>){
 }
 close($protcodeB);
 
-my @supported=("SPRING");
+my @supported=("SPRING","SEQ","STRING");
 my @intset=();
 
 print `mkdir $outdir/PPI`;
@@ -120,9 +120,9 @@ sub submitBatch{
 	print "Queue is currently full, waiting for submission...\n";
 	sleep(60);
     }
-    my $jobid=`sbatch --parsable -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
+    my $jobid=`sbatch --parsable -J PEPPI2batch -o /dev/null -t 24:00:00 -p shared -A mia174 -n 1 -N 1 $peppidir/bin/multiwrapper.pl $args`;
     for my $int (@intset){
-	print `echo "$jobid" > $int/jobid.txt`;
+	print `echo -n "$jobid" > $int/jobid.txt`;
     }
     
     #print `$peppidir/bin/multiwrapper.pl $args`;

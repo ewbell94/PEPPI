@@ -112,7 +112,7 @@ int main(int argc, char *argv[]){
     // buid residue hash table and
     // atom name dictionary for future using.
     //scanf("%s", filename);
-    read_charge_file("/nfs/amino-home/ewbell/PEPPI/bin/charge_inp.dat");
+    read_charge_file("/home/ewbell/PEPPI/bin/charge_inp.dat");
 
 
 
@@ -145,7 +145,7 @@ int main(int argc, char *argv[]){
     //fp=(FILE *)fopen("fort.21_alla_hy","r");
     //fp=(FILE *)fopen("fort.21_alla_hy_1.61","r"); //dimeric 1.61
     //fp=(FILE *)fopen("fort.21","r");
-    fp=(FILE *)fopen("/nfs/amino-home/ewbell/PEPPI/bin/fort.21_alla","r"); //monomic 1.61
+    fp=(FILE *)fopen("/home/ewbell/PEPPI/bin/fort.21_alla","r"); //monomic 1.61
     if(fp==NULL) stop("Could not find potential file: fort.21_alla");
     char ctmp1[5], ctmp2[5], ctmp3[5], ctmp4[5];
     double U;
