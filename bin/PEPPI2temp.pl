@@ -31,6 +31,7 @@ while (my $line=<$protcodeA>){
 	print `cp $outdir/mono/$parts[0]/$domains[$i].fasta $outdir/mono/$parts[0]/$parts[0]\_$n.fasta`;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].hhr.gz $outdir/mono/$parts[0]/$parts[0]\_$n.hhr.gz`;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].pdb $outdir/mono/$parts[0]/$parts[0]\_$n.pdb`;
+	print `cp $outdir/mono/$parts[0]/$domains[$i].tm $outdir/mono/$parts[0]/$parts[0]\_$n.tm`;
     }
 }
 close($protcodeA);
@@ -47,6 +48,7 @@ while (my $line=<$protcodeB>){
         print `cp $outdir/mono/$parts[0]/$domains[$i].fasta $outdir/mono/$parts[0]/$parts[0]\_$n.fasta`;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].hhr.gz $outdir/mono/$parts[0]/$parts[0]\_$n.hhr.gz`;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].pdb $outdir/mono/$parts[0]/$parts[0]\_$n.pdb`;
+	print `cp $outdir/mono/$parts[0]/$domains[$i].tm $outdir/mono/$parts[0]/$parts[0]\_$n.tm`;
     }
 }
 close($protcodeB);

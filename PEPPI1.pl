@@ -49,7 +49,7 @@ if (system("squeue > /dev/null")){
 }
 
 my $peppidir= "/nfs/amino-home/ewbell/PEPPI";
-my $maxjobs=300;
+my $maxjobs=500;
 
 #Organize sequences
 print `mkdir $outdir` if (!-e "$outdir");
@@ -133,9 +133,10 @@ if (openhandle($fastaout)){
 
 #print `mkdir $outdir/hhr`;
 #print `mkdir $outdir/model`;
+
 for my $ind (1..$i){
     print "prot$ind\n";
-    if (`ls $fastadir/prot${ind}/*.hhr.gz | wc -l` == 0){
+    if (`ls $fastadir/prot${ind}/*.tm | wc -l` == 0){
 	print "HHR\n";
 	my $args="-o $fastadir -t prot$ind";
 	$args="$args -b" if ($benchmarkflag);
