@@ -91,8 +91,7 @@ sub tmSearch{
     while (my $line=<$monofile>){
         chomp($line);
         my @pair;
-        if ($benchflag && getSeqID("$tempdir/$prot.fasta","$springdb/monomers/$line.pdb") > $\
-	    homologthresh){
+        if ($benchflag && getSeqID("$tempdir/$prot.fasta","$springdb/monomers/$line.pdb") > $homologthresh){
             print "Template $line given low TM-score because of high homology.\n";
             @pair=($line,0.00001);
         } else {

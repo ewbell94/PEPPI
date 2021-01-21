@@ -25,8 +25,14 @@ for my $val (@Bvals){
     print $inpfile "$val\n";
 }
 
+<<<<<<< HEAD
 my $result=`/home/ewbell/miniconda2/bin/python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
 #print `echo $result > $outdir/$pairname/CT/res.txt`;
+=======
+print `python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
+my $result=`cat $outdir/$pairname/CT/res.txt`;
+print `echo -en "$pairname,$result" >> $outdir/CTres.txt`;
+>>>>>>> master
 print `sync`;
 
 sub getCT{
