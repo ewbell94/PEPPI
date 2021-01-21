@@ -17,7 +17,7 @@ print `mkdir $outdir/$pairname/SPRING`;
 #User-set parameters
 my $bindir="$peppidir/bin"; #location of program binaries
 my $springout="$outdir/$pairname/SPRING"; #location of program output
-my $dbdir="/home/ewbell/SPRINGDB"; #location of SPRING database
+my $dbdir="/expanse/lustre/scratch/ewbell/temp_project/SPRINGDB"; #location of SPRING database
 my $complexlist="$dbdir/70CDHITstruct.txt";
 my $maxmodels=1; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"

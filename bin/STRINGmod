@@ -72,8 +72,8 @@ for my $i (0..scalar(@ids1)-1){
 	my @parts2=split(/\./,$id2);
 	next if ($parts1[0] ne $parts2[0]);
 	print "$id1 $id2\n";
-	my $hashcode=`python $peppidir/bin/getHashcode.py $id1 $id2`*1;
-	print `cp $peppidir/lib/STRING/$hashcode.txt.gz $tempdir/ints.txt.gz`;
+	my $hashcode=`python2 $peppidir/bin/getHashcode.py $id1 $id2`*1;
+	print `cp /expanse/lustre/scratch/ewbell/temp_project/lib/STRING/$hashcode.txt.gz $tempdir/ints.txt.gz`;
 	print `gzip -f -d $tempdir/ints.txt.gz`;
 	my $grepline=`fgrep "$id1" $tempdir/ints.txt | fgrep "$id2" | head -1`;
 

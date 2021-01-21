@@ -9,14 +9,14 @@ use Getopt::Long qw(GetOptions);
 use List::Util qw(sum0);
 use POSIX qw(ceil);
 
-$ENV{'PATH'}="/nfs/amino-home/zhanglabs/bin:$ENV{'PATH'}";
+#$ENV{'PATH'}="/nfs/amino-home/zhanglabs/bin:$ENV{'PATH'}";
 
 my $user="$ENV{USER}"; # user name, please change it to your own name, i.e. 'jsmith'
 my $outdir="";
 ######### Needed changes ended #################################
 
 my $target="";
-my $bindir="/nfs/amino-home/ewbell/PEPPI/bin";
+my $bindir="/home/ewbell/PEPPI/bin";
 my $domaindiv=0;
 my $benchflag=0;
 my $maxjobs=300;

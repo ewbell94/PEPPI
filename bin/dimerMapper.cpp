@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const string complexfile="/home/ewbell/SPRINGDB/70CDHITstruct.txt";
+const string complexfile="/expanse/lustre/scratch/ewbell/temp_project/SPRINGDB/70CDHITstruct.txt";
 const int maxmono=5000;
 
 struct namedScore{

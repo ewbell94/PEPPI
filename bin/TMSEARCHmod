@@ -12,7 +12,7 @@ my $benchmarkflag=!BENCHMARK!;
 #User-set parameters
 my $bindir="$peppidir/bin"; #location of program binaries
 my $tmout="$outdir/$pairname/TMSEARCH"; #location of program output
-my $dbdir="/home/ewbell/SPRINGDB"; #location of SPRING database
+my $dbdir="/expanse/lustre/scratch/ewbell/temp_project/SPRINGDB"; #location of SPRING database
 my $complexlist="$dbdir/70CDHITstruct.txt";
 my $tophits=100;
 my $maxmodels=1; #maximum number of model pdb files to make

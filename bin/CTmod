@@ -25,7 +25,7 @@ for my $val (@Bvals){
     print $inpfile "$val\n";
 }
 
-my $result=`python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
+my $result=`/home/ewbell/miniconda2/bin/python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
 #print `echo $result > $outdir/$pairname/CT/res.txt`;
 print `sync`;
 
