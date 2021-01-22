@@ -8,7 +8,7 @@ my $outdir="!OUTDIR!/PPI";
 my $pairname="!PAIRNAME!";
 my $benchmarkflag=!BENCHMARK!;
 
-print `mkdir $outdir/$pairname/COTHPPI`;
+print `mkdir -p $outdir/$pairname/COTHPPI`;
 
 #User-set parameters
 my $bindir="/nfs/amino-home/ewbell/SPRING-PPI/COTH"; #location of program binaries

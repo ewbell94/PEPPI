@@ -48,7 +48,7 @@ my $randomTag=int(rand(1000000)); #This is to prevent multiple instances from de
 print "Target: $target\n";
 my $tempdir="/tmp/$user/makeHHR\_$target\_$randomTag";
 if (! -e "$tempdir"){
-    print `mkdir $tempdir`;
+    print `mkdir -p $tempdir`;
 } else {
     print `rm -rf $tempdir/*`;
 }

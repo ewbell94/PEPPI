@@ -29,7 +29,7 @@ my $maxtargets=200;
 my $tophits=100;
 my @chains=split("-",$pairname);
 
-print `mkdir $outdir/$pairname/SEQ`;
+print `mkdir -p $outdir/$pairname/SEQ`;
 open(my $resfile,">","$outdir/$pairname/SEQ/res.txt");
 print `date`;
 

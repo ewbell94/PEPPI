@@ -14,7 +14,7 @@ chomp($user);
 my $seqid=0.9;
 my $maxtargets=100;
 my @chains=split("-",$pairname);
-print `mkdir $outdir/$pairname/STRING`;
+print `mkdir -p $outdir/$pairname/STRING`;
 open(my $resfile,">","$outdir/$pairname/STRING/res.txt");
 print `date`;
 

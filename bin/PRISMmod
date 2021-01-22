@@ -73,7 +73,7 @@ print `python TransformationFiltering.py 1 40000`;
 chdir("../6-FiberDock");
 print `python FlexibleRefinement.py 1 40000`;
 
-print `mkdir $outdir/$pairname/PRISM`;
+print `mkdir -p $outdir/$pairname/PRISM`;
 print `cp -r ENERGIES $outdir/$pairname/PRISM`;
 
 open(my $resfile,">","$outdir/$pairname/PRISM/res.txt");

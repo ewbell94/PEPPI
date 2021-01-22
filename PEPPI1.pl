@@ -136,7 +136,7 @@ if (openhandle($fastaout)){
 
 for my $ind (1..$i){
     print "prot$ind\n";
-    if (`ls $fastadir/prot${ind}/*.tm | wc -l` == 0){
+    if (`ls $fastadir/prot${ind}/*.tm | wc -l` == 0 || `ls $fastadir/prot${ind}/*.hhr.gz | wc -l` == 0){
 	print "HHR\n";
 	my $args="-o $fastadir -t prot$ind";
 	$args="$args -b" if ($benchmarkflag);
