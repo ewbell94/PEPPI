@@ -1,6 +1,4 @@
 #!/usr/bin/perl
-#SBATCH -t 24:00:00
-#SBATCH --mem=10G
 #SBATCH -J makeModel.pl
 
 use Getopt::Long qw(GetOptions);
@@ -19,10 +17,12 @@ my $dimerdb="$springdb/70CDHITstruct.db";
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02";
 my $restriplet="/nfs/amino-library/contact/NEW/ResTriplet3_04132020";
 my $trrosetta="/nfs/amino-home/zhng/local_library/anaconda3-tf/bin/python /nfs/amino-library/contact/NEW/trRosetta/trRosetta/trRosetta.py";
+my $benchflag=0;
 
 GetOptions(
     "outdir=s" => \$outdir,
-    "target=s" => \$s
+    "target=s" => \$s,
+    "benchmark" => \$benchflag
     ) or die "Invalid arguments were passed into makeModel";
 
 my $randomTag=int(rand(1000000));
@@ -39,9 +39,13 @@ print `cp $outdir/$sourcefasta/$s.fasta $tempdir/$s.fasta`;
 
 my $modeldir="$outdir/$sourcefasta";
 my $toptm=1000;
+my $homologthresh=0.3;
 
 modelSequence($s);
-tmSearch($s);
+#print `cp $outdir/$sourcefasta/$s.pdb $tempdir/$s.pdb`;
+if (-f "$modeldir/$s.pdb" && ! -f "$modeldir/$s.tm"){
+    tmSearch($s);
+}
 
 print `sync`;
 print `rm -rf $tempdir`;
@@ -58,6 +62,29 @@ sub modelSequence{
     print `mv final_1.pdb $prot.pdb`;
     print `cp $tempdir/$prot.pdb $modeldir/$prot.pdb`;
     print "Done!\n";
+}
+
+sub getSeqID{
+    my $fname1=$_[0];
+    my $fname2=$_[1];
+    return 0.0 if (! -f $fname1 || ! -f $fname2);
+    my $NWresult;
+    if ($fname2=~/\.fasta/){
+        $NWresult=`$bindir/NWalign $fname1 $fname2`;
+    } elsif ($fname2=~/\.pdb/){
+        $NWresult=`$bindir/NWalign $fname1 $fname2 2`;
+    } else {
+        return 0.0;
+    }
+    $NWresult=~/Identical length:\s+(\d+)/;
+    my $idcount=$1;
+    $NWresult=~/Length of sequence 1:\s+(\d+).*\nLength of sequence 2:\s+(\d+)/;
+    my $seq1len=$1;
+    my $seq2len=$2;
+    $idcount=1 if ($idcount==0);
+    return min($idcount/$seq1len,$idcount/$seq2len) if ($fname2=~/\.fasta/);
+    return $idcount/$seq1len if ($fname2=~/\.pdb/);
+    return 0.0;
 }
 
 sub TMalign{
@@ -103,8 +130,7 @@ sub tmSearch{
 
     @tmscores=sort{$b->[1]<=>$a->[1]} @tmscores;
     for my $i (0..$toptm-1){
-        $tmscores[$i][1]=TMalign("$springdb/monomers/$tmscores[$i][0].pdb","$tempdir/$prot.pd\
-b");
+        $tmscores[$i][1]=TMalign("$springdb/monomers/$tmscores[$i][0].pdb","$tempdir/$prot.pdb");
     }
     @tmscores=sort{$b->[1]<=>$a->[1]} @tmscores;
 

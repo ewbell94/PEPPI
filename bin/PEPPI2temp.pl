@@ -53,7 +53,7 @@ while (my $line=<$protcodeB>){
 }
 close($protcodeB);
 
-my @supported=("SPRING");
+my @supported=("TMSEARCH");
 my @intset=();
 
 print `mkdir -p $outdir/PPI`;

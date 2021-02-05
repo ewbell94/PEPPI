@@ -135,20 +135,24 @@ if (openhandle($fastaout)){
 #print `mkdir $outdir/model`;
 
 for my $ind (1..$i){
-    print "prot$ind\n";
-    if (`ls $fastadir/prot${ind}/*.tm | wc -l` == 0 || `ls $fastadir/prot${ind}/*.hhr.gz | wc -l` == 0){
-	print "HHR\n";
-	my $args="-o $fastadir -t prot$ind";
-	$args="$args -b" if ($benchmarkflag);
-	$args="$args -d" if ($domaindiv);
-
-	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
-	    sleep(60);
+    my @domlist=treeSearch("prot${ind}","$fastadir/prot${ind}");
+    for my $dom (@domlist){
+	print "$dom\n";
+	if (! -s "$fastadir/prot${ind}/$dom.tm" || ! -s "$fastadir/prot${ind}/$dom.pdb" || ! -s "$fastadir/prot${ind}/$dom.hhr.gz"){
+	    print "HHR\n";
+	    my $args="-o $fastadir -t prot$ind";
+	    $args="$args -b" if ($benchmarkflag);
+	    $args="$args -d" if ($domaindiv);
+	    
+	    while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+		sleep(60);
+	    }
+	    print `sbatch -o $fastadir/prot$ind/out_makeHHR_prot$ind.log $peppidir/bin/makeHHR.pl $args`;
+	    last;
 	}
-	print `sbatch -o $fastadir/prot$ind/out_makeHHR_prot$ind.log $peppidir/bin/makeHHR.pl $args`;
     }
-    
-    if (! -s "$fastadir/prot$ind/prot$ind.string" || ! -s "$fastadir/prot$ind/prot$ind.seq"){
+
+    if (! -f "$fastadir/prot$ind/prot$ind.string" || ! -s "$fastadir/prot$ind/prot$ind.seq"){
 	print "SEQ\n";
 	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
 	    sleep(60);
@@ -166,3 +170,19 @@ open(my $peppi2script,">","$outdir/PEPPI2.pl");
 print $peppi2script $peppi2;
 close($peppi2script);
 print `chmod +x $outdir/PEPPI2.pl`;
+
+sub treeSearch{
+    my $prot=$_[0];
+    my $dir=$_[1];
+
+    my @domlist=();
+
+    if (`ls $dir/$prot\_A*.fasta 2> /dev/null | wc -l` > 0){
+        @domlist=treeSearch("$prot\_A",$dir);
+        @domlist=(@domlist,treeSearch("$prot\_B",$dir));
+    } else {
+        @domlist=($prot);
+    }
+
+    return @domlist;
+}

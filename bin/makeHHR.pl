@@ -35,7 +35,7 @@ my $dimerdb="$springdb/70CDHITstruct.db";
 (my $sourcefasta=$target)=~s/\_[AB]//g;
 my $hhdir="$outdir/$sourcefasta";
 my $modeldir=$hhdir;
-my $zthresh=3.8;
+my $zthresh=8.5;
 my $homologthresh=0.3;
 my $toptm=1000;
 
@@ -95,8 +95,9 @@ if (! -e "$modeldir/$target.pdb"){
     submitMakeModel($outdir,$target);
 }
 
-tmSearch($target);
-
+if (! -e "$modeldir/$target.tm"){
+    tmSearch($target);
+}
 print `sync`;
 print `rm -rf $tempdir`;
 print `date`;
@@ -105,9 +106,25 @@ sub submitMakeModel{
     my $outdir=$_[0];
     my $target=$_[1];
 
-    my $args="-o $outdir -t $target\n";
-
-    print `sbatch -o $outdir/$sourcefasta/out_makeModel_$target.log $bindir/makeModel.pl $args`;
+    my $args="-o $outdir -t $target";
+    $args="$args --benchmark" if ($benchflag);
+    my $mem="10G";
+    my $time="24:00:00";
+    my $approxLch=`tail -n +1 $tempdir/$target.fasta | wc -c`;
+    if ($approxLch < 100){
+	$mem="5G";
+    } elsif ($approxLch < 300){
+	$mem="10G";
+    } elsif ($approxLch < 500){
+	$mem="15G";
+    } elsif ($approxLch < 1000){
+	$mem="25G";
+	$time="48:00:00";
+    } else {
+	$mem="50G";
+	$time="48:00:00";
+    }
+    print `sbatch -o $outdir/$sourcefasta/out_makeModel_$target.log -t $time --mem=$mem $bindir/makeModel.pl $args`;
     print `sync`;
     print `rm -rf $tempdir`;
     print `date`;
@@ -142,7 +159,7 @@ sub splitDomains{
     while (`squeue -u $user | wc -l`-1 >= $maxjobs){
         sleep(60);
     }
-    my $args="-o $outdir -d\n";
+    my $args="-o $outdir -d";
     $args="$args --benchmark" if ($benchflag);
 
     print `sbatch -o $outdir/$sourcefasta/out_makeHHR$target\_A.log $bindir/makeHHR.pl -t $target\_A $args`;
@@ -192,7 +209,8 @@ sub detectTemplate{
         my $tempname=$1;
 
         my $scoreline=<$hhrfile>;
-        $scoreline=~/Sum_probs=(.*)/;
+        #$scoreline=~/Sum_probs=(.*)/;
+	$scoreline=~/Score=(\d+\.\d+)/;
         my $sumprobs=$1;
         push(@scores,$sumprobs);
         my @pair=($tempname,$sumprobs);
@@ -238,7 +256,8 @@ sub detectDomains{
         my $tempname=$1;
 
         my $scoreline=<$hhrfile>;
-        $scoreline=~/Sum_probs=(.*)/;
+        #$scoreline=~/Sum_probs=(.*)/;
+	$scoreline=~/Score=(\d+\.\d+)/;
         my $sumprobs=$1;
 	push(@scores,$sumprobs);
         $templates{$tempname}=$sumprobs
@@ -277,7 +296,7 @@ sub detectDomains{
 	last if (!($line=~/^\s*\d+\s+/));
 	my @parts=split(" ",$line);
 	my $z=$templates{$parts[1]};
-	next if ($z < $zthresh || $parts[3] > 0.01);
+	next if ($z < $zthresh);
 	next if ($benchmark && getSeqID("$prot.fasta","$springdb/monomers/$parts[1].pdb") > $homologthresh);
 	print "$parts[1]:$z\n";
 	$nstrong++;
@@ -453,10 +472,11 @@ sub tmSearch{
 	} else {
 	    @pair=($line,fTMalign("$springdb/monomers/$line.pdb","$tempdir/$prot.pdb"));
 	}
+
+	#@pair=($line,TMalign("$springdb/monomers/$line.pdb","$tempdir/$prot.pdb"));
 	push(@tmscores,\@pair);
     }
     close($monofile);
-
     @tmscores=sort{$b->[1]<=>$a->[1]} @tmscores;
     for my $i (0..$toptm-1){
 	$tmscores[$i][1]=TMalign("$springdb/monomers/$tmscores[$i][0].pdb","$tempdir/$prot.pdb");

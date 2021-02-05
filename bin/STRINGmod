@@ -77,6 +77,8 @@ for my $i (0..scalar(@ids1)-1){
     }
 }
 
+print "No dimers were identified\n";
+print $resfile "?\n?\n?\n?\n";
 print `sync`;
 
 sub extractID{
