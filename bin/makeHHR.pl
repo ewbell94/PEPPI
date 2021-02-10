@@ -111,12 +111,10 @@ sub submitMakeModel{
     my $mem="10G";
     my $time="24:00:00";
     my $approxLch=`tail -n +1 $tempdir/$target.fasta | wc -c`;
-    if ($approxLch < 100){
+    if ($approxLch < 300){
 	$mem="5G";
-    } elsif ($approxLch < 300){
-	$mem="10G";
     } elsif ($approxLch < 500){
-	$mem="15G";
+	$mem="10G";
     } elsif ($approxLch < 1000){
 	$mem="25G";
 	$time="48:00:00";
@@ -292,12 +290,30 @@ sub detectDomains{
 	$matchline=<$hhrfile>;
     }
 
+    my @usedTemplates=();
     while (my $line=<$hhrfile>){
 	last if (!($line=~/^\s*\d+\s+/));
 	my @parts=split(" ",$line);
 	my $z=$templates{$parts[1]};
 	next if ($z < $zthresh);
 	next if ($benchmark && getSeqID("$prot.fasta","$springdb/monomers/$parts[1].pdb") > $homologthresh);
+
+	my $used=0;
+	for my $t (@usedTemplates){
+	    if ($t eq $parts[1]){
+		$used=1;
+		last;
+	    }
+	}
+	if ($used){
+	    next;
+	} else {
+	    my $clustline=`grep "$parts[1]" $springdb/monomers.aliases`;
+	    chomp($clustline);
+	    my @usedClust=split(",",$clustline);
+	    push(@usedTemplates,@usedClust);
+	}
+
 	print "$parts[1]:$z\n";
 	$nstrong++;
 	my @bounds=split("-",$parts[8]);
@@ -314,7 +330,7 @@ sub detectDomains{
     }
     close($hhrfile);
 
-    if ($nfull < $nstrong/2){
+    if ($nstrong >= 4 && $nfull < $nstrong/2){
 	if (scalar(@ngaps) > 0 && scalar(@cgaps) > 0){
 	    my @mids=();
 	    for my $n (@ngaps){
