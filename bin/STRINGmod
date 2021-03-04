@@ -38,7 +38,7 @@ print "\n";
 
 my @ids1=extractID($blast1res);
 my @ids2=extractID($blast2res);
-
+=pod
 my $randomTag=int(rand(1000000));
 my $jobid=`head -1 $outdir/$pairname/jobid.txt`;
 chomp($jobid);
@@ -48,13 +48,13 @@ if (! -e "$tempdir"){
 } else {
     print `rm -rf $tempdir/*`;
 }
-
+=cut
 for my $i (0..scalar(@ids1)-1){
     my $id1=$ids1[$i][0];
     if ($ids1[$i][1] < $seqid){
 	print "Sequence A homology is too low\n";
 	print $resfile "?\n?\n?\n?\n";
-	print `rm -rf $tempdir`;
+	#print `rm -rf $tempdir`;
 	exit(1);
     }
     for my $j (0..scalar(@ids2)-1){
@@ -64,7 +64,7 @@ for my $i (0..scalar(@ids1)-1){
 	if ($id1 eq $id2){
 	    print "Homodimer detected.  Homodimers are not in the STRING database.\n";
 	    print $resfile "?\n?\n?\n?\n";
-	    print `rm -rf $tempdir`;
+	    #print `rm -rf $tempdir`;
 	    exit(1);
 	}
 	next if ($ids2[$j][1] < $seqid);
@@ -72,15 +72,9 @@ for my $i (0..scalar(@ids1)-1){
 	my @parts2=split(/\./,$id2);
 	next if ($parts1[0] ne $parts2[0]);
 	print "$id1 $id2\n";
-<<<<<<< HEAD
+
 	my $hashcode=`python2 $peppidir/bin/getHashcode.py $id1 $id2`*1;
-	print `cp /expanse/lustre/scratch/ewbell/temp_project/lib/STRING/$hashcode.txt.gz $tempdir/ints.txt.gz`;
-	print `gzip -f -d $tempdir/ints.txt.gz`;
-	my $grepline=`fgrep "$id1" $tempdir/ints.txt | fgrep "$id2" | head -1`;
-=======
-	my $hashcode=`python $peppidir/bin/getHashcode.py $id1 $id2`*1;
 	my $grepline=`zgrep "$id1" $peppidir/lib/STRING/$hashcode.txt.gz | fgrep "$id2" | head -1`;
->>>>>>> master
 
 	if ($grepline ne ""){
 	    print "Dimer found!\n";
@@ -91,7 +85,7 @@ for my $i (0..scalar(@ids1)-1){
 	    my $ce=$parts[5]/1000.0; #co-expression
 	    print $resfile "$gn\n$gf\n$co\n$ce\n";
 	    print `echo "$pairname,$gn,$gf,$co,$ce" >> $outdir/STRINGres.txt`;
-	    print `rm -rf $tempdir`;
+	    #print `rm -rf $tempdir`;
 	    exit(1);
 	}
     }
