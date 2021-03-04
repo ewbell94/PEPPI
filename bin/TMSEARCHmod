@@ -31,7 +31,7 @@ if (-e "$tmout/res.txt"){
     exit(2);
 }
 
-print `mkdir $tmout`;
+print `mkdir -p $tmout`;
 
 my @qseqs=split("-",$pairname);
 my @domainPairs=();
@@ -64,7 +64,7 @@ for my $pointer (@domainPairs){
     my $prot2=$qdoms[1];
 
     my $outputdir="$tmout/$qdoms[0]-$qdoms[1]";
-    print `mkdir $outputdir`;
+    print `mkdir -p $outputdir`;
     if (! -e "$prot1file" || ! -e "$prot2file"){
 	print "Protein sequence files were not found!\n";
 	next;

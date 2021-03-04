@@ -12,7 +12,7 @@ my $outdir="!OUTDIR!/PPI";
 my $pairname="!PAIRNAME!";
 my $benchmarkflag=!BENCHMARK!;
 
-print `mkdir $outdir/$pairname/SPRING`;
+print `mkdir -p $outdir/$pairname/SPRING`;
 
 #User-set parameters
 my $bindir="$peppidir/bin"; #location of program binaries
@@ -109,7 +109,7 @@ for my $pointer (@domainPairs){
     my $prot2=$qdoms[1];
 
     my $outputdir="$springout/$qdoms[0]-$qdoms[1]";
-    print `mkdir $outputdir`;
+    print `mkdir -p $outputdir`;
     if (! -e "$prot1file" || ! -e "$prot2file"){
 	print "Protein sequence files were not found!\n";
 	next;
@@ -145,14 +145,9 @@ for my $pointer (@domainPairs){
     print "Fetching HHsearch hits\n";
     #my @prot1hits=fetchHits($prot1);
     #my @prot2hits=fetchHits($prot2);
-
-    print `$bindir/dimerMapper $tempdir/$prot1.hhr $tempdir/$prot2.hhr > $tempdir/dimers.txt`;
+    print `$bindir/dimerMapper $tempdir/$prot1.hhr $tempdir/$prot2.hhr`;
     
     open(my $mapres,"<","$tempdir/dimers.txt");
-    my $prot1top=<$mapres>;
-    my $prot2top=<$mapres>;
-    chomp($prot1top);
-    chomp($prot2top);
     my @dimerTemplates=();
 
     while(my $line=<$mapres>){
@@ -162,6 +157,38 @@ for my $pointer (@domainPairs){
 	push(@dimerTemplates,\@dimer);
     }
     close($mapres);
+
+    open(my $prot1topf,"<","$tempdir/prot1top.txt");
+    my $prot1top;
+    while(my $line=<$prot1topf>){
+	chomp($line);
+	if ($benchmarkflag){
+	    if (getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$line.pdb") < $scut){
+		$prot1top=$line;
+		last;
+	    }
+	} else {
+	    $prot1top=$line;
+	    last;
+	}
+    }
+    close($prot1topf);
+
+    open(my $prot2topf,"<","$tempdir/prot2top.txt");
+    my $prot2top;
+    while(my $line=<$prot2topf>){
+	chomp($line);
+	if ($benchmarkflag){
+	    if (getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$line.pdb") < $scut){
+		$prot2top=$line;
+		last;
+	    }
+	} else {
+	    $prot2top=$line;
+	    last;
+	}
+    }
+    close($prot2topf);
     #open(my $dfirefile,"<","$bindir/dfire.txt");
     #open(my $dfirefile,"<","$bindir/newdfire.txt");
     #my @dfire=<$dfirefile>;

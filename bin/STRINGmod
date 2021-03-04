@@ -14,7 +14,7 @@ chomp($user);
 my $seqid=0.9;
 my $maxtargets=100;
 my @chains=split("-",$pairname);
-print `mkdir $outdir/$pairname/STRING`;
+print `mkdir -p $outdir/$pairname/STRING`;
 open(my $resfile,">","$outdir/$pairname/STRING/res.txt");
 print `date`;
 
@@ -72,10 +72,15 @@ for my $i (0..scalar(@ids1)-1){
 	my @parts2=split(/\./,$id2);
 	next if ($parts1[0] ne $parts2[0]);
 	print "$id1 $id2\n";
+<<<<<<< HEAD
 	my $hashcode=`python2 $peppidir/bin/getHashcode.py $id1 $id2`*1;
 	print `cp /expanse/lustre/scratch/ewbell/temp_project/lib/STRING/$hashcode.txt.gz $tempdir/ints.txt.gz`;
 	print `gzip -f -d $tempdir/ints.txt.gz`;
 	my $grepline=`fgrep "$id1" $tempdir/ints.txt | fgrep "$id2" | head -1`;
+=======
+	my $hashcode=`python $peppidir/bin/getHashcode.py $id1 $id2`*1;
+	my $grepline=`zgrep "$id1" $peppidir/lib/STRING/$hashcode.txt.gz | fgrep "$id2" | head -1`;
+>>>>>>> master
 
 	if ($grepline ne ""){
 	    print "Dimer found!\n";
@@ -92,6 +97,8 @@ for my $i (0..scalar(@ids1)-1){
     }
 }
 
+print "No dimers were identified\n";
+print $resfile "?\n?\n?\n?\n";
 print `sync`;
 
 sub extractID{

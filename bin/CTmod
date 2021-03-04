@@ -12,7 +12,7 @@ chomp($user);
 
 my %aatypes=(A=>"0",G=>"0",V=>"0",I=>"1",L=>"1",F=>"1",P=>"1",Y=>"2",M=>"2",T=>"2",S=>"2",H=>"3",N=>"3",Q=>"3",W=>"3",R=>"4",K=>"4",D=>"5",E=>"5",C=>"6");
 
-print `mkdir $outdir/$pairname/CT`;
+print `mkdir -p $outdir/$pairname/CT`;
 open(my $inpfile,">","$outdir/$pairname/CT/input.txt");
 my @chains=split("-",$pairname);
 my @Avals=getCT($chains[0]);

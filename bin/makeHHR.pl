@@ -31,11 +31,11 @@ GetOptions(
 #User-set parameters
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
 my $springdb="/nfs/amino-home/ewbell/SPRINGDB/";
-my $dimerdb="$springdb/70CDHITstruct.db";
+my $dimerdb="$springdb/70negpos.db";
 (my $sourcefasta=$target)=~s/\_[AB]//g;
 my $hhdir="$outdir/$sourcefasta";
 my $modeldir=$hhdir;
-my $zthresh=3.8;
+my $zthresh=8.5;
 my $homologthresh=0.3;
 my $toptm=1000;
 
@@ -48,7 +48,7 @@ my $randomTag=int(rand(1000000)); #This is to prevent multiple instances from de
 print "Target: $target\n";
 my $tempdir="/tmp/$user/makeHHR\_$target\_$randomTag";
 if (! -e "$tempdir"){
-    print `mkdir $tempdir`;
+    print `mkdir -p $tempdir`;
 } else {
     print `rm -rf $tempdir/*`;
 }
@@ -81,7 +81,7 @@ if ($domaindiv){
 	print "Protein is single domain!\n";
     }
 }
-
+=pod
 my $template=detectTemplate($target,$benchflag,$zthresh);
 
 if ($template ne ""){
@@ -95,8 +95,10 @@ if (! -e "$modeldir/$target.pdb"){
     submitMakeModel($outdir,$target);
 }
 
-tmSearch($target);
-
+if (! -e "$modeldir/$target.tm"){
+    tmSearch($target);
+}
+=cut
 print `sync`;
 print `rm -rf $tempdir`;
 print `date`;
@@ -105,9 +107,23 @@ sub submitMakeModel{
     my $outdir=$_[0];
     my $target=$_[1];
 
-    my $args="-o $outdir -t $target\n";
-
-    print `sbatch -o $outdir/$sourcefasta/out_makeModel_$target.log $bindir/makeModel.pl $args`;
+    my $args="-o $outdir -t $target";
+    $args="$args --benchmark" if ($benchflag);
+    my $mem="10G";
+    my $time="24:00:00";
+    my $approxLch=`tail -n +1 $tempdir/$target.fasta | wc -c`;
+    if ($approxLch < 300){
+	$mem="5G";
+    } elsif ($approxLch < 500){
+	$mem="10G";
+    } elsif ($approxLch < 1000){
+	$mem="25G";
+	$time="48:00:00";
+    } else {
+	$mem="50G";
+	$time="48:00:00";
+    }
+    print `sbatch -o $outdir/$sourcefasta/out_makeModel_$target.log -t $time --mem=$mem $bindir/makeModel.pl $args`;
     print `sync`;
     print `rm -rf $tempdir`;
     print `date`;
@@ -142,7 +158,7 @@ sub splitDomains{
     while (`squeue -u $user | wc -l`-1 >= $maxjobs){
         sleep(60);
     }
-    my $args="-o $outdir -d\n";
+    my $args="-o $outdir -d";
     $args="$args --benchmark" if ($benchflag);
 
     print `sbatch -o $outdir/$sourcefasta/out_makeHHR$target\_A.log $bindir/makeHHR.pl -t $target\_A $args`;
@@ -192,7 +208,8 @@ sub detectTemplate{
         my $tempname=$1;
 
         my $scoreline=<$hhrfile>;
-        $scoreline=~/Sum_probs=(.*)/;
+        #$scoreline=~/Sum_probs=(.*)/;
+	$scoreline=~/Score=(\d+\.\d+)/;
         my $sumprobs=$1;
         push(@scores,$sumprobs);
         my @pair=($tempname,$sumprobs);
@@ -238,7 +255,8 @@ sub detectDomains{
         my $tempname=$1;
 
         my $scoreline=<$hhrfile>;
-        $scoreline=~/Sum_probs=(.*)/;
+        #$scoreline=~/Sum_probs=(.*)/;
+	$scoreline=~/Score=(\d+\.\d+)/;
         my $sumprobs=$1;
 	push(@scores,$sumprobs);
         $templates{$tempname}=$sumprobs
@@ -273,12 +291,30 @@ sub detectDomains{
 	$matchline=<$hhrfile>;
     }
 
+    my @usedTemplates=();
     while (my $line=<$hhrfile>){
 	last if (!($line=~/^\s*\d+\s+/));
 	my @parts=split(" ",$line);
 	my $z=$templates{$parts[1]};
-	next if ($z < $zthresh || $parts[3] > 0.01);
+	next if ($z < $zthresh);
 	next if ($benchmark && getSeqID("$prot.fasta","$springdb/monomers/$parts[1].pdb") > $homologthresh);
+
+	my $used=0;
+	for my $t (@usedTemplates){
+	    if ($t eq $parts[1]){
+		$used=1;
+		last;
+	    }
+	}
+	if ($used){
+	    next;
+	} else {
+	    my $clustline=`grep "$parts[1]" $springdb/monomers.aliases`;
+	    chomp($clustline);
+	    my @usedClust=split(",",$clustline);
+	    push(@usedTemplates,@usedClust);
+	}
+
 	print "$parts[1]:$z\n";
 	$nstrong++;
 	my @bounds=split("-",$parts[8]);
@@ -295,7 +331,7 @@ sub detectDomains{
     }
     close($hhrfile);
 
-    if ($nfull < $nstrong/2){
+    if ($nstrong >= 4 && $nfull < $nstrong/2){
 	if (scalar(@ngaps) > 0 && scalar(@cgaps) > 0){
 	    my @mids=();
 	    for my $n (@ngaps){
@@ -453,10 +489,11 @@ sub tmSearch{
 	} else {
 	    @pair=($line,fTMalign("$springdb/monomers/$line.pdb","$tempdir/$prot.pdb"));
 	}
+
+	#@pair=($line,TMalign("$springdb/monomers/$line.pdb","$tempdir/$prot.pdb"));
 	push(@tmscores,\@pair);
     }
     close($monofile);
-
     @tmscores=sort{$b->[1]<=>$a->[1]} @tmscores;
     for my $i (0..$toptm-1){
 	$tmscores[$i][1]=TMalign("$springdb/monomers/$tmscores[$i][0].pdb","$tempdir/$prot.pdb");

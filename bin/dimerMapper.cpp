@@ -6,6 +6,10 @@
 #include <unordered_map>
 #include <stdlib.h>
 
+#include <sstream>
+#include <string>
+#include <iterator>
+
 using namespace std;
 
 const string complexfile="/expanse/lustre/scratch/ewbell/temp_project/SPRINGDB/70CDHITstruct.txt";
@@ -56,7 +60,40 @@ vector<namedScore> fetchHits(string hhrfilename){
   vector<double> scores;
 
   double total=0.0;
+  string l;
+  for (int i=0;i<9;i++){
+    getline(hhrfile,l);
+  }
+  for (int i=0;i<20000;i++){
+    getline(hhrfile,l);
+    string target;
+    double score=0.0;
+    istringstream iss(l);
+    string tok;
+    for (int j=0; j<7; j++){
+      getline(iss,tok,' ');
+      while(tok.compare("")==0){
+	getline(iss,tok,' ');
+      }
+      
+      if (j==1){
+	target=tok;
+      } else if (j==5 || j==6){
+	//cout<<tok<<endl;
+	score+=atoi(tok.c_str());
+      }
+      
+    }
+    if (find(templates.begin(),templates.end(),target)!=templates.end()){
+      continue;
+    }
+    templates.push_back(target);
+    total+=score;
+    scores.push_back(score);
+  }
+  /*
   for (string line; getline(hhrfile,line);){
+
     if (line.substr(0,1).compare(">") == 0){
       string target=line.substr(1);
       if (find(templates.begin(),templates.end(),target) != templates.end()){
@@ -64,14 +101,21 @@ vector<namedScore> fetchHits(string hhrfilename){
       }
       templates.push_back(target);
       getline(hhrfile,line);
+<<<<<<< HEAD
       double score=atof(line.substr(line.find("Sum_probs=")+10).c_str());
       //double score=atof(line.substr(line.find("Score=")+6,6).c_str());
+=======
+      //double score=atof(line.substr(line.find("Sum_probs=")+10).c_str());
+      //double score=atof(line.substr(line.find("Score=")+6,6).c_str());
+      double score=-log(atof(line.substr(line.find("E-value=")+8,6).c_str()));
+>>>>>>> master
       //cout<<line<<endl<<score<<endl;
       total+=score;
       scores.push_back(score);
     }
+   
   }
-
+  */
   if (scores.size() != templates.size()){
     cout << "Array sizes are not equal" << endl;
     return hits;
@@ -141,14 +185,31 @@ int main(int argc, char** argv){
   vector<namedScore> hhr1hits=fetchHits(hhr1);
   vector<namedScore> hhr2hits=fetchHits(hhr2);
 
-  cout<<hhr1hits.begin()->name<<endl<<hhr2hits.begin()->name<<endl;
+  //cout<<hhr1hits.begin()->name<<endl<<hhr2hits.begin()->name<<endl;
+  ofstream hhr1hitfile;
+  hhr1hitfile.open("prot1top.txt");
+  for (vector<namedScore>::iterator it=hhr1hits.begin(); it!=hhr1hits.end(); ++it){
+    hhr1hitfile << it->name << endl;
+  }
+  hhr1hitfile.close();
+
+  ofstream hhr2hitfile;
+  hhr2hitfile.open("prot2top.txt");
+  for (vector<namedScore>::iterator it=hhr2hits.begin(); it!=hhr2hits.end(); ++it){
+    hhr2hitfile << it->name << endl;
+  }
+  hhr2hitfile.close();
+
   vector<namedScore> tophhr1(hhr1hits.begin(),hhr1hits.begin()+maxmono);
   vector<namedScore> tophhr2(hhr2hits.begin(),hhr2hits.begin()+maxmono);
 
   vector<namedScore> dimers=fetchDimers(tophhr1,tophhr2,complexlist);
-
+  
+  ofstream dimerfile;
+  dimerfile.open("dimers.txt");
   for (vector<namedScore>::iterator it=dimers.begin(); it!=dimers.end(); ++it){
-    cout << it->name << " " << it->score << endl;
+    dimerfile << it->name << " " << it->score << endl;
   }
+  dimerfile.close();
   return 0;
 }

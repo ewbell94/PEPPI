@@ -53,15 +53,19 @@ while (my $line=<$protcodeB>){
 }
 close($protcodeB);
 
+<<<<<<< HEAD
 my @supported=("SPRING","SEQ","STRING");
+=======
+my @supported=("SPRING","SPRINGNEG");
+>>>>>>> master
 my @intset=();
 
-print `mkdir $outdir/PPI`;
+print `mkdir -p $outdir/PPI`;
 for my $i (0..scalar(@protsA)-1){
     for my $j (0..scalar(@protsB)-1){
 	next if ((-e "$outdir/PPI/$protsB[$j]-$protsA[$i]" && $protsA[$i] ne $protsB[$j]) || ($nohomo && $protsB[$j] eq $protsA[$i]));
 	my $pairdir="$outdir/PPI/$protsA[$i]-$protsB[$j]";
-	print `mkdir $pairdir`;
+	print `mkdir -p $pairdir`;
 	print `cp $outdir/mono/$protsA[$i]/$protsA[$i].fasta $pairdir/$protsA[$i].seq`;
 	my $n=1;
 	while (-f "$outdir/mono/$protsA[$i]/$protsA[$i]\_$n.fasta"){
