@@ -12,13 +12,13 @@ my $outdir="!OUTDIR!/PPI";
 my $pairname="!PAIRNAME!";
 my $benchmarkflag=!BENCHMARK!;
 
-print `mkdir -p $outdir/$pairname/SPRING`;
+print `mkdir -p $outdir/$pairname/SPRINGNEG`;
 
 #User-set parameters
 my $bindir="$peppidir/bin"; #location of program binaries
-my $springout="$outdir/$pairname/SPRING"; #location of program output
+my $springout="$outdir/$pairname/SPRINGNEG"; #location of program output
 my $dbdir="/nfs/amino-home/ewbell/SPRINGDB"; #location of SPRING database
-my $complexlist="$dbdir/70CDHITstruct.txt";
+my $complexlist="$dbdir/70negs.txt";
 my $maxmodels=1; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
 my $zmin=2.0; #Minimum Z-score for reporting templates; if none are found satisfying this threshold, zmin is set to -5
@@ -27,7 +27,7 @@ my $zmin=2.0; #Minimum Z-score for reporting templates; if none are found satisf
 #Processed parameters
 my $user=`whoami`;
 chomp($user);
-my @weights=(1,12.0,-1.4); #weights for SPRING score calculation
+my @weights=(1,12.0,0.0); #weights for SPRING score calculation
 my $homothresh=0.9; #
 my $seqmax=1500; #maximum allowable length of input sequences; sequences longer than this will be truncated
 my $minmono=5000; #number of monomer templates for dimer matching
@@ -89,7 +89,7 @@ while (-e "$outdir/$pairname/$qseqs[0]\_$m.seq"){
 }
 
 my $randomTag=int(rand(1000000));
-my $tempdir="/tmp/$user/PEPPI_SPRING_$qseqs[0]-$qseqs[1]\_$randomTag";
+my $tempdir="/tmp/$user/PEPPI_SPRINGNEG_$qseqs[0]-$qseqs[1]\_$randomTag";
 if (! -e "$tempdir"){
     print `mkdir -p $tempdir`;
 } else {
@@ -143,62 +143,50 @@ for my $pointer (@domainPairs){
     print "Fetching HHsearch hits\n";
     #my @prot1hits=fetchHits($prot1);
     #my @prot2hits=fetchHits($prot2);
-    print `$bindir/dimerMapper $tempdir/$prot1.hhr $tempdir/$prot2.hhr`;
-    
+    print `$bindir/dimerMapperNeg $tempdir/$prot1.hhr $tempdir/$prot2.hhr`;
+
     open(my $mapres,"<","$tempdir/dimers.txt");
     my @dimerTemplates=();
 
     while(my $line=<$mapres>){
-	chomp($line);
-	my @dimer=split(" ",$line);
-	next if ($benchmarkflag && (getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$dimer[0].pdb") >= $scut || getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$dimer[1].pdb") >= $scut));
-	push(@dimerTemplates,\@dimer);
+        chomp($line);
+        my @dimer=split(" ",$line);
+        next if ($benchmarkflag && (getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$dimer[0].pdb") >= $scut || getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$dimer[1].pdb") >= $scut));
+        push(@dimerTemplates,\@dimer);
     }
     close($mapres);
 
     open(my $prot1topf,"<","$tempdir/prot1top.txt");
     my $prot1top;
     while(my $line=<$prot1topf>){
-	chomp($line);
-	if ($benchmarkflag){
-	    if (getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$line.pdb") < $scut){
-		$prot1top=$line;
-		last;
-	    }
-	} else {
-	    $prot1top=$line;
-	    last;
-	}
+        chomp($line);
+        if ($benchmarkflag){
+            if (getSeqID("$tempdir/$prot1.fasta","$dbdir/monomers/$line.pdb") < $scut){
+                $prot1top=$line;
+                last;
+            }
+        } else {
+            $prot1top=$line;
+            last;
+        }
     }
     close($prot1topf);
 
     open(my $prot2topf,"<","$tempdir/prot2top.txt");
     my $prot2top;
     while(my $line=<$prot2topf>){
-	chomp($line);
-	if ($benchmarkflag){
-	    if (getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$line.pdb") < $scut){
-		$prot2top=$line;
-		last;
-	    }
-	} else {
-	    $prot2top=$line;
-	    last;
-	}
+        chomp($line);
+        if ($benchmarkflag){
+            if (getSeqID("$tempdir/$prot2.fasta","$dbdir/monomers/$line.pdb") < $scut){
+                $prot2top=$line;
+                last;
+            }
+        } else {
+            $prot2top=$line;
+            last;
+        }
     }
     close($prot2topf);
-    #open(my $dfirefile,"<","$bindir/dfire.txt");
-    #open(my $dfirefile,"<","$bindir/newdfire.txt");
-    #my @dfire=<$dfirefile>;
-    #chomp(@dfire);
-    #close($dfirefile);
-    
-    
-#Search for dimer templates given monomeric hits
-    #my @dimerTemplates=fetchDimers(\@prot1hits,\@prot2hits,\%complexlist,$homoflag);
-    
-#Flip the sequence order and search for more dimer templates if the chains are nonidentical
-    #@dimerTemplates=sort{$b->[2]<=>$a->[2]} @dimerTemplates;
     
 #Create and score models from selected dimer templates
     my $t2=time();
@@ -258,10 +246,10 @@ for my $pointer (@domainPairs){
 
 print `rm -rf $tempdir`;
 if ($topscore!=-100.0){
-    print `echo "$pairname,$topscore" >> $outdir/SPRINGres.txt`;
+    print `echo "$pairname,$topscore" >> $outdir/SPRINGNEGres.txt`;
 }
 
-open(my $resfile,">","$outdir/$pairname/SPRING/res.txt");
+open(my $resfile,">","$outdir/$pairname/SPRINGNEG/res.txt");
 
 if ($topscore==-100.0){
     print $resfile "?\n";

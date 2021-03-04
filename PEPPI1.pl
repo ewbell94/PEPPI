@@ -49,7 +49,7 @@ if (system("squeue > /dev/null")){
 }
 
 my $peppidir= "/nfs/amino-home/ewbell/PEPPI";
-my $maxjobs=500;
+my $maxjobs=300;
 
 #Organize sequences
 print `mkdir $outdir` if (!-e "$outdir");
@@ -138,7 +138,8 @@ for my $ind (1..$i){
     my @domlist=treeSearch("prot${ind}","$fastadir/prot${ind}");
     for my $dom (@domlist){
 	print "$dom\n";
-	if (! -s "$fastadir/prot${ind}/$dom.tm" || ! -s "$fastadir/prot${ind}/$dom.pdb" || ! -s "$fastadir/prot${ind}/$dom.hhr.gz"){
+	#if (! -s "$fastadir/prot${ind}/$dom.tm" || ! -s "$fastadir/prot${ind}/$dom.pdb" || ! -s "$fastadir/prot${ind}/$dom.hhr.gz"){
+	if (! -s "$fastadir/prot${ind}/$dom.hhr.gz"){
 	    print "HHR\n";
 	    my $args="-o $fastadir -t prot$ind";
 	    $args="$args -b" if ($benchmarkflag);

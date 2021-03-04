@@ -61,7 +61,7 @@ for my $i (0..scalar(@ids1)-1){
 	next if ($parts1[0] ne $parts2[0]);
 	print "$id1 $id2\n";
 	my $hashcode=`python $peppidir/bin/getHashcode.py $id1 $id2`*1;
-	my $grepline=`fgrep "$id1" $peppidir/lib/STRING/$hashcode.txt | fgrep "$id2" | head -1`;
+	my $grepline=`zgrep "$id1" $peppidir/lib/STRING/$hashcode.txt.gz | fgrep "$id2" | head -1`;
 
 	if ($grepline ne ""){
 	    print "Dimer found!\n";

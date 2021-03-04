@@ -12,7 +12,7 @@
 
 using namespace std;
 
-const string complexfile="/nfs/amino-home/ewbell/SPRINGDB/70CDHITstruct.txt";
+const string complexfile="/nfs/amino-home/ewbell/SPRINGDB/70negs.txt";
 const int maxmono=5000;
 
 struct namedScore{

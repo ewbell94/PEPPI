@@ -31,7 +31,7 @@ GetOptions(
 #User-set parameters
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
 my $springdb="/nfs/amino-home/ewbell/SPRINGDB/";
-my $dimerdb="$springdb/70CDHITstruct.db";
+my $dimerdb="$springdb/70negpos.db";
 (my $sourcefasta=$target)=~s/\_[AB]//g;
 my $hhdir="$outdir/$sourcefasta";
 my $modeldir=$hhdir;
@@ -81,7 +81,7 @@ if ($domaindiv){
 	print "Protein is single domain!\n";
     }
 }
-
+=pod
 my $template=detectTemplate($target,$benchflag,$zthresh);
 
 if ($template ne ""){
@@ -98,6 +98,7 @@ if (! -e "$modeldir/$target.pdb"){
 if (! -e "$modeldir/$target.tm"){
     tmSearch($target);
 }
+=cut
 print `sync`;
 print `rm -rf $tempdir`;
 print `date`;
