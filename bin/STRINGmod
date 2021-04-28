@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use List::Util qw(min);
+use Time::HiRes qw(time);
 
 my $peppidir="!PEPPIDIR!";
 my $outdir="!OUTDIR!/PPI";
@@ -10,6 +11,7 @@ my $pairname="!PAIRNAME!";
 #my $benchflag=!BENCHMARK!;
 my $user=`whoami`;
 chomp($user);
+my $starttime=time();
 
 my $seqid=0.9;
 my $maxtargets=100;
@@ -23,6 +25,8 @@ print $blast1res;
 if ($blast1res eq ""){
     print "BLAST for sequence A returned no hits in STRING.\n";
     print $resfile "?\n?\n?\n?\n";
+    my $stoptime=time();
+    print "Total program runtime: ".($stoptime-$starttime)."\n";
     exit(1);
 }
 print "\n";
@@ -32,6 +36,8 @@ print $blast2res;
 if ($blast2res eq ""){
     print "BLAST for sequence B returned no hits in STRING.\n";
     print $resfile "?\n?\n?\n?\n";
+    my $stoptime=time();
+    print "Total program runtime: ".($stoptime-$starttime)."\n";
     exit(1);
 }
 print "\n";
@@ -54,7 +60,12 @@ for my $i (0..scalar(@ids1)-1){
     if ($ids1[$i][1] < $seqid){
 	print "Sequence A homology is too low\n";
 	print $resfile "?\n?\n?\n?\n";
+<<<<<<< HEAD
 	#print `rm -rf $tempdir`;
+=======
+	my $stoptime=time();
+	print "Total program runtime: ".($stoptime-$starttime)."\n";
+>>>>>>> master
 	exit(1);
     }
     for my $j (0..scalar(@ids2)-1){
@@ -64,7 +75,12 @@ for my $i (0..scalar(@ids1)-1){
 	if ($id1 eq $id2){
 	    print "Homodimer detected.  Homodimers are not in the STRING database.\n";
 	    print $resfile "?\n?\n?\n?\n";
+<<<<<<< HEAD
 	    #print `rm -rf $tempdir`;
+=======
+	    my $stoptime=time();
+	    print "Total program runtime: ".($stoptime-$starttime)."\n";
+>>>>>>> master
 	    exit(1);
 	}
 	next if ($ids2[$j][1] < $seqid);
@@ -85,7 +101,12 @@ for my $i (0..scalar(@ids1)-1){
 	    my $ce=$parts[5]/1000.0; #co-expression
 	    print $resfile "$gn\n$gf\n$co\n$ce\n";
 	    print `echo "$pairname,$gn,$gf,$co,$ce" >> $outdir/STRINGres.txt`;
+<<<<<<< HEAD
 	    #print `rm -rf $tempdir`;
+=======
+	    my $stoptime=time();
+	    print "Total program runtime: ".($stoptime-$starttime)."\n";
+>>>>>>> master
 	    exit(1);
 	}
     }
@@ -94,6 +115,8 @@ for my $i (0..scalar(@ids1)-1){
 print "No dimers were identified\n";
 print $resfile "?\n?\n?\n?\n";
 print `sync`;
+my $stoptime=time();
+print "Total program runtime: ".($stoptime-$starttime)."\n";
 
 sub extractID{
     my $blastres=$_[0];

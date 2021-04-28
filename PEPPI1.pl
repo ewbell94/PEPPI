@@ -139,7 +139,7 @@ for my $ind (1..$i){
     for my $dom (@domlist){
 	print "$dom\n";
 	#if (! -s "$fastadir/prot${ind}/$dom.tm" || ! -s "$fastadir/prot${ind}/$dom.pdb" || ! -s "$fastadir/prot${ind}/$dom.hhr.gz"){
-	if (! -s "$fastadir/prot${ind}/$dom.hhr.gz"){
+	if (! -s "$fastadir/prot${ind}/$dom.hhr.gz" || `zgrep "hhblits" $fastadir/prot${ind}/$dom.hhr.gz | wc -l` > 0){
 	    print "HHR\n";
 	    my $args="-o $fastadir -t prot$ind";
 	    $args="$args -b" if ($benchmarkflag);

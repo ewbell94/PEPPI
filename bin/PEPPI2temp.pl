@@ -30,8 +30,8 @@ while (my $line=<$protcodeA>){
 	my $n=$i+1;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].fasta $outdir/mono/$parts[0]/$parts[0]\_$n.fasta`;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].hhr.gz $outdir/mono/$parts[0]/$parts[0]\_$n.hhr.gz`;
-	print `cp $outdir/mono/$parts[0]/$domains[$i].pdb $outdir/mono/$parts[0]/$parts[0]\_$n.pdb`;
-	print `cp $outdir/mono/$parts[0]/$domains[$i].tm $outdir/mono/$parts[0]/$parts[0]\_$n.tm`;
+	#print `cp $outdir/mono/$parts[0]/$domains[$i].pdb $outdir/mono/$parts[0]/$parts[0]\_$n.pdb`;
+	#print `cp $outdir/mono/$parts[0]/$domains[$i].tm $outdir/mono/$parts[0]/$parts[0]\_$n.tm`;
     }
 }
 close($protcodeA);
@@ -47,13 +47,17 @@ while (my $line=<$protcodeB>){
 	print "$domains[$i]\n";
         print `cp $outdir/mono/$parts[0]/$domains[$i].fasta $outdir/mono/$parts[0]/$parts[0]\_$n.fasta`;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].hhr.gz $outdir/mono/$parts[0]/$parts[0]\_$n.hhr.gz`;
-	print `cp $outdir/mono/$parts[0]/$domains[$i].pdb $outdir/mono/$parts[0]/$parts[0]\_$n.pdb`;
-	print `cp $outdir/mono/$parts[0]/$domains[$i].tm $outdir/mono/$parts[0]/$parts[0]\_$n.tm`;
+	#print `cp $outdir/mono/$parts[0]/$domains[$i].pdb $outdir/mono/$parts[0]/$parts[0]\_$n.pdb`;
+	#print `cp $outdir/mono/$parts[0]/$domains[$i].tm $outdir/mono/$parts[0]/$parts[0]\_$n.tm`;
     }
 }
 close($protcodeB);
 
+<<<<<<< HEAD
 my @supported=("SPRING","SEQ","STRING","SPRINGNEG","CT");
+=======
+my @supported=("SPRING","SPRINGNEG","CT","STRING","SEQ");
+>>>>>>> master
 my @intset=();
 
 print `mkdir -p $outdir/PPI`;
@@ -62,6 +66,7 @@ for my $i (0..scalar(@protsA)-1){
 	next if ((-e "$outdir/PPI/$protsB[$j]-$protsA[$i]" && $protsA[$i] ne $protsB[$j]) || ($nohomo && $protsB[$j] eq $protsA[$i]));
 	my $pairdir="$outdir/PPI/$protsA[$i]-$protsB[$j]";
 	print `mkdir -p $pairdir`;
+=pod
 	print `cp $outdir/mono/$protsA[$i]/$protsA[$i].fasta $pairdir/$protsA[$i].seq`;
 	my $n=1;
 	while (-f "$outdir/mono/$protsA[$i]/$protsA[$i]\_$n.fasta"){
@@ -74,9 +79,10 @@ for my $i (0..scalar(@protsA)-1){
 	    print `cp $outdir/mono/$protsB[$j]/$protsB[$j]\_$n.fasta $pairdir/$protsB[$j]\_$n.seq`;
 	    $n++;
 	}
-
+=cut
 	my $pairname="$protsA[$i]-$protsB[$j]";
 	my $int="$outdir/PPI/$pairname";
+	print `echo "$int" > $int/out.log` if ($singleflag);
 	for my $prog (@supported){
 	    my $modtext=`cat $peppidir/bin/${prog}mod`;
             $modtext=~s/\!PEPPIDIR\!/$peppidir/;
@@ -87,7 +93,10 @@ for my $i (0..scalar(@protsA)-1){
             print $jobscript $modtext;
             close($jobscript);
             print `chmod +x $int/$pairname-$prog.pl`;
-            print `$int/$pairname-$prog.pl > $int/out_$prog.log 2> $int/err_$prog.log` if ($singleflag);
+	    if ($singleflag){
+		print `echo "$prog" >> $int/out.log`;
+		print `$int/$pairname-$prog.pl >> $int/out.log`;
+	    }
             while (`squeue -u $user | wc -l`-1 >= $maxjobs){
                 print "Queue is currently full, waiting for submission...\n";
                 sleep(60);
@@ -109,6 +118,7 @@ if (scalar(@intset) > 0){
 open(my $peppi3script,">","$outdir/PEPPI3.pl");
 my $peppi3=`cat $peppidir/bin/PEPPI3temp.pl`;
 $peppi3=~s/\!OUTDIR\!/$outdir/;
+$peppi3=~s/\!PEPPIDIR\!/$peppidir/;
 print $peppi3script $peppi3;
 close($peppi3script);
 print `chmod +x $outdir/PEPPI3.pl`;

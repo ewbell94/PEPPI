@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-#SBATCH -t 5:00:00
+#SBATCH -t 10:00:00
 #SBATCH --mem=2G
 #SBATCH -J seqSearch.pl
 

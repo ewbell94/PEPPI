@@ -10,6 +10,7 @@ my $outdir="!OUTDIR!/PPI";
 my $pairname="!PAIRNAME!";
 my $user=`whoami`;
 chomp($user);
+my $starttime=time();
 
 my $randomTag=int(rand(1000000));
 #my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02";
@@ -41,6 +42,8 @@ blastSearch();
 print `sync`;
 print `rm -rf $tempdir`;
 print `date`;
+my $stoptime=time();
+print "Total program runtime: ".($stoptime-$starttime)."\n";
 
 sub blastSearch{
     my $t0=time();

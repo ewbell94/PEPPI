@@ -36,7 +36,7 @@ my $dimerdb="$springdb/70negpos.db";
 my $hhdir="$outdir/$sourcefasta";
 my $modeldir=$hhdir;
 my $zthresh=8.5;
-my $homologthresh=0.3;
+my $homologthresh=0.5;
 my $toptm=1000;
 
 print "benchmark: $benchflag\n";

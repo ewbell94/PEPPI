@@ -11,6 +11,7 @@ my $peppidir="!PEPPIDIR!";
 my $outdir="!OUTDIR!/PPI";
 my $pairname="!PAIRNAME!";
 my $benchmarkflag=!BENCHMARK!;
+my $starttime=time();
 
 print `mkdir -p $outdir/$pairname/SPRINGNEG`;
 
@@ -20,7 +21,7 @@ my $springout="$outdir/$pairname/SPRINGNEG"; #location of program output
 my $dbdir="/expanse/lustre/scratch/ewbell/temp_project/SPRINGDB"; #location of SPRING database
 my $complexlist="$dbdir/70negs.txt";
 my $maxmodels=1; #maximum number of model pdb files to make
-my $scut=($benchmarkflag) ? 0.3 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
+my $scut=($benchmarkflag) ? 0.5 : 1.1; #monomeric sequence homology cutoffs for threading; 0.3="benchmark", 1.1="real"
 my $zmin=2.0; #Minimum Z-score for reporting templates; if none are found satisfying this threshold, zmin is set to -5
 
 #DO NOT CHANGE BENEATH THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING
@@ -78,9 +79,11 @@ close($indexfile);
 my @qseqs=split("-",$pairname);
 my @domainPairs=();
 my $m=1;
-while (-e "$outdir/$pairname/$qseqs[0]\_$m.seq"){
+#while (-e "$outdir/$pairname/$qseqs[0]\_$m.seq"){
+while (-e "$outdir/../mono/$qseqs[0]/$qseqs[0]\_$m.fasta"){
     my $n=1;
-    while (-e "$outdir/$pairname/$qseqs[1]\_$n.seq"){
+    #while (-e "$outdir/$pairname/$qseqs[1]\_$n.seq"){
+    while (-e "$outdir/../mono/$qseqs[1]/$qseqs[1]\_$n.fasta"){
 	my @domainPair=("$qseqs[0]\_$m","$qseqs[1]\_$n");
 	push(@domainPairs,\@domainPair);
 	$n++;
@@ -103,8 +106,10 @@ for my $pointer (@domainPairs){
     my $t0=time();
     #Read in arguments and process input
     my @qdoms = @{$pointer};
-    my $prot1file="$outdir/$pairname/$qdoms[0].seq";
-    my $prot2file="$outdir/$pairname/$qdoms[1].seq";
+    #my $prot1file="$outdir/$pairname/$qdoms[0].seq";
+    #my $prot2file="$outdir/$pairname/$qdoms[1].seq";
+    my $prot1file="$outdir/../mono/$qseqs[0]/$qdoms[0].fasta";
+    my $prot2file="$outdir/../mono/$qseqs[1]/$qdoms[1].fasta";
     my $prot1=$qdoms[0];
     my $prot2=$qdoms[1];
 
@@ -271,6 +276,8 @@ if ($topscore==-100.0){
     print $resfile "$topscore\n";
 }
 print `sync`;
+my $stoptime=time();
+print "Total program runtime: ".($stoptime-$starttime)."\n";
 
 sub getSeqID{
     my $fname1=$_[0];
