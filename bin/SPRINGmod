@@ -244,7 +244,7 @@ for my $pointer (@domainPairs){
     
     my $domainscore=$dimerModels[0][2][0];
     $topscore=$domainscore if ($domainscore>$topscore);
-
+=pod
     print "Writing output\n";
     open(my $summary,">","$outputdir/TemplateSummary.txt");
     for my $i (0..min(scalar(@dimerModels)-1,$topcount-1)){
@@ -254,7 +254,7 @@ for my $pointer (@domainPairs){
 	print $summary sprintf("%s\t%s\t%.3f\t%.3f\t%.3f\t%.3f\n",$dimerModels[$i][0],$dimerModels[$i][1],$dimerModels[$i][2][0],$dimerModels[$i][2][1],$dimerModels[$i][2][2],$dimerModels[$i][2][3]);
     }
     close($summary);
-    
+=cut
     my $t4=time();
     print "Total scoring time: ".($t4-$t3)."\n";
     #print `tar -zcf $tempdir/pdb.tar.gz $tempdir/*-*.pdb`;
@@ -267,7 +267,7 @@ print `rm -rf $tempdir`;
 if ($topscore!=-100.0){
     print `echo "$pairname,$topscore" >> $outdir/SPRINGres.txt`;
 }
-
+=pod
 open(my $resfile,">","$outdir/$pairname/SPRING/res.txt");
 
 if ($topscore==-100.0){
@@ -275,6 +275,7 @@ if ($topscore==-100.0){
 } else {
     print $resfile "$topscore\n";
 }
+=cut
 print `sync`;
 my $stoptime=time();
 print "Total program runtime: ".($stoptime-$starttime)."\n";
