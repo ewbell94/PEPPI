@@ -14,7 +14,7 @@ chomp($user);
 my $randomTag=int(rand(1000000));
 my $bindir="$peppidir/bin";
 my $prismloc="/nfs/amino-home/ewbell/PRISM/PRISM.tar.gz";
-my $homothresh=0.3;
+my $homothresh=0.5;
 
 my $tempdir="/tmp/$user/PRISM_$pairname\_$randomTag";
 if (! -e "$tempdir"){
@@ -30,6 +30,8 @@ $realchainB=~s/:.*//;
 chomp($realchainA);
 chomp($realchainB);
 print "$realchainA,$realchainB\n";
+my $chainletterA=substr($realchainA,6,1); 
+my $chainletterB=substr($realchainB,6,1);
 
 print `date`;
 print `cp $prismloc $tempdir/`;
@@ -38,6 +40,13 @@ print `tar -zxvf ./PRISM.tar.gz`;
 chdir("$tempdir/PRISM_protocol/0-SurfaceExtraction");
 print `echo "1ABC" > ./PDB.list`;
 print `cat /nfs/amino-home/ewbell/SPRINGDB/monomers/$realchainA.pdb > ./PDB/1abc.pdb`;
+if ($chainletterA eq $chainletterB){
+    if ($chainletterB ne "A"){
+	print `sed -i "s/ $chainletterA / A /" ./PDB/1abc.pdb`;
+    } else {
+	print `sed -i "s/ $chainletterA / B /" ./PDB/1abc.pdb`;
+    }
+}
 print `cat /nfs/amino-home/ewbell/SPRINGDB/monomers/$realchainB.pdb >> ./PDB/1abc.pdb`;
 print `echo "END" >> ./PDB/1abc.pdb`;
 print `sed -i "/TER/d" ./PDB/1abc.pdb`;
@@ -77,7 +86,25 @@ print `mkdir -p $outdir/$pairname/PRISM`;
 print `cp -r ENERGIES $outdir/$pairname/PRISM`;
 
 open(my $resfile,">","$outdir/$pairname/PRISM/res.txt");
-#print `cp $peppidir/lib/STRING/STRINGseqsv11.db* $tempdir/`;
+print `cat $outdir/$pairname/PRISM/ENERGIES/*.txt > $outdir/$pairname/PRISM/all.txt`;
+if (-s "$outdir/$pairname/PRISM/all.txt"){
+    open(my $engfile,"<","$outdir/$pairname/PRISM/all.txt");
+    my $besteng=10000000.0;
+    while (my $line=<$engfile>){
+	chomp($line);
+	my @parts=split(" ",$line);
+	my $eng=$parts[-1];
+	$besteng=$eng if ($eng<$besteng);
+    }
+    close($engfile);
+    if ($besteng < 10000000.0){
+	print $resfile -1*$besteng."\n";
+    } else {
+	print $resfile "?\n";
+    }
+} else {
+    print $resfile "?\n";
+}
 
 print `sync`;
 print `rm -rf $tempdir`;

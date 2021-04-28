@@ -4,31 +4,58 @@ use strict;
 use warnings;
 use List::Util qw(min);
 
-my $outdir="OUTDIR";
+my $outdir="!OUTDIR!";
+my $peppidir="!PEPPIDIR!";
+my $bindir="$peppidir/bin";
 
-open(my $resfile,">","$outdir/res.csv");
-my $springthresh=2.0;
-my $zthresh=-2.0;
-
-for my $pair (glob("$outdir/SPRING/*/")){
-    my @pairparts=split("/",$pair);
-    my $pairname=$pairparts[-1];
-    if (! -e "$pair/SPRING/TemplateSummary.txt"){
-	print "Protein pair $pairname was not analyzed by SPRING correctly.\n";
-	next;
-    }
-    open(my $summary,"<","$pair/SPRING/TemplateSummary.txt");
-    my $line=<$summary>;
-    while ($line=<$summary>){
-	last if (substr($line,0,4) eq "DONE");
-	my @parts=split(' ',$line);
-	my $springscore=$parts[2];
-	last if ($springscore < $springthresh);
-	my $zscore=min($parts[8],$parts[13]);
-	if ($zscore >= $zthresh){
-	    print $resfile "$pairname,$zscore,$springscore\n";
-	    last;
-	}
-    }
-    close($summary);
+my @protsA=();
+open(my $protcodeA,"<","$outdir/protcodeA.csv");
+while (my $line=<$protcodeA>){
+    my @parts=split(",",$line);
+    push(@protsA,"$parts[0]");
 }
+close($protcodeA);
+
+my @protsB=();
+open(my $protcodeB,"<","$outdir/protcodeB.csv");
+while (my $line=<$protcodeB>){
+    my @parts=split(",",$line);
+    push(@protsB,"$parts[0]");
+}
+close($protcodeB);
+
+my @supported=("SPRING","STRING","SEQ","CT","SPRINGNEG");
+open(my $allres,">","$outdir/allres.txt");
+my @pairs=();
+for my $protA (@protsA){
+    for my $protB (@protsB){
+	next if (grep(/$protB-$protA;/,@pairs) && $protA ne $protB);
+	print "$protA-$protB\n";
+	push(@pairs,"$protA-$protB;");
+	my @vals=();
+	for my $prog (@supported){
+	    my $grepline=`fgrep "$protA-$protB," $outdir/PPI/${prog}res.txt`;
+	    chomp($grepline);
+	    if ($grepline ne ""){
+		my @parts=split(",",$grepline);
+		my @topush=();
+		for my $i (1..scalar(@parts)-1){
+		    push(@topush,$parts[$i]);
+		}
+		push(@vals,\@topush);
+	    } else {
+		my @topush=("?");
+		push(@vals,\@topush);
+	    }
+	}
+	my $resline="$protA-$protB";
+	for my $v (@vals){
+	    my @subval=@{$v};
+	    $resline="$resline;".join(",",@subval);
+	}
+	print $allres "$resline\n";
+    }
+}
+close($allres);
+
+print `python $bindir/calcLR.py $outdir/allres.txt $outdir/LR.csv`;
