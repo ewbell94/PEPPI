@@ -74,7 +74,7 @@ for my $i (0..scalar(@ids1)-1){
 	print "$id1 $id2\n";
 
 	my $hashcode=`python2 $peppidir/bin/getHashcode.py $id1 $id2`*1;
-	my $grepline=`zgrep "$id1" $peppidir/lib/STRING/$hashcode.txt.gz | fgrep "$id2" | head -1`;
+	my $grepline=`zgrep "$id1" /expanse/lustre/scratch/ewbell/temp_project/lib/STRING/$hashcode.txt.gz | fgrep "$id2" | head -1`;
 
 	if ($grepline ne ""){
 	    print "Dimer found!\n";
