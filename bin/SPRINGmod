@@ -263,14 +263,6 @@ for my $pointer (@domainPairs){
 
 print `rm -rf $tempdir`;
 if ($topscore!=-100.0){
-    print `echo "$pairname,$topscore" >> $outdir/SPRINGres.txt`;
-}
-
-open(my $resfile,">","$outdir/$pairname/SPRING/res.txt");
-
-if ($topscore==-100.0){
-    print $resfile "?\n";
-} else {
     if ($topscore < 6.0){
 	print "Best SPRINGscore is outside of training set range.  Set to 6.0 for classification purposes\n";
 	$topscore=6.0;
@@ -278,8 +270,17 @@ if ($topscore==-100.0){
 	print "Best SPRINGscore is outside of training set range.  Set to 103.0 for classifiction purposes\n";
 	$topscore=103.0;
     }
+    print `echo "$pairname,$topscore" >> $outdir/SPRINGres.txt`;
+}
+
+open(my $resfile,">","$outdir/$pairname/SPRING/res.txt");
+
+if ($topscore==-100.0){
+    print $resfile "?\n";
+} else {    
     print $resfile "$topscore\n";
 }
+
 print `sync`;
 my $stoptime=time();
 print "Total program runtime: ".($stoptime-$starttime)."\n";
