@@ -271,6 +271,13 @@ open(my $resfile,">","$outdir/$pairname/SPRING/res.txt");
 if ($topscore==-100.0){
     print $resfile "?\n";
 } else {
+    if ($topscore < 6.0){
+	print "Best SPRINGscore is outside of training set range.  Set to 6.0 for classification purposes\n";
+	$topscore=6.0;
+    } elsif ($topscore > 103.0){
+	print "Best SPRINGscore is outside of training set range.  Set to 103.0 for classifiction purposes\n";
+	$topscore=103.0;
+    }
     print $resfile "$topscore\n";
 }
 print `sync`;
