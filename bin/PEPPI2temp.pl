@@ -53,7 +53,7 @@ while (my $line=<$protcodeB>){
 }
 close($protcodeB);
 
-my @supported=("SPRING","SPRINGNEG","CT","STRING","SEQ");
+my @supported=("PRISM");
 my @intset=();
 
 print `mkdir -p $outdir/PPI`;
@@ -111,13 +111,13 @@ if (scalar(@intset) > 0){
 }
 
 
-open(my $peppi3script,">","$outdir/PEPPI3.pl");
-my $peppi3=`cat $peppidir/bin/PEPPI3temp.pl`;
+open(my $peppi3script,">","$outdir/PEPPI3.py");
+my $peppi3=`cat $peppidir/bin/PEPPI3temp.py`;
 $peppi3=~s/\!OUTDIR\!/$outdir/;
 $peppi3=~s/\!PEPPIDIR\!/$peppidir/;
 print $peppi3script $peppi3;
 close($peppi3script);
-print `chmod +x $outdir/PEPPI3.pl`;
+print `chmod +x $outdir/PEPPI3.py`;
 
 sub submitBatch{
     my @intset=@{$_[0]};
