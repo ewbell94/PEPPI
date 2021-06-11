@@ -1,0 +1,124 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use List::Util qw(min);
+
+my $peppidir="/nfs/amino-home/ewbell/PEPPI";
+my $outdir="/nfs/amino-home/ewbell/PEPPI/test/PPI";
+my $pairname="prot1-prot5";
+my $benchflag=0;
+my $user=`whoami`;
+chomp($user);
+
+my $randomTag=int(rand(1000000));
+my $bindir="$peppidir/bin";
+my $prismloc="/nfs/amino-home/ewbell/PRISM/PRISM.tar.gz";
+my $homothresh=0.3;
+
+my $tempdir="/tmp/$user/PRISM_$pairname\_$randomTag";
+if (! -e "$tempdir"){
+    print `mkdir -p $tempdir`;
+} else {
+    print `rm -rf $tempdir/*`;
+}
+my @chains=split(",",$pairname);
+(my $realchainA=`cat $outdir/../protcodeA.csv`)=~s/.*,\"//; 
+(my $realchainB=`cat $outdir/../protcodeB.csv`)=~s/.*,\"//;
+$realchainA=~s/:.*//;
+$realchainB=~s/:.*//; 
+chomp($realchainA);
+chomp($realchainB);
+print "$realchainA,$realchainB\n";
+
+print `date`;
+print `cp $prismloc $tempdir/`;
+chdir($tempdir);
+print `tar -zxvf ./PRISM.tar.gz`;
+chdir("$tempdir/PRISM_protocol/0-SurfaceExtraction");
+print `echo "1ABC" > ./PDB.list`;
+print `cat /nfs/amino-home/ewbell/SPRINGDB/monomers/$realchainA.pdb > ./PDB/1abc.pdb`;
+print `cat /nfs/amino-home/ewbell/SPRINGDB/monomers/$realchainB.pdb >> ./PDB/1abc.pdb`;
+print `echo "END" >> ./PDB/1abc.pdb`;
+print `sed -i "/TER/d" ./PDB/1abc.pdb`;
+
+my $currdir=`pwd`;
+chomp($currdir);
+print `python surfaceExtractor.py $currdir/PDB $currdir 1 1`;
+if (!-f "all_pdbs.paths"){
+    print "Surface extraction was not completed successfully.\n";
+    exit(1);
+}
+print `cp all_pdbs.paths ../1-Prediction/PATHS`;
+chdir("../1-Prediction");
+
+$currdir=`pwd`;
+chomp($currdir);
+print `python structuralAlignment.py $currdir/TEMPLATE $currdir 1 40000`;
+if (!-e "MULTIPROT_OUTPUT"){
+    print "Multiprot alignment was not run.\n";
+    exit(2);
+}
+
+for my $dir (glob("./MULTIPROT_OUTPUT/*")){
+    (my $fastaname=$dir)=~s/.*\///;
+    $fastaname=substr($fastaname,0,4)."_".substr($fastaname,4,1);
+    if ($benchflag && getSeqID("./FASTA/$fastaname.fasta","../0-SurfaceExtraction/PDB/1abc.pdb") > $homothresh){
+	print `rm -rf $dir`;
+    }
+}
+
+chdir("../2-DistanceCalculation");
+print `python TransformationFiltering.py 1 40000`;
+chdir("../6-FiberDock");
+print `python FlexibleRefinement.py 1 40000`;
+
+print `mkdir -p $outdir/$pairname/PRISM`;
+print `cp -r ENERGIES $outdir/$pairname/PRISM`;
+
+open(my $resfile,">","$outdir/$pairname/PRISM/res.txt");
+print `cat $outdir/$pairname/PRISM/ENERGIES/*.txt > $outdir/$pairname/PRISM/all.txt`;
+if (-s "$outdir/$pairname/PRISM/all.txt"){
+    open(my $engfile,"<","$outdir/$pairname/PRISM/all.txt");
+    my $besteng=10000000.0;
+    while (my $line=<$engfile>){
+	chomp($line);
+	my @parts=split(" ",$line);
+	my $eng=$parts[-1];
+	$besteng=$eng if ($eng<$besteng);
+    }
+    close($engfile);
+    if ($besteng < 10000000.0){
+	print $resfile "$besteng\n";
+    } else {
+	print $resfile "?\n";
+    }
+} else {
+    print $resfile "?\n";
+}
+
+print `sync`;
+print `rm -rf $tempdir`;
+print `date`;
+
+sub getSeqID{
+    my $fname1=$_[0];
+    my $fname2=$_[1];
+    return 0.0 if (! -f $fname1 || ! -f $fname2);
+    my $NWresult;
+    if ($fname2=~/\.fasta/){
+        $NWresult=`$bindir/NWalign $fname1 $fname2`;
+    } elsif ($fname2=~/\.pdb/){
+        $NWresult=`$bindir/NWalign $fname1 $fname2 2`;
+    } else {
+        return 0.0;
+    }
+    $NWresult=~/Identical length:\s+(\d+)/;
+    my $idcount=$1;
+    $NWresult=~/Length of sequence 1:\s+(\d+).*\nLength of sequence 2:\s+(\d+)/;
+    my $seq1len=$1;
+    my $seq2len=$2;
+    return min($idcount/$seq1len,$idcount/$seq2len) if ($fname2=~/\.fasta/);
+    return $idcount/$seq2len if ($fname2=~/\.pdb/); #I changed this one because query is now the PDB
+    return 0.0;
+}

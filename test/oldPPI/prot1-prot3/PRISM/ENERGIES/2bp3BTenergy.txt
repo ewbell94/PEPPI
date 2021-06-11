@@ -1,0 +1,2 @@
+2bp3BT	1abc	1	1abc	0	-9.38
+2bp3BT	1abc	1	1abcE	0	-36.84

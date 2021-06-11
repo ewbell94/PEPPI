@@ -1,5 +1,6 @@
 from pickle import load
 from sys import argv
+#This script simply predicts interaction probability from the precalculated CTNN
 
 model=load(open("/nfs/amino-home/ewbell/PEPPI/bin/CTNN"))
 f=open(argv[1])

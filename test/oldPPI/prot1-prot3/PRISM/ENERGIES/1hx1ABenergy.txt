@@ -1,0 +1,6 @@
+1hx1AB	1abcE	0	1abcE	0	29.63
+1hx1AB	1abcE	0	1abc	2	-7.30
+1hx1AB	1abcL	1	1abcE	0	-9.59
+1hx1AB	1abcL	1	1abcE	2	6.47
+1hx1AB	1abcL	1	1abc	2	-9.59
+1hx1AB	1abc	0	1abcE	2	13.28

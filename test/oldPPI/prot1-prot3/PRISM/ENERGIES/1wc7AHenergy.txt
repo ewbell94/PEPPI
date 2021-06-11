@@ -1,0 +1,4 @@
+1wc7AH	1abcE	0	1abcE	2	-15.70
+1wc7AH	1abcL	0	1abcE	2	-2.96
+1wc7AH	1abc	0	1abcE	2	-14.48
+1wc7AH	1abc	2	1abcE	2	-8.06

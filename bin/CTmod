@@ -12,8 +12,10 @@ my $user=`whoami`;
 chomp($user);
 my $starttime=time();
 
+#Binnings for amino acids based on electrostatics
 my %aatypes=(A=>"0",G=>"0",V=>"0",I=>"1",L=>"1",F=>"1",P=>"1",Y=>"2",M=>"2",T=>"2",S=>"2",H=>"3",N=>"3",Q=>"3",W=>"3",R=>"4",K=>"4",D=>"5",E=>"5",C=>"6");
 
+#Create input vector into the neural network
 print `mkdir -p $outdir/$pairname/CT`;
 open(my $inpfile,">","$outdir/$pairname/CT/input.txt");
 my @chains=split("-",$pairname);
@@ -27,6 +29,7 @@ for my $val (@Bvals){
     print $inpfile "$val\n";
 }
 
+#Predict interaction likelihood and record the result
 print `python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
 my $result=`cat $outdir/$pairname/CT/res.txt`;
 print `echo -en "$pairname,$result" >> $outdir/CTres.txt`;
@@ -34,6 +37,7 @@ print `sync`;
 my $stoptime=time();
 print "Total program runtime: ".($stoptime-$starttime)."\n";
 
+#Given an amino acid sequence, calculate the 343-length CT vector
 sub getCT{
     my $prot=$_[0];
     
@@ -47,7 +51,6 @@ sub getCT{
     }
     
     my $seq="";
-    #open(my $seqfile,"<","$outdir/$pairname/$prot.seq");
     open(my $seqfile,"<","$outdir/../mono/$prot/$prot.fasta");
     my $throwaway=<$seqfile>;
     while (my $line=<$seqfile>){

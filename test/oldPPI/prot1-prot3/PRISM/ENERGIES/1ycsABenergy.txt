@@ -1,0 +1,3 @@
+1ycsAB	1abcE	0	1abcE	0	12.98
+1ycsAB	1abcL	2	1abcL	2	-2.69
+1ycsAB	1abc	0	1abcE	0	0.83

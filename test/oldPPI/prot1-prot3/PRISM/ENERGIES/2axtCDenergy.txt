@@ -1,0 +1,9 @@
+2axtCD	1abcL	1	1abcE	0	-19.20
+2axtCD	1abcL	1	1abcE	1	3417.65
+2axtCD	1abcL	1	1abcL	0	-9.05
+2axtCD	1abcL	1	1abc	0	-0.75
+2axtCD	1abcL	1	1abc	2	-6.57
+2axtCD	1abcE	1	1abcE	0	-13.43
+2axtCD	1abcE	1	1abcL	0	-27.51
+2axtCD	1abcE	1	1abc	0	-9.06
+2axtCD	1abcE	1	1abc	2	-8.58

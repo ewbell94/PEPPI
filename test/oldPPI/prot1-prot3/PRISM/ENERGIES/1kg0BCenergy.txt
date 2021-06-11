@@ -1,0 +1,5 @@
+1kg0BC	1abc	0	1abcL	0	-6.93
+1kg0BC	1abcE	0	1abcL	0	-11.99
+1kg0BC	1abcE	2	1abcL	0	-9.09
+1kg0BC	1abcE	0	1abcE	1	-13.11
+1kg0BC	1abcE	2	1abcE	0	-26.16

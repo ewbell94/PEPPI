@@ -1,0 +1,232 @@
+slurmstepd: error: couldn't chdir to `/tmp/ewbell/makeHHR_prot5_A_B_B_197101': No such file or directory: going to /tmp instead
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to the standard locale ("C").
+Wed Feb 17 12:15:06 EST 2021
+Making MSA for prot5_A_B_B...
+Search results will be written to prot5_A_B_B.hhr
+Reading in 8290068 column state sequences with a total of 1874100330 residues
+
+Iteration 1
+Prefiltering database
+...................................................................................
+HMMs passed 1st prefilter (gapless profile-profile alignment)  :  98021
+HMMs passed 2nd prefilter (gapped profile-profile alignment)   :     36
+HMMs passed 2nd prefilter and not found in previous iterations :     36
+Scoring 36 HMMs using HMM-HMM Viterbi alignment
+.
+Realigning 30 HMMs using HMM-HMM Maximum Accuracy algorithm
+...
+Merging hits to query profile
+4 sequences belonging to 4 database HMMs found with an E-value < 0.001       
+Number of effective sequences of resulting query HMM: Neff = 5.41
+
+Iteration 2
+Prefiltering database
+...................................................................................
+HMMs passed 1st prefilter (gapless profile-profile alignment)  : 145240
+HMMs passed 2nd prefilter (gapped profile-profile alignment)   :    335
+HMMs passed 2nd prefilter and not found in previous iterations :    335
+Scoring 335 HMMs using HMM-HMM Viterbi alignment
+................
+Rescoring previously found HMMs with Viterbi algorithm
+
+Realigning 320 HMMs using HMM-HMM Maximum Accuracy algorithm
+................................
+Merging hits to query profile
+24 sequences belonging to 24 database HMMs found with an E-value < 0.001       
+Number of effective sequences of resulting query HMM: Neff = 5.51
+
+Query         prot5_A_B_B
+Match_columns 67
+No_of_seqs    60 out of 89
+Neff          5.4 
+Searched_HMMs 339
+Date          Wed Feb 17 12:15:43 2021
+Command       /nfs/amino-home/ewbell/PEPPI/bin/hhsuite/bin/hhblits -i prot5_A_B_B.fasta -oa3m prot5_A_B_B.a3m -d /nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02 -n 2 -e 0.001 
+
+ No Hit                             Prob E-value P-value  Score    SS Cols Query HMM  Template HMM
+  1 tr|A0A091N0V1|A0A091N0V1_APAVI  99.9 4.5E-26 2.3E-31  177.9   0.0   67    1-67    234-300 (638)
+  2 tr|A0A091N0V1|A0A091N0V1_APAVI  99.9 6.8E-26 3.7E-31  177.9   0.0   67    1-67    234-300 (638)
+  3 tr|A0A0N4ZWC9|A0A0N4ZWC9_PARTI  99.8 3.9E-25 2.1E-30  179.6   0.0   67    1-67    565-632 (1054)
+  4 tr|A0A0N4ZWC9|A0A0N4ZWC9_PARTI  99.8 3.9E-25 2.1E-30  179.6   0.0   67    1-67    565-632 (1054)
+  5 tr|W5JD29|W5JD29_ANODA Diacylg  99.8 4.2E-23 2.2E-28  170.3   0.0   67    1-67    961-1027(1410)
+  6 tr|I3J9C9|I3J9C9_ORENI Diacylg  99.7 8.1E-22   4E-27  151.1   0.0   67    1-67     69-135 (491)
+  7 tr|I3J9C9|I3J9C9_ORENI Diacylg  99.7 1.1E-21 5.6E-27  151.1   0.0   67    1-67     69-135 (491)
+  8 tr|A0A0C2CG73|A0A0C2CG73_9BILA  99.5 2.8E-17 1.3E-22  111.2   0.0   60    8-67     16-75  (160)
+  9 tr|S7NU27|S7NU27_MYOBR Diacylg  99.4 1.3E-16 5.7E-22  124.6   0.0   67    1-67    414-480 (711)
+ 10 tr|S7NU27|S7NU27_MYOBR Diacylg  99.4 1.3E-16 5.7E-22  124.6   0.0   67    1-67    414-480 (711)
+ 11 tr|T1JQA0|T1JQA0_TETUR Diacylg  99.4 3.4E-16 1.6E-21  127.8   0.0   67    1-67    684-750 (1129)
+ 12 tr|A0A0N4WQT3|A0A0N4WQT3_HAEPC  99.4   1E-15 4.6E-21  111.6   0.0   58   10-67      2-59  (307)
+ 13 tr|A0A0F5C5W1|A0A0F5C5W1_PRIPA  99.3   2E-15 8.7E-21  106.3   0.0   66    2-67     73-139 (217)
+ 14 tr|J9E907|J9E907_WUCBA Unchara  99.3 3.3E-15 1.5E-20  112.7   0.0   67    1-67    285-352 (436)
+ 15 tr|A0A0N4T6X9|A0A0N4T6X9_BRUPA  99.3 4.5E-15   2E-20  113.0   0.0   67    1-67    162-229 (487)
+ 16 tr|A0A0K0EBU9|A0A0K0EBU9_STRER  99.3 7.7E-15 3.5E-20  120.8   0.0   67    1-67   1044-1111(1570)
+ 17 tr|A0A0R3QDU4|A0A0R3QDU4_9BILA  99.2 4.2E-14 1.9E-19  101.7   0.0   58   10-67      2-59  (258)
+ 18 tr|A0A085LT77|A0A085LT77_9BILA  99.2 5.7E-14 2.6E-19  119.1   0.0   67    1-67   3000-3067(3419)
+ 19 tr|Q8MUB2|Q8MUB2_APLCA Diacylg  99.2 6.8E-14   3E-19  108.3   0.0   66    1-66    334-399 (578)
+ 20 tr|A0A074ZYC7|A0A074ZYC7_9TREM  99.1 2.1E-13 9.9E-19  112.3   0.0   67    1-67    776-842 (1321)
+ 21 tr|A0A0R3VT04|A0A0R3VT04_TAEAS  99.0 6.9E-13 3.1E-18   82.9   0.0   50   16-65      2-51  (85)
+ 22 tr|A0A0R3WM90|A0A0R3WM90_HYDTA  99.0 7.2E-13 3.2E-18  104.3   0.0   65    1-65    513-577 (701)
+ 23 tr|W6USM4|W6USM4_ECHGR Diacylg  98.9 5.6E-12 2.5E-17  105.3   0.0   65    1-65   1295-1359(1879)
+ 24 tr|T1JU41|T1JU41_TETUR Unchara  98.8 9.3E-12 4.1E-17   82.5   0.0   53   10-62     29-81  (125)
+ 25 tr|G7YB49|G7YB49_CLOSI Diacylg  98.7 3.2E-11 1.4E-16  100.0   0.0   67    1-67    922-988 (1527)
+ 26 tr|A0A0R3TXI7|A0A0R3TXI7_HYMNN  97.2 7.6E-06 3.4E-11   62.7   0.0   40    3-42    312-351 (356)
+ 27 tr|A0A068X8X5|A0A068X8X5_HYMMI  96.8 5.1E-05 2.3E-10   61.3   0.0   41    2-42    562-602 (606)
+ 28 tr|A0A0M3J3S9|A0A0M3J3S9_ANISI  96.4 0.00028 1.2E-09   53.9   0.0   26    1-26    285-311 (311)
+ 29 tr|A0A087SI40|A0A087SI40_AUXPR  92.7   0.071 4.1E-07   34.9   0.0   35   20-54     38-72  (77)
+ 30 tr|N1Q667|N1Q667_PSEFD Unchara  92.7   0.063 4.4E-07   39.1   0.0   36   20-55     42-77  (179)
+ 31 tr|Q8TCM5|Q8TCM5_HUMAN Putativ  92.4    0.11 5.2E-07   31.5   0.0   35   20-54     11-45  (50)
+ 32 tr|A0A0P4WIZ8|A0A0P4WIZ8_9EUCA  91.9    0.13   7E-07   39.4   0.0   48    9-56     37-84  (219)
+ 33 tr|H0YKS1|H0YKS1_HUMAN Myelin   91.7    0.17 7.9E-07   36.0   0.0   48    8-55     66-122 (126)
+ 34 tr|A0A0E9WV76|A0A0E9WV76_ANGAN  91.1    0.24 1.1E-06   31.3   0.0   35   20-54     24-58  (63)
+ 35 tr|A0A024R5Q6|A0A024R5Q6_HUMAN  91.0    0.18 1.1E-06   42.0   0.0   48    8-55    380-436 (440)
+ 36 tr|F6QX80|F6QX80_CIOIN Unchara  90.4    0.32 1.4E-06   39.2   0.0   53    7-59    132-184 (374)
+ 37 tr|M3Y776|M3Y776_MUSPF Unchara  89.8    0.37 1.8E-06   42.6   0.0   46    9-54    744-798 (803)
+ 38 tr|A0A044VHD6|A0A044VHD6_ONCVO  89.4    0.37   2E-06   43.6   0.0   59    1-61    551-613 (982)
+ 39 tr|V9IGN2|V9IGN2_APICE Unchara  88.4    0.64 2.8E-06   27.0   0.0   32   21-52      3-34  (38)
+ 40 tr|E4XW83|E4XW83_OIKDI Unchara  87.6    0.73 3.5E-06   37.8   0.0   48   20-67    200-251 (363)
+ 41 tr|M1VIR5|M1VIR5_CYAME Similar  87.4    0.82 3.6E-06   31.9   0.0   34   20-53     75-108 (113)
+ 42 tr|A0A0E9M0Y3|A0A0E9M0Y3_9BACT  87.0    0.84   4E-06   34.5   0.0   29    6-34    140-168 (182)
+ 43 tr|B7XNI3|B7XNI3_ENTBH Transcr  86.9    0.83 4.2E-06   33.2   0.0   35   20-54     64-98  (136)
+ 44 tr|B4NDB3|B4NDB3_DROWI Unchara  86.7    0.97 4.3E-06   33.6   0.0   52    8-59     85-140 (176)
+ 45 tr|H2V2M5|H2V2M5_TAKRU Unchara  85.5     1.1 5.7E-06   39.0   0.0   36   20-55    577-612 (616)
+ 46 tr|A0A059AWR9|A0A059AWR9_EUCGR  85.3     1.3 5.9E-06   29.3   0.0   32    9-40     12-47  (78)
+ 47 tr|A0A0K8LNY1|A0A0K8LNY1_9EURO  84.6     1.2 6.9E-06   37.5   0.0   50   10-59    301-350 (432)
+ 48 tr|A0A0D0KLA4|A0A0D0KLA4_RHIRD  84.4     1.6 7.1E-06   29.3   0.0   25    6-30     22-46  (84)
+ 49 tr|A0A0G4FI17|A0A0G4FI17_9ALVE  84.3     1.5 7.2E-06   35.9   0.0   31   21-51     84-114 (360)
+ 50 sp|O13845|RSD1_SCHPO RNA-bindi  84.2     1.6 7.3E-06   37.8   0.0   57    3-59    534-591 (603)
+ 51 tr|A0A024GT11|A0A024GT11_9STRA  84.2     1.7 7.4E-06   34.8   0.0   40   19-58    141-180 (310)
+ 52 tr|W2KLL3|W2KLL3_PHYPR Unchara  84.1     1.4 7.4E-06   36.2   0.0   46    9-54     94-148 (343)
+ 53 tr|N1Q667|N1Q667_PSEFD Unchara  83.9     1.1 7.8E-06   33.0   0.0   34   22-55    138-171 (179)
+ 54 tr|A0A0C9MJX5|A0A0C9MJX5_9FUNG  83.7     1.6 8.1E-06   37.7   0.0   47   20-66    157-203 (529)
+ 55 tr|A0A060XQR6|A0A060XQR6_ONCMY  83.6     1.8 8.2E-06   31.3   0.0   45    9-53     21-74  (141)
+ 56 tr|K3WRK1|K3WRK1_PYTUL Unchara  83.3     1.8 8.5E-06   36.6   0.0   34   20-53    271-304 (460)
+ 57 tr|A0A0C3DBA3|A0A0C3DBA3_9HOMO  82.8       2 9.4E-06   29.8   0.0   32   24-55     29-60  (102)
+ 58 tr|F0Y2V2|F0Y2V2_AURAN Putativ  81.8     1.8 1.1E-05   32.8   0.0   37   21-57    108-144 (186)
+ 59 tr|F9Q7G4|F9Q7G4_9PAST Conserv  81.5     2.4 1.1E-05   30.2   0.0   28   30-57     12-39  (114)
+ 60 tr|V5EQY9|V5EQY9_PSEBG RNA-bin  81.5     2.3 1.1E-05   36.7   0.0   34   20-53    122-155 (524)
+ 61 tr|W4HDL5|W4HDL5_9STRA Unchara  81.3     2.6 1.2E-05   36.2   0.0   33   20-52    269-301 (619)
+ 62 tr|A0A0K9TKB1|A0A0K9TKB1_VIBCL  80.7     2.9 1.3E-05   29.6   0.0   44    9-52     33-76  (117)
+ 63 tr|A0A0H2RD96|A0A0H2RD96_9HOMO  80.6     2.4 1.3E-05   35.8   0.0   37   19-55    347-383 (408)
+ 64 tr|G3VMP5|G3VMP5_SARHA Unchara  80.2     3.1 1.4E-05   33.7   0.0   40   26-65     83-122 (332)
+ 65 tr|C3ZJU3|C3ZJU3_BRAFL Putativ  79.9     3.1 1.4E-05   28.7   0.0   44   12-55     47-93  (95)
+ 66 sp|Q10021|RSP5_CAEEL Probable   79.9     2.4 1.4E-05   32.7   0.0   46    9-54     23-68  (208)
+ 67 tr|B7ZC11|B7ZC11_MOUSE RNA-bin  79.9     3.2 1.4E-05   30.3   0.0   44   10-53      7-53  (145)
+ 68 tr|A0A0H5RNS1|A0A0H5RNS1_9EUKA  79.7     3.3 1.5E-05   35.8   0.0   42   17-58    563-604 (637)
+ 69 tr|Q4RBG0|Q4RBG0_TETNG Chromos  79.5     3.4 1.5E-05   24.7   0.0   31   25-55      8-38  (42)
+ 70 tr|Q5DE32|Q5DE32_SCHJA SJCHGC0  79.5     3.4 1.5E-05   29.8   0.0   45   10-54     15-59  (131)
+ 71 tr|K3WRK1|K3WRK1_PYTUL Unchara  79.3     3.3 1.6E-05   35.2   0.0   36   20-55    164-199 (460)
+ 72 tr|I3N8W1|I3N8W1_ICTTR Unchara  79.2     2.9 1.6E-05   30.8   0.0   35   20-54     45-79  (139)
+ 73 tr|A0A0D2MUU5|A0A0D2MUU5_9AGAR  78.6     3.3 1.7E-05   27.2   0.0   31   25-55     14-44  (68)
+ 74 tr|Q70BG5|Q70BG5_9CAUD Putativ  78.6     3.8 1.7E-05   25.7   0.0   27   23-49     19-45  (55)
+ 75 tr|A0A0D9YA74|A0A0D9YA74_9ORYZ  78.2       4 1.8E-05   31.7   0.0   42    5-51      5-46  (222)
+ 76 tr|F1LII9|F1LII9_ASCSU Sex det  77.8       4 1.9E-05   26.2   0.0   45   10-54      7-54  (60)
+ 77 tr|Q54QQ7|Q54QQ7_DICDI Unchara  77.6     3.9 1.9E-05   36.6   0.0   50    9-58    666-718 (727)
+ 78 tr|A0A078K0D1|A0A078K0D1_9APIC  76.6     4.2 2.1E-05   35.4   0.0   52    2-53    402-458 (528)
+ 79 tr|V9LCP9|V9LCP9_CALMI RNA-bin  76.3     4.3 2.2E-05   31.3   0.0   43    9-51    142-187 (188)
+ 80 tr|H2ZEB5|H2ZEB5_CIOSA Unchara  76.3       5 2.2E-05   34.0   0.0   52    8-59    107-158 (498)
+ 81 tr|A0A0L0P8J9|A0A0L0P8J9_9ASCO  76.2       5 2.2E-05   28.6   0.0   30    5-34     84-114 (119)
+ 82 tr|A0A061RCW0|A0A061RCW0_9CHLO  76.2     4.6 2.2E-05   30.3   0.0   35   21-55     51-85  (156)
+ 83 tr|A0A0F8C915|A0A0F8C915_LARCR  76.1       5 2.3E-05   33.9   0.0   45    9-53    171-218 (457)
+ 84 tr|W2TU43|W2TU43_NECAM Unchara  76.0     4.7 2.3E-05   30.1   0.0   61    5-65     17-81  (150)
+ 85 tr|A0A060YNY7|A0A060YNY7_ONCMY  76.0     5.1 2.3E-05   30.7   0.0   50    9-58     83-135 (200)
+ 86 tr|S4PR48|S4PR48_9NEOP Trinucl  75.6     5.3 2.4E-05   27.5   0.0   38   15-52     51-88  (95)
+ 87 tr|A0A0L6URV0|A0A0L6URV0_9BASI  75.2     5.5 2.5E-05   35.4   0.0   35   19-53    360-394 (748)
+ 88 tr|A0A016TPY8|A0A016TPY8_9BILA  75.1     5.7 2.5E-05   33.2   0.0   33   13-45    381-413 (426)
+ 89 tr|G1T6Y3|G1T6Y3_RABIT Unchara  75.1     5.7 2.5E-05   32.6   0.0   45    9-53    128-175 (359)
+ 90 tr|K2MRT8|K2MRT8_TRYCR Unchara  74.6     5.3 2.6E-05   33.0   0.0   55    3-57     97-153 (325)
+ 91 tr|A0A0P7V8B1|A0A0P7V8B1_9TELE  74.6     5.6 2.7E-05   33.2   0.0   45    9-53    161-208 (362)
+ 92 tr|V9LBC2|V9LBC2_CALMI RNA-bin  74.2     6.2 2.8E-05   31.3   0.0   48    9-56    191-241 (263)
+ 93 tr|A0A087TTQ0|A0A087TTQ0_9ARAC  74.0     5.3 2.8E-05   30.3   0.0   47    9-55     28-74  (166)
+ 94 tr|A0A0L8G039|A0A0L8G039_OCTBM  74.0     5.8 2.8E-05   36.5   0.0   39   20-58    162-201 (947)
+ 95 tr|A0A091S6K5|A0A091S6K5_NESNO  73.9     6.1 2.9E-05   31.4   0.0   45    9-53    134-181 (245)
+ 96 tr|A0A0N4ZKM5|A0A0N4ZKM5_PARTI  73.7     6.4 2.9E-05   33.2   0.0   36   20-55    236-271 (446)
+ 97 tr|L9KZM2|L9KZM2_TUPCH RNA bin  73.6     6.6 2.9E-05   33.4   0.0   45    9-53    258-305 (492)
+ 98 tr|Q1KSH6|Q1KSH6_PHAVU Poly-A   73.2     6.6   3E-05   29.8   0.0   37   20-56     15-51  (172)
+ 99 tr|A0A0L0SLM1|A0A0L0SLM1_ALLMA  72.2     7.5 3.4E-05   31.9   0.0   45    9-55     74-118 (337)
+100 tr|A0A0B6ZT26|A0A0B6ZT26_9EUPU  71.9     7.7 3.4E-05   30.0   0.0   42   12-53    155-199 (208)
+
+Writing A3M alignment to prot5_A_B_B.a3m
+Done
+Predicting maps...
+hhlib=/nfs/amino-home/ewbell/PEPPI/bin/hhsuite/
+prot5_A_B_B.a3m is in A2M, A3M or FASTA format
+Read prot5_A_B_B.a3m with 72 sequences
+Alignment in prot5_A_B_B.a3m contains 67 match states
+72 out of 72 sequences passed filter (90% max pairwise sequence identity)
+Effective number of sequences exp(entropy) = 5.5 
+Writing HMM to prot5_A_B_B.hmm
+Done
+cuda is ready? : False
+predicting 7
+predicting 10
+predicting 11
+predicting 15
+predicting 20
+predicting 28
+
+done.Model generating...
+Done!
+Warning! Duplicated residue    2 
+Warning! Duplicated residue    2 
+Warning! Duplicated residue    2 
+Warning! Duplicated residue    6 
+Warning! Duplicated residue    6 
+Warning! Duplicated residue    7 
+Warning! Duplicated residue    7 
+Warning! Duplicated residue    8 
+Warning! Duplicated residue    8 
+Warning! Duplicated residue    8 
+Warning! Duplicated residue    9 
+Warning! Duplicated residue    9 
+Warning! Duplicated residue   10 
+Warning! Duplicated residue   10 
+Warning! Duplicated residue   11 
+Warning! Duplicated residue   11 
+Warning! Duplicated residue   11 
+Warning! Duplicated residue   11 
+Warning! Duplicated residue   12 
+Warning! Duplicated residue   12 
+Warning! Duplicated residue   13 
+Warning! Duplicated residue   13 
+Warning! Duplicated residue   14 
+Warning! Duplicated residue   14 
+Warning! Duplicated residue   14 
+Warning! Duplicated residue   15 
+Warning! Duplicated residue   15 
+Warning! Duplicated residue   15 
+Warning! Duplicated residue   17 
+Warning! Duplicated residue   18 
+Warning! Duplicated residue   18 
+Warning! Duplicated residue   19 
+Warning! Duplicated residue   20 
+Warning! Duplicated residue   21 
+Warning! Duplicated residue   21 
+Warning! Duplicated residue   22 
+Warning! Duplicated residue   23 
+Warning! Duplicated residue   24 
+Warning! Duplicated residue   24 
+Warning! Duplicated residue   25 
+Warning! Duplicated residue   25 
+Warning! Duplicated residue   25 
+Warning! Duplicated residue   27 
+Warning! Duplicated residue   27 
+Warning! Duplicated residue   28 
+Warning! Duplicated residue   28 
+Warning! Duplicated residue   28 
+Warning! Duplicated residue   29 
+Warning! Duplicated residue   30 
+Warning! Duplicated residue   31 
+Warning! Duplicated residue   31 
+Warning! Duplicated residue   32 
+Warning! Duplicated residue   34 
+Warning! Duplicated residue   35 
+Warning! Duplicated residue   35 
+Warning! Duplicated residue   35 
+Warning! Duplicated residue   36 
+Wed Feb 17 12:39:26 EST 2021

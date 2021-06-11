@@ -1,0 +1,4 @@
+4ubpAC	1abc	0	1abcE	1	-8.87
+4ubpAC	1abc	1	1abcE	1	-8.20
+4ubpAC	1abcE	1	1abcE	1	4.94
+4ubpAC	1abcE	2	1abcE	1	-17.62

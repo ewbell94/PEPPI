@@ -1,0 +1,2 @@
+1dy9AC	1abc	2	1abcE	1	-8.05
+1dy9AC	1abcL	0	1abcE	2	-6.15

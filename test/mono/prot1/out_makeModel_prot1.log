@@ -1,0 +1,197 @@
+slurmstepd: error: couldn't chdir to `/tmp/ewbell/makeHHR_prot1_506502': No such file or directory: going to /tmp instead
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to the standard locale ("C").
+Wed Feb 17 12:06:24 EST 2021
+Making MSA for prot1...
+WARNING: Number of hits passing 2nd prefilter (reduced from  72173 to allowed maximum of 20000).
+You can increase the allowed maximum using the -maxfilt <max> option.
+
+WARNING in hhblits: maximum number of 65535 sequences exceeded while reading W4H921.a3m. Skipping all following sequences of this MSA
+Search results will be written to prot1.hhr
+Reading in 8290068 column state sequences with a total of 1874100330 residues
+
+Iteration 1
+Prefiltering database
+...................................................................................
+HMMs passed 1st prefilter (gapless profile-profile alignment)  : 476212
+HMMs passed 2nd prefilter (gapped profile-profile alignment)   :  16051
+HMMs passed 2nd prefilter and not found in previous iterations :  16051
+Scoring 16051 HMMs using HMM-HMM Viterbi alignment
+.................................................. 1000 HMMs searched
+.................................................. 2000 HMMs searched
+.................................................. 3000 HMMs searched
+.................................................. 4000 HMMs searched
+.................................................. 5000 HMMs searched
+.................................................. 6000 HMMs searched
+.................................................. 7000 HMMs searched
+.................................................. 8000 HMMs searched
+.................................................. 9000 HMMs searched
+.................................................. 10000 HMMs searched
+.................................................. 11000 HMMs searched
+......
+
+Realigning 644 HMMs using HMM-HMM Maximum Accuracy algorithm
+.................................................. 500  HMMs aligned
+..............
+Merging hits to query profile
+2194 sequences belonging to 2194 database HMMs found with an E-value < 0.001       
+Number of effective sequences of resulting query HMM: Neff = 8.50
+
+Iteration 2
+Prefiltering database
+...................................................................................
+HMMs passed 1st prefilter (gapless profile-profile alignment)  : 714150
+HMMs passed 2nd prefilter (gapped profile-profile alignment)   :  20000
+HMMs passed 2nd prefilter and not found in previous iterations :  20000
+Scoring 20000 HMMs using HMM-HMM Viterbi alignment
+.................................................. 1000 HMMs searched
+.................................................. 2000 HMMs searched
+.................................................. 3000 HMMs searched
+.................................................. 4000 HMMs searched
+.................................................. 5000 HMMs searched
+.................................................. 6000 HMMs searched
+.................................................. 7000 HMMs searched
+.................................................. 8000 HMMs searched
+.................................................. 9000 HMMs searched
+.................................................. 10000 HMMs searched
+.................................................. 11000 HMMs searched
+.................................................. 12000 HMMs searched
+.................................................. 13000 HMMs searched
+.................................................. 14000 HMMs searched
+.................................................. 15000 HMMs searched
+.................................................. 16000 HMMs searched
+.................................................. 17000 HMMs searched
+.................................................. 18000 HMMs searched
+.................................................. 19000 HMMs searched
+.................................................. 20000 HMMs searched
+
+Rescoring previously found HMMs with Viterbi algorithm
+.................................................. 1000 HMMs searched
+....................
+Realigning 324 HMMs using HMM-HMM Maximum Accuracy algorithm
+.................................................. 500  HMMs aligned
+.............
+Merging hits to query profile
+4425 sequences belonging to 4425 database HMMs found with an E-value < 0.001       
+Number of effective sequences of resulting query HMM: Neff = 8.78
+Maximun number of sequences in query alignment reached (65535). Stop searching!
+
+Query         prot1
+Match_columns 747
+No_of_seqs    2804 out of 50389
+Neff          8.5 
+Searched_HMMs 22194
+Date          Wed Feb 17 12:39:44 2021
+Command       /nfs/amino-home/ewbell/PEPPI/bin/hhsuite/bin/hhblits -i prot1.fasta -oa3m prot1.a3m -d /nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02 -n 2 -e 0.001 
+
+ No Hit                             Prob E-value P-value  Score    SS Cols Query HMM  Template HMM
+  1 tr|K9IMM3|K9IMM3_DESRO Unchara 100.0  6E-160  3E-165 1322.4   0.0  745    1-746     1-745 (746)
+  2 tr|K9IMM3|K9IMM3_DESRO Unchara 100.0  6E-160  3E-165 1322.4   0.0  745    1-746     1-745 (746)
+  3 tr|F7IHQ3|F7IHQ3_CALJA Unchara 100.0  7E-134  3E-139 1005.3   0.0  592    1-592     1-592 (637)
+  4 tr|F7IHQ3|F7IHQ3_CALJA Unchara 100.0  2E-133  1E-138 1005.3   0.0  592    1-592     1-592 (637)
+  5 tr|A0A091CMS9|A0A091CMS9_FUKDA 100.0  4E-119  2E-124  917.4   0.0  691   54-744     2-692 (957)
+  6 tr|A0A091CMS9|A0A091CMS9_FUKDA 100.0  4E-119  2E-124  917.4   0.0  691   54-744     2-692 (957)
+  7 tr|A0A0G4IQL8|A0A0G4IQL8_PLABS 100.0  2E-104  1E-109  819.8   0.0  548    2-743     1-580 (582)
+  8 tr|A0A0G4IQL8|A0A0G4IQL8_PLABS 100.0  2E-104  1E-109  819.8   0.0  548    2-743     1-580 (582)
+  9 tr|A0A0A1NY97|A0A0A1NY97_9FUNG 100.0 1.3E-86 6.1E-92  659.7   0.0  450    9-588     2-452 (457)
+ 10 tr|A0A0A1NY97|A0A0A1NY97_9FUNG 100.0   7E-86 3.3E-91  659.7   0.0  450    9-588     2-452 (457)
+ 11 tr|A0A0D9WEW5|A0A0D9WEW5_9ORYZ 100.0 6.4E-84 2.9E-89  628.1   0.0  394    2-489     1-399 (408)
+ 12 tr|A0A0D9WEW5|A0A0D9WEW5_9ORYZ 100.0 2.2E-83   1E-88  628.1   0.0  394    2-489     1-399 (408)
+ 13 tr|G6CWA3|G6CWA3_DANPL Unchara 100.0 3.4E-82 1.6E-87  601.4   0.0  198    2-199     1-201 (276)
+ 14 tr|G6CWA3|G6CWA3_DANPL Unchara 100.0 8.3E-81 4.1E-86  601.4   0.0  198    2-199     1-201 (276)
+ 15 tr|B9ENS6|B9ENS6_SALSA WD repe 100.0 1.2E-79 5.4E-85  560.1   0.0  234    1-242    14-247 (247)
+ 16 tr|H2MX00|H2MX00_ORYLA Unchara 100.0 1.2E-79 5.5E-85  622.2   0.0  554  170-747     1-558 (558)
+ 17 tr|B9ENS6|B9ENS6_SALSA WD repe 100.0 2.4E-79 1.1E-84  560.1   0.0  234    1-242    14-247 (247)
+ 18 tr|H2MX00|H2MX00_ORYLA Unchara 100.0 1.4E-78 6.8E-84  622.2   0.0  554  170-747     1-558 (558)
+ 19 tr|M1A8C5|M1A8C5_SOLTU Unchara 100.0   1E-68 4.8E-74  486.1   0.0  168    2-170     1-170 (196)
+ 20 tr|M1A8C5|M1A8C5_SOLTU Unchara 100.0   9E-68 4.4E-73  486.1   0.0  168    2-170     1-170 (196)
+ 21 tr|A0A0D9WEW6|A0A0D9WEW6_9ORYZ 100.0 5.3E-66 2.4E-71  480.1   0.0  213    2-214     1-215 (316)
+ 22 tr|A0A0D9WEW6|A0A0D9WEW6_9ORYZ 100.0 7.8E-66 3.5E-71  480.1   0.0  213    2-214     1-215 (316)
+ 23 tr|W2SQQ4|W2SQQ4_NECAM Unchara 100.0 1.8E-60 8.9E-66  454.6   0.0  181    1-181     1-181 (252)
+ 24 tr|W2SQQ4|W2SQQ4_NECAM Unchara 100.0 1.1E-59 5.4E-65  454.6   0.0  182    1-182     1-182 (252)
+ 25 tr|L7LZ58|L7LZ58_9ACAR Unchara 100.0 2.8E-57 1.2E-62  425.8   0.0  209    2-210     1-209 (360)
+ 26 tr|L7LZ58|L7LZ58_9ACAR Unchara 100.0 2.8E-57 1.2E-62  425.8   0.0  209    2-210     1-209 (360)
+ 27 tr|F4PYE3|F4PYE3_DICFS WD40 re 100.0 4.8E-56 2.1E-61  471.9   0.0  551   78-742  1094-1647(1654)
+ 28 tr|F4PYE3|F4PYE3_DICFS WD40 re 100.0 4.8E-56 2.1E-61  471.9   0.0  551   78-742  1094-1647(1654)
+ 29 tr|U9V1Z2|U9V1Z2_RHIID Unchara 100.0 1.2E-54 5.4E-60  386.2   0.0  169    2-170    56-225 (233)
+ 30 tr|U9V1Z2|U9V1Z2_RHIID Unchara 100.0 1.2E-54 5.4E-60  386.2   0.0  169    2-170    56-225 (233)
+ 31 tr|A0A0D2L982|A0A0D2L982_9CHLO 100.0 5.7E-53 2.5E-58  433.7   0.0  560    2-593     1-663 (928)
+ 32 tr|A0A0D2L982|A0A0D2L982_9CHLO 100.0 5.7E-53 2.5E-58  433.7   0.0  560    2-593     1-663 (928)
+ 33 tr|T2MJK0|T2MJK0_HYDVU WD repe 100.0 3.8E-51 1.7E-56  373.7   0.0  209    1-210     1-209 (283)
+ 34 tr|T2MJK0|T2MJK0_HYDVU WD repe 100.0 3.8E-51 1.7E-56  373.7   0.0  209    1-210     1-209 (283)
+ 35 tr|D3Z0V8|D3Z0V8_MOUSE WD repe 100.0   8E-51 3.6E-56  334.2   0.0  137   54-190     2-138 (138)
+ 36 tr|D3Z0V8|D3Z0V8_MOUSE WD repe 100.0   8E-51 3.6E-56  334.2   0.0  137   54-190     2-138 (138)
+ 37 tr|A0A0B2R2K0|A0A0B2R2K0_GLYSO 100.0 3.8E-48 1.8E-53  323.5   0.0  126    2-127     1-128 (128)
+ 38 tr|A0A061RFC5|A0A061RFC5_9CHLO 100.0 3.9E-48 1.8E-53  340.0   0.0  174   65-242     1-185 (185)
+ 39 tr|A0A061RFC5|A0A061RFC5_9CHLO 100.0 6.2E-48 2.8E-53  340.0   0.0  174   65-242     1-185 (185)
+ 40 tr|A0A0B2R2K0|A0A0B2R2K0_GLYSO 100.0 7.6E-48 3.6E-53  323.5   0.0  126    2-127     1-128 (128)
+ 41 tr|A0A0E0DPM2|A0A0E0DPM2_9ORYZ 100.0 8.5E-48 3.9E-53  381.3   0.0  468  131-742     1-474 (475)
+ 42 tr|A0A0F5YC45|A0A0F5YC45_9CYAN 100.0 1.1E-47 5.3E-53  389.4   0.0  206  401-635   135-340 (462)
+ 43 tr|A0A0E0DPM2|A0A0E0DPM2_9ORYZ 100.0 2.9E-47 1.3E-52  381.3   0.0  468  131-742     1-474 (475)
+ 44 tr|A0A0F5YC45|A0A0F5YC45_9CYAN 100.0 6.1E-47 2.9E-52  389.4   0.0  290  401-745    51-341 (462)
+ 45 tr|A0A0M1JNN2|A0A0M1JNN2_9CYAN 100.0 1.4E-46 6.6E-52  421.2   0.0  310  401-745   896-1229(1434)
+ 46 tr|A0A0K9R530|A0A0K9R530_SPIOL 100.0 1.6E-46   7E-52  385.7   0.0  168    2-170   723-892 (896)
+ 47 tr|A0A0K9R530|A0A0K9R530_SPIOL 100.0 1.6E-46   7E-52  385.7   0.0  168    2-170   723-892 (896)
+ 48 tr|A0A0C3AWJ9|A0A0C3AWJ9_9HOMO 100.0 2.5E-46 1.2E-51  424.3   0.0  335  402-745   975-1386(1626)
+ 49 tr|A0A0M1JNN2|A0A0M1JNN2_9CYAN 100.0 3.6E-46 1.7E-51  417.9   0.0  312  401-745   980-1313(1434)
+ 50 tr|A0A0M0SU34|A0A0M0SU34_9CYAN 100.0 6.1E-46 2.9E-51  396.1   0.0  289  400-745   421-720 (735)
+ 51 tr|A0A0M1JNN2|A0A0M1JNN2_9CYAN 100.0 1.3E-45 6.5E-51  421.2   0.0  312  401-745   980-1313(1434)
+ 52 tr|A0A0C3NGJ1|A0A0C3NGJ1_PHLGI 100.0 2.1E-45   1E-50  403.3   0.0  231  403-635   615-931 (943)
+ 53 tr|A0A0C3AWJ9|A0A0C3AWJ9_9HOMO 100.0 3.2E-45 1.6E-50  424.3   0.0  294  401-745   931-1228(1626)
+ 54 tr|A0A0M1JNN2|A0A0M1JNN2_9CYAN 100.0 3.4E-45 1.7E-50  417.9   0.0  292  401-746   896-1188(1434)
+ 55 tr|A0A0M0SU34|A0A0M0SU34_9CYAN 100.0 3.9E-45 1.9E-50  396.1   0.0  289  400-745   421-720 (735)
+ 56 tr|M2P9I3|M2P9I3_CERS8 Unchara 100.0 7.4E-45   4E-50  423.3   0.0  290  402-742   550-845 (845)
+ 57 tr|M2P9I3|M2P9I3_CERS8 Unchara 100.0 7.4E-45   4E-50  423.3   0.0  290  402-742   550-845 (845)
+ 58 tr|A0A0C3AWJ9|A0A0C3AWJ9_9HOMO 100.0 1.2E-44 5.8E-50  410.8   0.0  294  401-745   931-1228(1626)
+ 59 tr|X6MGF0|X6MGF0_RETFI WD-40 r 100.0 1.3E-44 6.1E-50  371.1   0.0  244  449-746   149-393 (430)
+ 60 tr|I0Z0A8|I0Z0A8_9CHLO WD40 re 100.0 1.8E-44 8.2E-50  379.6   0.0  514   39-739   757-1281(1286)
+ 61 tr|I0Z0A8|I0Z0A8_9CHLO WD40 re 100.0 1.8E-44 8.2E-50  379.6   0.0  514   39-739   757-1281(1286)
+ 62 tr|X6NUP0|X6NUP0_RETFI WD-40 r 100.0 2.2E-44 1.1E-49  366.1   0.0  244  449-746   130-374 (413)
+ 63 tr|F5UD90|F5UD90_9CYAN WD40 re 100.0 2.4E-44 1.2E-49  393.8   0.0  310  399-742   405-718 (719)
+ 64 tr|A0C2Z9|A0C2Z9_PARTE Unchara 100.0 2.6E-44 1.2E-49  388.2   0.0  311  403-746   443-770 (1111)
+ 65 tr|A0C2Z9|A0C2Z9_PARTE Unchara 100.0 3.4E-44 1.6E-49  387.4   0.0  329  403-745   649-1021(1111)
+ 66 tr|A0A0D0EDF7|A0A0D0EDF7_9HOMO 100.0 4.5E-44 2.3E-49  367.1   0.0  291  402-745    16-311 (341)
+ 67 tr|A0A0C3GD31|A0A0C3GD31_9HOMO 100.0 5.1E-44 2.4E-49  385.8   0.0  313  402-746   524-863 (936)
+ 68 tr|A0A093EVN6|A0A093EVN6_GAVST 100.0 7.8E-44 3.6E-49  351.0   0.0  396  352-747     5-400 (400)
+ 69 tr|X6P0R4|X6P0R4_RETFI Pfs, NA 100.0 1.1E-43 5.3E-49  357.4   0.0  240  451-746    97-337 (374)
+ 70 tr|A0A0C3NGJ1|A0A0C3NGJ1_PHLGI 100.0 1.3E-43 6.6E-49  403.3   0.0  296  403-745   615-932 (943)
+ 71 tr|A0A0C3AWJ9|A0A0C3AWJ9_9HOMO 100.0 1.5E-43 7.2E-49  410.8   0.0  296  402-745   975-1298(1626)
+ 72 tr|X6MGF0|X6MGF0_RETFI WD-40 r 100.0 1.6E-43 8.2E-49  371.1   0.0  286  402-741   144-430 (430)
+ 73 tr|A0A0K6FZN8|A0A0K6FZN8_9HOMO 100.0 1.9E-43 8.8E-49  390.7   0.0  294  402-744   862-1158(1680)
+ 74 tr|A0A093EVN6|A0A093EVN6_GAVST 100.0 2.1E-43 9.9E-49  351.0   0.0  396  352-747     5-400 (400)
+ 75 tr|A0A067CVQ9|A0A067CVQ9_SAPPC 100.0 2.8E-43 1.3E-48  349.9   0.0  196    5-207    10-209 (570)
+ 76 tr|K8GNK8|K8GNK8_9CYAN WD40 re 100.0 2.7E-43 1.3E-48  370.8   0.0  250  401-745   254-506 (507)
+ 77 tr|A0A067CVQ9|A0A067CVQ9_SAPPC 100.0 3.3E-43 1.5E-48  349.9   0.0  196    5-207    10-209 (570)
+ 78 tr|A0EFN4|A0EFN4_PARTE Unchara 100.0 3.5E-43 1.6E-48  362.8   0.0  288  404-746   191-480 (609)
+ 79 tr|A0A0C3GD31|A0A0C3GD31_9HOMO 100.0 3.5E-43 1.6E-48  379.5   0.0  312  402-742   567-902 (936)
+ 80 tr|F5UD90|F5UD90_9CYAN WD40 re 100.0 3.4E-43 1.7E-48  393.8   0.0  310  399-742   405-718 (719)
+ 81 tr|A0A0C3GD31|A0A0C3GD31_9HOMO 100.0 3.7E-43 1.8E-48  385.8   0.0  292  402-745   524-819 (936)
+ 82 tr|A0A0L0SIF7|A0A0L0SIF7_ALLMA 100.0   4E-43 1.8E-48  348.9   0.0  205    2-207     1-206 (594)
+ 83 tr|A0A0L0SIF7|A0A0L0SIF7_ALLMA 100.0   4E-43 1.8E-48  348.9   0.0  205    2-207     1-206 (594)
+ 84 tr|X6NUP0|X6NUP0_RETFI WD-40 r 100.0 5.3E-43 2.7E-48  366.1   0.0  287  402-742   125-412 (413)
+ 85 tr|A0A0D0EDF7|A0A0D0EDF7_9HOMO 100.0 5.7E-43   3E-48  367.1   0.0  291  402-745    16-311 (341)
+ 86 tr|M2QX77|M2QX77_CERS8 Unchara 100.0   6E-43 3.2E-48  374.9   0.0  309  404-745    57-393 (429)
+ 87 tr|M2QX77|M2QX77_CERS8 Unchara 100.0   6E-43 3.2E-48  374.9   0.0  291  404-745    57-351 (429)
+ 88 tr|A0A0D0C7Y9|A0A0D0C7Y9_9AGAR 100.0 6.8E-43 3.6E-48  407.9   0.0  294  402-746   467-764 (930)
+ 89 tr|A0A0D0C7Y9|A0A0D0C7Y9_9AGAR 100.0 6.8E-43 3.6E-48  407.9   0.0  312  402-745   467-806 (930)
+ 90 tr|A0A0C3CKA2|A0A0C3CKA2_9PEZI 100.0 8.7E-43 4.2E-48  393.5   0.0  308  402-745   822-1152(1428)
+ 91 tr|A0A0M3JXZ0|A0A0M3JXZ0_ANISI 100.0 9.6E-43 4.3E-48  328.1   0.0  187    1-187     1-187 (355)
+ 92 tr|A0A0M3JXZ0|A0A0M3JXZ0_ANISI 100.0 9.6E-43 4.3E-48  328.1   0.0  187    1-187     1-187 (355)
+ 93 tr|A0A0P4UN47|A0A0P4UN47_9CYAN 100.0 8.1E-43 4.3E-48  414.0   0.0  308  406-746   736-1080(1212)
+ 94 tr|A0A0P4UN47|A0A0P4UN47_9CYAN 100.0 8.1E-43 4.3E-48  414.0   0.0  312  401-745   773-1120(1212)
+ 95 tr|A0C2Z9|A0C2Z9_PARTE Unchara 100.0 1.1E-42 5.5E-48  388.2   0.0  288  403-745   649-937 (1111)
+ 96 tr|A0CBM5|A0CBM5_PARTE Unchara 100.0 1.2E-42 5.5E-48  365.2   0.0  244  449-746   394-638 (806)
+ 97 tr|X6P0R4|X6P0R4_RETFI Pfs, NA 100.0 1.4E-42 6.9E-48  357.4   0.0  284  401-741    90-374 (374)
+ 98 tr|A0C2Z9|A0C2Z9_PARTE Unchara 100.0 1.4E-42   7E-48  387.4   0.0  288  404-745   733-1021(1111)
+ 99 tr|R7RYI0|R7RYI0_STEHR WD40 re 100.0 1.5E-42 7.3E-48  400.5   0.0  270  402-694  1037-1319(1322)
+100 tr|A0EFN4|A0EFN4_PARTE Unchara 100.0 1.7E-42 8.1E-48  362.8   0.0  288  404-746   191-480 (609)
+
+Writing A3M alignment to prot1.a3m
+Done
+Predicting maps...
+slurmstepd: error: *** JOB 7951728 ON nyx5950 CANCELLED AT 2021-02-17T14:35:42 ***

@@ -1,0 +1,4 @@
+slurmstepd: error: couldn't chdir to `/tmp/ewbell/makeHHR_prot2_B_177257': No such file or directory: going to /tmp instead
+benchmark: 0
+Target: prot2_B_B
+slurmstepd: error: *** JOB 9278006 ON nyx5898 CANCELLED AT 2021-05-18T13:32:13 ***

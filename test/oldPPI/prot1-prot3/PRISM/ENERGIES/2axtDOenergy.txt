@@ -1,0 +1,4 @@
+2axtDO	1abcL	0	1abcE	2	-10.06
+2axtDO	1abcL	0	1abc	2	2039.04
+2axtDO	1abc	0	1abcE	2	-10.20
+2axtDO	1abc	0	1abc	2	-31.28

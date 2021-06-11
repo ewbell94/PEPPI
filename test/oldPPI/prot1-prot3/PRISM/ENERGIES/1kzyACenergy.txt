@@ -1,0 +1,15 @@
+1kzyAC	1abcE	0	1abcE	0	-10.05
+1kzyAC	1abcE	2	1abcE	0	-2.30
+1kzyAC	1abcE	0	1abcL	1	-9.77
+1kzyAC	1abcE	0	1abcL	2	-18.21
+1kzyAC	1abcE	2	1abcL	1	-45.29
+1kzyAC	1abcL	0	1abc	2	1244.01
+1kzyAC	1abcL	0	1abcE	0	-3.06
+1kzyAC	1abcL	0	1abcE	1	-5.83
+1kzyAC	1abcL	0	1abcL	1	257.84
+1kzyAC	1abcL	0	1abcL	2	2.46
+1kzyAC	1abc	0	1abcE	0	7.06
+1kzyAC	1abc	1	1abcE	0	-51.47
+1kzyAC	1abc	0	1abcL	1	2.79
+1kzyAC	1abc	0	1abcL	2	-12.94
+1kzyAC	1abc	1	1abcL	1	-51.81

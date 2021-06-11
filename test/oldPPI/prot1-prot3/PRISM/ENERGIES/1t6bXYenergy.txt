@@ -1,0 +1,6 @@
+1t6bXY	1abcE	0	1abcE	1	22.85
+1t6bXY	1abcE	0	1abc	1	-7.28
+1t6bXY	1abcL	1	1abcE	0	-6.91
+1t6bXY	1abcL	1	1abcE	1	-19.71
+1t6bXY	1abcL	1	1abc	0	-6.91
+1t6bXY	1abcL	1	1abc	1	-17.52

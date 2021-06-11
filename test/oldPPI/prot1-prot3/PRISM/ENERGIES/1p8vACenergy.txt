@@ -1,0 +1,4 @@
+1p8vAC	1abc	2	1abcE	0	-6.24
+1p8vAC	1abc	2	1abc	1	-8.03
+1p8vAC	1abcL	0	1abcE	0	-4.87
+1p8vAC	1abcL	0	1abc	1	-10.35

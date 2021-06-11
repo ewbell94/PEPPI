@@ -1,0 +1,3 @@
+1c0gSA	1abcE	0	1abcL	2	-0.49
+1c0gSA	1abcL	0	1abcL	2	-14.43
+1c0gSA	1abcL	2	1abcL	2	-47.30

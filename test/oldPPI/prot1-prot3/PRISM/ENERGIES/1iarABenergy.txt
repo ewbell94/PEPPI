@@ -1,0 +1,2 @@
+1iarAB	1abcE	2	1abc	2	13.52
+1iarAB	1abcE	2	1abcE	1	0.38

@@ -1,0 +1,6 @@
+1o7dBE	1abcE	0	1abcE	1	-4.27
+1o7dBE	1abcE	0	1abc	0	-17.42
+1o7dBE	1abcL	0	1abcE	1	-27.58
+1o7dBE	1abcL	0	1abc	0	-0.05
+1o7dBE	1abcL	0	1abc	1	-44.83
+1o7dBE	1abc	2	1abc	0	13.82

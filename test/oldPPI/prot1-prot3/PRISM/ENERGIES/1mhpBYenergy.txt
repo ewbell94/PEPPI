@@ -1,0 +1,5 @@
+1mhpBY	1abcL	0	1abcL	1	-18.27
+1mhpBY	1abcE	1	1abc	0	-35.98
+1mhpBY	1abcE	1	1abc	2	-10.83
+1mhpBY	1abcE	1	1abcL	1	-21.98
+1mhpBY	1abcE	1	1abcL	2	-13.60

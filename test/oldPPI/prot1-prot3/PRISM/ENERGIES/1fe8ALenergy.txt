@@ -1,0 +1,2 @@
+1fe8AL	1abcE	2	1abcE	0	-8.50
+1fe8AL	1abcE	2	1abc	0	-1.08

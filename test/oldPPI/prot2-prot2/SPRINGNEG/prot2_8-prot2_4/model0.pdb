@@ -1,0 +1,42 @@
+ATOM      1  CA  ASP A   2       9.568 -26.533  40.723
+ATOM      2  CA  ASP A   3       7.853 -25.454  43.939
+ATOM      3  CA  ASP A   4       7.663 -28.806  45.739
+ATOM      4  CA  ASN A   5      11.199 -29.710  44.556
+ATOM      5  CA  ASP A   6      10.451 -33.118  43.048
+ATOM      6  CA  GLY A   7      12.034 -32.499  39.615
+ATOM      7  CA  ILE A   8       8.684 -32.136  37.826
+ATOM      8  CA  PRO A   9       7.795 -28.548  36.831
+ATOM      9  CA  ASP A  10       4.582 -26.917  37.998
+ATOM     10  CA  TYR A  11       3.003 -26.564  34.557
+TER
+ATOM     11  CA  THR B   1      -8.779 -72.797 -31.064
+ATOM     12  CA  ASP B   2      -8.802 -76.465 -29.977
+ATOM     13  CA  THR B   3      -5.448 -78.222 -30.451
+ATOM     14  CA  ASP B   4      -6.287 -81.584 -28.835
+ATOM     15  CA  ILE B   5      -9.612 -81.776 -30.674
+ATOM     16  CA  ASP B   6     -11.544 -82.783 -27.523
+ATOM     17  CA  GLY B   7     -14.185 -80.046 -27.721
+ATOM     18  CA  TYR B   8     -12.929 -77.847 -24.886
+ATOM     19  CA  PRO B   9     -11.254 -74.655 -26.198
+ATOM     20  CA  ASP B  10      -7.573 -74.290 -25.239
+ATOM     21  CA  GLN B  11      -7.838 -71.055 -23.263
+TER
+CONECT    1    2
+CONECT    2    3
+CONECT    3    4
+CONECT    4    5
+CONECT    5    6
+CONECT    6    7
+CONECT    7    8
+CONECT    8    9
+CONECT    9   10
+CONECT   11   12
+CONECT   12   13
+CONECT   13   14
+CONECT   14   15
+CONECT   15   16
+CONECT   16   17
+CONECT   17   18
+CONECT   18   19
+CONECT   19   20
+CONECT   20   21

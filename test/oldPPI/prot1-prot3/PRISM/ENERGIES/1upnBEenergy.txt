@@ -1,0 +1,6 @@
+1upnBE	1abc	1	1abcE	0	-8.30
+1upnBE	1abc	1	1abc	0	-2.81
+1upnBE	1abcE	0	1abcE	0	-20.72
+1upnBE	1abcE	2	1abcE	0	2.14
+1upnBE	1abcE	0	1abc	0	-7.14
+1upnBE	1abcE	2	1abc	0	3.39
