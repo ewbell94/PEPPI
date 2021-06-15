@@ -37,11 +37,12 @@ my $modeldir=$hhdir;
 my $zthresh=8.5;
 my $homologthresh=0.5;
 my $toptm=1000;
+my $hhsuitedir="$bindir/../lib/hhsuite";
 
 print "benchmark: $benchflag\n";
 #DO NOT CHANGE BENEATH THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING
 #Processed parameters
-$ENV{'HHLIB'}="$bindir/hhsuite/"; #necessary for proper function of HHsearch
+$ENV{'HHLIB'}="$hhsuitedir"; #necessary for proper function of HHsearch
 
 my $randomTag=int(rand(1000000)); #This is to prevent multiple instances from deleting eachother's directories
 print "Target: $target\n";
@@ -56,10 +57,10 @@ chdir($tempdir);
 print `cp $outdir/$sourcefasta/$target.fasta $tempdir/$target.fasta`;
 #makeHHR threads a query sequence through DIMERDB using HHsearch
 if (! -e "$hhdir/$target.hhr.gz"){
-    print `$bindir/hhsuite/bin/hhblits -i $tempdir/$target.fasta -oa3m $tempdir/$target.a3m -d $uniprotdb -n 2 -e 0.001`;
-    print `$bindir/hhsuite/scripts/addss.pl $tempdir/$target.a3m`;
-    print `$bindir/hhsuite/bin/hhmake -i $tempdir/$target.a3m -id 90 -diff 100 -cov 0 -qid 0`;
-    print `$bindir/hhsuite/bin/hhsearch -i $tempdir/$target.hhm -d $dimerdb -id 90 -diff 100 -cov 0 -qid 0 -e 0.001 -p 20 -E 0.01 -Z 30000 -z 20000 -B 30000 -b 20000`;
+    print `$hhsuitedir/bin/hhblits -i $tempdir/$target.fasta -oa3m $tempdir/$target.a3m -d $uniprotdb -n 2 -e 0.001`;
+    print `$hhsuitedir/scripts/addss.pl $tempdir/$target.a3m`;
+    print `$hhsuitedir/bin/hhmake -i $tempdir/$target.a3m -id 90 -diff 100 -cov 0 -qid 0`;
+    print `$hhsuitedir/bin/hhsearch -i $tempdir/$target.hhm -d $dimerdb -id 90 -diff 100 -cov 0 -qid 0 -e 0.001 -p 20 -E 0.01 -Z 30000 -z 20000 -B 30000 -b 20000`;
     print `cp $tempdir/$target.hhr $hhdir/$target.hhr`;
     print `gzip $hhdir/$target.hhr`;
 }
