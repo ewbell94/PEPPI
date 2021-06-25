@@ -31,6 +31,9 @@ for my $val (@Bvals){
 
 print `/home/ewbell/miniconda2/bin/python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
 my $result=`cat $outdir/$pairname/CT/res.txt`;
+while (`lsof $outdir/CTres.txt | wc -l` > 0){
+    sleep(1);
+}
 print `echo -en "$pairname,$result" >> $outdir/CTres.txt`;
 print `sync`;
 my $stoptime=time();

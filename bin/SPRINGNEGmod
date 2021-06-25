@@ -272,6 +272,9 @@ if ($topscore!=-100.0){
         print "Best SPRINGscore is outside of training set range.  Set to 67.0 for classification purposes\n";
         $topscore=67.0;
     }
+    while (`lsof $outdir/SPRINGNEGres.txt | wc -l` > 0){
+	sleep(1);
+    }
     print `echo "$pairname,$topscore" >> $outdir/SPRINGNEGres.txt`;
 }
 
