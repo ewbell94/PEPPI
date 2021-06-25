@@ -15,8 +15,8 @@ my $starttime=time();
 my $randomTag=int(rand(1000000));
 #my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02";
 #my $blitsdb="$peppidir/lib/SEQ/hhblitsdb/db";
-my $interactfile="/expanse/lustre/scratch/ewbell/temp_project/lib/SEQ/psicquic.txt";
-my $aliasfile="/expanse/lustre/scratch/ewbell/temp_project/lib/SEQ/100_psicquic.fasta.clstr.aliases";
+my $interactfile="/expanse/projects/itasser/ewbell/lib/SEQ/psicquic.txt";
+my $aliasfile="/expanse/projects/itasser/ewbell/lib/SEQ/100_psicquic.fasta.clstr.aliases";
 
 my $jobid=`head -1 $outdir/$pairname/jobid.txt`;
 chomp($jobid);

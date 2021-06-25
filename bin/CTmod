@@ -29,12 +29,7 @@ for my $val (@Bvals){
     print $inpfile "$val\n";
 }
 
-<<<<<<< HEAD
 print `/home/ewbell/miniconda2/bin/python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
-=======
-#Predict interaction likelihood and record the result
-print `python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
->>>>>>> master
 my $result=`cat $outdir/$pairname/CT/res.txt`;
 print `echo -en "$pairname,$result" >> $outdir/CTres.txt`;
 print `sync`;
