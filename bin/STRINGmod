@@ -82,7 +82,7 @@ for my $i (0..scalar(@ids1)-1){
 	    my $ce=$parts[5]/1000.0; #co-expression
 	    print $resfile "$gn\n$gf\n$co\n$ce\n";
 	    while (`lsof $outdir/STRINGres.txt | wc -l` > 0){
-		while(1);
+		sleep(1);
 	    }
 	    print `echo "$pairname,$gn,$gf,$co,$ce" >> $outdir/STRINGres.txt`;
 	    my $stoptime=time();
