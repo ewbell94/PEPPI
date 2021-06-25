@@ -28,7 +28,7 @@ my $zmin=2.0; #Minimum Z-score for reporting templates; if none are found satisf
 #Processed parameters
 my $user=`whoami`;
 chomp($user);
-my @weights=(1,12.0,0.0); #weights for SPRING score calculation
+my @weights=(1,7.6,0.0); #weights for SPRING score calculation
 my $homothresh=0.9; #
 my $seqmax=1500; #maximum allowable length of input sequences; sequences longer than this will be truncated
 my $minmono=5000; #number of monomer templates for dimer matching
@@ -273,9 +273,9 @@ if ($topscore!=-100.0){
     if ($topscore < 0.0){
         print "Best SPRINGscore is outside of training set range.  Set to 0.0 for classification purposes\n";
         $topscore=0.0;
-    } elsif ($topscore > 71.0){
-        print "Best SPRINGscore is outside of training set range.  Set to 71.0 for classification purposes\n";
-        $topscore=71.0;
+    } elsif ($topscore > 67.0){
+        print "Best SPRINGscore is outside of training set range.  Set to 67.0 for classification purposes\n";
+        $topscore=67.0;
     }
     print `echo "$pairname,$topscore" >> $outdir/SPRINGNEGres.txt`;
 }

@@ -148,6 +148,7 @@ for my $ind (1..$i){
 	print "$dom\n";
 	if (! -f "$fastadir/prot${ind}/$dom.hhr.gz" || `cat $fastadir/prot${ind}/$dom.hhr.gz | wc -l` < 1 || `zgrep "hhblits" $fastadir/prot${ind}/$dom.hhr.gz | wc -l` > 0){
 	    print "HHR\n";
+	    print `rm -rf $fastadir/prot${ind}/$dom.hhr.gz` if (-f "$fastadir/prot${ind}/$dom.hhr.gz");
 	    my $args="-o $fastadir -t prot$ind";
 	    $args="$args -b" if ($benchmarkflag);
 	    $args="$args -d" if ($domaindiv);
