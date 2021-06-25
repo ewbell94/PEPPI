@@ -1,0 +1,3 @@
+1e96AB	1abcL	2	1abc	2	-23.50
+1e96AB	1abcL	2	1abcE	0	-15.36
+1e96AB	1abcL	2	1abcL	2	-22.20

@@ -1,0 +1,4 @@
+1i8lAC	1abcE	0	1abc	0	-12.39
+1i8lAC	1abcE	0	1abcE	1	-17.32
+1i8lAC	1abc	0	1abc	0	-4.73
+1i8lAC	1abc	0	1abcE	1	-8.15

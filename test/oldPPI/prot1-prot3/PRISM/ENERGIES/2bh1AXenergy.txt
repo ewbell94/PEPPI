@@ -1,0 +1,5 @@
+2bh1AX	1abcL	1	1abcL	1	1.53
+2bh1AX	1abcE	0	1abcL	0	4.87
+2bh1AX	1abcE	0	1abcL	1	-5.04
+2bh1AX	1abc	2	1abcL	0	29.89
+2bh1AX	1abc	2	1abcL	1	-10.10

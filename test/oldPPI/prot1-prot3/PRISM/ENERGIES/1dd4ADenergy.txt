@@ -1,0 +1,2 @@
+1dd4AD	1abcE	2	1abcL	0	-21.89
+1dd4AD	1abcE	2	1abc	1	-20.49

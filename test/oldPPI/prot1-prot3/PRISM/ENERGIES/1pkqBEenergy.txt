@@ -1,0 +1,14 @@
+1pkqBE	1abcE	0	1abcL	0	-21.78
+1pkqBE	1abcE	0	1abcL	2	-27.86
+1pkqBE	1abcE	0	1abcE	2	0.98
+1pkqBE	1abcL	1	1abcL	0	-15.40
+1pkqBE	1abcL	1	1abcL	1	-23.59
+1pkqBE	1abcL	2	1abcL	0	-14.67
+1pkqBE	1abcL	2	1abcL	2	-28.07
+1pkqBE	1abcL	1	1abcE	2	-25.10
+1pkqBE	1abcL	2	1abcE	2	-12.39
+1pkqBE	1abc	0	1abcL	0	-8.28
+1pkqBE	1abc	0	1abcL	2	-27.86
+1pkqBE	1abc	2	1abcL	0	-15.11
+1pkqBE	1abc	0	1abcE	2	15.79
+1pkqBE	1abc	2	1abcE	2	-13.53

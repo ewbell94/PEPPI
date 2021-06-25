@@ -1,0 +1,4 @@
+1xqsBD	1abcL	0	1abcL	1	-11.09
+1xqsBD	1abcL	2	1abcL	1	6.64
+1xqsBD	1abcE	1	1abcL	1	-17.59
+1xqsBD	1abc	0	1abcL	1	-10.02

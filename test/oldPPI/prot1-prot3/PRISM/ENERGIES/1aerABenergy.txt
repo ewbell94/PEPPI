@@ -1,0 +1,3 @@
+1aerAB	1abcL	1	1abcL	0	-18.06
+1aerAB	1abcL	2	1abc	2	10.90
+1aerAB	1abcE	1	1abc	2	0.20

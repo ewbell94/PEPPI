@@ -1,0 +1,4 @@
+1l9bMC	1abcL	2	1abcE	0	-11.07
+1l9bMC	1abcL	2	1abcE	1	-20.01
+1l9bMC	1abcL	2	1abc	0	-19.54
+1l9bMC	1abcL	2	1abc	1	-22.91

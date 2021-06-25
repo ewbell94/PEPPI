@@ -1,0 +1,6 @@
+1f3vAB	1abcE	1	1abcL	1	-6.85
+1f3vAB	1abcE	1	1abcL	2	4.75
+1f3vAB	1abcE	1	1abcE	2	20.24
+1f3vAB	1abc	2	1abcL	1	-2.12
+1f3vAB	1abc	2	1abcL	2	2.93
+1f3vAB	1abc	2	1abcE	2	0.06

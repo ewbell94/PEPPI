@@ -1,0 +1,8 @@
+1nfdBE	1abcE	1	1abcL	0	-15.44
+1nfdBE	1abcE	0	1abcE	0	-7.87
+1nfdBE	1abcE	1	1abcE	0	-12.40
+1nfdBE	1abcE	1	1abcE	2	-0.33
+1nfdBE	1abc	1	1abcL	0	-9.03
+1nfdBE	1abc	0	1abcE	0	-13.21
+1nfdBE	1abc	1	1abcE	0	-10.44
+1nfdBE	1abc	1	1abcE	2	-5.23

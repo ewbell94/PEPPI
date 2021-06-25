@@ -1,0 +1,6 @@
+1rxzAB	1abcL	0	1abcE	0	-14.98
+1rxzAB	1abcL	0	1abc	2	-11.76
+1rxzAB	1abcE	2	1abcE	0	-11.36
+1rxzAB	1abcE	2	1abc	2	3.14
+1rxzAB	1abc	2	1abcE	0	-26.41
+1rxzAB	1abc	2	1abc	2	-9.55

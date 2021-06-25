@@ -1,0 +1,5 @@
+1rzrCT	1abcL	0	1abcL	1	-9.42
+1rzrCT	1abcE	2	1abcE	2	-16.46
+1rzrCT	1abcE	2	1abcL	1	4.39
+1rzrCT	1abc	2	1abcE	2	-11.24
+1rzrCT	1abc	2	1abcL	1	-13.64

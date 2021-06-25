@@ -1,12 +1,7 @@
 lib/
 *~
-SPRING-PPI/ZiSet/
-IntAct/
-*.tar.gz
-test/
 bin/CTNN
-bin/dimerMapper
-bin/dimerMapperNeg
+bin/dimMap
 bin/fTMalign
 bin/TMalign
 bin/NWalign

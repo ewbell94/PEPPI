@@ -1,0 +1,8 @@
+1s6vBC	1abcE	0	1abcE	0	-6.52
+1s6vBC	1abcE	1	1abcE	0	-9.29
+1s6vBC	1abcE	0	1abcL	0	16.24
+1s6vBC	1abcE	1	1abcL	0	-15.00
+1s6vBC	1abc	0	1abcE	0	-10.13
+1s6vBC	1abc	2	1abcE	0	-6.52
+1s6vBC	1abc	0	1abcL	0	-17.48
+1s6vBC	1abc	2	1abcL	0	16.24

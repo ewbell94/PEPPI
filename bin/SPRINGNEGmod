@@ -150,8 +150,13 @@ for my $pointer (@domainPairs){
     print "Fetching HHsearch hits\n";
     #my @prot1hits=fetchHits($prot1);
     #my @prot2hits=fetchHits($prot2);
+<<<<<<< HEAD
     print `$bindir/dimerMapperNeg $tempdir/$prot1.hhr $tempdir/$prot2.hhr`;
     
+=======
+    print `$bindir/dimMap $tempdir/$prot1.hhr $tempdir/$prot2.hhr $complexlist`;
+
+>>>>>>> master
     open(my $mapres,"<","$tempdir/dimers.txt");
     my @dimerTemplates=();
 

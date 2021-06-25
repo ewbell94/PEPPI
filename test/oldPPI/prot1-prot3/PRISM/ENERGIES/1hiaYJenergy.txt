@@ -1,0 +1,4 @@
+1hiaYJ	1abcL	0	1abc	0	-9.25
+1hiaYJ	1abcL	0	1abcE	0	-10.01
+1hiaYJ	1abcL	0	1abcE	1	-12.39
+1hiaYJ	1abcL	0	1abcL	2	-12.74
