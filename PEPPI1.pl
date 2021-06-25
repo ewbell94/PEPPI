@@ -11,7 +11,7 @@ use Getopt::Long qw(GetOptions);
 #
 
 #EDIT THESE PARAMETERS
-my $peppidir= "/nfs/amino-home/ewbell/PEPPI"; #location of PEPPI installation
+my $peppidir= "/home/ewbell/PEPPI"; #location of PEPPI installation
 my $maxjobs=300; #maximum number of allowable concurrent jobs
 
 #DO NOT EDIT BENEAT THIS LINE
@@ -53,14 +53,7 @@ if (system("squeue > /dev/null")){
     die "Must be connected to a slurm cluster to run.\n";
 }
 
-<<<<<<< HEAD
-my $peppidir= "/home/ewbell/PEPPI";
-my $maxjobs=300;
-
-#Organize sequences
-=======
 #Processing of input sequence files
->>>>>>> master
 print `mkdir $outdir` if (!-e "$outdir");
 print `cp $infastaA $outdir/A.fasta`;
 print `cp $infastaB $outdir/B.fasta`;
@@ -143,13 +136,11 @@ if (openhandle($fastaout)){
     exit(1);
 }
 
-<<<<<<< HEAD
 #print `mkdir $outdir/hhr`;
 #print `mkdir $outdir/model`;
 =pod
-=======
 #Populate mono directory with threading and sequence search results
->>>>>>> master
+
 for my $ind (1..$i){
     #Check for threading results for all domains
     my @domlist=treeSearch("prot${ind}","$fastadir/prot${ind}");
@@ -168,7 +159,7 @@ for my $ind (1..$i){
 	    last;
 	}
     }
-=pod    
+   
     #Check for sequence results
     if (! -f "$fastadir/prot$ind/prot$ind.string" || ! -s "$fastadir/prot$ind/prot$ind.seq"){
 	print "SEQ\n";
@@ -177,14 +168,10 @@ for my $ind (1..$i){
 	}
 	print `sbatch -o $fastadir/prot$ind/out_seqSearch_prot$ind.log $peppidir/bin/seqSearch.pl -o $fastadir -t prot$ind`;
     }
-=cut
 }
-<<<<<<< HEAD
 =cut
-=======
 
 #Prepare PEPPI2 for running
->>>>>>> master
 my $peppi2 = `cat $peppidir/bin/PEPPI2temp.pl`;
 $peppi2=~s/\!PEPPIDIR\!/$peppidir/;
 $peppi2=~s/\!OUTDIR\!/$outdir/;

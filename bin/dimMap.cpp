@@ -12,10 +12,6 @@
 
 using namespace std;
 
-<<<<<<< HEAD:bin/dimerMapperNeg.cpp
-const string complexfile="/expanse/lustre/scratch/ewbell/temp_project/SPRINGDB/70negs.txt";
-=======
->>>>>>> master:bin/dimMap.cpp
 const int maxmono=5000;
 
 struct namedScore{
