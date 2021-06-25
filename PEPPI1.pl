@@ -144,6 +144,7 @@ for my $ind (1..$i){
 	print "$dom\n";
 	if (! -f "$fastadir/prot${ind}/$dom.hhr.gz" || `cat $fastadir/prot${ind}/$dom.hhr.gz | wc -l` < 1 || `zgrep "hhblits" $fastadir/prot${ind}/$dom.hhr.gz | wc -l` > 0){
 	    print "HHR\n";
+	    print `rm -rf $fastadir/prot${ind}/$dom.hhr.gz` if (-f "$fastadir/prot${ind}/$dom.hhr.gz");
 	    my $args="-o $fastadir -t prot$ind";
 	    $args="$args -b" if ($benchmarkflag);
 	    $args="$args -d" if ($domaindiv);
@@ -155,7 +156,7 @@ for my $ind (1..$i){
 	    last;
 	}
     }
-=pod    
+   
     #Check for sequence results
     if (! -f "$fastadir/prot$ind/prot$ind.string" || ! -s "$fastadir/prot$ind/prot$ind.seq"){
 	print "SEQ\n";
@@ -164,7 +165,6 @@ for my $ind (1..$i){
 	}
 	print `sbatch -o $fastadir/prot$ind/out_seqSearch_prot$ind.log $peppidir/bin/seqSearch.pl -o $fastadir -t prot$ind`;
     }
-=cut
 }
 
 #Prepare PEPPI2 for running
