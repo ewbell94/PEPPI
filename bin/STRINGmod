@@ -13,13 +13,13 @@ my $user=`whoami`;
 chomp($user);
 my $starttime=time();
 
-my $seqid=0.9;
-my $maxtargets=100;
+my $seqid=0.9; #Identity threshold necessary to get a hit
 my @chains=split("-",$pairname);
 print `mkdir -p $outdir/$pairname/STRING`;
 open(my $resfile,">","$outdir/$pairname/STRING/res.txt");
 print `date`;
 
+#Load monomeric string search results
 my $blast1res=`cat $outdir/../mono/$chains[0]/$chains[0].string`;
 print $blast1res;
 if ($blast1res eq ""){
@@ -45,10 +45,11 @@ print "\n";
 my @ids1=extractID($blast1res);
 my @ids2=extractID($blast2res);
 
+#Search for pairs in the STRING database
 for my $i (0..scalar(@ids1)-1){
     my $id1=$ids1[$i][0];
     if ($ids1[$i][1] < $seqid){
-	print "Sequence A homology is too low\n";
+	print "Sequence A homology dropped too low\n";
 	print $resfile "?\n?\n?\n?\n";
 	my $stoptime=time();
 	print "Total program runtime: ".($stoptime-$starttime)."\n";
@@ -68,7 +69,7 @@ for my $i (0..scalar(@ids1)-1){
 	next if ($ids2[$j][1] < $seqid);
 	my @parts1=split(/\./,$id1);
 	my @parts2=split(/\./,$id2);
-	next if ($parts1[0] ne $parts2[0]);
+	next if ($parts1[0] ne $parts2[0]); #Skip if the ids are not in the same species
 	print "$id1 $id2\n";
 	my $hashcode=`python $peppidir/bin/getHashcode.py $id1 $id2`*1;
 	my $grepline=`zgrep "$id1" $peppidir/lib/STRING/$hashcode.txt.gz | fgrep "$id2" | head -1`;
@@ -81,7 +82,7 @@ for my $i (0..scalar(@ids1)-1){
 	    my $co=$parts[4]/1000.0; #co-occurrence
 	    my $ce=$parts[5]/1000.0; #co-expression
 	    print $resfile "$gn\n$gf\n$co\n$ce\n";
-	    while (`lsof $outdir/STRINGres.txt | wc -l` > 0){
+	    while (`lsof $outdir/STRINGres.txt | wc -l` > 0){ #To prevent simultaneous writing
 		sleep(1);
 	    }
 	    print `echo "$pairname,$gn,$gf,$co,$ce" >> $outdir/STRINGres.txt`;
@@ -98,6 +99,7 @@ print `sync`;
 my $stoptime=time();
 print "Total program runtime: ".($stoptime-$starttime)."\n";
 
+#Extract the chain IDs from the string search result file
 sub extractID{
     my $blastres=$_[0];
     my @blines=split("\n",$blastres);

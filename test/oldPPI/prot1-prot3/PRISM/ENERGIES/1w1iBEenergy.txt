@@ -1,3 +1,0 @@
-1w1iBE	1abcE	0	1abc	1	-0.80
-1w1iBE	1abcE	0	1abcE	2	6.35
-1w1iBE	1abcE	0	1abcL	0	7.43

@@ -1,4 +1,0 @@
-1kigHI	1abc	2	1abcE	0	-59.31
-1kigHI	1abc	2	1abcE	2	-20.98
-1kigHI	1abcE	1	1abcE	0	-32.48
-1kigHI	1abcE	1	1abcE	2	-22.78

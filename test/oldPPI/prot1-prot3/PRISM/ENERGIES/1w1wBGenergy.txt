@@ -1,2 +1,0 @@
-1w1wBG	1abcE	0	1abcE	1	0.87
-1w1wBG	1abc	0	1abcE	1	-16.12

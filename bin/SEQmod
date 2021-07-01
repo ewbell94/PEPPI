@@ -13,10 +13,8 @@ chomp($user);
 my $starttime=time();
 
 my $randomTag=int(rand(1000000));
-#my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02";
-#my $blitsdb="$peppidir/lib/SEQ/hhblitsdb/db";
-my $interactfile="$peppidir/lib/SEQ/psicquic.txt";
-my $aliasfile="$peppidir/lib/SEQ/100_psicquic.fasta.clstr.aliases";
+my $interactfile="$peppidir/lib/SEQ/psicquic.txt"; #File containing all known dimers
+my $aliasfile="$peppidir/lib/SEQ/100_psicquic.fasta.clstr.aliases"; #File containing all potential names for the same sequence (because different databases use different IDs)
 
 my $tempdir="/tmp/$user/PEPPI_SEQ_$pairname\_$randomTag";
 if (! -e "$tempdir"){
@@ -24,18 +22,14 @@ if (! -e "$tempdir"){
 } else {
     print `rm -rf $tempdir/*`;
 }
-#print `cp $interactfile $tempdir/ints.txt`;
 
-my $maxtargets=200;
-my $tophits=100;
+my $tophits=100; #How many maximum hits to report in SearchSummary.txt
 my @chains=split("-",$pairname);
 
 print `mkdir -p $outdir/$pairname/SEQ`;
 open(my $resfile,">","$outdir/$pairname/SEQ/res.txt");
-print `date`;
 
 blastSearch();
-#psiNW();
 
 print `sync`;
 print `rm -rf $tempdir`;
@@ -43,6 +37,7 @@ print `date`;
 my $stoptime=time();
 print "Total program runtime: ".($stoptime-$starttime)."\n";
 
+#Find sequence-based homology hits for the pair given the precalculated monomer hits
 sub blastSearch{
     my $t0=time();
     my $blast1res=`cat $outdir/../mono/$chains[0]/$chains[0].seq`;
@@ -148,15 +143,7 @@ sub blastSearch{
     print "Total search time: ".($t2-$t1)."\n";
 }
 
-=pod
-sub psiNW{
-    print `$peppidir/bin/hhsuite/bin/hhblits -i $outdir/$pairname/$chains[0].seq -oa3m $tempdir/$chains[0].a3m -d $uniprotdb -n 2 -e 0.001`;
-    print `$peppidir/bin/hhsuite/bin/hhblits -i $outdir/$pairname/$chains[1].seq -oa3m $tempdir/$chains[1].a3m -d $uniprotdb -n 2 -e 0.001`;
-    print `$peppidir/bin/hhsuite/bin/hhblits -i $tempdir/$chains[0].a3m -d $blitsdb`;
-    print `$peppidir/bin/hhsuite/bin/hhblits -i $tempdir/$chains[1].a3m -d $blitsdb`;
-}
-=cut
-
+#Get all monomeric hit ids given the hits in a .seq file
 sub extractID{
     my $blastres=$_[0];
     my @blines=split("\n",$blastres);

@@ -1,6 +1,0 @@
-1f5qBC	1abc	2	1abcL	1	6.21
-1f5qBC	1abc	2	1abcE	0	-3.59
-1f5qBC	1abc	2	1abc	1	1.79
-1f5qBC	1abcE	2	1abcL	1	4.83
-1f5qBC	1abcE	2	1abcE	0	-1.80
-1f5qBC	1abcE	2	1abc	1	14.96

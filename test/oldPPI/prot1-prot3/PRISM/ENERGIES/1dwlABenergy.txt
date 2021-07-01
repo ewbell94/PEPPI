@@ -1,5 +1,0 @@
-1dwlAB	1abcE	1	1abcE	0	-13.95
-1dwlAB	1abcL	2	1abcE	0	-3.29
-1dwlAB	1abcL	2	1abcE	1	-19.17
-1dwlAB	1abcL	2	1abc	0	-12.93
-1dwlAB	1abcL	2	1abc	1	-7.67

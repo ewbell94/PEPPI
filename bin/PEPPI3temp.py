@@ -6,6 +6,7 @@ outdir="!OUTDIR!"
 peppidir="!PEPPIDIR!"
 bindir=peppidir+"/bin"
 
+#Load proteins from protcodes
 f=open(outdir+"/protcodeA.csv")
 protsA=[line.split(",")[0] for line in f]
 f.close()
@@ -14,6 +15,7 @@ f=open(outdir+"/protcodeB.csv")
 protsB=[line.split(",")[0] for line in f]
 f.close()
 
+#Load matrix of module scores from *res.txt files
 supported=["SPRING","STRING","SEQ","CT","SPRINGNEG"]
 scorelens=[]
 scoremat=[]
@@ -56,30 +58,8 @@ from scipy.stats import norm
 from scipy.stats import beta
 
 supported=[["SPRING","kde"],["STRING","beta"],["SEQ","kde"],["CT","kde"],["SPRINGNEG","kde"]]
-def extractData(resdir,supported):
-    points={}
-    for i in range(len(supported)):
-        dataset=[]
-        f=open("%s/%sres.txt"%(resdir,supported[i][0]))
-        for line in f:
-            parts=line.strip().split(",")
-            dataset.append([parts[0].split("/")[1]]+parts[1:])
-        f.close()
-        for datum in dataset:
-            try:
-                points[datum[0]].append(datum[1:])
-                if i==0:
-                    print(datum[0])
-                    print("Duplicate key exists")
-                    exit(1)
-            except:
-                points[datum[0]]=[[] for n in range(i)]
-                points[datum[0]].append(datum[1:])
-        for key in points.keys():
-            if len(points[key]) < i+1:
-                points[key].append([])
-    return points
 
+#Given the loaded model, calculate the final LR of a single datapoint
 def calcLR(model,point,supported=supported):
     lr=0.
     for i in range(len(supported)):
@@ -102,6 +82,7 @@ model=load(open("/nfs/amino-home/ewbell/PEPPI/bin/model_multiD"))
 #print(model)
 scoredPoints=[] 
 
+#For each pair, write the score into allres.txt and calculate the final LR
 f=open(outdir+"/allres.txt","w")
 for i in range(len(scoremat)):
     if i % 100000 == 0:

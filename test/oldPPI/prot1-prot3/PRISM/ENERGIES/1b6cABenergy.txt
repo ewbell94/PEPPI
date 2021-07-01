@@ -1,2 +1,0 @@
-1b6cAB	1abcE	2	1abcE	0	-5.28
-1b6cAB	1abcE	2	1abc	0	6.00

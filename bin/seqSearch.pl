@@ -12,15 +12,17 @@ my $outdir="";
 ######### Needed changes ended #################################
 
 my $target="";
-my $bindir="/nfs/amino-home/ewbell/PEPPI/bin";
-my $libdir="/nfs/amino-home/ewbell/PEPPI/lib";
+my $peppidir="/nfs/amino-home/ewbell/PEPPI";
 
 GetOptions(
     "outdir=s" => \$outdir,
-    "target=s" => \$target
-    ) or die "Invalid arguments were passed into makeHHR\n";
+    "target=s" => \$target,
+    "peppidir=s" => \$peppidir
+    ) or die "Invalid arguments were passed into seqSearch\n";
 
 #User-set parameters
+my $bindir="$peppidir/bin";
+my $libdir="$peppidir/lib";
 my $stringdb="$libdir/STRING/STRINGseqsv11.db";
 my $seqdb="$libdir/SEQ/100_psicquic.fasta";
 

@@ -1,9 +1,0 @@
-1akjAD	1abcL	1	1abcE	0	-12.73
-1akjAD	1abcL	1	1abcE	1	-9.32
-1akjAD	1abcL	1	1abcL	0	4.48
-1akjAD	1abcE	0	1abcE	0	-3.44
-1akjAD	1abcE	1	1abcE	0	-19.81
-1akjAD	1abcE	0	1abcL	0	-2.10
-1akjAD	1abcE	1	1abcL	0	-3.70
-1akjAD	1abc	0	1abcE	0	-1.55
-1akjAD	1abc	0	1abcL	0	0.44

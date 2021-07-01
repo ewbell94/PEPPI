@@ -1,2 +1,0 @@
-1oxbAB	1abcE	1	1abc	1	-4.30
-1oxbAB	1abcE	1	1abcE	0	-8.97

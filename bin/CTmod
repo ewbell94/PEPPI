@@ -32,7 +32,7 @@ for my $val (@Bvals){
 #Predict interaction likelihood and record the result
 print `python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
 my $result=`cat $outdir/$pairname/CT/res.txt`;
-while (`lsof $outdir/CTres.txt | wc -l` > 0){
+while (`lsof $outdir/CTres.txt | wc -l` > 0){ #To prevent simultaneous writing
     sleep(1);
 }
 print `echo -en "$pairname,$result" >> $outdir/CTres.txt`;

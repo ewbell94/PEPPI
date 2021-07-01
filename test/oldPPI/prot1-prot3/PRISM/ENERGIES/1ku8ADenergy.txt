@@ -1,3 +1,0 @@
-1ku8AD	1abcL	1	1abcE	1	-57.72
-1ku8AD	1abcL	1	1abcL	0	-34.03
-1ku8AD	1abcL	1	1abc	2	-20.48

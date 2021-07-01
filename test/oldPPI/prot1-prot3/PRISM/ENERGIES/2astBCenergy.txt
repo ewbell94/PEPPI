@@ -1,6 +1,0 @@
-2astBC	1abcL	0	1abcE	0	0.17
-2astBC	1abcL	2	1abcE	0	-23.33
-2astBC	1abcL	0	1abc	0	-33.25
-2astBC	1abcL	2	1abc	0	-1.24
-2astBC	1abcE	1	1abcE	0	-21.65
-2astBC	1abcE	1	1abc	0	-18.27

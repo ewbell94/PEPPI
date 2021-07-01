@@ -1,4 +1,0 @@
-1wdwDE	1abc	0	1abcE	0	7.07
-1wdwDE	1abc	0	1abc	0	16.72
-1wdwDE	1abcE	0	1abcE	0	5.21
-1wdwDE	1abcE	0	1abc	0	16.94

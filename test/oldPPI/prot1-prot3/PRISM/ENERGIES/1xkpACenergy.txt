@@ -1,6 +1,0 @@
-1xkpAC	1abcL	0	1abcE	1	-13.21
-1xkpAC	1abcL	0	1abcE	2	-7.80
-1xkpAC	1abcE	2	1abc	0	-25.29
-1xkpAC	1abcE	0	1abcL	0	1.74
-1xkpAC	1abcE	2	1abcL	0	-14.18
-1xkpAC	1abcE	2	1abcE	2	-14.58

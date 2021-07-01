@@ -1,2 +1,0 @@
-1gcqAC	1abc	2	1abc	0	9.88
-1gcqAC	1abcL	2	1abc	0	-24.08

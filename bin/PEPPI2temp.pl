@@ -17,8 +17,7 @@ chomp($user);
 my $singleflag=0;
 $singleflag=1 if (scalar(@ARGV) > 0 && $ARGV[0] eq "s");
 
-#print `python $peppidir/bin/splitFUD.py $outdir`;
-
+#load all proteins from the protcodes and number domains in order
 my @protsA=();
 open(my $protcodeA,"<","$outdir/protcodeA.csv");
 while (my $line=<$protcodeA>){
@@ -30,8 +29,6 @@ while (my $line=<$protcodeA>){
 	my $n=$i+1;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].fasta $outdir/mono/$parts[0]/$parts[0]\_$n.fasta`;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].hhr.gz $outdir/mono/$parts[0]/$parts[0]\_$n.hhr.gz`;
-	#print `cp $outdir/mono/$parts[0]/$domains[$i].pdb $outdir/mono/$parts[0]/$parts[0]\_$n.pdb`;
-	#print `cp $outdir/mono/$parts[0]/$domains[$i].tm $outdir/mono/$parts[0]/$parts[0]\_$n.tm`;
     }
 }
 close($protcodeA);
@@ -47,35 +44,20 @@ while (my $line=<$protcodeB>){
 	print "$domains[$i]\n";
         print `cp $outdir/mono/$parts[0]/$domains[$i].fasta $outdir/mono/$parts[0]/$parts[0]\_$n.fasta`;
 	print `cp $outdir/mono/$parts[0]/$domains[$i].hhr.gz $outdir/mono/$parts[0]/$parts[0]\_$n.hhr.gz`;
-	#print `cp $outdir/mono/$parts[0]/$domains[$i].pdb $outdir/mono/$parts[0]/$parts[0]\_$n.pdb`;
-	#print `cp $outdir/mono/$parts[0]/$domains[$i].tm $outdir/mono/$parts[0]/$parts[0]\_$n.tm`;
     }
 }
 close($protcodeB);
 
-my @supported=("SPRING","SPRINGNEG");
+my @supported=("PRISM"); #Change this to change which modules are available
 my @intset=();
 
+#Create PPI folders and run the pairs
 print `mkdir -p $outdir/PPI`;
 for my $i (0..scalar(@protsA)-1){
     for my $j (0..scalar(@protsB)-1){
 	next if ((-e "$outdir/PPI/$protsB[$j]-$protsA[$i]" && $protsA[$i] ne $protsB[$j]) || ($nohomo && $protsB[$j] eq $protsA[$i]));
 	my $pairdir="$outdir/PPI/$protsA[$i]-$protsB[$j]";
 	print `mkdir -p $pairdir`;
-=pod
-	print `cp $outdir/mono/$protsA[$i]/$protsA[$i].fasta $pairdir/$protsA[$i].seq`;
-	my $n=1;
-	while (-f "$outdir/mono/$protsA[$i]/$protsA[$i]\_$n.fasta"){
-	    print `cp $outdir/mono/$protsA[$i]/$protsA[$i]\_$n.fasta $pairdir/$protsA[$i]\_$n.seq`;
-	    $n++;
-	}
-	print `cp $outdir/mono/$protsB[$j]/$protsB[$j].fasta $pairdir/$protsB[$j].seq`;
-	$n=1;
-	while (-f "$outdir/mono/$protsB[$j]/$protsB[$j]\_$n.fasta"){
-	    print `cp $outdir/mono/$protsB[$j]/$protsB[$j]\_$n.fasta $pairdir/$protsB[$j]\_$n.seq`;
-	    $n++;
-	}
-=cut
 	my $pairname="$protsA[$i]-$protsB[$j]";
 	my $int="$outdir/PPI/$pairname";
 	print `echo "$int" > $int/out.log` if ($singleflag);
@@ -110,7 +92,7 @@ if (scalar(@intset) > 0){
     submitBatch(\@intset);
 }
 
-
+#Create new 
 open(my $peppi3script,">","$outdir/PEPPI3.py");
 my $peppi3=`cat $peppidir/bin/PEPPI3temp.py`;
 $peppi3=~s/\!OUTDIR\!/$outdir/;
@@ -119,6 +101,7 @@ print $peppi3script $peppi3;
 close($peppi3script);
 print `chmod +x $outdir/PEPPI3.py`;
 
+#Given a set of interactions, submit a wrapper script which runs them all
 sub submitBatch{
     my @intset=@{$_[0]};
     my $args=join(",",@supported);
@@ -133,6 +116,7 @@ sub submitBatch{
     #print `$peppidir/bin/multiwrapper.pl $args`;
 }
 
+#Tree traversing algorithm which grabs a list of domains
 sub treeSearch{
     my $prot=$_[0];
     my $dir=$_[1];

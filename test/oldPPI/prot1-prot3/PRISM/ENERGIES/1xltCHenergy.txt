@@ -1,4 +1,0 @@
-1xltCH	1abcL	0	1abcE	2	-5.57
-1xltCH	1abcL	0	1abc	2	-21.58
-1xltCH	1abcE	0	1abcE	2	-34.92
-1xltCH	1abc	1	1abcE	2	-34.48
