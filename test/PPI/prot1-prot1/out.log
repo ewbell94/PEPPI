@@ -1,10 +1,56 @@
 /nfs/amino-home/ewbell/PEPPI/test/PPI/prot1-prot1
 SPRING
-SPRING has already been run!
+Running HHsearch
+Total HHsearch time: 0.238038063049316
+Fetching HHsearch hits
+Total mapping time: 3.54825806617737
+Constructing models
+Total monomer model time: 0.0388729572296143
+5A1U01D1-5A1U01C1
+-4.700000
+5A1U01C1-5A1U01D1
+-4.700000
+6ND401T1-6ND401O1
+-4.727839
+6ND401O1-6ND401T1
+-4.727839
+6ND401Q1-6ND401O1
+-4.700000
+6ND401O1-6ND401Q1
+-4.700000
+6ND401Q1-6ND401T1
+-4.700000
+6ND401T1-6ND401Q1
+-4.700000
+3J2T01A1-3J2T01B1
+-4.700000
+3J2T01B1-3J2T01A1
+-4.700000
+Writing output
+Total scoring time: 26.6869339942932
+Total program runtime: 30.8911318778992
 SPRINGNEG
-SPRING has already been run!
+Copying HHsearch
+Total HHsearch time: 0.2275710105896
+Fetching HHsearch hits
+Total mapping time: 3.47696685791016
+Constructing models
+Total monomer model time: 0.0328750610351562
+5NZV01H1-5NZV01A1
+5NZV01A1-5NZV01H1
+5NZV01C1-5NZV01J1
+5NZV01J1-5NZV01C1
+6ND401O1-6ND401N1
+6ND401N1-6ND401T1
+6ND401N1-6ND401Q1
+6ND401T1-6ND401N1
+6ND401Q1-6ND401N1
+6ND401N1-6ND401O1
+Writing output
+Total scoring time: 26.1170649528503
+Total program runtime: 30.1928551197052
 STRING
-Thu Jul  1 15:39:45 EDT 2021
+Wed Jul 21 15:22:50 EDT 2021
 9606.ENSP00000346466	747	747	747
 9598.ENSPTRP00000033792	744	747	747
 60711.ENSCSAP00000005392	742	747	747
@@ -210,7 +256,7 @@ Thu Jul  1 15:39:45 EDT 2021
 144197.XP_008303300.1	361	747	529
 
 Homodimer detected.  Homodimers are not in the STRING database.
-Total program runtime: 0.0138928890228271
+Total program runtime: 0.0111470222473145
 SEQ
 uniprotkb:A4D1P6	747	747	747
 uniprotkb:Q9VE12	85	747	324
@@ -6642,7 +6688,7 @@ refseq:NP_592910	3	747	598
 refseq:NP_592910	2	747	598
 refseq:NP_592910	2	747	598
 
-Total id extraction time: 0.820793867111206
+Total id extraction time: 1.0582218170166
 Dimer found!
 Dimer found!
 Dimer found!
@@ -6677,8 +6723,8 @@ Dimer found!
 Dimer found!
 Dimer found!
 Dimer found!
-Total search time: 1.08666706085205
-Thu Jul  1 15:39:47 EDT 2021
-Total program runtime: 2.65542006492615
+Total search time: 1.38525700569153
+Wed Jul 21 15:22:53 EDT 2021
+Total program runtime: 3.02303791046143
 CT
-Total program runtime: 5.80268812179565
+Total program runtime: 1.55672693252563

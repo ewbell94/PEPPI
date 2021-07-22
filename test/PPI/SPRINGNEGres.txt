@@ -1,8 +1,0 @@
-prot1-prot1,11.012992
-prot1-prot2,7.68048
-prot1-prot3,4.112912
-prot1-prot4,3.294744
-prot1-prot5,9.602618
-prot2-prot2,20.835172
-prot2-prot3,3.958228
-prot2-prot4,3.758918

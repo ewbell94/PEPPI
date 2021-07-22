@@ -12,9 +12,9 @@ git clone https://github.com/ewbell94/PEPPI.git
 cd PEPPI
 wget https://zhanglab.dcmb.med.umich.edu/PEPPI/lib.tar.gz
 tar -zxvf lib.tar.gz
-sed "s/\$peppidir=\".*\"/\$peppidir=\"$peppidir\"/" PEPPI1.pl
-sed "s/\$maxjobs=.*;/\$maxjobs=$maxjobs;/" PEPPI1.pl
-sed "s/\$hhsuitedir=\".*\"/\$hhsuitedir=$hhdir/" bin/makeHHR.pl
+sed -i "s#\$peppidir= \".*\"#\$peppidir=\"$peppidir\"#" PEPPI1.pl
+sed -i "s#\$maxjobs=.*;#\$maxjobs=$maxjobs;#" PEPPI1.pl
+sed -i "s#\$hhsuitedir=\".*\"#\$hhsuitedir=$hhdir#" bin/makeHHR.pl
 $cppcompiler bin/compiled_source/dcomplex.c -o bin/dcomplex -lm -O3
 $cppcompiler bin/compiled_source/dimMap.cpp -o bin/dimMap -O3 --std=c++11
 $fcompiler bin/compiled_source/NWalign.f -o bin/NWalign -lm -O3

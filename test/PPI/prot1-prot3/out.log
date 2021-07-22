@@ -1,11 +1,11 @@
 /nfs/amino-home/ewbell/PEPPI/test/PPI/prot1-prot3
 SPRING
 Running HHsearch
-Total HHsearch time: 0.180628061294556
+Total HHsearch time: 0.216293096542358
 Fetching HHsearch hits
-Total mapping time: 3.12210488319397
+Total mapping time: 4.15119695663452
 Constructing models
-Total monomer model time: 0.0421690940856934
+Total monomer model time: 0.0362300872802734
 1U2V02C2-1U2V02A1
 -4.707279
 6Q6G01R1-6Q6G01A1
@@ -27,15 +27,15 @@ Total monomer model time: 0.0421690940856934
 6R5K01A1-6R5K01O1
 -4.700000
 Writing output
-Total scoring time: 23.1954159736633
-Total program runtime: 27.5617990493774
+Total scoring time: 25.8535017967224
+Total program runtime: 30.5172448158264
 SPRINGNEG
 Copying HHsearch
-Total HHsearch time: 0.168932914733887
+Total HHsearch time: 0.222856998443604
 Fetching HHsearch hits
-Total mapping time: 3.27766108512878
+Total mapping time: 3.93398189544678
 Constructing models
-Total monomer model time: 0.0313730239868164
+Total monomer model time: 0.0306119918823242
 6F1T01gl1-6F1T01H1
 6F1T01gl1-6F1T01J1
 6F1T01gl1-6F1T01A1
@@ -47,10 +47,10 @@ Total monomer model time: 0.0313730239868164
 4UER01R1-4UER01cl1
 3J8B01L1-3J8B01C1
 Writing output
-Total scoring time: 17.5370788574219
-Total program runtime: 22.0121479034424
+Total scoring time: 15.145131111145
+Total program runtime: 19.7351069450378
 STRING
-Thu Jul  1 15:45:33 EDT 2021
+Wed Jul 21 15:31:00 EDT 2021
 9606.ENSP00000346466	747	747	747
 9598.ENSPTRP00000033792	744	747	747
 60711.ENSCSAP00000005392	742	747	747
@@ -266,7 +266,7 @@ Thu Jul  1 15:45:33 EDT 2021
 61853.ENSNLEP00000016146 61853.ENSNLEP00000016056
 9597.XP_008964248.1 9597.XP_003825447.1
 Sequence A homology dropped too low
-Total program runtime: 30.5291850566864
+Total program runtime: 29.190505027771
 SEQ
 uniprotkb:A4D1P6	747	747	747
 uniprotkb:Q9VE12	85	747	324
@@ -6306,14 +6306,14 @@ entrez_gene/locuslink:832543	2	510	3446
 entrez_gene/locuslink:832543	2	510	3446
 entrez_gene/locuslink:832543	6	510	3446
 
-Total id extraction time: 0.871246099472046
+Total id extraction time: 1.04862499237061
 Dimer found!
 Dimer found!
 Dimer found!
 Dimer found!
 Dimer found!
-Total search time: 1.08916401863098
-Thu Jul  1 15:46:06 EDT 2021
-Total program runtime: 2.69819498062134
+Total search time: 1.35421109199524
+Wed Jul 21 15:31:32 EDT 2021
+Total program runtime: 2.98245310783386
 CT
-Total program runtime: 24.587751865387
+Total program runtime: 1.03491711616516

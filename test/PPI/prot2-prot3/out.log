@@ -1,11 +1,11 @@
 /nfs/amino-home/ewbell/PEPPI/test/PPI/prot2-prot3
 SPRING
 Running HHsearch
-Total HHsearch time: 0.146806955337524
+Total HHsearch time: 0.155604124069214
 Fetching HHsearch hits
-Total mapping time: 3.2374279499054
+Total mapping time: 3.9446280002594
 Constructing models
-Total monomer model time: 0.0336129665374756
+Total monomer model time: 0.0246880054473877
 3ZYY01Y1-3ZYY01X1
 -4.700000
 6MX401B23-6MX401B1
@@ -27,13 +27,13 @@ Total monomer model time: 0.0336129665374756
 6PNS01B1-6PNS01A1
 -4.700000
 Writing output
-Total scoring time: 9.17311906814575
+Total scoring time: 22.2790248394012
 Running HHsearch
-Total HHsearch time: 0.130810022354126
+Total HHsearch time: 0.150381088256836
 Fetching HHsearch hits
-Total mapping time: 3.29753589630127
+Total mapping time: 3.92833590507507
 Constructing models
-Total monomer model time: 0.0218830108642578
+Total monomer model time: 0.0249180793762207
 6KN701U1-6KN701B1
 -4.700000
 4JN401A1-4JN401B1
@@ -55,13 +55,13 @@ Total monomer model time: 0.0218830108642578
 1QHA01B1-1QHA01A1
 -4.700000
 Writing output
-Total scoring time: 10.7679839134216
+Total scoring time: 23.2246677875519
 Running HHsearch
-Total HHsearch time: 0.121655941009521
+Total HHsearch time: 0.142896890640259
 Fetching HHsearch hits
-Total mapping time: 3.30210709571838
+Total mapping time: 3.90318202972412
 Constructing models
-Total monomer model time: 0.022819995880127
+Total monomer model time: 0.0237720012664795
 3ZYY01Y1-3ZYY01X1
 -4.700000
 3J8201A1-3J8201D1
@@ -83,13 +83,13 @@ Total monomer model time: 0.022819995880127
 4JEP01B1-4JEP01A1
 -4.700000
 Writing output
-Total scoring time: 6.94900393486023
+Total scoring time: 16.7511470317841
 Running HHsearch
-Total HHsearch time: 0.133035898208618
+Total HHsearch time: 0.147698879241943
 Fetching HHsearch hits
-Total mapping time: 3.29388999938965
+Total mapping time: 3.93440699577332
 Constructing models
-Total monomer model time: 0.0293819904327393
+Total monomer model time: 0.0253260135650635
 6PBZ01C1-6PBZ01A1
 -4.700000
 3ZYY01Y1-3ZYY01X1
@@ -111,13 +111,13 @@ Total monomer model time: 0.0293819904327393
 2I9I01A2-2I9I01A1
 -4.700000
 Writing output
-Total scoring time: 5.4203519821167
+Total scoring time: 16.5442199707031
 Running HHsearch
-Total HHsearch time: 0.138031005859375
+Total HHsearch time: 0.145833015441895
 Fetching HHsearch hits
-Total mapping time: 3.3542811870575
+Total mapping time: 3.9433901309967
 Constructing models
-Total monomer model time: 0.0280230045318604
+Total monomer model time: 0.0239748954772949
 2W490101-2W4901P1
 -4.700000
 1X3M01A2-1X3M01A1
@@ -139,13 +139,13 @@ Total monomer model time: 0.0280230045318604
 1KXP01D1-1KXP01A1
 -4.700004
 Writing output
-Total scoring time: 7.18946886062622
+Total scoring time: 15.8495819568634
 Running HHsearch
-Total HHsearch time: 0.123271942138672
+Total HHsearch time: 0.139701128005981
 Fetching HHsearch hits
-Total mapping time: 3.27526497840881
+Total mapping time: 3.95345187187195
 Constructing models
-Total monomer model time: 0.0266749858856201
+Total monomer model time: 0.0240280628204346
 6PBZ01C1-6PBZ01A1
 -4.700000
 6LTJ01I1-6LTJ01J1
@@ -167,13 +167,13 @@ Total monomer model time: 0.0266749858856201
 3ZYY01Y1-3ZYY01X1
 -4.700000
 Writing output
-Total scoring time: 7.79546093940735
+Total scoring time: 11.9265329837799
 Running HHsearch
-Total HHsearch time: 0.121923208236694
+Total HHsearch time: 0.172533988952637
 Fetching HHsearch hits
-Total mapping time: 3.34740495681763
+Total mapping time: 3.92522811889648
 Constructing models
-Total monomer model time: 0.0210409164428711
+Total monomer model time: 0.025925874710083
 1NBW01A1-1NBW01C1
 -4.700000
 1NBW01C1-1NBW01A1
@@ -195,13 +195,13 @@ Total monomer model time: 0.0210409164428711
 4JN401A1-4JN401B1
 -4.700000
 Writing output
-Total scoring time: 7.50220990180969
+Total scoring time: 11.8643050193787
 Running HHsearch
-Total HHsearch time: 0.166769027709961
+Total HHsearch time: 0.142183065414429
 Fetching HHsearch hits
-Total mapping time: 3.37495398521423
+Total mapping time: 3.97646999359131
 Constructing models
-Total monomer model time: 0.0234289169311523
+Total monomer model time: 0.0239839553833008
 1M8Q01A1-1M8Q0181
 -4.700000
 1K8K01E1-1K8K01A1
@@ -223,13 +223,13 @@ Total monomer model time: 0.0234289169311523
 5BSB01A1-5BSB01A2
 -4.700000
 Writing output
-Total scoring time: 7.20784187316895
+Total scoring time: 11.2768700122833
 Running HHsearch
-Total HHsearch time: 0.135478973388672
+Total HHsearch time: 0.161525011062622
 Fetching HHsearch hits
-Total mapping time: 3.26045203208923
+Total mapping time: 3.94750499725342
 Constructing models
-Total monomer model time: 0.0228438377380371
+Total monomer model time: 0.0268368721008301
 4A5701D1-4A5701A1
 -4.700000
 4A5A01A1-4A5A01A2
@@ -251,15 +251,15 @@ Total monomer model time: 0.0228438377380371
 3ZX001B1-3ZX001A1
 -4.702879
 Writing output
-Total scoring time: 10.1482961177826
-Total program runtime: 108.319204092026
+Total scoring time: 12.7493879795074
+Total program runtime: 180.965342998505
 SPRINGNEG
 Copying HHsearch
-Total HHsearch time: 0.132936000823975
+Total HHsearch time: 0.157901048660278
 Fetching HHsearch hits
-Total mapping time: 2.9484748840332
+Total mapping time: 3.57411479949951
 Constructing models
-Total monomer model time: 0.0219769477844238
+Total monomer model time: 0.0253291130065918
 5SVB01F1-5SVB01B1
 6L7P01S1-6L7P01G1
 5LCW01Z1-5LCW01A1
@@ -271,13 +271,13 @@ Total monomer model time: 0.0219769477844238
 6HU901fl1-6HU901D1
 6EM301S1-6EM301nl1
 Writing output
-Total scoring time: 14.3736321926117
+Total scoring time: 21.1568050384521
 Copying HHsearch
-Total HHsearch time: 0.127321004867554
+Total HHsearch time: 0.151358127593994
 Fetching HHsearch hits
-Total mapping time: 2.96359300613403
+Total mapping time: 3.60424995422363
 Constructing models
-Total monomer model time: 0.0222840309143066
+Total monomer model time: 0.0235779285430908
 5ADX01K1-5ADX01J1
 2W490111-2W4901E1
 5ADX01K1-5ADX01H1
@@ -289,13 +289,13 @@ Total monomer model time: 0.0222840309143066
 3UKR01E1-3UKR01B1
 6FML01P1-6FML01J1
 Writing output
-Total scoring time: 4.04558300971985
+Total scoring time: 7.59492611885071
 Copying HHsearch
-Total HHsearch time: 0.128816843032837
+Total HHsearch time: 0.140190839767456
 Fetching HHsearch hits
-Total mapping time: 3.03249907493591
+Total mapping time: 3.55972599983215
 Constructing models
-Total monomer model time: 0.0211589336395264
+Total monomer model time: 0.0233650207519531
 6ID101R1-6ID101Q1
 6FF70191-6FF701U1
 3UKR01E1-3UKR01B1
@@ -307,13 +307,13 @@ Total monomer model time: 0.0211589336395264
 5XNL01P1-5XNL01H1
 6KAC01P1-6KAC01H1
 Writing output
-Total scoring time: 10.1946451663971
+Total scoring time: 14.3215019702911
 Copying HHsearch
-Total HHsearch time: 0.119960069656372
+Total HHsearch time: 0.150155067443848
 Fetching HHsearch hits
-Total mapping time: 2.94952392578125
+Total mapping time: 3.60446500778198
 Constructing models
-Total monomer model time: 0.0314240455627441
+Total monomer model time: 0.0245368480682373
 5Y8101B1-5Y8101G1
 3UKR01G1-3UKR01A1
 5Y8101B1-5Y8101F1
@@ -325,13 +325,13 @@ Total monomer model time: 0.0314240455627441
 4UER01W1-4UER01cl1
 6O7V01P1-6O7V01O1
 Writing output
-Total scoring time: 11.4164769649506
+Total scoring time: 16.8253350257874
 Copying HHsearch
-Total HHsearch time: 0.121217012405396
+Total HHsearch time: 0.147240161895752
 Fetching HHsearch hits
-Total mapping time: 2.96783709526062
+Total mapping time: 3.67843198776245
 Constructing models
-Total monomer model time: 0.0286159515380859
+Total monomer model time: 0.0242679119110107
 6C1D01R1-6C1D01B1
 6KN701V1-6KN701B1
 5H5301C1-5H5301D1
@@ -343,13 +343,13 @@ Total monomer model time: 0.0286159515380859
 6NJN01K1-6NJN01C1
 6V0101B1-6V0101C1
 Writing output
-Total scoring time: 5.28238701820374
+Total scoring time: 7.7682740688324
 Copying HHsearch
-Total HHsearch time: 0.120760917663574
+Total HHsearch time: 0.146384954452515
 Fetching HHsearch hits
-Total mapping time: 2.94548797607422
+Total mapping time: 3.69501805305481
 Constructing models
-Total monomer model time: 0.0251669883728027
+Total monomer model time: 0.0249078273773193
 6F1T01kl1-6F1T01H1
 6F1T01kl1-6F1T01J1
 6F1T01kl1-6F1T01A1
@@ -361,13 +361,13 @@ Total monomer model time: 0.0251669883728027
 6Q6G01S1-6Q6G01A1
 4UER01Z1-4UER01cl1
 Writing output
-Total scoring time: 11.1390991210938
+Total scoring time: 16.398463010788
 Copying HHsearch
-Total HHsearch time: 0.120619058609009
+Total HHsearch time: 0.14549708366394
 Fetching HHsearch hits
-Total mapping time: 3.05425310134888
+Total mapping time: 3.63379907608032
 Constructing models
-Total monomer model time: 0.0206918716430664
+Total monomer model time: 0.0249099731445312
 6C1D01R1-6C1D01B1
 6KN701V1-6KN701B1
 4JD201D1-4JD201B1
@@ -379,13 +379,13 @@ Total monomer model time: 0.0206918716430664
 6FF70191-6FF701U1
 3J9V01E1-3J9V01O1
 Writing output
-Total scoring time: 10.4731631278992
+Total scoring time: 14.8791828155518
 Copying HHsearch
-Total HHsearch time: 0.131565093994141
+Total HHsearch time: 0.147578954696655
 Fetching HHsearch hits
-Total mapping time: 3.0628650188446
+Total mapping time: 3.66180205345154
 Constructing models
-Total monomer model time: 0.0256950855255127
+Total monomer model time: 0.0244970321655273
 4JD201E1-4JD201B1
 5Y8101B1-5Y8101G1
 5Y8101B1-5Y8101F1
@@ -397,13 +397,13 @@ Total monomer model time: 0.0256950855255127
 6FF701tl1-6FF701U1
 4UER01Q1-4UER01cl1
 Writing output
-Total scoring time: 10.0181410312653
+Total scoring time: 16.219465970993
 Copying HHsearch
-Total HHsearch time: 0.137688875198364
+Total HHsearch time: 0.159816026687622
 Fetching HHsearch hits
-Total mapping time: 3.16609811782837
+Total mapping time: 3.7485671043396
 Constructing models
-Total monomer model time: 0.0244178771972656
+Total monomer model time: 0.026749849319458
 4JD201E1-4JD201B1
 3UKR01E1-3UKR01B1
 5ADX01L1-5ADX01J1
@@ -415,10 +415,10 @@ Total monomer model time: 0.0244178771972656
 4UER0101-4UER01cl1
 3J0C01I1-3J0C01A1
 Writing output
-Total scoring time: 8.3490571975708
-Total program runtime: 118.669382095337
+Total scoring time: 14.2015681266785
+Total program runtime: 165.378956794739
 STRING
-Thu Jul  1 16:12:45 EDT 2021
+Wed Jul 21 16:11:58 EDT 2021
 9606.ENSP00000357362	956	956	956
 9598.ENSPTRP00000002388	955	956	956
 9593.ENSGGOP00000009116	955	956	958
@@ -635,7 +635,7 @@ Thu Jul  1 16:12:45 EDT 2021
 9483.ENSCJAP00000016308 9483.ENSCJAP00000029896
 61853.ENSNLEP00000014489 61853.ENSNLEP00000016056
 Sequence A homology dropped too low
-Total program runtime: 14.0421380996704
+Total program runtime: 19.3074331283569
 SEQ
 uniprotkb:P49746	956	956	956
 entrez_gene/locuslink:7059	947	956	947
@@ -19339,9 +19339,9 @@ entrez_gene/locuslink:832543	2	510	3446
 entrez_gene/locuslink:832543	2	510	3446
 entrez_gene/locuslink:832543	6	510	3446
 
-Total id extraction time: 0.929857969284058
-Total search time: 1.08044695854187
-Thu Jul  1 16:13:02 EDT 2021
-Total program runtime: 2.8017361164093
+Total id extraction time: 1.22852993011475
+Total search time: 1.41598296165466
+Wed Jul 21 16:12:20 EDT 2021
+Total program runtime: 3.28711485862732
 CT
-Total program runtime: 1.43203091621399
+Total program runtime: 1.48655986785889

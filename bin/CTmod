@@ -32,12 +32,17 @@ for my $val (@Bvals){
 #Predict interaction likelihood and record the result
 print `python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
 my $result=`cat $outdir/$pairname/CT/res.txt`;
-while (`lsof $outdir/CTres.txt | wc -l` > 0){ #To prevent simultaneous writing
-    sleep(1);
+
+my $idnum=0;
+if (defined($ENV{SLURM_JOB_ID}) && $ENV{SLURM_JOB_ID} ne ''){
+    $idnum=$ENV{SLURM_JOB_ID};
 }
-print `echo -en "$pairname,$result" >> $outdir/CTres.txt`;
-print `sync`;
+
+open(my $fullres,">>","$outdir/CTres_$idnum.txt");
+print $fullres "$pairname,$result";
+close($fullres);
 my $stoptime=time();
+print `sync`;
 print "Total program runtime: ".($stoptime-$starttime)."\n";
 
 #Given an amino acid sequence, calculate the 343-length CT vector

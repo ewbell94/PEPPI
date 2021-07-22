@@ -204,10 +204,11 @@ if ($topscore!=-100.0){
         print "Best SPRINGNEGscore is outside of training set range.  Set to $scorerange[1] for classification purposes\n";
         $topscore=$scorerange[1];
     }
-    while (`lsof $outdir/SPRINGNEGres.txt | wc -l` > 0){ #To prevent simultaneous file writing
-	sleep(1);
+    my $idnum=0;
+    if (defined($ENV{SLURM_JOB_ID}) && $ENV{SLURM_JOB_ID} ne ''){
+	$idnum=$ENV{SLURM_JOB_ID};
     }
-    print `echo "$pairname,$topscore" >> $outdir/SPRINGNEGres.txt`;
+    print `echo "$pairname,$topscore" >> $outdir/SPRINGNEGres_$idnum.txt`;
 }
 
 open(my $resfile,">","$outdir/$pairname/SPRINGNEG/res.txt");

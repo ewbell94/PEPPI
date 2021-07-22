@@ -82,10 +82,11 @@ for my $i (0..scalar(@ids1)-1){
 	    my $co=$parts[4]/1000.0; #co-occurrence
 	    my $ce=$parts[5]/1000.0; #co-expression
 	    print $resfile "$gn\n$gf\n$co\n$ce\n";
-	    while (`lsof $outdir/STRINGres.txt | wc -l` > 0){ #To prevent simultaneous writing
-		sleep(1);
+	    my $idnum=0;
+	    if (defined($ENV{SLURM_JOB_ID}) && $ENV{SLURM_JOB_ID} ne ''){
+		$idnum=$ENV{SLURM_JOB_ID};
 	    }
-	    print `echo "$pairname,$gn,$gf,$co,$ce" >> $outdir/STRINGres.txt`;
+	    print `echo "$pairname,$gn,$gf,$co,$ce" >> $outdir/STRINGres_$idnum.txt`;
 	    my $stoptime=time();
 	    print "Total program runtime: ".($stoptime-$starttime)."\n";
 	    exit(1);

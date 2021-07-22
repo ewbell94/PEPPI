@@ -1,11 +1,11 @@
 /nfs/amino-home/ewbell/PEPPI/test/PPI/prot2-prot2
 SPRING
 Running HHsearch
-Total HHsearch time: 0.13843297958374
+Total HHsearch time: 0.194424152374268
 Fetching HHsearch hits
-Total mapping time: 3.24759411811829
+Total mapping time: 3.80044388771057
 Constructing models
-Total monomer model time: 0.0243659019470215
+Total monomer model time: 0.0230250358581543
 2OUJ01A1-2OUJ01A2
 -4.700000
 2OUJ01A2-2OUJ01A1
@@ -27,13 +27,13 @@ Total monomer model time: 0.0243659019470215
 1QU002C1-1QU002B1
 -4.740545
 Writing output
-Total scoring time: 1.7211971282959
+Total scoring time: 3.05466794967651
 Running HHsearch
-Total HHsearch time: 0.125272989273071
+Total HHsearch time: 0.140435934066772
 Fetching HHsearch hits
-Total mapping time: 3.30098390579224
+Total mapping time: 3.9231219291687
 Constructing models
-Total monomer model time: 0.0275590419769287
+Total monomer model time: 0.0224699974060059
 3V6401A1-3V6401C1
 -4.700000
 5OQM01ll1-5OQM01dl1
@@ -55,13 +55,13 @@ Total monomer model time: 0.0275590419769287
 3ZIF01B1-3ZIF01A1
 -4.700000
 Writing output
-Total scoring time: 5.11326503753662
+Total scoring time: 7.33506298065186
 Running HHsearch
-Total HHsearch time: 0.144454002380371
+Total HHsearch time: 0.22760796546936
 Fetching HHsearch hits
-Total mapping time: 3.32515501976013
+Total mapping time: 3.93359613418579
 Constructing models
-Total monomer model time: 0.0272221565246582
+Total monomer model time: 0.0226039886474609
 3V6401A1-3V6401C1
 -4.700000
 5OW301C1-5OW301C2
@@ -83,13 +83,13 @@ Total monomer model time: 0.0272221565246582
 6MUI01F1-6MUI01J1
 -4.708797
 Writing output
-Total scoring time: 2.95213198661804
+Total scoring time: 5.199049949646
 Running HHsearch
-Total HHsearch time: 0.118803977966309
+Total HHsearch time: 0.244804859161377
 Fetching HHsearch hits
-Total mapping time: 3.2817280292511
+Total mapping time: 3.9174211025238
 Constructing models
-Total monomer model time: 0.0208950042724609
+Total monomer model time: 0.0237908363342285
 5X5901A1-5X5901B1
 -4.700000
 6NB301A1-6NB301B1
@@ -111,13 +111,13 @@ Total monomer model time: 0.0208950042724609
 6CGV01M5-6CGV01N1
 -4.700000
 Writing output
-Total scoring time: 7.35346078872681
+Total scoring time: 9.44916009902954
 Running HHsearch
-Total HHsearch time: 0.11682391166687
+Total HHsearch time: 0.133349895477295
 Fetching HHsearch hits
-Total mapping time: 3.29877400398254
+Total mapping time: 3.91583800315857
 Constructing models
-Total monomer model time: 0.0208799839019775
+Total monomer model time: 0.0226750373840332
 3V6401A1-3V6401C1
 -4.700000
 5B2C01A1-5B2C01B1
@@ -139,13 +139,13 @@ Total monomer model time: 0.0208799839019775
 6K3101B1-6K3101A1
 -4.700000
 Writing output
-Total scoring time: 3.82440996170044
+Total scoring time: 5.6847140789032
 Running HHsearch
-Total HHsearch time: 0.124882936477661
+Total HHsearch time: 0.133114814758301
 Fetching HHsearch hits
-Total mapping time: 3.28583788871765
+Total mapping time: 3.90456104278564
 Constructing models
-Total monomer model time: 0.0199949741363525
+Total monomer model time: 0.0229251384735107
 3IN902A2-3IN902A1
 -4.700000
 3IN902A1-3IN902A2
@@ -167,13 +167,13 @@ Total monomer model time: 0.0199949741363525
 5U6Y01H1-5U6Y01A1
 -4.700000
 Writing output
-Total scoring time: 4.88390707969666
+Total scoring time: 7.22289991378784
 Running HHsearch
-Total HHsearch time: 0.113136768341064
+Total HHsearch time: 0.131876945495605
 Fetching HHsearch hits
-Total mapping time: 3.25812220573425
+Total mapping time: 3.8914110660553
 Constructing models
-Total monomer model time: 0.0201499462127686
+Total monomer model time: 0.0228328704833984
 6K3101A1-6K3101B1
 -4.700000
 6K3101B1-6K3101A1
@@ -195,13 +195,13 @@ Total monomer model time: 0.0201499462127686
 4IU201A1-4IU201B1
 -4.369045
 Writing output
-Total scoring time: 6.66783499717712
+Total scoring time: 8.63449907302856
 Running HHsearch
-Total HHsearch time: 0.118571043014526
+Total HHsearch time: 0.136638879776001
 Fetching HHsearch hits
-Total mapping time: 3.26132488250732
+Total mapping time: 3.90568995475769
 Constructing models
-Total monomer model time: 0.0294950008392334
+Total monomer model time: 0.0228271484375
 4UF702A1-4UF702E1
 -4.700000
 4JDM01A1-4JDM01B1
@@ -223,13 +223,13 @@ Total monomer model time: 0.0294950008392334
 3ZIW01B1-3ZIW01A1
 -4.696442
 Writing output
-Total scoring time: 4.54825615882874
+Total scoring time: 6.72616982460022
 Running HHsearch
-Total HHsearch time: 0.147814035415649
+Total HHsearch time: 0.152801990509033
 Fetching HHsearch hits
-Total mapping time: 3.25541210174561
+Total mapping time: 3.91255903244019
 Constructing models
-Total monomer model time: 0.0215239524841309
+Total monomer model time: 0.0256290435791016
 4JQT01B1-4JQT01A1
 -4.700000
 4JQT01A1-4JQT01B1
@@ -251,13 +251,13 @@ Total monomer model time: 0.0215239524841309
 1YI701A1-1YI701C1
 -4.700000
 Writing output
-Total scoring time: 2.69945287704468
+Total scoring time: 3.98522996902466
 Running HHsearch
-Total HHsearch time: 0.167210817337036
+Total HHsearch time: 0.143691062927246
 Fetching HHsearch hits
-Total mapping time: 3.27811813354492
+Total mapping time: 3.96391892433167
 Constructing models
-Total monomer model time: 0.027379035949707
+Total monomer model time: 0.0226418972015381
 3V6401C1-3V6401A1
 -4.700000
 5OQM01dl1-5OQM01ll1
@@ -279,13 +279,13 @@ Total monomer model time: 0.027379035949707
 6CGV01A1-6CGV01C5
 -4.700000
 Writing output
-Total scoring time: 5.28233003616333
+Total scoring time: 15.6291739940643
 Running HHsearch
-Total HHsearch time: 0.115800857543945
+Total HHsearch time: 0.137444972991943
 Fetching HHsearch hits
-Total mapping time: 3.17196702957153
+Total mapping time: 3.79784989356995
 Constructing models
-Total monomer model time: 0.0190601348876953
+Total monomer model time: 0.0215680599212646
 5FM901A1-5FM901A2
 -4.700000
 5FM901A2-5FM901A1
@@ -307,13 +307,13 @@ Total monomer model time: 0.0190601348876953
 1Z1Y01B1-1Z1Y01A1
 -4.693511
 Writing output
-Total scoring time: 1.54257297515869
+Total scoring time: 8.69516396522522
 Running HHsearch
-Total HHsearch time: 0.111660957336426
+Total HHsearch time: 0.12797999382019
 Fetching HHsearch hits
-Total mapping time: 3.27575302124023
+Total mapping time: 3.91356801986694
 Constructing models
-Total monomer model time: 0.0201609134674072
+Total monomer model time: 0.0222868919372559
 5UK501A1-5UK501B1
 -4.700000
 1Z1Y01A1-1Z1Y01B1
@@ -335,13 +335,13 @@ Total monomer model time: 0.0201609134674072
 4D9003A1-4D9003B1
 -4.700000
 Writing output
-Total scoring time: 0.906160116195679
+Total scoring time: 7.56762599945068
 Running HHsearch
-Total HHsearch time: 0.108483791351318
+Total HHsearch time: 0.129011154174805
 Fetching HHsearch hits
-Total mapping time: 3.24797511100769
+Total mapping time: 3.92714595794678
 Constructing models
-Total monomer model time: 0.0204710960388184
+Total monomer model time: 0.022960901260376
 4G1E01B1-4G1E01A1
 -4.700000
 3FCS01B1-3FCS01A1
@@ -363,13 +363,13 @@ Total monomer model time: 0.0204710960388184
 3VKG01A1-3VKG01B1
 -4.700000
 Writing output
-Total scoring time: 14.1107800006866
+Total scoring time: 34.9453091621399
 Running HHsearch
-Total HHsearch time: 0.131765127182007
+Total HHsearch time: 0.134778022766113
 Fetching HHsearch hits
-Total mapping time: 3.20677590370178
+Total mapping time: 3.93092799186707
 Constructing models
-Total monomer model time: 0.0314030647277832
+Total monomer model time: 0.022968053817749
 3FCS01B1-3FCS01A1
 -4.700000
 4CAK01B1-4CAK01A1
@@ -391,13 +391,13 @@ Total monomer model time: 0.0314030647277832
 5K5S01A1-5K5S01B1
 -4.700000
 Writing output
-Total scoring time: 2.69039297103882
+Total scoring time: 6.89312791824341
 Running HHsearch
-Total HHsearch time: 0.108371019363403
+Total HHsearch time: 0.128344058990479
 Fetching HHsearch hits
-Total mapping time: 3.24501419067383
+Total mapping time: 4.0114860534668
 Constructing models
-Total monomer model time: 0.0192008018493652
+Total monomer model time: 0.0225439071655273
 3K6S01B1-3K6S01A1
 -4.700000
 3FCS01B1-3FCS01A1
@@ -419,13 +419,13 @@ Total monomer model time: 0.0192008018493652
 3VDP01A1-3VDP01B1
 -4.700000
 Writing output
-Total scoring time: 2.07679796218872
+Total scoring time: 5.84342408180237
 Running HHsearch
-Total HHsearch time: 0.147968053817749
+Total HHsearch time: 0.127800941467285
 Fetching HHsearch hits
-Total mapping time: 3.27158188819885
+Total mapping time: 3.92066311836243
 Constructing models
-Total monomer model time: 0.0205800533294678
+Total monomer model time: 0.0228269100189209
 3FCS01B1-3FCS01A1
 -4.700000
 4CAK01B1-4CAK01A1
@@ -447,13 +447,13 @@ Total monomer model time: 0.0205800533294678
 5K5T03A1-5K5T03A3
 -4.700000
 Writing output
-Total scoring time: 3.10482692718506
+Total scoring time: 7.64490413665771
 Running HHsearch
-Total HHsearch time: 0.112328052520752
+Total HHsearch time: 0.145102024078369
 Fetching HHsearch hits
-Total mapping time: 3.2941460609436
+Total mapping time: 3.92569804191589
 Constructing models
-Total monomer model time: 0.0187699794769287
+Total monomer model time: 0.0222280025482178
 3FCS01B1-3FCS01A1
 -4.700000
 4CAK01B1-4CAK01A1
@@ -475,13 +475,13 @@ Total monomer model time: 0.0187699794769287
 4QIW01L1-4QIW01A1
 -4.700000
 Writing output
-Total scoring time: 2.68692493438721
+Total scoring time: 8.24692797660828
 Running HHsearch
-Total HHsearch time: 0.185394048690796
+Total HHsearch time: 0.151144027709961
 Fetching HHsearch hits
-Total mapping time: 3.28671407699585
+Total mapping time: 3.96257591247559
 Constructing models
-Total monomer model time: 0.0292718410491943
+Total monomer model time: 0.0258920192718506
 5GYY01B1-5GYY01A1
 -4.707740
 5GYY01A1-5GYY01B1
@@ -503,13 +503,13 @@ Total monomer model time: 0.0292718410491943
 5LMX01K1-5LMX01A1
 -4.720671
 Writing output
-Total scoring time: 5.79372000694275
+Total scoring time: 11.2055649757385
 Running HHsearch
-Total HHsearch time: 0.112814903259277
+Total HHsearch time: 0.182398080825806
 Fetching HHsearch hits
-Total mapping time: 3.26467204093933
+Total mapping time: 3.92791390419006
 Constructing models
-Total monomer model time: 0.0233900547027588
+Total monomer model time: 0.0295650959014893
 3V6401C1-3V6401A1
 -4.700000
 5OW301C1-5OW301C2
@@ -531,13 +531,13 @@ Total monomer model time: 0.0233900547027588
 6MX401B23-6MX401B1
 -4.696883
 Writing output
-Total scoring time: 2.19548892974854
+Total scoring time: 7.17252492904663
 Running HHsearch
-Total HHsearch time: 0.161515951156616
+Total HHsearch time: 0.131036996841431
 Fetching HHsearch hits
-Total mapping time: 3.23547005653381
+Total mapping time: 3.95305418968201
 Constructing models
-Total monomer model time: 0.0191090106964111
+Total monomer model time: 0.0233488082885742
 1Z1Y01B1-1Z1Y01A1
 -4.700000
 5UK501B1-5UK501A1
@@ -559,13 +559,13 @@ Total monomer model time: 0.0191090106964111
 4CUD01A1-4CUD01A2
 -4.700000
 Writing output
-Total scoring time: 0.906077146530151
+Total scoring time: 3.79996705055237
 Running HHsearch
-Total HHsearch time: 0.103065013885498
+Total HHsearch time: 0.121309995651245
 Fetching HHsearch hits
-Total mapping time: 3.19557094573975
+Total mapping time: 3.84929203987122
 Constructing models
-Total monomer model time: 0.0188181400299072
+Total monomer model time: 0.0216059684753418
 5FM901A2-5FM901A1
 -4.810674
 5FM901A1-5FM901A2
@@ -587,13 +587,13 @@ Total monomer model time: 0.0188181400299072
 4CUD01A2-4CUD01A1
 -4.700000
 Writing output
-Total scoring time: 0.840028047561646
+Total scoring time: 3.74578905105591
 Running HHsearch
-Total HHsearch time: 0.108767032623291
+Total HHsearch time: 0.117581129074097
 Fetching HHsearch hits
-Total mapping time: 3.23881196975708
+Total mapping time: 3.92742085456848
 Constructing models
-Total monomer model time: 0.0300559997558594
+Total monomer model time: 0.0235970020294189
 4G1E01B1-4G1E01A1
 -4.700000
 4CAK01B1-4CAK01A1
@@ -615,13 +615,13 @@ Total monomer model time: 0.0300559997558594
 3BP101A1-3BP101B1
 -4.700000
 Writing output
-Total scoring time: 2.17654418945312
+Total scoring time: 6.2213180065155
 Running HHsearch
-Total HHsearch time: 0.105319976806641
+Total HHsearch time: 0.124983072280884
 Fetching HHsearch hits
-Total mapping time: 3.23781085014343
+Total mapping time: 3.94491100311279
 Constructing models
-Total monomer model time: 0.0287430286407471
+Total monomer model time: 0.0224299430847168
 4CAK01B1-4CAK01A1
 -4.700000
 3FCS01B1-3FCS01A1
@@ -643,13 +643,13 @@ Total monomer model time: 0.0287430286407471
 3S2K01C1-3S2K01B1
 -4.700000
 Writing output
-Total scoring time: 2.18869996070862
+Total scoring time: 6.79573893547058
 Running HHsearch
-Total HHsearch time: 0.0999219417572021
+Total HHsearch time: 0.118268966674805
 Fetching HHsearch hits
-Total mapping time: 3.25057005882263
+Total mapping time: 4.01546001434326
 Constructing models
-Total monomer model time: 0.0223109722137451
+Total monomer model time: 0.0225708484649658
 3K6S01B1-3K6S01A1
 -4.700000
 4CAK01B1-4CAK01A1
@@ -671,13 +671,13 @@ Total monomer model time: 0.0223109722137451
 6J9F01D1-6J9F01C1
 -4.700000
 Writing output
-Total scoring time: 3.10382294654846
+Total scoring time: 8.81935906410217
 Running HHsearch
-Total HHsearch time: 0.107099056243896
+Total HHsearch time: 0.123867034912109
 Fetching HHsearch hits
-Total mapping time: 3.26214098930359
+Total mapping time: 3.9235098361969
 Constructing models
-Total monomer model time: 0.0204939842224121
+Total monomer model time: 0.0595121383666992
 4CAK01B1-4CAK01A1
 -4.700000
 3FCS01B1-3FCS01A1
@@ -699,13 +699,13 @@ Total monomer model time: 0.0204939842224121
 4WQS02N1-4WQS02M1
 -4.700000
 Writing output
-Total scoring time: 3.05069613456726
+Total scoring time: 9.10063600540161
 Running HHsearch
-Total HHsearch time: 0.135962963104248
+Total HHsearch time: 0.123737812042236
 Fetching HHsearch hits
-Total mapping time: 3.25768399238586
+Total mapping time: 3.93036508560181
 Constructing models
-Total monomer model time: 0.0191209316253662
+Total monomer model time: 0.022183895111084
 4CAK01B1-4CAK01A1
 -4.700000
 3FCS01B1-3FCS01A1
@@ -727,13 +727,13 @@ Total monomer model time: 0.0191209316253662
 6SB501B1-6SB501A1
 -4.700000
 Writing output
-Total scoring time: 2.52186298370361
+Total scoring time: 7.81960105895996
 Running HHsearch
-Total HHsearch time: 0.126704931259155
+Total HHsearch time: 0.143098115921021
 Fetching HHsearch hits
-Total mapping time: 3.28200387954712
+Total mapping time: 3.96105980873108
 Constructing models
-Total monomer model time: 0.0272409915924072
+Total monomer model time: 0.0247941017150879
 5GYY01A1-5GYY01B1
 -4.727773
 5GYY01B1-5GYY01A1
@@ -755,13 +755,13 @@ Total monomer model time: 0.0272409915924072
 1J6X01A1-1J6X01B1
 -4.509209
 Writing output
-Total scoring time: 5.33820414543152
+Total scoring time: 11.5978889465332
 Running HHsearch
-Total HHsearch time: 0.113560199737549
+Total HHsearch time: 0.136035919189453
 Fetching HHsearch hits
-Total mapping time: 3.25941896438599
+Total mapping time: 3.94973301887512
 Constructing models
-Total monomer model time: 0.0198080539703369
+Total monomer model time: 0.0240440368652344
 5X5901A1-5X5901B1
 -4.700000
 6NB301B1-6NB301A1
@@ -783,13 +783,13 @@ Total monomer model time: 0.0198080539703369
 2INY01A1-2INY01A2
 -4.700000
 Writing output
-Total scoring time: 8.08351898193359
+Total scoring time: 14.6905198097229
 Running HHsearch
-Total HHsearch time: 0.11143684387207
+Total HHsearch time: 0.206822872161865
 Fetching HHsearch hits
-Total mapping time: 3.3211190700531
+Total mapping time: 3.95068717002869
 Constructing models
-Total monomer model time: 0.0204660892486572
+Total monomer model time: 0.0230770111083984
 4G1E01A1-4G1E01B1
 -4.700000
 4CAK01A1-4CAK01B1
@@ -811,13 +811,13 @@ Total monomer model time: 0.0204660892486572
 6SCJ01A1-6SCJ01B1
 -4.700000
 Writing output
-Total scoring time: 13.507640838623
+Total scoring time: 23.5161960124969
 Running HHsearch
-Total HHsearch time: 0.109518051147461
+Total HHsearch time: 0.116961002349854
 Fetching HHsearch hits
-Total mapping time: 3.3634090423584
+Total mapping time: 4.03157901763916
 Constructing models
-Total monomer model time: 0.0207769870758057
+Total monomer model time: 0.0232260227203369
 4G1E01A1-4G1E01B1
 -4.700000
 4CAK01A1-4CAK01B1
@@ -839,13 +839,13 @@ Total monomer model time: 0.0207769870758057
 6MX401B1-6MX401B23
 -4.700000
 Writing output
-Total scoring time: 2.37113785743713
+Total scoring time: 7.30007100105286
 Running HHsearch
-Total HHsearch time: 0.0989770889282227
+Total HHsearch time: 0.116446018218994
 Fetching HHsearch hits
-Total mapping time: 3.10523986816406
+Total mapping time: 3.8425669670105
 Constructing models
-Total monomer model time: 0.0290169715881348
+Total monomer model time: 0.0473461151123047
 3J9C01A2-3J9C01A1
 -4.700000
 1TZN05M2-1TZN05F1
@@ -867,13 +867,13 @@ Total monomer model time: 0.0290169715881348
 6OKR01B1-6OKR01A1
 -4.700000
 Writing output
-Total scoring time: 1.43895506858826
+Total scoring time: 5.52830505371094
 Running HHsearch
-Total HHsearch time: 0.101030111312866
+Total HHsearch time: 0.119263172149658
 Fetching HHsearch hits
-Total mapping time: 3.18325781822205
+Total mapping time: 3.9413628578186
 Constructing models
-Total monomer model time: 0.0298361778259277
+Total monomer model time: 0.0228221416473389
 3J9C01A2-3J9C01A1
 -4.700000
 1TZN05M2-1TZN05F1
@@ -895,13 +895,13 @@ Total monomer model time: 0.0298361778259277
 6OKR01B1-6OKR01A1
 -4.700000
 Writing output
-Total scoring time: 1.43505597114563
+Total scoring time: 5.26718902587891
 Running HHsearch
-Total HHsearch time: 0.100247859954834
+Total HHsearch time: 0.118143081665039
 Fetching HHsearch hits
-Total mapping time: 3.27073311805725
+Total mapping time: 3.94363689422607
 Constructing models
-Total monomer model time: 0.0202639102935791
+Total monomer model time: 0.0230209827423096
 3J9C01A2-3J9C01A1
 -4.700000
 3J9C01A1-3J9C01A2
@@ -923,13 +923,13 @@ Total monomer model time: 0.0202639102935791
 6O2M01V1-6O2M01A1
 -4.700000
 Writing output
-Total scoring time: 1.85281205177307
+Total scoring time: 6.16367697715759
 Running HHsearch
-Total HHsearch time: 0.101278066635132
+Total HHsearch time: 0.118582963943481
 Fetching HHsearch hits
-Total mapping time: 3.29328393936157
+Total mapping time: 3.94421601295471
 Constructing models
-Total monomer model time: 0.0204000473022461
+Total monomer model time: 0.0235860347747803
 3J9C01A2-3J9C01A1
 -4.700000
 1TZN05M2-1TZN05F1
@@ -951,13 +951,13 @@ Total monomer model time: 0.0204000473022461
 6OKR01B1-6OKR01A1
 -4.700000
 Writing output
-Total scoring time: 1.46027207374573
+Total scoring time: 5.1686110496521
 Running HHsearch
-Total HHsearch time: 0.103917837142944
+Total HHsearch time: 0.123018980026245
 Fetching HHsearch hits
-Total mapping time: 3.21049499511719
+Total mapping time: 3.94761085510254
 Constructing models
-Total monomer model time: 0.025731086730957
+Total monomer model time: 0.0231611728668213
 3J9C01A2-3J9C01A1
 -4.700000
 3J9C01A1-3J9C01A2
@@ -979,13 +979,13 @@ Total monomer model time: 0.025731086730957
 6OKR01A1-6OKR01B1
 -4.700000
 Writing output
-Total scoring time: 1.39875602722168
+Total scoring time: 4.79111480712891
 Running HHsearch
-Total HHsearch time: 0.121365070343018
+Total HHsearch time: 0.135771989822388
 Fetching HHsearch hits
-Total mapping time: 3.21293902397156
+Total mapping time: 3.97512197494507
 Constructing models
-Total monomer model time: 0.0229220390319824
+Total monomer model time: 0.0253350734710693
 6RKW01B1-6RKW01D1
 -4.700000
 6RKW01D1-6RKW01B1
@@ -1007,13 +1007,13 @@ Total monomer model time: 0.0229220390319824
 6NZK01A1-6NZK01B1
 -4.700000
 Writing output
-Total scoring time: 6.34025597572327
+Total scoring time: 16.2932240962982
 Running HHsearch
-Total HHsearch time: 0.133913993835449
+Total HHsearch time: 0.136457920074463
 Fetching HHsearch hits
-Total mapping time: 3.21071195602417
+Total mapping time: 3.9241681098938
 Constructing models
-Total monomer model time: 0.0270540714263916
+Total monomer model time: 0.0232999324798584
 3V6401C1-3V6401A1
 -4.700000
 5B2C01A1-5B2C01B1
@@ -1035,13 +1035,13 @@ Total monomer model time: 0.0270540714263916
 3INB01B1-3INB01A1
 -4.712393
 Writing output
-Total scoring time: 2.8319878578186
+Total scoring time: 11.0640830993652
 Running HHsearch
-Total HHsearch time: 0.114669799804688
+Total HHsearch time: 0.130155086517334
 Fetching HHsearch hits
-Total mapping time: 3.22832107543945
+Total mapping time: 3.92224097251892
 Constructing models
-Total monomer model time: 0.027946949005127
+Total monomer model time: 0.0224809646606445
 3FCS01A1-3FCS01B1
 -4.700000
 3K6S01A1-3K6S01B1
@@ -1063,13 +1063,13 @@ Total monomer model time: 0.027946949005127
 5K5T01A2-5K5T01A1
 -4.700000
 Writing output
-Total scoring time: 2.57689309120178
+Total scoring time: 12.6412389278412
 Running HHsearch
-Total HHsearch time: 0.110438108444214
+Total HHsearch time: 0.121222019195557
 Fetching HHsearch hits
-Total mapping time: 3.24664998054504
+Total mapping time: 3.92521500587463
 Constructing models
-Total monomer model time: 0.0193018913269043
+Total monomer model time: 0.0222029685974121
 3FCS01A1-3FCS01B1
 -4.700000
 3K6S01A1-3K6S01B1
@@ -1091,13 +1091,13 @@ Total monomer model time: 0.0193018913269043
 3S2K01B1-3S2K01C1
 -4.700000
 Writing output
-Total scoring time: 2.21101093292236
+Total scoring time: 7.27350807189941
 Running HHsearch
-Total HHsearch time: 0.0989940166473389
+Total HHsearch time: 0.123185157775879
 Fetching HHsearch hits
-Total mapping time: 3.19986605644226
+Total mapping time: 4.0792248249054
 Constructing models
-Total monomer model time: 0.0285639762878418
+Total monomer model time: 0.023766040802002
 1TZN05M2-1TZN05F1
 -4.700000
 3J9C01A2-3J9C01A1
@@ -1119,13 +1119,13 @@ Total monomer model time: 0.0285639762878418
 6KLO01A1-6KLO01B1
 -4.700000
 Writing output
-Total scoring time: 1.43612790107727
+Total scoring time: 4.79579210281372
 Running HHsearch
-Total HHsearch time: 0.100395917892456
+Total HHsearch time: 0.122770071029663
 Fetching HHsearch hits
-Total mapping time: 3.11063408851624
+Total mapping time: 3.97054886817932
 Constructing models
-Total monomer model time: 0.0198550224304199
+Total monomer model time: 0.0234341621398926
 6OKR01B1-6OKR01A1
 -4.700000
 6OKR01A1-6OKR01B1
@@ -1147,13 +1147,13 @@ Total monomer model time: 0.0198550224304199
 1TZN05F1-1TZN05M2
 -4.700000
 Writing output
-Total scoring time: 1.47542905807495
+Total scoring time: 4.13385200500488
 Running HHsearch
-Total HHsearch time: 0.101620197296143
+Total HHsearch time: 0.120347023010254
 Fetching HHsearch hits
-Total mapping time: 3.40809178352356
+Total mapping time: 4.00148701667786
 Constructing models
-Total monomer model time: 0.0200870037078857
+Total monomer model time: 0.0235550403594971
 6OKR01B1-6OKR01A1
 -4.700000
 6OKR01A1-6OKR01B1
@@ -1175,13 +1175,13 @@ Total monomer model time: 0.0200870037078857
 1TZN05F1-1TZN05M2
 -4.700000
 Writing output
-Total scoring time: 1.41437721252441
+Total scoring time: 4.6999499797821
 Running HHsearch
-Total HHsearch time: 0.0989279747009277
+Total HHsearch time: 0.1246018409729
 Fetching HHsearch hits
-Total mapping time: 3.15895390510559
+Total mapping time: 4.02214407920837
 Constructing models
-Total monomer model time: 0.0316150188446045
+Total monomer model time: 0.0231101512908936
 6OKR01B1-6OKR01A1
 -4.700000
 6OKR01A1-6OKR01B1
@@ -1203,13 +1203,13 @@ Total monomer model time: 0.0316150188446045
 6O2M01A1-6O2M01V1
 -4.700000
 Writing output
-Total scoring time: 1.51327419281006
+Total scoring time: 4.38664293289185
 Running HHsearch
-Total HHsearch time: 0.102373123168945
+Total HHsearch time: 0.122052192687988
 Fetching HHsearch hits
-Total mapping time: 3.16762590408325
+Total mapping time: 4.04196500778198
 Constructing models
-Total monomer model time: 0.0198571681976318
+Total monomer model time: 0.0223429203033447
 1TZN01B1-1TZN01A1
 -4.700000
 6OKR01A1-6OKR01B1
@@ -1231,13 +1231,13 @@ Total monomer model time: 0.0198571681976318
 6O2M01A1-6O2M01V1
 -4.700000
 Writing output
-Total scoring time: 1.51865983009338
+Total scoring time: 4.76398205757141
 Running HHsearch
-Total HHsearch time: 0.116292953491211
+Total HHsearch time: 0.141697883605957
 Fetching HHsearch hits
-Total mapping time: 3.22116494178772
+Total mapping time: 4.05206203460693
 Constructing models
-Total monomer model time: 0.0322890281677246
+Total monomer model time: 0.0250179767608643
 5N5Y01Q1-5N5Y01A1
 -4.700000
 5N6101Q1-5N6101A1
@@ -1259,13 +1259,13 @@ Total monomer model time: 0.0322890281677246
 5LJ301M1-5LJ301A1
 -4.700000
 Writing output
-Total scoring time: 8.41201305389404
+Total scoring time: 15.624922990799
 Running HHsearch
-Total HHsearch time: 0.109522104263306
+Total HHsearch time: 0.135442018508911
 Fetching HHsearch hits
-Total mapping time: 3.25445699691772
+Total mapping time: 3.95028018951416
 Constructing models
-Total monomer model time: 0.0198209285736084
+Total monomer model time: 0.0244138240814209
 3IN902A1-3IN902A2
 -4.700000
 3IN902A2-3IN902A1
@@ -1287,13 +1287,13 @@ Total monomer model time: 0.0198209285736084
 3DL301F2-3DL301D1
 -4.700000
 Writing output
-Total scoring time: 5.12621903419495
+Total scoring time: 11.5362610816956
 Running HHsearch
-Total HHsearch time: 0.125159025192261
+Total HHsearch time: 0.128001928329468
 Fetching HHsearch hits
-Total mapping time: 3.25213694572449
+Total mapping time: 3.96229791641235
 Constructing models
-Total monomer model time: 0.0201890468597412
+Total monomer model time: 0.0227680206298828
 3K6S01A1-3K6S01B1
 -4.700000
 4CAK01A1-4CAK01B1
@@ -1315,13 +1315,13 @@ Total monomer model time: 0.0201890468597412
 3VE501A1-3VE501D1
 -4.700000
 Writing output
-Total scoring time: 1.88265299797058
+Total scoring time: 6.30068707466125
 Running HHsearch
-Total HHsearch time: 0.102328062057495
+Total HHsearch time: 0.117472171783447
 Fetching HHsearch hits
-Total mapping time: 3.27707886695862
+Total mapping time: 4.0351459980011
 Constructing models
-Total monomer model time: 0.0204160213470459
+Total monomer model time: 0.0222928524017334
 3K6S01A1-3K6S01B1
 -4.700000
 4CAK01A1-4CAK01B1
@@ -1343,13 +1343,13 @@ Total monomer model time: 0.0204160213470459
 3LU001C1-3LU001D1
 -4.700000
 Writing output
-Total scoring time: 4.49448394775391
+Total scoring time: 11.4012351036072
 Running HHsearch
-Total HHsearch time: 0.100709199905396
+Total HHsearch time: 0.121271848678589
 Fetching HHsearch hits
-Total mapping time: 3.25511288642883
+Total mapping time: 3.95481705665588
 Constructing models
-Total monomer model time: 0.0279428958892822
+Total monomer model time: 0.022913932800293
 3J9C01A2-3J9C01A1
 -4.700000
 3J9C01A1-3J9C01A2
@@ -1371,13 +1371,13 @@ Total monomer model time: 0.0279428958892822
 6O2M01A1-6O2M01B1
 -4.700000
 Writing output
-Total scoring time: 1.79060816764832
+Total scoring time: 6.23861193656921
 Running HHsearch
-Total HHsearch time: 0.100497961044312
+Total HHsearch time: 0.125022172927856
 Fetching HHsearch hits
-Total mapping time: 3.30641508102417
+Total mapping time: 3.93136382102966
 Constructing models
-Total monomer model time: 0.0211770534515381
+Total monomer model time: 0.02459716796875
 6O2N01A1-6O2N01E1
 -4.700000
 3J9C01A1-3J9C01A2
@@ -1399,13 +1399,13 @@ Total monomer model time: 0.0211770534515381
 6O2M01V1-6O2M01A1
 -4.700000
 Writing output
-Total scoring time: 1.69423079490662
+Total scoring time: 5.40166997909546
 Running HHsearch
-Total HHsearch time: 0.0979979038238525
+Total HHsearch time: 0.124790906906128
 Fetching HHsearch hits
-Total mapping time: 3.21225810050964
+Total mapping time: 3.82296299934387
 Constructing models
-Total monomer model time: 0.0207369327545166
+Total monomer model time: 0.0242490768432617
 3J9C01A2-3J9C01A1
 -4.700000
 3J9C01A1-3J9C01A2
@@ -1427,13 +1427,13 @@ Total monomer model time: 0.0207369327545166
 1TZN05F1-1TZN05M2
 -4.700000
 Writing output
-Total scoring time: 1.89689993858337
+Total scoring time: 5.94317603111267
 Running HHsearch
-Total HHsearch time: 0.109302043914795
+Total HHsearch time: 0.124165058135986
 Fetching HHsearch hits
-Total mapping time: 3.24132490158081
+Total mapping time: 3.92773079872131
 Constructing models
-Total monomer model time: 0.030217170715332
+Total monomer model time: 0.0241870880126953
 3J9C01A2-3J9C01A1
 -4.700000
 3J9C01A1-3J9C01A2
@@ -1455,13 +1455,13 @@ Total monomer model time: 0.030217170715332
 6O2N01A1-6O2N01E1
 -4.700000
 Writing output
-Total scoring time: 1.50309681892395
+Total scoring time: 4.71039009094238
 Running HHsearch
-Total HHsearch time: 0.105143070220947
+Total HHsearch time: 0.138949155807495
 Fetching HHsearch hits
-Total mapping time: 3.21997308731079
+Total mapping time: 3.94466805458069
 Constructing models
-Total monomer model time: 0.0208699703216553
+Total monomer model time: 0.0238687992095947
 3J9C01A2-3J9C01A1
 -4.700000
 3J9C01A1-3J9C01A2
@@ -1483,13 +1483,13 @@ Total monomer model time: 0.0208699703216553
 6O2M01B1-6O2M01A1
 -4.700000
 Writing output
-Total scoring time: 1.59489893913269
+Total scoring time: 6.24742603302002
 Running HHsearch
-Total HHsearch time: 0.122500896453857
+Total HHsearch time: 0.138839960098267
 Fetching HHsearch hits
-Total mapping time: 3.33643198013306
+Total mapping time: 4.04983401298523
 Constructing models
-Total monomer model time: 0.0216209888458252
+Total monomer model time: 0.0255520343780518
 6RKW01B1-6RKW01D1
 -4.700000
 6RKW01D1-6RKW01B1
@@ -1511,13 +1511,13 @@ Total monomer model time: 0.0216209888458252
 6FCX01B1-6FCX01A1
 -4.700000
 Writing output
-Total scoring time: 8.32752704620361
+Total scoring time: 15.6462390422821
 Running HHsearch
-Total HHsearch time: 0.114845037460327
+Total HHsearch time: 0.133356809616089
 Fetching HHsearch hits
-Total mapping time: 3.26416087150574
+Total mapping time: 3.95851898193359
 Constructing models
-Total monomer model time: 0.0199379920959473
+Total monomer model time: 0.0233471393585205
 6K3101B1-6K3101A1
 -4.700000
 6K3101A1-6K3101B1
@@ -1539,13 +1539,13 @@ Total monomer model time: 0.0199379920959473
 3OD902C1-3OD902C2
 -4.700000
 Writing output
-Total scoring time: 5.37154316902161
+Total scoring time: 11.5342509746552
 Running HHsearch
-Total HHsearch time: 0.106978178024292
+Total HHsearch time: 0.128631114959717
 Fetching HHsearch hits
-Total mapping time: 3.19187092781067
+Total mapping time: 4.02251696586609
 Constructing models
-Total monomer model time: 0.0284700393676758
+Total monomer model time: 0.0230860710144043
 4CAK01A1-4CAK01B1
 -4.700000
 3FCS01A1-3FCS01B1
@@ -1567,13 +1567,13 @@ Total monomer model time: 0.0284700393676758
 5K5T03A1-5K5T03A3
 -4.700000
 Writing output
-Total scoring time: 3.0196418762207
+Total scoring time: 7.5694739818573
 Running HHsearch
-Total HHsearch time: 0.0996060371398926
+Total HHsearch time: 0.118094921112061
 Fetching HHsearch hits
-Total mapping time: 3.20274996757507
+Total mapping time: 3.99175310134888
 Constructing models
-Total monomer model time: 0.0237720012664795
+Total monomer model time: 0.022831916809082
 3K6S01A1-3K6S01B1
 -4.700000
 3FCS01A1-3FCS01B1
@@ -1595,13 +1595,13 @@ Total monomer model time: 0.0237720012664795
 1G5G01B1-1G5G01A1
 -4.700000
 Writing output
-Total scoring time: 2.49849891662598
+Total scoring time: 5.43178200721741
 Running HHsearch
-Total HHsearch time: 0.0999751091003418
+Total HHsearch time: 0.123998165130615
 Fetching HHsearch hits
-Total mapping time: 3.18783092498779
+Total mapping time: 3.94910883903503
 Constructing models
-Total monomer model time: 0.02109694480896
+Total monomer model time: 0.0229701995849609
 1TZN01A1-1TZN01B1
 -4.700000
 3J9C01A2-3J9C01A1
@@ -1623,13 +1623,13 @@ Total monomer model time: 0.02109694480896
 6OKR01A1-6OKR01B1
 -4.700000
 Writing output
-Total scoring time: 1.46305203437805
+Total scoring time: 3.47947382926941
 Running HHsearch
-Total HHsearch time: 0.102718830108643
+Total HHsearch time: 0.120530843734741
 Fetching HHsearch hits
-Total mapping time: 3.17433714866638
+Total mapping time: 3.90260910987854
 Constructing models
-Total monomer model time: 0.0201060771942139
+Total monomer model time: 0.0222909450531006
 6O2N01E1-6O2N01A1
 -4.700000
 6KLO01B1-6KLO01A1
@@ -1651,13 +1651,13 @@ Total monomer model time: 0.0201060771942139
 1TZN01B1-1TZN01A1
 -4.700000
 Writing output
-Total scoring time: 1.50655293464661
+Total scoring time: 3.71736598014832
 Running HHsearch
-Total HHsearch time: 0.0991239547729492
+Total HHsearch time: 0.122727870941162
 Fetching HHsearch hits
-Total mapping time: 3.3086371421814
+Total mapping time: 3.91108202934265
 Constructing models
-Total monomer model time: 0.0288238525390625
+Total monomer model time: 0.023036003112793
 6O2N01E1-6O2N01A1
 -4.700000
 6KLO01B1-6KLO01A1
@@ -1679,13 +1679,13 @@ Total monomer model time: 0.0288238525390625
 1TZN01B1-1TZN01A1
 -4.700000
 Writing output
-Total scoring time: 1.53949809074402
+Total scoring time: 3.11414909362793
 Running HHsearch
-Total HHsearch time: 0.103411912918091
+Total HHsearch time: 0.118000030517578
 Fetching HHsearch hits
-Total mapping time: 3.12867712974548
+Total mapping time: 3.82923293113708
 Constructing models
-Total monomer model time: 0.0293319225311279
+Total monomer model time: 0.0225651264190674
 6O2N01E1-6O2N01A1
 -4.700000
 6KLO01B1-6KLO01A1
@@ -1707,13 +1707,13 @@ Total monomer model time: 0.0293319225311279
 1TZN01B1-1TZN01A1
 -4.700000
 Writing output
-Total scoring time: 1.40720295906067
+Total scoring time: 2.87506699562073
 Running HHsearch
-Total HHsearch time: 0.101822853088379
+Total HHsearch time: 0.121093988418579
 Fetching HHsearch hits
-Total mapping time: 3.19707608222961
+Total mapping time: 3.94613313674927
 Constructing models
-Total monomer model time: 0.0200510025024414
+Total monomer model time: 0.0224058628082275
 6O2N01E1-6O2N01A1
 -4.700000
 6KLO01B1-6KLO01A1
@@ -1735,13 +1735,13 @@ Total monomer model time: 0.0200510025024414
 1TZN01B1-1TZN01A1
 -4.700000
 Writing output
-Total scoring time: 1.48058390617371
+Total scoring time: 4.49921202659607
 Running HHsearch
-Total HHsearch time: 0.118932008743286
+Total HHsearch time: 0.137283086776733
 Fetching HHsearch hits
-Total mapping time: 3.24920082092285
+Total mapping time: 3.94139504432678
 Constructing models
-Total monomer model time: 0.0216710567474365
+Total monomer model time: 0.0249178409576416
 2V5I01A2-2V5I01A1
 -4.700000
 6K3101B1-6K3101A1
@@ -1763,13 +1763,13 @@ Total monomer model time: 0.0216710567474365
 1CLW02A2-1CLW02A1
 -4.700000
 Writing output
-Total scoring time: 8.28620195388794
+Total scoring time: 11.0398190021515
 Running HHsearch
-Total HHsearch time: 0.116775989532471
+Total HHsearch time: 0.136481046676636
 Fetching HHsearch hits
-Total mapping time: 3.29012513160706
+Total mapping time: 4.03745102882385
 Constructing models
-Total monomer model time: 0.0206480026245117
+Total monomer model time: 0.0232961177825928
 4JDM01A1-4JDM01B1
 -4.556351
 6NB301B1-6NB301A1
@@ -1791,13 +1791,13 @@ Total monomer model time: 0.0206480026245117
 3ZIW01B1-3ZIW01A1
 -4.700000
 Writing output
-Total scoring time: 4.52677583694458
+Total scoring time: 7.30836486816406
 Running HHsearch
-Total HHsearch time: 0.109141111373901
+Total HHsearch time: 0.136245965957642
 Fetching HHsearch hits
-Total mapping time: 3.28287982940674
+Total mapping time: 3.97513604164124
 Constructing models
-Total monomer model time: 0.0264241695404053
+Total monomer model time: 0.0228209495544434
 3K6S01A1-3K6S01B1
 -4.700000
 4CAK01A1-4CAK01B1
@@ -1819,13 +1819,13 @@ Total monomer model time: 0.0264241695404053
 4C2M01A1-4C2M01K1
 -4.700000
 Writing output
-Total scoring time: 2.69623589515686
+Total scoring time: 9.45454216003418
 Running HHsearch
-Total HHsearch time: 0.10292387008667
+Total HHsearch time: 0.121975898742676
 Fetching HHsearch hits
-Total mapping time: 3.29157590866089
+Total mapping time: 4.01871299743652
 Constructing models
-Total monomer model time: 0.0249471664428711
+Total monomer model time: 0.0222620964050293
 3K6S01A1-3K6S01B1
 -4.700000
 4CAK01A1-4CAK01B1
@@ -1847,13 +1847,13 @@ Total monomer model time: 0.0249471664428711
 1S4N01A1-1S4N01B1
 -4.700000
 Writing output
-Total scoring time: 2.4158730506897
+Total scoring time: 9.3950629234314
 Running HHsearch
-Total HHsearch time: 0.157610177993774
+Total HHsearch time: 0.123125076293945
 Fetching HHsearch hits
-Total mapping time: 3.20471596717834
+Total mapping time: 4.03252506256104
 Constructing models
-Total monomer model time: 0.0317778587341309
+Total monomer model time: 0.023162841796875
 3J9C01A2-3J9C01A1
 -4.700000
 3J9C01A1-3J9C01A2
@@ -1875,13 +1875,13 @@ Total monomer model time: 0.0317778587341309
 6OKR01B1-6OKR01A1
 -4.700000
 Writing output
-Total scoring time: 1.4946300983429
+Total scoring time: 5.6980140209198
 Running HHsearch
-Total HHsearch time: 0.106040954589844
+Total HHsearch time: 0.122386932373047
 Fetching HHsearch hits
-Total mapping time: 3.26577305793762
+Total mapping time: 3.99015593528748
 Constructing models
-Total monomer model time: 0.0206420421600342
+Total monomer model time: 0.0224509239196777
 6O2M01A1-6O2M01V1
 -4.700000
 6KLO01B1-6KLO01A1
@@ -1903,13 +1903,13 @@ Total monomer model time: 0.0206420421600342
 6KLO01A1-6KLO01B1
 -4.700000
 Writing output
-Total scoring time: 1.71294689178467
+Total scoring time: 3.57319211959839
 Running HHsearch
-Total HHsearch time: 0.100593090057373
+Total HHsearch time: 0.119996070861816
 Fetching HHsearch hits
-Total mapping time: 3.22433710098267
+Total mapping time: 3.97136998176575
 Constructing models
-Total monomer model time: 0.032310962677002
+Total monomer model time: 0.0227971076965332
 3J9C01A2-3J9C01A1
 -4.700000
 3J9C01A1-3J9C01A2
@@ -1931,13 +1931,13 @@ Total monomer model time: 0.032310962677002
 6O2M01B1-6O2M01A1
 -4.700000
 Writing output
-Total scoring time: 1.81047892570496
+Total scoring time: 3.91411089897156
 Running HHsearch
-Total HHsearch time: 0.112541913986206
+Total HHsearch time: 0.119162082672119
 Fetching HHsearch hits
-Total mapping time: 3.21048593521118
+Total mapping time: 3.97934889793396
 Constructing models
-Total monomer model time: 0.0224311351776123
+Total monomer model time: 0.022813081741333
 6KLO01A1-6KLO01B1
 -4.700000
 6KLO01B1-6KLO01A1
@@ -1959,13 +1959,13 @@ Total monomer model time: 0.0224311351776123
 1TZN05M2-1TZN05F1
 -4.700000
 Writing output
-Total scoring time: 1.82319188117981
+Total scoring time: 3.65918493270874
 Running HHsearch
-Total HHsearch time: 0.104603052139282
+Total HHsearch time: 0.125904083251953
 Fetching HHsearch hits
-Total mapping time: 3.12605500221252
+Total mapping time: 3.87822794914246
 Constructing models
-Total monomer model time: 0.0297601222991943
+Total monomer model time: 0.0226011276245117
 6KLO01A1-6KLO01B1
 -4.700000
 6O2N01E1-6O2N01A1
@@ -1987,13 +1987,13 @@ Total monomer model time: 0.0297601222991943
 6KLO01B1-6KLO01A1
 -4.700000
 Writing output
-Total scoring time: 1.59328079223633
+Total scoring time: 4.31224894523621
 Running HHsearch
-Total HHsearch time: 0.173165082931519
+Total HHsearch time: 0.139305830001831
 Fetching HHsearch hits
-Total mapping time: 3.21675896644592
+Total mapping time: 3.98367714881897
 Constructing models
-Total monomer model time: 0.0335590839385986
+Total monomer model time: 0.0245058536529541
 5N6101Q1-5N6101A1
 -4.700000
 5N5Y01Q1-5N5Y01A1
@@ -2015,13 +2015,13 @@ Total monomer model time: 0.0335590839385986
 5FJ801B1-5FJ801A1
 -4.700000
 Writing output
-Total scoring time: 5.88437080383301
+Total scoring time: 7.86417317390442
 Running HHsearch
-Total HHsearch time: 0.128022909164429
+Total HHsearch time: 0.153620958328247
 Fetching HHsearch hits
-Total mapping time: 3.18678116798401
+Total mapping time: 5.002121925354
 Constructing models
-Total monomer model time: 0.0317649841308594
+Total monomer model time: 0.0250630378723145
 4JQT01B1-4JQT01A1
 -4.700000
 4JQT01A1-4JQT01B1
@@ -2043,13 +2043,13 @@ Total monomer model time: 0.0317649841308594
 1YI701A1-1YI701C1
 -4.700000
 Writing output
-Total scoring time: 2.81314492225647
+Total scoring time: 5.38346195220947
 Running HHsearch
-Total HHsearch time: 0.121541023254395
+Total HHsearch time: 0.147457122802734
 Fetching HHsearch hits
-Total mapping time: 3.26731109619141
+Total mapping time: 4.02717185020447
 Constructing models
-Total monomer model time: 0.023000955581665
+Total monomer model time: 0.0251951217651367
 5GYY01B1-5GYY01A1
 -4.723180
 5GYY01A1-5GYY01B1
@@ -2071,13 +2071,13 @@ Total monomer model time: 0.023000955581665
 4QIW01A1-4QIW01L1
 -4.360109
 Writing output
-Total scoring time: 5.13711500167847
+Total scoring time: 9.61503386497498
 Running HHsearch
-Total HHsearch time: 0.117427110671997
+Total HHsearch time: 0.140079975128174
 Fetching HHsearch hits
-Total mapping time: 3.21345710754395
+Total mapping time: 3.95037698745728
 Constructing models
-Total monomer model time: 0.020272970199585
+Total monomer model time: 0.024029016494751
 5GYY01A1-5GYY01B1
 -4.700000
 5GYY01B1-5GYY01A1
@@ -2099,13 +2099,13 @@ Total monomer model time: 0.020272970199585
 1J6X01A1-1J6X01B1
 -4.073320
 Writing output
-Total scoring time: 5.18353390693665
+Total scoring time: 7.67747592926025
 Running HHsearch
-Total HHsearch time: 0.116208076477051
+Total HHsearch time: 0.137830018997192
 Fetching HHsearch hits
-Total mapping time: 3.32086992263794
+Total mapping time: 3.92729687690735
 Constructing models
-Total monomer model time: 0.0225119590759277
+Total monomer model time: 0.0254929065704346
 6RKW01B1-6RKW01D1
 -4.700000
 6RKW01D1-6RKW01B1
@@ -2127,13 +2127,13 @@ Total monomer model time: 0.0225119590759277
 1CLW02A1-1CLW02A2
 -4.700000
 Writing output
-Total scoring time: 4.02328991889954
+Total scoring time: 7.30201816558838
 Running HHsearch
-Total HHsearch time: 0.116979837417603
+Total HHsearch time: 0.207857847213745
 Fetching HHsearch hits
-Total mapping time: 3.21729016304016
+Total mapping time: 3.95136117935181
 Constructing models
-Total monomer model time: 0.0276298522949219
+Total monomer model time: 0.0251569747924805
 5N6101A1-5N6101Q1
 -4.700000
 5N5Y01A1-5N5Y01Q1
@@ -2155,13 +2155,13 @@ Total monomer model time: 0.0276298522949219
 5LJ301A1-5LJ301M1
 -4.700000
 Writing output
-Total scoring time: 9.88673400878906
+Total scoring time: 17.2491018772125
 Running HHsearch
-Total HHsearch time: 0.217833042144775
+Total HHsearch time: 0.210514068603516
 Fetching HHsearch hits
-Total mapping time: 3.52488112449646
+Total mapping time: 3.97558999061584
 Constructing models
-Total monomer model time: 0.0212328433990479
+Total monomer model time: 0.0249991416931152
 6RKW01D1-6RKW01B1
 -4.700000
 6RKW01B1-6RKW01D1
@@ -2183,13 +2183,13 @@ Total monomer model time: 0.0212328433990479
 5X4Z01A1-5X4Z01B1
 -4.700000
 Writing output
-Total scoring time: 8.5391571521759
+Total scoring time: 15.4284889698029
 Running HHsearch
-Total HHsearch time: 0.121196031570435
+Total HHsearch time: 0.138295888900757
 Fetching HHsearch hits
-Total mapping time: 3.28729891777039
+Total mapping time: 3.94833898544312
 Constructing models
-Total monomer model time: 0.0230119228363037
+Total monomer model time: 0.0245871543884277
 6K3101A1-6K3101B1
 -4.700000
 6K3101B1-6K3101A1
@@ -2211,13 +2211,13 @@ Total monomer model time: 0.0230119228363037
 1CLW02A2-1CLW02A1
 -4.700000
 Writing output
-Total scoring time: 8.60225296020508
+Total scoring time: 16.5774338245392
 Running HHsearch
-Total HHsearch time: 0.12592601776123
+Total HHsearch time: 0.141696929931641
 Fetching HHsearch hits
-Total mapping time: 3.26162505149841
+Total mapping time: 4.01760292053223
 Constructing models
-Total monomer model time: 0.0204958915710449
+Total monomer model time: 0.024893045425415
 5N6101A1-5N6101Q1
 -4.700000
 5N5Y01A1-5N5Y01Q1
@@ -2239,13 +2239,13 @@ Total monomer model time: 0.0204958915710449
 1JJU01A1-1JJU01C1
 -4.700000
 Writing output
-Total scoring time: 6.19507598876953
+Total scoring time: 11.7848029136658
 Running HHsearch
-Total HHsearch time: 0.134196043014526
+Total HHsearch time: 0.158931970596313
 Fetching HHsearch hits
-Total mapping time: 3.20771408081055
+Total mapping time: 3.83093500137329
 Constructing models
-Total monomer model time: 0.0259997844696045
+Total monomer model time: 0.0258798599243164
 4JQT01B1-4JQT01A1
 -4.700000
 4JQT01A1-4JQT01B1
@@ -2267,15 +2267,15 @@ Total monomer model time: 0.0259997844696045
 6MS201A1-6MS201A2
 -4.687124
 Writing output
-Total scoring time: 3.48965215682983
-Total program runtime: 608.269117832184
+Total scoring time: 8.4195990562439
+Total program runtime: 1020.22308516502
 SPRINGNEG
 Copying HHsearch
-Total HHsearch time: 0.124355792999268
+Total HHsearch time: 0.151135921478271
 Fetching HHsearch hits
-Total mapping time: 2.97398114204407
+Total mapping time: 3.58789205551147
 Constructing models
-Total monomer model time: 0.0268399715423584
+Total monomer model time: 0.0229189395904541
 3VKF01C1-3VKF01D1
 3VKF01D1-3VKF01C1
 4RA001A1-4RA001B1
@@ -2287,13 +2287,13 @@ Total monomer model time: 0.0268399715423584
 5D1Z01I1-5D1Z01J1
 6SB001N1-6SB001Y1
 Writing output
-Total scoring time: 4.45793700218201
+Total scoring time: 8.85322594642639
 Copying HHsearch
-Total HHsearch time: 0.14726996421814
+Total HHsearch time: 0.14668083190918
 Fetching HHsearch hits
-Total mapping time: 3.05471587181091
+Total mapping time: 3.57745504379272
 Constructing models
-Total monomer model time: 0.0204451084136963
+Total monomer model time: 0.0232961177825928
 1P0S01E1-1P0S01L1
 5U0S01N1-5U0S01kl1
 5U0P01N1-5U0P01V1
@@ -2305,13 +2305,13 @@ Total monomer model time: 0.0204451084136963
 6Q6G01A1-6Q6G01I1
 5OOL01P1-5OOL01Y1
 Writing output
-Total scoring time: 3.95221710205078
+Total scoring time: 8.06979894638062
 Copying HHsearch
-Total HHsearch time: 0.120254039764404
+Total HHsearch time: 0.202292919158936
 Fetching HHsearch hits
-Total mapping time: 3.04609894752502
+Total mapping time: 3.59946417808533
 Constructing models
-Total monomer model time: 0.020287036895752
+Total monomer model time: 0.0223560333251953
 4WJG01D1-4WJG01C1
 1P0S01E1-1P0S01L1
 6H0401E1-6H0401L1
@@ -2323,13 +2323,13 @@ Total monomer model time: 0.020287036895752
 1MJG01N1-1MJG01M1
 2WIN01B1-2WIN01H1
 Writing output
-Total scoring time: 3.90634608268738
+Total scoring time: 9.45120882987976
 Copying HHsearch
-Total HHsearch time: 0.117751836776733
+Total HHsearch time: 0.13713812828064
 Fetching HHsearch hits
-Total mapping time: 3.04110312461853
+Total mapping time: 3.59592485427856
 Constructing models
-Total monomer model time: 0.0205309391021729
+Total monomer model time: 0.0249660015106201
 6Q4501H1-6Q4501D1
 5IK201H1-5IK201D1
 5A2Q01Y1-5A2Q01G1
@@ -2341,13 +2341,13 @@ Total monomer model time: 0.0205309391021729
 5FL701H1-5FL701D1
 1FI801E1-1FI801C1
 Writing output
-Total scoring time: 2.08241701126099
+Total scoring time: 5.43752717971802
 Copying HHsearch
-Total HHsearch time: 0.117923021316528
+Total HHsearch time: 0.133127212524414
 Fetching HHsearch hits
-Total mapping time: 3.06275916099548
+Total mapping time: 3.59642291069031
 Constructing models
-Total monomer model time: 0.0204179286956787
+Total monomer model time: 0.0228440761566162
 4UER01P1-4UER01Q1
 4UER01P1-4UER01Z1
 4KZX01Y1-4KZX01V1
@@ -2359,13 +2359,13 @@ Total monomer model time: 0.0204179286956787
 6AZ101Z1-6AZ101Y1
 5VOB01A1-5VOB01E1
 Writing output
-Total scoring time: 1.25159406661987
+Total scoring time: 3.6101188659668
 Copying HHsearch
-Total HHsearch time: 0.118834972381592
+Total HHsearch time: 0.131900072097778
 Fetching HHsearch hits
-Total mapping time: 3.0479941368103
+Total mapping time: 3.59185385704041
 Constructing models
-Total monomer model time: 0.0209980010986328
+Total monomer model time: 0.0232081413269043
 4UER01P1-4UER01Z1
 4KZX01Y1-4KZX01V1
 4UER01P1-4UER01O1
@@ -2377,13 +2377,13 @@ Total monomer model time: 0.0209980010986328
 5XXU01Y1-5XXU01N1
 5XYI01Y1-5XYI01V1
 Writing output
-Total scoring time: 0.844183921813965
+Total scoring time: 3.57283782958984
 Copying HHsearch
-Total HHsearch time: 0.1161949634552
+Total HHsearch time: 0.136564970016479
 Fetching HHsearch hits
-Total mapping time: 3.06098484992981
+Total mapping time: 3.58385610580444
 Constructing models
-Total monomer model time: 0.0206091403961182
+Total monomer model time: 0.023594856262207
 5TZS01F1-5TZS01D1
 4UER01P1-4UER0151
 4UER01P1-4UER01Q1
@@ -2395,13 +2395,13 @@ Total monomer model time: 0.0206091403961182
 5XXU01Y1-5XXU01L1
 1MJG01M1-1MJG01N1
 Writing output
-Total scoring time: 1.47469592094421
+Total scoring time: 4.53882312774658
 Copying HHsearch
-Total HHsearch time: 0.120796203613281
+Total HHsearch time: 0.136579036712646
 Fetching HHsearch hits
-Total mapping time: 3.04582095146179
+Total mapping time: 3.67447805404663
 Constructing models
-Total monomer model time: 0.0203700065612793
+Total monomer model time: 0.0231890678405762
 6TMF01X1-6TMF01P1
 5XYI01Y1-5XYI01S1
 6TMF01X1-6TMF01dl1
@@ -2413,13 +2413,13 @@ Total monomer model time: 0.0203700065612793
 5XYI01Y1-5XYI01L1
 5TZS01F1-5TZS01D1
 Writing output
-Total scoring time: 0.92195200920105
+Total scoring time: 3.94046998023987
 Copying HHsearch
-Total HHsearch time: 0.13747501373291
+Total HHsearch time: 0.155184984207153
 Fetching HHsearch hits
-Total mapping time: 2.95593595504761
+Total mapping time: 3.60317397117615
 Constructing models
-Total monomer model time: 0.0312070846557617
+Total monomer model time: 0.0246760845184326
 4KZX01Y1-4KZX01O1
 5LK501D1-5LK501A1
 5LK501A1-5LK501D1
@@ -2431,13 +2431,13 @@ Total monomer model time: 0.0312070846557617
 4CR201O1-4CR201V1
 4UER01P1-4UER0121
 Writing output
-Total scoring time: 3.82179808616638
+Total scoring time: 8.5420560836792
 Copying HHsearch
-Total HHsearch time: 0.119603157043457
+Total HHsearch time: 0.143404006958008
 Fetching HHsearch hits
-Total mapping time: 3.01434588432312
+Total mapping time: 3.61853790283203
 Constructing models
-Total monomer model time: 0.0223150253295898
+Total monomer model time: 0.0224721431732178
 1P0S01L1-1P0S01E1
 5U0S01kl1-5U0S01N1
 5U0P01V1-5U0P01N1
@@ -2449,13 +2449,13 @@ Total monomer model time: 0.0223150253295898
 6Q6G01I1-6Q6G01A1
 5OOL01Y1-5OOL01P1
 Writing output
-Total scoring time: 3.7339551448822
+Total scoring time: 11.2700438499451
 Copying HHsearch
-Total HHsearch time: 0.115937948226929
+Total HHsearch time: 0.138445138931274
 Fetching HHsearch hits
-Total mapping time: 2.98752593994141
+Total mapping time: 3.60484790802002
 Constructing models
-Total monomer model time: 0.018930196762085
+Total monomer model time: 0.0215270519256592
 3LTF01B1-3LTF01D1
 3LTF01D1-3LTF01B1
 1MOX01C1-1MOX01D1
@@ -2467,13 +2467,13 @@ Total monomer model time: 0.018930196762085
 6H0401D1-6H0401L1
 6H0401L1-6H0401D1
 Writing output
-Total scoring time: 1.15556883811951
+Total scoring time: 6.19870805740356
 Copying HHsearch
-Total HHsearch time: 0.10720682144165
+Total HHsearch time: 0.128094911575317
 Fetching HHsearch hits
-Total mapping time: 3.00172996520996
+Total mapping time: 3.63371801376343
 Constructing models
-Total monomer model time: 0.0210452079772949
+Total monomer model time: 0.023151159286499
 3LTF01D1-3LTF01B1
 3LTF01B1-3LTF01D1
 1MOX01C1-1MOX01D1
@@ -2485,13 +2485,13 @@ Total monomer model time: 0.0210452079772949
 3S2K01B1-3S2K01A1
 6H0401D1-6H0401L1
 Writing output
-Total scoring time: 1.13224983215332
+Total scoring time: 4.17557501792908
 Copying HHsearch
-Total HHsearch time: 0.107613086700439
+Total HHsearch time: 0.126053810119629
 Fetching HHsearch hits
-Total mapping time: 2.99701595306396
+Total mapping time: 3.63460803031921
 Constructing models
-Total monomer model time: 0.0298411846160889
+Total monomer model time: 0.0225789546966553
 4V1O01W1-4V1O01A1
 6ULG01L1-6ULG01D1
 4CR201N1-4CR20171
@@ -2503,13 +2503,13 @@ Total monomer model time: 0.0298411846160889
 4TMA01B1-4TMA01D1
 4V1O01Z1-4V1O01A1
 Writing output
-Total scoring time: 2.23562288284302
+Total scoring time: 5.9351441860199
 Copying HHsearch
-Total HHsearch time: 0.110856771469116
+Total HHsearch time: 0.127567052841187
 Fetching HHsearch hits
-Total mapping time: 2.9705491065979
+Total mapping time: 3.63064002990723
 Constructing models
-Total monomer model time: 0.0192890167236328
+Total monomer model time: 0.0228009223937988
 3V6401C1-3V6401D1
 3V6401D1-3V6401C1
 3S2K01A1-3S2K01B1
@@ -2521,13 +2521,13 @@ Total monomer model time: 0.0192890167236328
 5SVA01P1-5SVA01B1
 5SVA01P1-5SVA01A1
 Writing output
-Total scoring time: 2.49941897392273
+Total scoring time: 5.9564950466156
 Copying HHsearch
-Total HHsearch time: 0.109241962432861
+Total HHsearch time: 0.126152038574219
 Fetching HHsearch hits
-Total mapping time: 3.01048016548157
+Total mapping time: 3.65655994415283
 Constructing models
-Total monomer model time: 0.0240709781646729
+Total monomer model time: 0.0225479602813721
 6NZD01H1-6NZD01B1
 6NZD01H1-6NZD01E1
 4V1O01W1-4V1O01B1
@@ -2539,13 +2539,13 @@ Total monomer model time: 0.0240709781646729
 6GML01V1-6GML01B1
 6ULG01L1-6ULG01A1
 Writing output
-Total scoring time: 1.63251399993896
+Total scoring time: 5.71197605133057
 Copying HHsearch
-Total HHsearch time: 0.106789827346802
+Total HHsearch time: 0.126535892486572
 Fetching HHsearch hits
-Total mapping time: 2.97644901275635
+Total mapping time: 3.63283705711365
 Constructing models
-Total monomer model time: 0.019334077835083
+Total monomer model time: 0.0241401195526123
 6O9L01K1-6O9L0161
 6EU001K1-6EU001P1
 6GML01V1-6GML01A1
@@ -2557,13 +2557,13 @@ Total monomer model time: 0.019334077835083
 3H0G01K1-3H0G01I1
 6O9L01K1-6O9L01I1
 Writing output
-Total scoring time: 1.12939810752869
+Total scoring time: 3.96395492553711
 Copying HHsearch
-Total HHsearch time: 0.108675003051758
+Total HHsearch time: 0.183990955352783
 Fetching HHsearch hits
-Total mapping time: 3.01687693595886
+Total mapping time: 3.63369989395142
 Constructing models
-Total monomer model time: 0.0266740322113037
+Total monomer model time: 0.0222461223602295
 4V1O01W1-4V1O01A1
 6RD50191-6RD50182
 2CSE01A1-2CSE01V1
@@ -2575,13 +2575,13 @@ Total monomer model time: 0.0266740322113037
 6H0401B1-6H0401E1
 6GML01V1-6GML01Y1
 Writing output
-Total scoring time: 2.07109189033508
+Total scoring time: 5.60359501838684
 Copying HHsearch
-Total HHsearch time: 0.141693115234375
+Total HHsearch time: 0.145512104034424
 Fetching HHsearch hits
-Total mapping time: 2.97193908691406
+Total mapping time: 3.63662886619568
 Constructing models
-Total monomer model time: 0.0208189487457275
+Total monomer model time: 0.0241999626159668
 4V1O01W1-4V1O01A1
 1P0S01L1-1P0S01E1
 3JB901A1-3JB901J1
@@ -2593,13 +2593,13 @@ Total monomer model time: 0.0208189487457275
 6N7R01I1-6N7R01P1
 6N7R01I1-6N7R01N1
 Writing output
-Total scoring time: 6.80122900009155
+Total scoring time: 12.1085391044617
 Copying HHsearch
-Total HHsearch time: 0.113083124160767
+Total HHsearch time: 0.150973081588745
 Fetching HHsearch hits
-Total mapping time: 2.92526388168335
+Total mapping time: 3.58065891265869
 Constructing models
-Total monomer model time: 0.0254719257354736
+Total monomer model time: 0.0233631134033203
 4WJG01C1-4WJG01D1
 1P0S01L1-1P0S01E1
 6H0401C1-6H0401E1
@@ -2611,13 +2611,13 @@ Total monomer model time: 0.0254719257354736
 1MJG01N1-1MJG01M1
 6ID101R1-6ID101Q1
 Writing output
-Total scoring time: 4.25537514686584
+Total scoring time: 8.66952896118164
 Copying HHsearch
-Total HHsearch time: 0.104780912399292
+Total HHsearch time: 0.125852823257446
 Fetching HHsearch hits
-Total mapping time: 2.9032039642334
+Total mapping time: 3.55566120147705
 Constructing models
-Total monomer model time: 0.0305840969085693
+Total monomer model time: 0.021514892578125
 3LTF01D1-3LTF01B1
 3LTF01B1-3LTF01D1
 1MOX01D1-1MOX01C1
@@ -2629,13 +2629,13 @@ Total monomer model time: 0.0305840969085693
 3V6401D1-3V6401C1
 6H0401C1-6H0401L1
 Writing output
-Total scoring time: 1.09986996650696
+Total scoring time: 3.67851209640503
 Copying HHsearch
-Total HHsearch time: 0.098308801651001
+Total HHsearch time: 0.119057893753052
 Fetching HHsearch hits
-Total mapping time: 2.92448306083679
+Total mapping time: 3.61585402488708
 Constructing models
-Total monomer model time: 0.0183701515197754
+Total monomer model time: 0.0213539600372314
 3LTF01B1-3LTF01D1
 3LTF01D1-3LTF01B1
 1MOX01D1-1MOX01C1
@@ -2647,13 +2647,13 @@ Total monomer model time: 0.0183701515197754
 3V6401C1-3V6401D1
 3V6401D1-3V6401C1
 Writing output
-Total scoring time: 0.924447774887085
+Total scoring time: 3.53778910636902
 Copying HHsearch
-Total HHsearch time: 0.105017185211182
+Total HHsearch time: 0.121989965438843
 Fetching HHsearch hits
-Total mapping time: 2.9115948677063
+Total mapping time: 3.57102203369141
 Constructing models
-Total monomer model time: 0.0276241302490234
+Total monomer model time: 0.0224030017852783
 5VU201B1-5VU201Q1
 6ILJ01E1-6ILJ01D1
 1MJG01N1-1MJG01M1
@@ -2665,13 +2665,13 @@ Total monomer model time: 0.0276241302490234
 6AH001J1-6AH00161
 6G9001U1-6G9001S1
 Writing output
-Total scoring time: 1.07965302467346
+Total scoring time: 3.79742312431335
 Copying HHsearch
-Total HHsearch time: 0.108488082885742
+Total HHsearch time: 0.120728015899658
 Fetching HHsearch hits
-Total mapping time: 3.05923390388489
+Total mapping time: 3.55461192131042
 Constructing models
-Total monomer model time: 0.0204341411590576
+Total monomer model time: 0.0224850177764893
 3V6401C1-3V6401D1
 3V6401D1-3V6401C1
 3S2K01A1-3S2K01B1
@@ -2683,13 +2683,13 @@ Total monomer model time: 0.0204341411590576
 3V4P01L1-3V4P01A1
 3UAJ01L1-3UAJ01B1
 Writing output
-Total scoring time: 1.51989793777466
+Total scoring time: 4.66515707969666
 Copying HHsearch
-Total HHsearch time: 0.101909875869751
+Total HHsearch time: 0.117914915084839
 Fetching HHsearch hits
-Total mapping time: 2.95122814178467
+Total mapping time: 3.55404210090637
 Constructing models
-Total monomer model time: 0.0295610427856445
+Total monomer model time: 0.0220339298248291
 6O9L01Q1-6O9L01B1
 5ZWO01W1-5ZWO01ul1
 6FF40171-6FF401Y1
@@ -2701,13 +2701,13 @@ Total monomer model time: 0.0295610427856445
 1MJG01N1-1MJG01M1
 1MJG01M1-1MJG01N1
 Writing output
-Total scoring time: 1.45250582695007
+Total scoring time: 4.3503839969635
 Copying HHsearch
-Total HHsearch time: 0.0997829437255859
+Total HHsearch time: 0.317456960678101
 Fetching HHsearch hits
-Total mapping time: 2.92986083030701
+Total mapping time: 3.55835890769958
 Constructing models
-Total monomer model time: 0.031015157699585
+Total monomer model time: 0.0229411125183105
 5ZWO01W1-5ZWO0151
 6O9L01Q1-6O9L01I1
 5ZWO01J1-5ZWO0151
@@ -2719,13 +2719,13 @@ Total monomer model time: 0.031015157699585
 3UAJ01L1-3UAJ01B1
 6G9001U1-6G9001S1
 Writing output
-Total scoring time: 1.28048706054688
+Total scoring time: 4.86397695541382
 Copying HHsearch
-Total HHsearch time: 0.103214979171753
+Total HHsearch time: 0.124364852905273
 Fetching HHsearch hits
-Total mapping time: 2.95135593414307
+Total mapping time: 3.55479001998901
 Constructing models
-Total monomer model time: 0.0261321067810059
+Total monomer model time: 0.0236790180206299
 6RD50191-6RD50182
 5ZWO01W1-5ZWO0151
 6O9L01Q1-6O9L01B1
@@ -2737,13 +2737,13 @@ Total monomer model time: 0.0261321067810059
 3UAJ01L1-3UAJ01B1
 3V4P01L1-3V4P01A1
 Writing output
-Total scoring time: 0.985013961791992
+Total scoring time: 3.99580597877502
 Copying HHsearch
-Total HHsearch time: 0.113929033279419
+Total HHsearch time: 0.138818979263306
 Fetching HHsearch hits
-Total mapping time: 2.92355799674988
+Total mapping time: 3.57220602035522
 Constructing models
-Total monomer model time: 0.0212490558624268
+Total monomer model time: 0.0237059593200684
 5ZWO01W1-5ZWO01Q1
 5ZWO01vl1-5ZWO01A1
 5ZWO01W1-5ZWO01R1
@@ -2755,13 +2755,13 @@ Total monomer model time: 0.0212490558624268
 5ZWO01W1-5ZWO01N1
 5ZWO01W1-5ZWO01P1
 Writing output
-Total scoring time: 3.78999185562134
+Total scoring time: 6.8650119304657
 Copying HHsearch
-Total HHsearch time: 0.11065411567688
+Total HHsearch time: 0.134788990020752
 Fetching HHsearch hits
-Total mapping time: 2.95900988578796
+Total mapping time: 3.60161995887756
 Constructing models
-Total monomer model time: 0.0292630195617676
+Total monomer model time: 0.0228240489959717
 5A2Q01G1-5A2Q01Y1
 6Q4501D1-6Q4501H1
 5IK201D1-5IK201H1
@@ -2773,13 +2773,13 @@ Total monomer model time: 0.0292630195617676
 5VU201Q1-5VU201B1
 6H0401A1-6H0401E1
 Writing output
-Total scoring time: 2.18932509422302
+Total scoring time: 5.36797690391541
 Copying HHsearch
-Total HHsearch time: 0.11382794380188
+Total HHsearch time: 0.126188993453979
 Fetching HHsearch hits
-Total mapping time: 2.93441700935364
+Total mapping time: 3.60580801963806
 Constructing models
-Total monomer model time: 0.0305709838867188
+Total monomer model time: 0.0237081050872803
 4V1O01A1-4V1O01W1
 2CSE01V1-2CSE01A1
 6CGV01N1-6CGV01P1
@@ -2791,13 +2791,13 @@ Total monomer model time: 0.0305709838867188
 1JDB01F1-1JDB01C1
 1JDB01C1-1JDB01F1
 Writing output
-Total scoring time: 1.94589018821716
+Total scoring time: 6.25790309906006
 Copying HHsearch
-Total HHsearch time: 0.0980789661407471
+Total HHsearch time: 0.117727041244507
 Fetching HHsearch hits
-Total mapping time: 2.96590900421143
+Total mapping time: 3.62153697013855
 Constructing models
-Total monomer model time: 0.0244920253753662
+Total monomer model time: 0.0216999053955078
 5VU201Q1-5VU201B1
 6ILJ01D1-6ILJ01E1
 3BSZ01A1-3BSZ01L1
@@ -2809,13 +2809,13 @@ Total monomer model time: 0.0244920253753662
 5ZWO0151-5ZWO01W1
 6G9001S1-6G9001U1
 Writing output
-Total scoring time: 1.12383103370667
+Total scoring time: 4.11789512634277
 Copying HHsearch
-Total HHsearch time: 0.0982401371002197
+Total HHsearch time: 0.118989944458008
 Fetching HHsearch hits
-Total mapping time: 2.95840287208557
+Total mapping time: 3.60700702667236
 Constructing models
-Total monomer model time: 0.0213131904602051
+Total monomer model time: 0.0232689380645752
 5NZV01C1-5NZV01J1
 3MKQ01C1-3MKQ01A1
 5NZV01J1-5NZV01C1
@@ -2827,13 +2827,13 @@ Total monomer model time: 0.0213131904602051
 6RKU01D1-6RKU01B1
 6RKU01B1-6RKU01D1
 Writing output
-Total scoring time: 1.95292782783508
+Total scoring time: 4.65360593795776
 Copying HHsearch
-Total HHsearch time: 0.0987060070037842
+Total HHsearch time: 0.120176076889038
 Fetching HHsearch hits
-Total mapping time: 3.05472183227539
+Total mapping time: 3.60021591186523
 Constructing models
-Total monomer model time: 0.0227351188659668
+Total monomer model time: 0.0235171318054199
 5FFO01A1-5FFO01E1
 6EM501Z1-6EM50131
 5FFO01E1-5FFO01A1
@@ -2845,13 +2845,13 @@ Total monomer model time: 0.0227351188659668
 4TMA01B1-4TMA01D1
 6RKU01D1-6RKU01B1
 Writing output
-Total scoring time: 0.942183971405029
+Total scoring time: 3.81545996665955
 Copying HHsearch
-Total HHsearch time: 0.107045888900757
+Total HHsearch time: 0.117493152618408
 Fetching HHsearch hits
-Total mapping time: 3.10822415351868
+Total mapping time: 3.66815090179443
 Constructing models
-Total monomer model time: 0.0289537906646729
+Total monomer model time: 0.0764751434326172
 5FFO01A1-5FFO01E1
 5FFO01E1-5FFO01A1
 4TMA01D1-4TMA01B1
@@ -2863,13 +2863,13 @@ Total monomer model time: 0.0289537906646729
 4Z2D01D1-4Z2D01C1
 6FQS01B1-6FQS01D1
 Writing output
-Total scoring time: 1.04133009910583
+Total scoring time: 6.41138291358948
 Copying HHsearch
-Total HHsearch time: 0.0977029800415039
+Total HHsearch time: 0.193805932998657
 Fetching HHsearch hits
-Total mapping time: 2.93421292304993
+Total mapping time: 6.46775794029236
 Constructing models
-Total monomer model time: 0.0274419784545898
+Total monomer model time: 0.0269229412078857
 5FFO01A1-5FFO01E1
 5FFO01E1-5FFO01A1
 4Z2D01D1-4Z2D01C1
@@ -2881,13 +2881,13 @@ Total monomer model time: 0.0274419784545898
 5MDX01A1-5MDX01ol1
 4IFD01J1-4IFD01K1
 Writing output
-Total scoring time: 1.06071615219116
+Total scoring time: 3.38560819625854
 Copying HHsearch
-Total HHsearch time: 0.145784854888916
+Total HHsearch time: 0.215219974517822
 Fetching HHsearch hits
-Total mapping time: 2.96384811401367
+Total mapping time: 4.92192506790161
 Constructing models
-Total monomer model time: 0.03000807762146
+Total monomer model time: 0.0345230102539062
 5FFO01E1-5FFO01A1
 5FFO01A1-5FFO01E1
 6EM501Z1-6EM50131
@@ -2899,13 +2899,13 @@ Total monomer model time: 0.03000807762146
 5MDX01A1-5MDX01ol1
 5LNK01Z1-5LNK0191
 Writing output
-Total scoring time: 0.942503929138184
+Total scoring time: 2.12977290153503
 Copying HHsearch
-Total HHsearch time: 0.115427017211914
+Total HHsearch time: 0.166992902755737
 Fetching HHsearch hits
-Total mapping time: 2.98944115638733
+Total mapping time: 5.24041819572449
 Constructing models
-Total monomer model time: 0.0214748382568359
+Total monomer model time: 0.0467679500579834
 6RKU01B1-6RKU01D1
 6RKU01D1-6RKU01B1
 4TMA01D1-4TMA01B1
@@ -2917,13 +2917,13 @@ Total monomer model time: 0.0214748382568359
 5XNL01B1-5XNL01I1
 6RQL01A1-6RQL01S1
 Writing output
-Total scoring time: 2.0793559551239
+Total scoring time: 4.09893584251404
 Copying HHsearch
-Total HHsearch time: 0.116495847702026
+Total HHsearch time: 0.257307052612305
 Fetching HHsearch hits
-Total mapping time: 2.9600031375885
+Total mapping time: 5.84469103813171
 Constructing models
-Total monomer model time: 0.0318038463592529
+Total monomer model time: 0.0396828651428223
 4UER01Q1-4UER01P1
 4UER01Z1-4UER01P1
 4KZX01V1-4KZX01Y1
@@ -2935,13 +2935,13 @@ Total monomer model time: 0.0318038463592529
 5VOB01E1-5VOB01A1
 6AZ101Y1-6AZ101Z1
 Writing output
-Total scoring time: 1.13160419464111
+Total scoring time: 3.3587760925293
 Copying HHsearch
-Total HHsearch time: 0.106460094451904
+Total HHsearch time: 0.243973970413208
 Fetching HHsearch hits
-Total mapping time: 2.99008584022522
+Total mapping time: 5.953458070755
 Constructing models
-Total monomer model time: 0.0291080474853516
+Total monomer model time: 0.0452249050140381
 3V6401D1-3V6401C1
 3V6401C1-3V6401D1
 3S2K01B1-3S2K01A1
@@ -2953,13 +2953,13 @@ Total monomer model time: 0.0291080474853516
 6GML01A1-6GML01V1
 5SVA01A1-5SVA01P1
 Writing output
-Total scoring time: 2.4092710018158
+Total scoring time: 6.07958197593689
 Copying HHsearch
-Total HHsearch time: 0.100528001785278
+Total HHsearch time: 0.208830118179321
 Fetching HHsearch hits
-Total mapping time: 2.98129487037659
+Total mapping time: 5.67976593971252
 Constructing models
-Total monomer model time: 0.0263819694519043
+Total monomer model time: 0.0226399898529053
 3V6401D1-3V6401C1
 3V6401C1-3V6401D1
 3S2K01B1-3S2K01A1
@@ -2971,13 +2971,13 @@ Total monomer model time: 0.0263819694519043
 3J8D01A1-3J8D01G1
 3UAJ01B1-3UAJ01L1
 Writing output
-Total scoring time: 1.47696399688721
+Total scoring time: 2.09752202033997
 Copying HHsearch
-Total HHsearch time: 0.104312181472778
+Total HHsearch time: 0.144660949707031
 Fetching HHsearch hits
-Total mapping time: 3.06962084770203
+Total mapping time: 3.65355205535889
 Constructing models
-Total monomer model time: 0.0205960273742676
+Total monomer model time: 0.0230579376220703
 5FFO01E1-5FFO01A1
 6EM50131-6EM501Z1
 5FFO01A1-5FFO01E1
@@ -2989,13 +2989,13 @@ Total monomer model time: 0.0205960273742676
 4Z2D01C1-4Z2D01D1
 4TMA01D1-4TMA01B1
 Writing output
-Total scoring time: 1.04031205177307
+Total scoring time: 1.62616896629333
 Copying HHsearch
-Total HHsearch time: 0.1402587890625
+Total HHsearch time: 0.120968818664551
 Fetching HHsearch hits
-Total mapping time: 2.98668313026428
+Total mapping time: 3.59816718101501
 Constructing models
-Total monomer model time: 0.0305418968200684
+Total monomer model time: 0.0222079753875732
 3V6401C1-3V6401D1
 3V6401D1-3V6401C1
 3S2K01B1-3S2K01A1
@@ -3007,13 +3007,13 @@ Total monomer model time: 0.0305418968200684
 4UYP01D1-4UYP01B1
 1E0F01I1-1E0F01K1
 Writing output
-Total scoring time: 1.45631098747253
+Total scoring time: 2.18148493766785
 Copying HHsearch
-Total HHsearch time: 0.110124111175537
+Total HHsearch time: 0.118456125259399
 Fetching HHsearch hits
-Total mapping time: 2.96492004394531
+Total mapping time: 3.61104607582092
 Constructing models
-Total monomer model time: 0.0203239917755127
+Total monomer model time: 0.0221569538116455
 5FFO01E1-5FFO01A1
 5FFO01A1-5FFO01E1
 4UYP01B1-4UYP01D1
@@ -3025,13 +3025,13 @@ Total monomer model time: 0.0203239917755127
 6FQS01D1-6FQS01B1
 6RKS01B1-6RKS01D1
 Writing output
-Total scoring time: 1.02122688293457
+Total scoring time: 1.68706583976746
 Copying HHsearch
-Total HHsearch time: 0.102190017700195
+Total HHsearch time: 0.117264032363892
 Fetching HHsearch hits
-Total mapping time: 2.96705412864685
+Total mapping time: 3.78979992866516
 Constructing models
-Total monomer model time: 0.0205459594726562
+Total monomer model time: 0.0228261947631836
 5FFO01E1-5FFO01A1
 6K6101bl1-6K6101B1
 6K6101B1-6K6101bl1
@@ -3043,13 +3043,13 @@ Total monomer model time: 0.0205459594726562
 3J0401F1-3J0401B1
 6BK801G1-6BK801O1
 Writing output
-Total scoring time: 1.52419304847717
+Total scoring time: 6.74409699440002
 Copying HHsearch
-Total HHsearch time: 0.102674961090088
+Total HHsearch time: 0.155336856842041
 Fetching HHsearch hits
-Total mapping time: 3.04775595664978
+Total mapping time: 4.68782997131348
 Constructing models
-Total monomer model time: 0.020388126373291
+Total monomer model time: 0.0304169654846191
 5FFO01E1-5FFO01A1
 4UYP01B1-4UYP01D1
 4UYP01D1-4UYP01B1
@@ -3061,13 +3061,13 @@ Total monomer model time: 0.020388126373291
 5XYI01V1-5XYI01S1
 6TMF01dl1-6TMF01P1
 Writing output
-Total scoring time: 1.19268178939819
+Total scoring time: 8.60727906227112
 Copying HHsearch
-Total HHsearch time: 0.116461992263794
+Total HHsearch time: 0.155604839324951
 Fetching HHsearch hits
-Total mapping time: 2.96683716773987
+Total mapping time: 4.45782113075256
 Constructing models
-Total monomer model time: 0.0216989517211914
+Total monomer model time: 0.0241818428039551
 6G9001S1-6G9001hl1
 5ZWO0151-5ZWO01A1
 6G9001S1-6G9001bl1
@@ -3079,13 +3079,13 @@ Total monomer model time: 0.0216989517211914
 5GMK01R1-5GMK01il1
 6EXN01cl1-6EXN01ll1
 Writing output
-Total scoring time: 3.37389397621155
+Total scoring time: 9.39402103424072
 Copying HHsearch
-Total HHsearch time: 0.111096858978271
+Total HHsearch time: 0.134868144989014
 Fetching HHsearch hits
-Total mapping time: 2.97537899017334
+Total mapping time: 3.61818385124207
 Constructing models
-Total monomer model time: 0.0206260681152344
+Total monomer model time: 0.0235641002655029
 4KZX01V1-4KZX01Y1
 4UER01Z1-4UER01P1
 4KZX01N1-4KZX01Y1
@@ -3097,13 +3097,13 @@ Total monomer model time: 0.0206260681152344
 5XXU01V1-5XXU01Y1
 5XYI01V1-5XYI01Y1
 Writing output
-Total scoring time: 0.804526090621948
+Total scoring time: 6.04075002670288
 Copying HHsearch
-Total HHsearch time: 0.109766006469727
+Total HHsearch time: 0.127725124359131
 Fetching HHsearch hits
-Total mapping time: 3.08159995079041
+Total mapping time: 3.60128498077393
 Constructing models
-Total monomer model time: 0.0269229412078857
+Total monomer model time: 0.0225300788879395
 6NZD01B1-6NZD01H1
 6NZD01E1-6NZD01H1
 4V1O01B1-4V1O01W1
@@ -3115,13 +3115,13 @@ Total monomer model time: 0.0269229412078857
 5SVA01B1-5SVA01P1
 6CGV01N1-6CGV01P1
 Writing output
-Total scoring time: 1.66884803771973
+Total scoring time: 4.65227198600769
 Copying HHsearch
-Total HHsearch time: 0.099290132522583
+Total HHsearch time: 0.116728067398071
 Fetching HHsearch hits
-Total mapping time: 3.06657385826111
+Total mapping time: 3.61907196044922
 Constructing models
-Total monomer model time: 0.020186185836792
+Total monomer model time: 0.02236008644104
 6O9L01B1-6O9L01Q1
 5ZWO01ul1-5ZWO01W1
 3V4P01A1-3V4P01L1
@@ -3133,13 +3133,13 @@ Total monomer model time: 0.020186185836792
 6G9001S1-6G9001U1
 5ZWO0151-5ZWO01W1
 Writing output
-Total scoring time: 1.10588479042053
+Total scoring time: 3.40397596359253
 Copying HHsearch
-Total HHsearch time: 0.109997034072876
+Total HHsearch time: 0.134866952896118
 Fetching HHsearch hits
-Total mapping time: 2.96846604347229
+Total mapping time: 3.61292219161987
 Constructing models
-Total monomer model time: 0.0203509330749512
+Total monomer model time: 0.0233860015869141
 5FFO01E1-5FFO01A1
 5FFO01A1-5FFO01E1
 4TMA01D1-4TMA01B1
@@ -3151,13 +3151,13 @@ Total monomer model time: 0.0203509330749512
 4Z2D01D1-4Z2D01C1
 6FQS01B1-6FQS01D1
 Writing output
-Total scoring time: 0.988687992095947
+Total scoring time: 3.83568382263184
 Copying HHsearch
-Total HHsearch time: 0.102308988571167
+Total HHsearch time: 0.11932897567749
 Fetching HHsearch hits
-Total mapping time: 3.00292611122131
+Total mapping time: 3.62453722953796
 Constructing models
-Total monomer model time: 0.0325310230255127
+Total monomer model time: 0.0229527950286865
 5FFO01A1-5FFO01E1
 5FFO01E1-5FFO01A1
 4UYP01D1-4UYP01B1
@@ -3169,13 +3169,13 @@ Total monomer model time: 0.0325310230255127
 4Z2D01C1-4Z2D01D1
 6RKS01D1-6RKS01B1
 Writing output
-Total scoring time: 0.831223011016846
+Total scoring time: 3.79659914970398
 Copying HHsearch
-Total HHsearch time: 0.100162982940674
+Total HHsearch time: 0.118929147720337
 Fetching HHsearch hits
-Total mapping time: 2.96613883972168
+Total mapping time: 3.60269689559937
 Constructing models
-Total monomer model time: 0.027569055557251
+Total monomer model time: 0.0228211879730225
 5FFO01E1-5FFO01A1
 5FFO01A1-5FFO01E1
 4UYP01D1-4UYP01B1
@@ -3187,13 +3187,13 @@ Total monomer model time: 0.027569055557251
 5MDX01wl1-5MDX01W1
 5XNL01W1-5XNL01B1
 Writing output
-Total scoring time: 1.07026314735413
+Total scoring time: 3.84221386909485
 Copying HHsearch
-Total HHsearch time: 0.12053108215332
+Total HHsearch time: 0.168612003326416
 Fetching HHsearch hits
-Total mapping time: 2.99121999740601
+Total mapping time: 3.61540508270264
 Constructing models
-Total monomer model time: 0.0195560455322266
+Total monomer model time: 0.0236530303955078
 5FFO01E1-5FFO01A1
 5FFO01A1-5FFO01E1
 4UYP01D1-4UYP01B1
@@ -3205,13 +3205,13 @@ Total monomer model time: 0.0195560455322266
 1M6301F1-1M6301B1
 4Z2D01C1-4Z2D01D1
 Writing output
-Total scoring time: 1.3316478729248
+Total scoring time: 4.26184988021851
 Copying HHsearch
-Total HHsearch time: 0.107369184494019
+Total HHsearch time: 0.119317054748535
 Fetching HHsearch hits
-Total mapping time: 2.99008202552795
+Total mapping time: 3.62783598899841
 Constructing models
-Total monomer model time: 0.0340838432312012
+Total monomer model time: 0.0224699974060059
 5FFO01E1-5FFO01A1
 5FFO01A1-5FFO01E1
 4UYP01D1-4UYP01B1
@@ -3223,13 +3223,13 @@ Total monomer model time: 0.0340838432312012
 2DOQ01C1-2DOQ01A1
 6FF401Y1-6FF401yl1
 Writing output
-Total scoring time: 0.774374008178711
+Total scoring time: 2.61512804031372
 Copying HHsearch
-Total HHsearch time: 0.119262933731079
+Total HHsearch time: 0.135700941085815
 Fetching HHsearch hits
-Total mapping time: 2.97808504104614
+Total mapping time: 3.63108801841736
 Constructing models
-Total monomer model time: 0.0339019298553467
+Total monomer model time: 0.0254240036010742
 4TMA01D1-4TMA01B1
 6RKU01D1-6RKU01B1
 6RKU01B1-6RKU01D1
@@ -3241,13 +3241,13 @@ Total monomer model time: 0.0339019298553467
 6ULG01B1-6ULG01N1
 6G9001T1-6G9001dl1
 Writing output
-Total scoring time: 4.06495904922485
+Total scoring time: 7.82280206680298
 Copying HHsearch
-Total HHsearch time: 0.114169120788574
+Total HHsearch time: 0.131821155548096
 Fetching HHsearch hits
-Total mapping time: 3.0138099193573
+Total mapping time: 3.72469282150269
 Constructing models
-Total monomer model time: 0.0212090015411377
+Total monomer model time: 0.0291030406951904
 5TZS01D1-5TZS01F1
 4KZX01L1-4KZX01Y1
 5XXU01L1-5XXU01Y1
@@ -3259,13 +3259,13 @@ Total monomer model time: 0.0212090015411377
 4UER01Q1-4UER01P1
 1MJG01N1-1MJG01M1
 Writing output
-Total scoring time: 1.4384241104126
+Total scoring time: 4.42338109016418
 Copying HHsearch
-Total HHsearch time: 0.156260013580322
+Total HHsearch time: 0.129951000213623
 Fetching HHsearch hits
-Total mapping time: 3.01623916625977
+Total mapping time: 3.64120101928711
 Constructing models
-Total monomer model time: 0.0262658596038818
+Total monomer model time: 0.0223400592803955
 6O9L0161-6O9L01K1
 6EU001P1-6EU001K1
 6GML01Y1-6GML01V1
@@ -3277,13 +3277,13 @@ Total monomer model time: 0.0262658596038818
 3H0G01I1-3H0G01K1
 5Y6001C1-5Y6001N1
 Writing output
-Total scoring time: 1.34428811073303
+Total scoring time: 3.97447800636292
 Copying HHsearch
-Total HHsearch time: 0.103003978729248
+Total HHsearch time: 0.119946002960205
 Fetching HHsearch hits
-Total mapping time: 3.0711350440979
+Total mapping time: 3.65997409820557
 Constructing models
-Total monomer model time: 0.0303590297698975
+Total monomer model time: 0.02256178855896
 5ZWO0151-5ZWO01W1
 6O9L01I1-6O9L01Q1
 4MHH01A1-4MHH01I1
@@ -3295,13 +3295,13 @@ Total monomer model time: 0.0303590297698975
 1MJG01M1-1MJG01N1
 6G9001S1-6G9001U1
 Writing output
-Total scoring time: 1.48059296607971
+Total scoring time: 4.81316304206848
 Copying HHsearch
-Total HHsearch time: 0.100272178649902
+Total HHsearch time: 0.12210488319397
 Fetching HHsearch hits
-Total mapping time: 3.05434799194336
+Total mapping time: 3.719162940979
 Constructing models
-Total monomer model time: 0.0208358764648438
+Total monomer model time: 0.0224800109863281
 5FFO01E1-5FFO01A1
 5FFO01A1-5FFO01E1
 4Z2D01D1-4Z2D01C1
@@ -3313,13 +3313,13 @@ Total monomer model time: 0.0208358764648438
 5MDX01ol1-5MDX01A1
 6EU001P1-6EU001A1
 Writing output
-Total scoring time: 1.06712198257446
+Total scoring time: 4.0595121383667
 Copying HHsearch
-Total HHsearch time: 0.101197957992554
+Total HHsearch time: 0.11804986000061
 Fetching HHsearch hits
-Total mapping time: 2.99650287628174
+Total mapping time: 3.65469694137573
 Constructing models
-Total monomer model time: 0.0201170444488525
+Total monomer model time: 0.0228080749511719
 5FFO01A1-5FFO01E1
 6K6101bl1-6K6101B1
 6K6101B1-6K6101bl1
@@ -3331,13 +3331,13 @@ Total monomer model time: 0.0201170444488525
 6BK801O1-6BK801G1
 3J0401B1-3J0401E1
 Writing output
-Total scoring time: 1.45560598373413
+Total scoring time: 5.33428597450256
 Copying HHsearch
-Total HHsearch time: 0.10009503364563
+Total HHsearch time: 0.117954969406128
 Fetching HHsearch hits
-Total mapping time: 2.98890590667725
+Total mapping time: 3.65503096580505
 Constructing models
-Total monomer model time: 0.0285341739654541
+Total monomer model time: 0.0235021114349365
 5FFO01E1-5FFO01A1
 5FFO01A1-5FFO01E1
 6GMH01Y1-6GMH01B1
@@ -3349,13 +3349,13 @@ Total monomer model time: 0.0285341739654541
 1M6301F1-1M6301B1
 5MDX01ol1-5MDX01A1
 Writing output
-Total scoring time: 1.14464783668518
+Total scoring time: 3.70943784713745
 Copying HHsearch
-Total HHsearch time: 0.105211973190308
+Total HHsearch time: 0.117722034454346
 Fetching HHsearch hits
-Total mapping time: 3.04717898368835
+Total mapping time: 3.65231895446777
 Constructing models
-Total monomer model time: 0.0315520763397217
+Total monomer model time: 0.0225729942321777
 3BLX02L1-3BLX02J1
 3BLX02J1-3BLX02L1
 5FFO01A1-5FFO01E1
@@ -3367,13 +3367,13 @@ Total monomer model time: 0.0315520763397217
 6K6101A1-6K6101al1
 6K6101bl1-6K6101B1
 Writing output
-Total scoring time: 1.70383095741272
+Total scoring time: 6.48943901062012
 Copying HHsearch
-Total HHsearch time: 0.102692842483521
+Total HHsearch time: 0.12086009979248
 Fetching HHsearch hits
-Total mapping time: 3.03221797943115
+Total mapping time: 3.65792798995972
 Constructing models
-Total monomer model time: 0.0275611877441406
+Total monomer model time: 0.0222949981689453
 5FFO01E1-5FFO01A1
 5FFO01A1-5FFO01E1
 3BLX02J1-3BLX02L1
@@ -3385,13 +3385,13 @@ Total monomer model time: 0.0275611877441406
 6K6101B1-6K6101bl1
 6K6101al1-6K6101A1
 Writing output
-Total scoring time: 1.59843897819519
+Total scoring time: 5.25016903877258
 Copying HHsearch
-Total HHsearch time: 0.114021062850952
+Total HHsearch time: 0.135690927505493
 Fetching HHsearch hits
-Total mapping time: 3.06560802459717
+Total mapping time: 3.66774988174438
 Constructing models
-Total monomer model time: 0.0345199108123779
+Total monomer model time: 0.0247371196746826
 6EXN01cl1-6EXN01ll1
 6G9001S1-6G9001hl1
 6G9001S1-6G9001bl1
@@ -3403,13 +3403,13 @@ Total monomer model time: 0.0345199108123779
 6GMH01Y1-6GMH01A1
 6BK801O1-6BK801gl1
 Writing output
-Total scoring time: 5.30978894233704
+Total scoring time: 8.90384697914124
 Copying HHsearch
-Total HHsearch time: 0.116174936294556
+Total HHsearch time: 0.136307001113892
 Fetching HHsearch hits
-Total mapping time: 3.07272291183472
+Total mapping time: 3.66164803504944
 Constructing models
-Total monomer model time: 0.0300431251525879
+Total monomer model time: 0.0228619575500488
 6TMF01P1-6TMF01X1
 5XYI01S1-5XYI01Y1
 5TZS01D1-5TZS01F1
@@ -3421,13 +3421,13 @@ Total monomer model time: 0.0300431251525879
 4KZX01L1-4KZX01Y1
 5JPQ01yl1-5JPQ0101
 Writing output
-Total scoring time: 0.864591836929321
+Total scoring time: 1.66099715232849
 Copying HHsearch
-Total HHsearch time: 0.111377954483032
+Total HHsearch time: 0.131986141204834
 Fetching HHsearch hits
-Total mapping time: 3.01434588432312
+Total mapping time: 3.66381001472473
 Constructing models
-Total monomer model time: 0.0288190841674805
+Total monomer model time: 0.0226778984069824
 4V1O01A1-4V1O01W1
 6RD50182-6RD50191
 2CSE01V1-2CSE01A1
@@ -3439,13 +3439,13 @@ Total monomer model time: 0.0288190841674805
 4V1O01B1-4V1O01W1
 3JB901al1-3JB901A1
 Writing output
-Total scoring time: 3.000324010849
+Total scoring time: 5.54456615447998
 Copying HHsearch
-Total HHsearch time: 0.100373029708862
+Total HHsearch time: 0.153982877731323
 Fetching HHsearch hits
-Total mapping time: 3.09884405136108
+Total mapping time: 3.67917799949646
 Constructing models
-Total monomer model time: 0.0201349258422852
+Total monomer model time: 0.0222280025482178
 6RD50182-6RD50191
 5ZWO0151-5ZWO01W1
 6O9L01B1-6O9L01Q1
@@ -3457,13 +3457,13 @@ Total monomer model time: 0.0201349258422852
 3BSZ01A1-3BSZ01L1
 6G9001S1-6G9001U1
 Writing output
-Total scoring time: 1.18791890144348
+Total scoring time: 2.96612596511841
 Copying HHsearch
-Total HHsearch time: 0.102307081222534
+Total HHsearch time: 0.120033979415894
 Fetching HHsearch hits
-Total mapping time: 3.04443788528442
+Total mapping time: 3.66431212425232
 Constructing models
-Total monomer model time: 0.0254020690917969
+Total monomer model time: 0.0233559608459473
 5FFO01A1-5FFO01E1
 5FFO01E1-5FFO01A1
 6EM50131-6EM501Z1
@@ -3475,13 +3475,13 @@ Total monomer model time: 0.0254020690917969
 3ZIF01M1-3ZIF01N1
 5LNK0131-5LNK01Z1
 Writing output
-Total scoring time: 1.0089430809021
+Total scoring time: 3.69620490074158
 Copying HHsearch
-Total HHsearch time: 0.103741884231567
+Total HHsearch time: 0.122447967529297
 Fetching HHsearch hits
-Total mapping time: 3.01425814628601
+Total mapping time: 3.67514896392822
 Constructing models
-Total monomer model time: 0.0200519561767578
+Total monomer model time: 0.0227141380310059
 5FFO01A1-5FFO01E1
 5FFO01E1-5FFO01A1
 4UYP01D1-4UYP01B1
@@ -3493,13 +3493,13 @@ Total monomer model time: 0.0200519561767578
 3J0401B1-3J0401F1
 6BK801O1-6BK801G1
 Writing output
-Total scoring time: 1.18460893630981
+Total scoring time: 2.66966891288757
 Copying HHsearch
-Total HHsearch time: 0.107359170913696
+Total HHsearch time: 0.218060970306396
 Fetching HHsearch hits
-Total mapping time: 3.04399394989014
+Total mapping time: 3.65154790878296
 Constructing models
-Total monomer model time: 0.0267539024353027
+Total monomer model time: 0.022381067276001
 5FFO01E1-5FFO01A1
 5FFO01A1-5FFO01E1
 4UYP01B1-4UYP01D1
@@ -3511,13 +3511,13 @@ Total monomer model time: 0.0267539024353027
 6TMF01P1-6TMF01O1
 5XYI01S1-5XYI01N1
 Writing output
-Total scoring time: 0.779006004333496
+Total scoring time: 2.36232495307922
 Copying HHsearch
-Total HHsearch time: 0.107381105422974
+Total HHsearch time: 0.120645999908447
 Fetching HHsearch hits
-Total mapping time: 3.05162692070007
+Total mapping time: 3.72656583786011
 Constructing models
-Total monomer model time: 0.022737979888916
+Total monomer model time: 0.0223681926727295
 5FFO01A1-5FFO01E1
 5FFO01E1-5FFO01A1
 3BLX02L1-3BLX02J1
@@ -3529,13 +3529,13 @@ Total monomer model time: 0.022737979888916
 6K6101al1-6K6101A1
 6K6101A1-6K6101al1
 Writing output
-Total scoring time: 1.59332203865051
+Total scoring time: 3.59909391403198
 Copying HHsearch
-Total HHsearch time: 0.129174947738647
+Total HHsearch time: 0.125806093215942
 Fetching HHsearch hits
-Total mapping time: 3.10101413726807
+Total mapping time: 3.65697407722473
 Constructing models
-Total monomer model time: 0.0202958583831787
+Total monomer model time: 0.0222649574279785
 5FFO01E1-5FFO01A1
 5FFO01A1-5FFO01E1
 6RD40182-6RD40181
@@ -3547,13 +3547,13 @@ Total monomer model time: 0.0202958583831787
 6KAC01O1-6KAC01ol1
 3WU201ol1-3WU201O1
 Writing output
-Total scoring time: 0.985063076019287
+Total scoring time: 2.9695188999176
 Copying HHsearch
-Total HHsearch time: 0.12196683883667
+Total HHsearch time: 0.138590097427368
 Fetching HHsearch hits
-Total mapping time: 3.08982610702515
+Total mapping time: 3.67005085945129
 Constructing models
-Total monomer model time: 0.0356221199035645
+Total monomer model time: 0.0241520404815674
 5MDX01O1-5MDX01ol1
 5MDX01ol1-5MDX01O1
 6G9001S1-6G9001el1
@@ -3565,13 +3565,13 @@ Total monomer model time: 0.0356221199035645
 6ICZ01Z1-6ICZ01il1
 5LNK0191-5LNK01yl1
 Writing output
-Total scoring time: 3.22038888931274
+Total scoring time: 5.15488600730896
 Copying HHsearch
-Total HHsearch time: 0.13332200050354
+Total HHsearch time: 0.160656929016113
 Fetching HHsearch hits
-Total mapping time: 3.17613506317139
+Total mapping time: 3.75795197486877
 Constructing models
-Total monomer model time: 0.0277090072631836
+Total monomer model time: 0.0258491039276123
 4KZX01O1-4KZX01Y1
 5LK501A1-5LK501D1
 5LK501D1-5LK501A1
@@ -3583,13 +3583,13 @@ Total monomer model time: 0.0277090072631836
 4CR201V1-4CR201O1
 4V2T0111-4V2T0101
 Writing output
-Total scoring time: 3.95366883277893
+Total scoring time: 6.67385983467102
 Copying HHsearch
-Total HHsearch time: 0.126014947891235
+Total HHsearch time: 0.146317005157471
 Fetching HHsearch hits
-Total mapping time: 3.09867000579834
+Total mapping time: 3.73250889778137
 Constructing models
-Total monomer model time: 0.0294060707092285
+Total monomer model time: 0.024960994720459
 4V1O01A1-4V1O01W1
 1P0S01E1-1P0S01L1
 6N7R01K1-6N7R01I1
@@ -3601,13 +3601,13 @@ Total monomer model time: 0.0294060707092285
 6N7R01L1-6N7R01I1
 3JB901E1-3JB901A1
 Writing output
-Total scoring time: 7.04790186882019
+Total scoring time: 9.56342101097107
 Copying HHsearch
-Total HHsearch time: 0.166661024093628
+Total HHsearch time: 0.164026975631714
 Fetching HHsearch hits
-Total mapping time: 3.10149002075195
+Total mapping time: 3.75770688056946
 Constructing models
-Total monomer model time: 0.021414041519165
+Total monomer model time: 0.0240609645843506
 5ZWO01A1-5ZWO01vl1
 5ZWO01Q1-5ZWO01W1
 5ZWO01R1-5ZWO01W1
@@ -3619,13 +3619,13 @@ Total monomer model time: 0.021414041519165
 5ZWO01nl1-5ZWO01W1
 5ZWO01nl1-5ZWO01vl1
 Writing output
-Total scoring time: 3.34438586235046
+Total scoring time: 5.36963415145874
 Copying HHsearch
-Total HHsearch time: 0.120002031326294
+Total HHsearch time: 0.138653039932251
 Fetching HHsearch hits
-Total mapping time: 3.1479971408844
+Total mapping time: 3.75333094596863
 Constructing models
-Total monomer model time: 0.0222198963165283
+Total monomer model time: 0.02451491355896
 6RKU01D1-6RKU01B1
 6RKU01B1-6RKU01D1
 4TMA01B1-4TMA01D1
@@ -3637,13 +3637,13 @@ Total monomer model time: 0.0222198963165283
 6EU001N1-6EU001A1
 6RQL01S1-6RQL01A1
 Writing output
-Total scoring time: 2.28025007247925
+Total scoring time: 6.26396298408508
 Copying HHsearch
-Total HHsearch time: 0.117079973220825
+Total HHsearch time: 0.138938903808594
 Fetching HHsearch hits
-Total mapping time: 3.07763600349426
+Total mapping time: 3.80867505073547
 Constructing models
-Total monomer model time: 0.0322818756103516
+Total monomer model time: 0.0247039794921875
 6G9001hl1-6G9001S1
 6G9001bl1-6G9001S1
 5ZWO01A1-5ZWO0151
@@ -3655,13 +3655,13 @@ Total monomer model time: 0.0322818756103516
 5GMK01il1-5GMK01R1
 6EXN01ll1-6EXN01cl1
 Writing output
-Total scoring time: 3.16398501396179
+Total scoring time: 6.27069497108459
 Copying HHsearch
-Total HHsearch time: 0.11675500869751
+Total HHsearch time: 0.139795064926147
 Fetching HHsearch hits
-Total mapping time: 3.11170887947083
+Total mapping time: 3.78051710128784
 Constructing models
-Total monomer model time: 0.029210090637207
+Total monomer model time: 0.0249979496002197
 6RKU01D1-6RKU01B1
 4TMA01B1-4TMA01D1
 6RKU01B1-6RKU01D1
@@ -3673,13 +3673,13 @@ Total monomer model time: 0.029210090637207
 6ULG01N1-6ULG01C1
 6ULG01N1-6ULG01B1
 Writing output
-Total scoring time: 4.22903203964233
+Total scoring time: 7.14307188987732
 Copying HHsearch
-Total HHsearch time: 0.119148969650269
+Total HHsearch time: 0.136139869689941
 Fetching HHsearch hits
-Total mapping time: 3.08216214179993
+Total mapping time: 3.76179909706116
 Constructing models
-Total monomer model time: 0.0382959842681885
+Total monomer model time: 0.0246760845184326
 6EXN01ll1-6EXN01cl1
 6G9001hl1-6G9001S1
 5ZWO01A1-5ZWO0151
@@ -3691,13 +3691,13 @@ Total monomer model time: 0.0382959842681885
 5XON01A1-5XON01V1
 6G9001dl1-6G9001S1
 Writing output
-Total scoring time: 5.27073287963867
+Total scoring time: 13.0441248416901
 Copying HHsearch
-Total HHsearch time: 0.11882209777832
+Total HHsearch time: 0.14213490486145
 Fetching HHsearch hits
-Total mapping time: 3.17614006996155
+Total mapping time: 3.75536799430847
 Constructing models
-Total monomer model time: 0.0216898918151855
+Total monomer model time: 0.0239880084991455
 5MDX01O1-5MDX01ol1
 5MDX01ol1-5MDX01O1
 6G9001el1-6G9001S1
@@ -3709,13 +3709,13 @@ Total monomer model time: 0.0216898918151855
 6ICZ01il1-6ICZ01Z1
 6BK801pl1-6BK801O1
 Writing output
-Total scoring time: 3.16101598739624
+Total scoring time: 9.73721694946289
 Copying HHsearch
-Total HHsearch time: 0.134073972702026
+Total HHsearch time: 0.156791925430298
 Fetching HHsearch hits
-Total mapping time: 3.08980107307434
+Total mapping time: 3.72713899612427
 Constructing models
-Total monomer model time: 0.0317330360412598
+Total monomer model time: 0.0255370140075684
 6RKU01D1-6RKU01B1
 6RKU01B1-6RKU01D1
 6EXN01A1-6EXN01ll1
@@ -3727,10 +3727,10 @@ Total monomer model time: 0.0317330360412598
 3JCM01J1-3JCM01R1
 5GAN0131-5GAN01A1
 Writing output
-Total scoring time: 8.9843008518219
-Total program runtime: 469.678333997726
+Total scoring time: 20.2066991329193
+Total program runtime: 780.892025947571
 STRING
-Thu Jul  1 16:08:54 EDT 2021
+Wed Jul 21 16:06:05 EDT 2021
 9606.ENSP00000357362	956	956	956
 9598.ENSPTRP00000002388	955	956	956
 9593.ENSGGOP00000009116	955	956	958
@@ -3940,7 +3940,7 @@ Thu Jul  1 16:08:54 EDT 2021
 9707.XP_004405657.1	591	956	961
 
 Homodimer detected.  Homodimers are not in the STRING database.
-Total program runtime: 0.0117290019989014
+Total program runtime: 0.0112440586090088
 SEQ
 uniprotkb:P49746	956	956	956
 entrez_gene/locuslink:7059	947	956	947
@@ -35700,7 +35700,7 @@ uniprotkb:O77469	2	956	728
 uniprotkb:O77469	2	956	728
 uniprotkb:O77469	3	956	728
 
-Total id extraction time: 1.03856086730957
+Total id extraction time: 1.36767196655273
 Dimer found!
 Dimer found!
 Dimer found!
@@ -35799,8 +35799,8 @@ Dimer found!
 Dimer found!
 Dimer found!
 Dimer found!
-Total search time: 1.09322714805603
-Thu Jul  1 16:08:57 EDT 2021
-Total program runtime: 2.89188194274902
+Total search time: 1.39225697517395
+Wed Jul 21 16:06:09 EDT 2021
+Total program runtime: 3.43497705459595
 CT
-Total program runtime: 1.3744809627533
+Total program runtime: 2.50700402259827

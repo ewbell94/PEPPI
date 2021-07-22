@@ -1,11 +1,11 @@
 /nfs/amino-home/ewbell/PEPPI/test/PPI/prot1-prot4
 SPRING
 Running HHsearch
-Total HHsearch time: 0.172636032104492
+Total HHsearch time: 0.204700946807861
 Fetching HHsearch hits
-Total mapping time: 3.16367197036743
+Total mapping time: 3.89260411262512
 Constructing models
-Total monomer model time: 0.0288290977478027
+Total monomer model time: 0.0296869277954102
 5LJ301J1-5LJ301A1
 -4.700000
 5GMK01O1-5GMK01A1
@@ -27,15 +27,15 @@ Total monomer model time: 0.0288290977478027
 6G9001P1-6G9001Q1
 -4.700000
 Writing output
-Total scoring time: 7.13859891891479
-Total program runtime: 11.4995360374451
+Total scoring time: 9.80456900596619
+Total program runtime: 14.4616520404816
 SPRINGNEG
 Copying HHsearch
-Total HHsearch time: 0.170819997787476
+Total HHsearch time: 0.189481019973755
 Fetching HHsearch hits
-Total mapping time: 3.17714691162109
+Total mapping time: 3.64827299118042
 Constructing models
-Total monomer model time: 0.0300471782684326
+Total monomer model time: 0.0251519680023193
 6TB401G1-6TB401M1
 6MZD01F1-6MZD01T1
 5LJ501tl1-5LJ501A1
@@ -47,10 +47,10 @@ Total monomer model time: 0.0300471782684326
 5JK701C1-5JK701G1
 5ZWO0131-5ZWO01A1
 Writing output
-Total scoring time: 7.525554895401
-Total program runtime: 11.9050190448761
+Total scoring time: 8.96278095245361
+Total program runtime: 13.1865210533142
 STRING
-Thu Jul  1 15:46:54 EDT 2021
+Wed Jul 21 15:32:01 EDT 2021
 9606.ENSP00000346466	747	747	747
 9598.ENSPTRP00000033792	744	747	747
 60711.ENSCSAP00000005392	742	747	747
@@ -258,7 +258,7 @@ Thu Jul  1 15:46:54 EDT 2021
 61853.ENSNLEP00000016146 61853.ENSNLEP00000001710
 9597.XP_008964248.1 9597.XP_003831250.1
 Sequence A homology dropped too low
-Total program runtime: 12.8764619827271
+Total program runtime: 14.1157829761505
 SEQ
 uniprotkb:A4D1P6	747	747	747
 uniprotkb:Q9VE12	85	747	324
@@ -10694,13 +10694,13 @@ uniprotkb:A0A590UJN4	3	385	1970
 uniprotkb:A0A590UJN4	2	385	1970
 uniprotkb:A0A590UJN4	8	385	1970
 
-Total id extraction time: 0.838470935821533
+Total id extraction time: 1.05894994735718
 Dimer found!
 Dimer found!
 Dimer found!
 Dimer found!
-Total search time: 1.04551792144775
-Thu Jul  1 15:47:10 EDT 2021
-Total program runtime: 2.64773893356323
+Total search time: 1.3848180770874
+Wed Jul 21 15:32:18 EDT 2021
+Total program runtime: 3.02867698669434
 CT
-Total program runtime: 15.3330550193787
+Total program runtime: 1.03004503250122

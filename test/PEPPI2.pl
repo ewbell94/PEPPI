@@ -9,7 +9,7 @@ my $maxjobs=300;
 my $nohomo=0;
 my $keepflag=1;
 my $benchmarkflag=0;
-my $batchsize=1;
+my $batchsize=25;
 
 my $user=`whoami`;
 chomp($user);
@@ -111,9 +111,9 @@ sub submitBatch{
 	print "Queue is currently full, waiting for submission...\n";
 	sleep(60);
     }
-    #print `sbatch -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
+    print `sbatch -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
 
-    print `$peppidir/bin/multiwrapper.pl $args`;
+    #print `$peppidir/bin/multiwrapper.pl $args`;
 }
 
 #Tree traversing algorithm which grabs a list of domains
