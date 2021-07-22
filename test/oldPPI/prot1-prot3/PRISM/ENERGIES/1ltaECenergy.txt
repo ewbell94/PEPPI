@@ -1,5 +1,0 @@
-1ltaEC	1abcL	0	1abcE	0	-31.24
-1ltaEC	1abcL	2	1abcE	2	-3.12
-1ltaEC	1abcE	1	1abcL	2	35.76
-1ltaEC	1abcE	1	1abcE	0	2.88
-1ltaEC	1abcE	1	1abcE	2	-6.96

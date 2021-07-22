@@ -13,9 +13,12 @@ use POSIX qw(ceil);
 
 my $user="$ENV{USER}";
 my $outdir="";
-
 my $target="";
+<<<<<<< HEAD
 my $bindir="/home/ewbell/PEPPI/bin";
+=======
+my $peppidir="/nfs/amino-home/ewbell/PEPPI";
+>>>>>>> master
 my $domaindiv=0;
 my $benchflag=0;
 my $maxjobs=300;
@@ -24,24 +27,23 @@ GetOptions(
     "benchmark" => \$benchflag,
     "domains" => \$domaindiv,
     "outdir=s" => \$outdir,
-    "target=s" => \$target
+    "target=s" => \$target,
+    "peppidir=s" => \$peppidir
     ) or die "Invalid arguments were passed into makeHHR\n";
 
 #User-set parameters
+my $bindir="$peppidir/bin";
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
 my $springdb="/nfs/amino-home/ewbell/SPRINGDB/";
 my $dimerdb="$springdb/70negpos.db";
 (my $sourcefasta=$target)=~s/\_[AB]//g;
 my $hhdir="$outdir/$sourcefasta";
-my $modeldir=$hhdir;
 my $zthresh=8.5;
 my $homologthresh=0.5;
-my $toptm=1000;
 my $hhsuitedir="$bindir/../lib/hhsuite";
 
 print "benchmark: $benchflag\n";
 #DO NOT CHANGE BENEATH THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING
-#Processed parameters
 $ENV{'HHLIB'}="$hhsuitedir"; #necessary for proper function of HHsearch
 
 my $randomTag=int(rand(1000000)); #This is to prevent multiple instances from deleting eachother's directories
@@ -163,7 +165,6 @@ sub detectDomains{
         my $tempname=$1;
 
         my $scoreline=<$hhrfile>;
-        #$scoreline=~/Sum_probs=(.*)/;
 	$scoreline=~/Score=(\d+\.\d+)/;
         my $sumprobs=$1;
 	push(@scores,$sumprobs);
@@ -190,7 +191,7 @@ sub detectDomains{
     my @ngaps=();
     my @cgaps=();
 
-    #It's jank, I know
+    #It's hacky, I know
     my $matchline=<$hhrfile>;
     $matchline=<$hhrfile>;
     $matchline=~/ (\d+)/;
@@ -204,7 +205,6 @@ sub detectDomains{
 	last if (!($line=~/^\s*\d+\s+/));
 	my @parts=split(" ",$line);
 	my $z=$templates{$parts[1]};
-	#print "Testing: $parts[1] $z\n";
 	next if ($z < $zthresh);
 	next if ($benchmark && getSeqID("$prot.fasta","$springdb/monomers/$parts[1].pdb") > $homologthresh);
 

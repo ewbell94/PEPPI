@@ -1,9 +1,0 @@
-1j6tAB	1abcL	0	1abcE	1	-13.89
-1j6tAB	1abcL	0	1abcL	0	-13.95
-1j6tAB	1abcL	0	1abcL	2	-27.31
-1j6tAB	1abcL	0	1abc	1	-12.69
-1j6tAB	1abcL	0	1abc	2	-18.26
-1j6tAB	1abcE	0	1abcE	1	-19.25
-1j6tAB	1abcE	0	1abcL	0	-0.63
-1j6tAB	1abcE	0	1abcL	2	3.31
-1j6tAB	1abcE	0	1abc	2	9.32

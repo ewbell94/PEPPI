@@ -13,10 +13,15 @@ chomp($user);
 my $starttime=time();
 
 my $randomTag=int(rand(1000000));
+<<<<<<< HEAD
 #my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02";
 #my $blitsdb="$peppidir/lib/SEQ/hhblitsdb/db";
 my $interactfile="/expanse/projects/itasser/ewbell/lib/SEQ/psicquic.txt";
 my $aliasfile="/expanse/projects/itasser/ewbell/lib/SEQ/100_psicquic.fasta.clstr.aliases";
+=======
+my $interactfile="$peppidir/lib/SEQ/psicquic.txt"; #File containing all known dimers
+my $aliasfile="$peppidir/lib/SEQ/100_psicquic.fasta.clstr.aliases"; #File containing all potential names for the same sequence (because different databases use different IDs)
+>>>>>>> master
 
 my $jobid=`head -1 $outdir/$pairname/jobid.txt`;
 chomp($jobid);
@@ -26,18 +31,19 @@ if (! -e "$tempdir"){
 } else {
     print `rm -rf $tempdir/*`;
 }
-#print `cp $interactfile $tempdir/ints.txt`;
 
-my $maxtargets=200;
-my $tophits=100;
+my $tophits=100; #How many maximum hits to report in SearchSummary.txt
 my @chains=split("-",$pairname);
 
 print `mkdir -p $outdir/$pairname/SEQ`;
 open(my $resfile,">","$outdir/$pairname/SEQ/res.txt");
-print `date`;
+
+my $idnum=0;
+if (defined($ENV{SLURM_JOB_ID}) && $ENV{SLURM_JOB_ID} ne ''){
+    $idnum=$ENV{SLURM_JOB_ID};
+}
 
 blastSearch();
-#psiNW();
 
 print `sync`;
 print `rm -rf $tempdir`;
@@ -45,6 +51,7 @@ print `date`;
 my $stoptime=time();
 print "Total program runtime: ".($stoptime-$starttime)."\n";
 
+#Find sequence-based homology hits for the pair given the precalculated monomer hits
 sub blastSearch{
     my $t0=time();
     my $blast1res=`cat $outdir/../mono/$chains[0]/$chains[0].seq`;
@@ -52,10 +59,7 @@ sub blastSearch{
     if ($blast1res eq ""){
 	print "BLAST for sequence A returned no hits in database.\n";
 	print $resfile "0.0\n";
-	while(`lsof $outdir/SEQres.txt | wc -l` > 0){
-	    sleep(1);
-	}
-	print `echo "$pairname,0.0" >> $outdir/SEQres.txt`;
+	print `echo "$pairname,0.0" >> $outdir/SEQres_$idnum.txt`;
 	print `rm -rf $tempdir`;
 	exit(1);
     }
@@ -66,10 +70,7 @@ sub blastSearch{
     if ($blast2res eq ""){
 	print "BLAST for sequence B returned no hits in STRING.\n";
 	print $resfile "0.0\n";
-	while(`lsof $outdir/SEQres.txt | wc -l` > 0){
-	    sleep(1);
-	}
-	print `echo "$pairname,0.0" >> $outdir/SEQres.txt`;
+	print `echo "$pairname,0.0" >> $outdir/SEQres_$idnum.txt`;
 	print `rm -rf $tempdir`;
 	exit(1);
     }
@@ -137,30 +138,16 @@ sub blastSearch{
 
     if (scalar(@results)>0){
 	print $resfile "$results[0][2]\n";
-	while(`lsof $outdir/SEQres.txt | wc -l` > 0){
-	    sleep(1);
-	}
-	print `echo "$pairname,$results[0][2]" >> $outdir/SEQres.txt`;
+	print `echo "$pairname,$results[0][2]" >> $outdir/SEQres_$idnum.txt`;
     } else {
 	print $resfile "0.0\n";
-	while(`lsof $outdir/SEQres.txt | wc -l` > 0){
-	    sleep(1);
-	}
-	print `echo "$pairname,0.0" >> $outdir/SEQres.txt`;
+	print `echo "$pairname,0.0" >> $outdir/SEQres_$idnum.txt`;
     }
     my $t2=time();
     print "Total search time: ".($t2-$t1)."\n";
 }
 
-=pod
-sub psiNW{
-    print `$peppidir/bin/hhsuite/bin/hhblits -i $outdir/$pairname/$chains[0].seq -oa3m $tempdir/$chains[0].a3m -d $uniprotdb -n 2 -e 0.001`;
-    print `$peppidir/bin/hhsuite/bin/hhblits -i $outdir/$pairname/$chains[1].seq -oa3m $tempdir/$chains[1].a3m -d $uniprotdb -n 2 -e 0.001`;
-    print `$peppidir/bin/hhsuite/bin/hhblits -i $tempdir/$chains[0].a3m -d $blitsdb`;
-    print `$peppidir/bin/hhsuite/bin/hhblits -i $tempdir/$chains[1].a3m -d $blitsdb`;
-}
-=cut
-
+#Get all monomeric hit ids given the hits in a .seq file
 sub extractID{
     my $blastres=$_[0];
     my @blines=split("\n",$blastres);

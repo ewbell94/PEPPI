@@ -1,4 +1,0 @@
-1ktkAE	1abc	2	1abcE	2	-16.88
-1ktkAE	1abc	2	1abcL	2	-11.88
-1ktkAE	1abcE	1	1abcE	2	-11.66
-1ktkAE	1abcE	1	1abcL	2	-15.85

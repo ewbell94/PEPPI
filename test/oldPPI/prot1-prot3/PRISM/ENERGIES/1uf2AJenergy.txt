@@ -1,6 +1,0 @@
-1uf2AJ	1abcE	0	1abc	0	3.48
-1uf2AJ	1abcE	0	1abcL	0	-8.27
-1uf2AJ	1abcE	0	1abcE	0	-4.09
-1uf2AJ	1abcL	1	1abc	0	4.42
-1uf2AJ	1abcL	1	1abcL	0	-14.67
-1uf2AJ	1abcL	1	1abcE	0	-3.74

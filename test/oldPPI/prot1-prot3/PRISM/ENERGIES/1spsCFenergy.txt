@@ -1,6 +1,0 @@
-1spsCF	1abcE	0	1abc	1	-11.64
-1spsCF	1abcE	0	1abcE	0	-0.61
-1spsCF	1abcE	0	1abcL	0	-14.17
-1spsCF	1abc	1	1abc	1	-8.01
-1spsCF	1abc	1	1abcE	0	-4.27
-1spsCF	1abc	1	1abcL	0	-2.50

@@ -1,6 +1,0 @@
-1guxAB	1abcL	0	1abcL	1	-34.03
-1guxAB	1abcL	1	1abcL	1	-1.23
-1guxAB	1abcL	2	1abcL	2	-17.41
-1guxAB	1abcE	0	1abcL	1	-36.07
-1guxAB	1abc	0	1abcL	2	-5.37
-1guxAB	1abc	2	1abcL	1	-38.01

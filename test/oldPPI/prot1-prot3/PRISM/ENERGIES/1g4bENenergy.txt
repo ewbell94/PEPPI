@@ -1,3 +1,0 @@
-1g4bEN	1abcL	2	1abcL	0	-31.44
-1g4bEN	1abcL	1	1abcE	1	-18.33
-1g4bEN	1abcL	2	1abcE	2	-29.36

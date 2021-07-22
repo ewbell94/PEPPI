@@ -1,5 +1,0 @@
-1s1hBH	1abcL	1	1abcE	2	-21.40
-1s1hBH	1abcE	2	1abcL	0	-40.89
-1s1hBH	1abcE	2	1abcE	1	-12.47
-1s1hBH	1abcE	2	1abc	0	-29.55
-1s1hBH	1abcE	2	1abc	2	-28.67

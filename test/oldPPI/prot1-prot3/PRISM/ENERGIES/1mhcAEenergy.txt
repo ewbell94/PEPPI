@@ -1,2 +1,0 @@
-1mhcAE	1abcE	1	1abc	0	-3.19
-1mhcAE	1abcE	1	1abcE	0	-6.02

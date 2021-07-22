@@ -1,2 +1,0 @@
-1nocAB	1abcL	2	1abcL	1	-20.74
-1nocAB	1abcL	2	1abc	0	-31.05

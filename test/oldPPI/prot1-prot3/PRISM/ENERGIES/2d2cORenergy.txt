@@ -1,8 +1,0 @@
-2d2cOR	1abcL	0	1abc	2	0.00
-2d2cOR	1abcL	1	1abc	2	0.00
-2d2cOR	1abcL	2	1abc	2	0.00
-2d2cOR	1abcE	0	1abc	2	0.00
-2d2cOR	1abcE	1	1abc	2	0.00
-2d2cOR	1abc	0	1abc	2	0.00
-2d2cOR	1abc	1	1abc	2	0.00
-2d2cOR	1abc	2	1abc	2	0.00

@@ -1,7 +1,0 @@
-1jmtAB	1abc	2	1abc	0	-0.35
-1jmtAB	1abc	2	1abcL	1	-10.66
-1jmtAB	1abc	2	1abcE	0	-6.75
-1jmtAB	1abcE	2	1abcL	1	-46.53
-1jmtAB	1abcL	1	1abc	0	-10.26
-1jmtAB	1abcL	1	1abcL	1	-12.61
-1jmtAB	1abcL	1	1abcE	0	-10.26

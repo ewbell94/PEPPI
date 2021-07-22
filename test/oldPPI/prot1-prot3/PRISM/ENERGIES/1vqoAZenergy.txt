@@ -1,5 +1,0 @@
-1vqoAZ	1abcE	1	1abcL	0	-5.15
-1vqoAZ	1abcE	1	1abcL	2	-31.95
-1vqoAZ	1abcE	2	1abcL	0	2.68
-1vqoAZ	1abc	0	1abcL	0	-10.80
-1vqoAZ	1abc	2	1abcL	0	-42.54

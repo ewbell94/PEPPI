@@ -1,3 +1,0 @@
-1gvnCD	1abcE	2	1abcE	1	22.78
-1gvnCD	1abcL	1	1abcL	0	345.51
-1gvnCD	1abcL	1	1abcE	1	-10.95

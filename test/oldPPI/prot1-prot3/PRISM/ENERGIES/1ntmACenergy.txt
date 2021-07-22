@@ -1,5 +1,0 @@
-1ntmAC	1abcL	0	1abcL	2	-12.93
-1ntmAC	1abcL	1	1abcL	0	-6.06
-1ntmAC	1abcL	1	1abcL	1	-5.52
-1ntmAC	1abcL	1	1abcL	2	-23.96
-1ntmAC	1abcE	1	1abcL	2	-5.85

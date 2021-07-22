@@ -1,5 +1,0 @@
-1tceAB	1abcL	1	1abcL	0	-39.46
-1tceAB	1abcL	1	1abcL	2	-14.18
-1tceAB	1abcE	0	1abcL	2	-6.35
-1tceAB	1abcE	2	1abcL	2	-3.47
-1tceAB	1abc	0	1abcL	2	-6.35

@@ -1,4 +1,0 @@
-1t60CH	1abcL	0	1abcE	1	1.33
-1t60CH	1abcL	0	1abcL	0	-18.30
-1t60CH	1abcE	0	1abcE	1	-34.61
-1t60CH	1abcE	0	1abcL	0	-41.53

@@ -149,14 +149,14 @@ for my $ind (1..$i){
 	if (! -f "$fastadir/prot${ind}/$dom.hhr.gz" || `cat $fastadir/prot${ind}/$dom.hhr.gz | wc -l` < 1 || `zgrep "hhblits" $fastadir/prot${ind}/$dom.hhr.gz | wc -l` > 0){
 	    print "HHR\n";
 	    print `rm -rf $fastadir/prot${ind}/$dom.hhr.gz` if (-f "$fastadir/prot${ind}/$dom.hhr.gz");
-	    my $args="-o $fastadir -t prot$ind";
+	    my $args="-o $fastadir -t prot$ind -p $peppidir";
 	    $args="$args -b" if ($benchmarkflag);
 	    $args="$args -d" if ($domaindiv);
 	    
 	    while (`squeue -u $user | wc -l`-1 >= $maxjobs){
 		sleep(60);
 	    }
-	    print `sbatch -o $fastadir/prot$ind/out_makeHHR_prot$ind.log $peppidir/bin/makeHHR.pl $args`;
+	    print `sbatch -o $fastadir/prot$ind/out_makeHHR_prot$ind.log --mem=50G $peppidir/bin/makeHHR.pl $args`;
 	    last;
 	}
     }
@@ -167,7 +167,7 @@ for my $ind (1..$i){
 	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
 	    sleep(60);
 	}
-	print `sbatch -o $fastadir/prot$ind/out_seqSearch_prot$ind.log $peppidir/bin/seqSearch.pl -o $fastadir -t prot$ind`;
+	print `sbatch -o $fastadir/prot$ind/out_seqSearch_prot$ind.log $peppidir/bin/seqSearch.pl -o $fastadir -t prot$ind -p $peppidir`;
     }
 }
 =cut

@@ -1,0 +1,15 @@
+prot1-prot1,12.194748
+prot1-prot2,8.422893
+prot1-prot3,4.8579336
+prot1-prot4,4.891963
+prot1-prot5,10.430633
+prot2-prot2,36.610962
+prot2-prot3,6.362357
+prot2-prot4,6.374705
+prot2-prot5,7.169229
+prot3-prot3,43.5762792
+prot3-prot4,3.230355
+prot3-prot5,5.4930868
+prot4-prot4,9.5718132
+prot4-prot5,5.391386
+prot5-prot5,39.1460102

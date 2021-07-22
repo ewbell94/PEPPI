@@ -1,8 +1,0 @@
-1i9rAH	1abc	0	1abcE	0	-11.91
-1i9rAH	1abc	0	1abcL	0	-6.06
-1i9rAH	1abc	0	1abc	0	-11.95
-1i9rAH	1abcL	2	1abcE	0	-10.94
-1i9rAH	1abcL	2	1abc	0	-4.97
-1i9rAH	1abcE	2	1abcE	0	-12.93
-1i9rAH	1abcE	2	1abcL	0	-17.47
-1i9rAH	1abcE	2	1abc	0	1.27

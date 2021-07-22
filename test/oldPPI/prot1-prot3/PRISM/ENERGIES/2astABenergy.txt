@@ -1,2 +1,0 @@
-2astAB	1abcE	0	1abcE	0	-17.98
-2astAB	1abcE	0	1abcE	1	-15.99

@@ -1,5 +1,0 @@
-1kklBI	1abcL	0	1abcL	0	-34.79
-1kklBI	1abcL	0	1abcE	1	-15.05
-1kklBI	1abcL	1	1abcE	0	0.32
-1kklBI	1abcL	0	1abc	1	-15.13
-1kklBI	1abcL	1	1abc	0	1.12

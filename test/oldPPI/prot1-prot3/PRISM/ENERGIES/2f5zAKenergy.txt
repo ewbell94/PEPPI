@@ -1,8 +1,0 @@
-2f5zAK	1abc	2	1abcE	0	-2.67
-2f5zAK	1abc	2	1abc	0	7.66
-2f5zAK	1abcE	1	1abcE	0	18.08
-2f5zAK	1abcE	1	1abc	0	-3.80
-2f5zAK	1abcL	0	1abcE	0	8.06
-2f5zAK	1abcL	2	1abcE	0	-12.77
-2f5zAK	1abcL	0	1abc	0	8.06
-2f5zAK	1abcL	2	1abc	0	-12.72

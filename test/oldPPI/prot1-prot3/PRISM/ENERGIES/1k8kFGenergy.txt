@@ -1,3 +1,0 @@
-1k8kFG	1abcE	2	1abcL	0	-39.78
-1k8kFG	1abcE	2	1abcE	1	-33.04
-1k8kFG	1abcE	2	1abc	2	-3.98

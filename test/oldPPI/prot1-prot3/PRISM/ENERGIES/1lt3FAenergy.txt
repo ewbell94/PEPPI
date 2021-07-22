@@ -1,5 +1,0 @@
-1lt3FA	1abcE	1	1abcE	0	-16.97
-1lt3FA	1abcE	1	1abcE	2	-10.88
-1lt3FA	1abcE	1	1abcL	0	-18.81
-1lt3FA	1abcE	1	1abcL	1	-12.77
-1lt3FA	1abcE	2	1abcL	1	-11.94
