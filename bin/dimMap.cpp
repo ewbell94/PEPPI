@@ -86,6 +86,7 @@ vector<namedScore> fetchHits(string hhrfilename){
     if (find(templates.begin(),templates.end(),target)!=templates.end()){
       continue;
     }
+    //cout<<target<<endl;
     templates.push_back(target);
     total+=score;
     scores.push_back(score);
