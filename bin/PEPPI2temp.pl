@@ -48,7 +48,7 @@ while (my $line=<$protcodeB>){
 }
 close($protcodeB);
 
-my @supported=("PRISM"); #Change this to change which modules are available
+my @supported=("AC"); #Change this to change which modules are available
 my @intset=();
 
 #Create PPI folders and run the pairs

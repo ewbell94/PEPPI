@@ -48,7 +48,7 @@ while (my $line=<$protcodeB>){
 }
 close($protcodeB);
 
-my @supported=("SPRING","SPRINGNEG","STRING","SEQ","CT"); #Change this to change which modules are available
+my @supported=("AC"); #Change this to change which modules are available
 my @intset=();
 
 #Create PPI folders and run the pairs
@@ -111,9 +111,9 @@ sub submitBatch{
 	print "Queue is currently full, waiting for submission...\n";
 	sleep(60);
     }
-    print `sbatch -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
+    #print `sbatch -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
 
-    #print `$peppidir/bin/multiwrapper.pl $args`;
+    print `$peppidir/bin/multiwrapper.pl $args`;
 }
 
 #Tree traversing algorithm which grabs a list of domains
