@@ -9,6 +9,7 @@ my $maxjobs=!MAXJOBS!;
 my $nohomo=0;
 my $keepflag=1;
 my $benchmarkflag=!BENCHMARKFLAG!;
+my $hpcflag=!HPCFLAG!;
 my $batchsize=1;
 
 my $user=`whoami`;
@@ -75,7 +76,7 @@ for my $i (0..scalar(@protsA)-1){
 		print `echo "$prog" >> $int/out.log`;
 		print `$int/$pairname-$prog.pl >> $int/out.log`;
 	    }
-            while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+            while ($hpcflag && `squeue -u $user | wc -l`-1 >= $maxjobs){
                 print "Queue is currently full, waiting for submission...\n";
                 sleep(60);
             }
@@ -107,13 +108,15 @@ sub submitBatch{
     my $args=join(",",@supported);
     $args="$args ".join(",",@intset);
     $args="$args $keepflag";
-    while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+    while ($hpcflag && `squeue -u $user | wc -l`-1 >= $maxjobs){
 	print "Queue is currently full, waiting for submission...\n";
 	sleep(60);
     }
-    print `sbatch -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
-
-    #print `$peppidir/bin/multiwrapper.pl $args`;
+    if ($hpcflag){
+	print `sbatch -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
+    } else {
+	print `perl $peppidir/bin/multiwrapper.pl $args`;
+    }
 }
 
 #Tree traversing algorithm which grabs a list of domains
