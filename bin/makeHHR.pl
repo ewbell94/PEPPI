@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #SBATCH -t 24:00:00
-#SBATCH --mem=5G
+#SBATCH --mem=20G
 #SBATCH -J makeHHR.pl
 
 use strict;
@@ -32,7 +32,7 @@ GetOptions(
 #User-set parameters
 my $bindir="$peppidir/bin";
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
-my $springdb="/nfs/amino-home/ewbell/SPRINGDB/";
+my $springdb="$peppidir/lib/SPRINGDB/"; #REMEMBER TO CHANGE THIS
 my $dimerdb="$springdb/70negpos.db";
 (my $sourcefasta=$target)=~s/\_[AB]//g;
 my $hhdir="$outdir/$sourcefasta";
@@ -117,8 +117,8 @@ sub splitDomains{
     $args="$args --benchmark" if ($benchflag);
 
     if ($hpcflag){
-	print `sbatch -o $outdir/$sourcefasta/out_makeHHR$target\_A.log $bindir/makeHHR.pl -t $target\_A $args -h`;
-	print `sbatch -o $outdir/$sourcefasta/out_makeHHR$target\_B.log $bindir/makeHHR.pl -t $target\_B $args -h`;
+	print `sbatch -o $outdir/$sourcefasta/out_makeHHR_$target\_A.log $bindir/makeHHR.pl -t $target\_A $args -h`;
+	print `sbatch -o $outdir/$sourcefasta/out_makeHHR_$target\_B.log $bindir/makeHHR.pl -t $target\_B $args -h`;
     } else {
 	print `perl $bindir/makeHHR.pl -t $target\_A $args`;
 	print `perl $bindir/makeHHR.pl -t $target\_B $args`;

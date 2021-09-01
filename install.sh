@@ -35,7 +35,7 @@ if ! [ -d "lib" ]; then
     fi
     tar -zxvf lib.tar.gz && rm -rf lib.tar.gz
 fi
-sed -i "s#\$peppidir= \".*\"#\$peppidir=\"$peppidir\"#" PEPPI1.pl
+sed -i "s#\$peppidir= \".*\"#\$peppidir=\"$peppidir/PEPPI\"#" PEPPI1.pl
 sed -i "s#\$maxjobs=.*;#\$maxjobs=$maxjobs;#" PEPPI1.pl
 sed -i "s#\$hpcflag=.*;#\$hpcflag=$hpcflag;#" PEPPI1.pl
 sed -i "s#\$hhsuitedir=\".*\"#\$hhsuitedir=\"$hhdir\"#" bin/makeHHR.pl
@@ -44,4 +44,5 @@ $cppcompiler bin/compiled_source/dcomplex.c -o bin/dcomplex -lm -O3
 $cppcompiler bin/compiled_source/dimMap.cpp -o bin/dimMap -O3 --std=c++11
 $fcompiler bin/compiled_source/NWalign.f -o bin/NWalign -lm -O3
 $fcompiler bin/compiled_source/TMalign.f -o bin/TMalign -lm -O3
-
+python bin/trainCT.py
+python bin/trainDists.py
