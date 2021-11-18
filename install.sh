@@ -25,7 +25,7 @@ mkdir -p $peppidir
 cd $peppidir
 if ! [ -d "PEPPI" ]; then
     if ! [ -f "PEPPI.tar.gz" ]; then
-	wget https://zhanggroup.org/PEPPI/PEPPI.tar.gz
+	git clone https://github.com/ewbell94/PEPPI.git
     fi
     tar -zxvf PEPPI.tar.gz && rm -rf PEPPI.tar.gz
 fi
@@ -42,9 +42,9 @@ sed -i "s#\$maxjobs=.*;#\$maxjobs=$maxjobs;#" PEPPI1.pl
 sed -i "s#\$hpcflag=.*;#\$hpcflag=$hpcflag;#" PEPPI1.pl
 sed -i "s#\$hhsuitedir=\".*\"#\$hhsuitedir=\"$hhdir\"#" bin/makeHHR.pl
 sed -i "s#\$uniprotdb=\".*\"#\$uniprotdb=\"$dbdir\"#" bin/makeHHR.pl
-sed -i "s#python#$pythonbin#" bin/CTmod
-sed -i "s#python#$pythonbin#" bin/STRINGmod
-sed -i "s#/usr/bin/env python#$pythonbin#" PEPPI3temp.py
+sed -i "s#/nfs/amino-library/anaconda/bin/python#$pythonbin#" bin/CTmod
+sed -i "s#/nfs/amino-library/anaconda/bin/python#$pythonbin#" bin/STRINGmod
+sed -i "s#/nfs/amino-library/anaconda/bin/python#$pythonbin#" PEPPI3temp.py
 $cppcompiler bin/compiled_source/dcomplex.c -o bin/dcomplex -lm -O3
 $cppcompiler bin/compiled_source/dimMap.cpp -o bin/dimMap -O3 --std=c++11
 $fcompiler bin/compiled_source/NWalign.f -o bin/NWalign -lm -O3

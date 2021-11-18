@@ -1,5 +1,7 @@
 #!/usr/bin/env perl
 
+#NOTE: This script is not used in the main body of PEPPI and will not function without a pre-existing installation
+#of PRISM.  This is only included to demonstrate how the benchmark was performed in the PEPPI manuscript.
 use strict;
 use warnings;
 use List::Util qw(min);

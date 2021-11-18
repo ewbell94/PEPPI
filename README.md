@@ -10,7 +10,7 @@ Note: version numbers are provided to ensure proper functionality.  Other versio
 2. A perl 5 interpreter (v5.16.3)
 3. A C/C++ compiler compatible with the C++11 standard (g++ 4.8.5)
 4. A fortran compiler (gfortran 4.8.5)
-5. An installation of HHsuite3 (you will need to install psipred, blast, and a database as part of this, otherwise HHsearch will not work properly)
+5. An installation of HHsuite2 (you will need to install psipred, blast, and a database as part of this, otherwise HHsearch will not work properly)
 
 # Installation
 Run the included install.sh script.  You will be asked several questions regarding the configuration of PEPPI, including install locations.  If you are not running PEPPI on an HPC environment, this script will create aliases for the "sbatch" and "squeue" commands, which will allow PEPPI to run properly.  After installing, please re-open your terminal and run these aliases before proceeding to ensure they're properly defined (squeue is echo, sbatch is the perl interpreter).
