@@ -163,7 +163,10 @@ for my $pointer (@domainPairs){
     
     if (scalar(@dimerTemplates)==0){
 	print "No dimer templates found!\n";
-	exit(0);
+	my $domainscore=$scorerange[0];
+	$topscore=$domainscore if ($domainscore>$topscore);
+	print `rm -rf $tempdir/*`;
+	next;
     }
 
     my @dimerModels=();

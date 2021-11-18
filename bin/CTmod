@@ -30,7 +30,7 @@ for my $val (@Bvals){
 }
 
 #Predict interaction likelihood and record the result
-print `python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
+print `/nfs/amino-library/anaconda/bin/python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
 my $result=`cat $outdir/$pairname/CT/res.txt`;
 
 my $idnum=0;

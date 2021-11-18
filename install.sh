@@ -13,9 +13,11 @@ else
     exit 1
 fi
 
-read -p "Where do you wish to install PEPPI? " peppidir
-read -p "Where is your HHsuite installation? " hhdir
-read -p "Where is the database used for hhblits? " dbdir
+echo ""
+read -p "Full path of where you wish to install PEPPI: " peppidir
+read -p "Full path to your HHsuite installation: " hhdir
+read -p "Full path to the database used for hhblits: " dbdir
+read -p "Full path of your python interpreter: " pythonbin
 read -p "What is your C++ compiler? " cppcompiler
 read -p "What is your fortran compiler? " fcompiler
 
@@ -40,9 +42,12 @@ sed -i "s#\$maxjobs=.*;#\$maxjobs=$maxjobs;#" PEPPI1.pl
 sed -i "s#\$hpcflag=.*;#\$hpcflag=$hpcflag;#" PEPPI1.pl
 sed -i "s#\$hhsuitedir=\".*\"#\$hhsuitedir=\"$hhdir\"#" bin/makeHHR.pl
 sed -i "s#\$uniprotdb=\".*\"#\$uniprotdb=\"$dbdir\"#" bin/makeHHR.pl
+sed -i "s#python#$pythonbin#" bin/CTmod
+sed -i "s#python#$pythonbin#" bin/STRINGmod
+sed -i "s#/usr/bin/env python#$pythonbin#" PEPPI3temp.py
 $cppcompiler bin/compiled_source/dcomplex.c -o bin/dcomplex -lm -O3
 $cppcompiler bin/compiled_source/dimMap.cpp -o bin/dimMap -O3 --std=c++11
 $fcompiler bin/compiled_source/NWalign.f -o bin/NWalign -lm -O3
 $fcompiler bin/compiled_source/TMalign.f -o bin/TMalign -lm -O3
-python bin/trainCT.py
-python bin/trainDists.py
+$pythonbin bin/trainCT.py
+$pythonbin python bin/trainDists.py

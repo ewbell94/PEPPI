@@ -11,7 +11,7 @@ def trainModel(trainData,trainLabels,param):
 
 labels=[]
 thispath=os.path.dirname(os.path.abspath(__file__))
-f=open(thispath+"/../lib/CTtrainvec.txt")
+f=open(thispath+"/../lib/CTtrainvecs.txt")
 for line in f:
     parts=line.split("\t")
     data.append([float(x) for x in parts[0].split(",")])

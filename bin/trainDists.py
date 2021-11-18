@@ -17,7 +17,7 @@ truepath=os.path.dirname(os.path.abspath(__file__))
 def extractData(supported,truepath):
     data=[]
     labels=[]
-    f=open(truepath+"/../lib/trainNB.txt"%s[0])
+    f=open(truepath+"/../lib/trainNB.txt")
     for line in f:
         parts=line.split("\t")
         labels.append(float(parts[1]))

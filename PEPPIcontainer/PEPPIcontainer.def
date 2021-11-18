@@ -1,0 +1,30 @@
+Bootstrap: library
+From: centos:7
+Stage: build
+
+%files
+	PEPPIconda.yml
+
+%runscript
+	source /conda/etc/profile.d/conda.sh
+	conda activate base
+	./PEPPI1.pl -A $1 -B $2 -o $3 -d
+	$3/PEPPI2.pl
+	$3/PEPPI3.py
+
+%post -c /bin/bash
+	git clone https://github.com/ewbell94/PEPPI.git
+	yum -y install wget
+	wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+	bash miniconda.sh -b -p conda
+	source /conda/etc/profile.d/conda.sh
+	conda update -y -b base conda
+	conda activate base
+	conda install -c conda-forge mamba
+	mamba env create -f PEPPIconda.yml
+	rm miniconda.sh -f
+
+%test
+	source /conda/etc/profile.d/conda.sh
+	conda activate base
+	python --version

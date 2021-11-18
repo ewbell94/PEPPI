@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #SBATCH -t 24:00:00
-#SBATCH --mem=20G
+#SBATCH --mem=5G
 #SBATCH -J makeHHR.pl
 
 use strict;
