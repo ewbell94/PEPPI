@@ -1,6 +1,7 @@
-#!/usr/bin/env python
+#!/nfs/amino-library/anaconda/bin/python
 import numpy as np
 from math import floor
+from subprocess import call
 
 outdir="/nfs/amino-home/ewbell/PEPPI/test"
 peppidir="/nfs/amino-home/ewbell/PEPPI"
@@ -22,6 +23,7 @@ scoremat=[]
 for prog in supported:
     print(prog)
     singleprog=[]
+    call([bindir+"/compileRes.sh",outdir,prog])
     f=open(outdir+"/PPI/"+prog+"res.txt")
     for line in f:
         if line.strip()=="" or line[:4]!="prot":
@@ -78,7 +80,7 @@ def calcLR(model,point,supported=supported):
                 lr+=model[i][j][1].score([[float(point[i][j])]])-model[i][j][0].score([[float(point[i][j])]])
     return lr
 
-model=load(open("/nfs/amino-home/ewbell/PEPPI/bin/model_multiD"))
+model=load(open(bindir+"/model_multiD"))
 #print(model)
 scoredPoints=[] 
 

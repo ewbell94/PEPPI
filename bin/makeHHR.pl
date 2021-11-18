@@ -17,11 +17,13 @@ my $target="";
 my $peppidir="/home/ewbell/PEPPI";
 my $domaindiv=0;
 my $benchflag=0;
+my $hpcflag=0;
 my $maxjobs=300;
 
 GetOptions(
     "benchmark" => \$benchflag,
     "domains" => \$domaindiv,
+    "hpc" => \$hpcflag,
     "outdir=s" => \$outdir,
     "target=s" => \$target,
     "peppidir=s" => \$peppidir
@@ -30,7 +32,7 @@ GetOptions(
 #User-set parameters
 my $bindir="$peppidir/bin";
 my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02"; #location of Uniprot database for HHblits search
-my $springdb="/nfs/amino-home/ewbell/SPRINGDB/";
+my $springdb="$peppidir/lib/SPRINGDB/"; #REMEMBER TO CHANGE THIS
 my $dimerdb="$springdb/70negpos.db";
 (my $sourcefasta=$target)=~s/\_[AB]//g;
 my $hhdir="$outdir/$sourcefasta";
@@ -108,14 +110,19 @@ sub splitDomains{
     print $fastB substr($sequence,$boundary-1);
     close($fastB);
 
-    while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+    while ($hpcflag && `squeue -u $user | wc -l`-1 >= $maxjobs){
         sleep(60);
     }
     my $args="-o $outdir -d";
     $args="$args --benchmark" if ($benchflag);
 
-    print `sbatch -o $outdir/$sourcefasta/out_makeHHR$target\_A.log $bindir/makeHHR.pl -t $target\_A $args`;
-    print `sbatch -o $outdir/$sourcefasta/out_makeHHR$target\_B.log $bindir/makeHHR.pl -t $target\_B $args`;
+    if ($hpcflag){
+	print `sbatch -o $outdir/$sourcefasta/out_makeHHR_$target\_A.log $bindir/makeHHR.pl -t $target\_A $args -h`;
+	print `sbatch -o $outdir/$sourcefasta/out_makeHHR_$target\_B.log $bindir/makeHHR.pl -t $target\_B $args -h`;
+    } else {
+	print `perl $bindir/makeHHR.pl -t $target\_A $args`;
+	print `perl $bindir/makeHHR.pl -t $target\_B $args`;
+    }
     print `sync`;
     print `rm -rf $tempdir`;
     print `date`;

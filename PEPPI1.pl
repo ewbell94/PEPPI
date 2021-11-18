@@ -16,6 +16,7 @@ my $maxjobs=300; #maximum number of allowable concurrent jobs
 
 #DO NOT EDIT BENEAT THIS LINE
 my $domaindiv=0;
+my $hpcflag=1;
 my $infastaA;
 my $infastaB;
 my $outdir=`pwd`;
@@ -47,11 +48,6 @@ chomp($startdir);
 $infastaA=$startdir."/".$infastaA if (!($infastaA=~/^\//));
 $infastaB=$startdir."/".$infastaB if (!($infastaB=~/^\//));
 $outdir=$startdir."/".$outdir if (!($outdir=~/^\//));
-
-#Check if the user is running on a slurm-supported cluster
-if (system("squeue > /dev/null")){
-    die "Must be connected to a slurm cluster to run.\n";
-}
 
 #Processing of input sequence files
 print `mkdir $outdir` if (!-e "$outdir");
@@ -146,17 +142,21 @@ for my $ind (1..$i){
     my @domlist=treeSearch("prot${ind}","$fastadir/prot${ind}");
     for my $dom (@domlist){
 	print "$dom\n";
-	if (! -f "$fastadir/prot${ind}/$dom.hhr.gz" || `cat $fastadir/prot${ind}/$dom.hhr.gz | wc -l` < 1 || `zgrep "hhblits" $fastadir/prot${ind}/$dom.hhr.gz | wc -l` > 0){
+	if (! -f "$fastadir/prot${ind}/$dom.hhr.gz" || `cat $fastadir/prot${ind}/$dom.hhr.gz | wc -l` < 1 || `zgrep "hhblits" $fastadir/prot${ind}/$dom.hhr.gz | wc -l` > 0 || `fgrep "No space" $fastadir/prot${ind}/out_makeHHR_${dom}.log | wc -l` > 0 || `fgrep "uninitialized value" $fastadir/prot${ind}/out_makeHHR_${dom}.log | wc -l` > 0){
 	    print "HHR\n";
 	    print `rm -rf $fastadir/prot${ind}/$dom.hhr.gz` if (-f "$fastadir/prot${ind}/$dom.hhr.gz");
 	    my $args="-o $fastadir -t prot$ind -p $peppidir";
 	    $args="$args -b" if ($benchmarkflag);
 	    $args="$args -d" if ($domaindiv);
 	    
-	    while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+	    while ($hpcflag && `squeue -u $user | wc -l`-1 >= $maxjobs){
 		sleep(60);
 	    }
-	    print `sbatch -o $fastadir/prot$ind/out_makeHHR_prot$ind.log --mem=50G $peppidir/bin/makeHHR.pl $args`;
+	    if ($hpcflag){
+		print `sbatch -o $fastadir/prot$ind/out_makeHHR_prot$ind.log $peppidir/bin/makeHHR.pl $args -h`;
+	    } else {
+		print `perl $peppidir/bin/makeHHR.pl $args`;
+	    }
 	    last;
 	}
     }
@@ -164,10 +164,14 @@ for my $ind (1..$i){
     #Check for sequence results
     if (! -f "$fastadir/prot$ind/prot$ind.string" || ! -s "$fastadir/prot$ind/prot$ind.seq"){
 	print "SEQ\n";
-	while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+	while ($hpcflag && `squeue -u $user | wc -l`-1 >= $maxjobs){
 	    sleep(60);
 	}
-	print `sbatch -o $fastadir/prot$ind/out_seqSearch_prot$ind.log $peppidir/bin/seqSearch.pl -o $fastadir -t prot$ind -p $peppidir`;
+	if ($hpcflag) {
+	    print `sbatch -o $fastadir/prot$ind/out_seqSearch_prot$ind.log $peppidir/bin/seqSearch.pl -o $fastadir -t prot$ind -p $peppidir`;
+	} else {
+	    print `perl $peppidir/bin/seqSearch.pl -o $fastadir -t prot$ind -p $peppidir`;
+	}
     }
 }
 =cut
@@ -178,6 +182,7 @@ $peppi2=~s/\!PEPPIDIR\!/$peppidir/;
 $peppi2=~s/\!OUTDIR\!/$outdir/;
 $peppi2=~s/\!MAXJOBS\!/$maxjobs/;
 $peppi2=~s/\!BENCHMARKFLAG\!/$benchmarkflag/;
+$peppi2=~s/\!HPCFLAG\!/$hpcflag/;
 open(my $peppi2script,">","$outdir/PEPPI2.pl");
 print $peppi2script $peppi2;
 close($peppi2script);

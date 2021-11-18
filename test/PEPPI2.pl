@@ -9,7 +9,8 @@ my $maxjobs=300;
 my $nohomo=0;
 my $keepflag=1;
 my $benchmarkflag=0;
-my $batchsize=25;
+my $hpcflag=1;
+my $batchsize=1;
 
 my $user=`whoami`;
 chomp($user);
@@ -48,7 +49,7 @@ while (my $line=<$protcodeB>){
 }
 close($protcodeB);
 
-my @supported=("SPRING","SPRINGNEG","STRING","SEQ","CT"); #Change this to change which modules are available
+my @supported=("SPRING","SPRINGNEG","SEQ","STRING","CT"); #Change this to change which modules are available
 my @intset=();
 
 #Create PPI folders and run the pairs
@@ -75,7 +76,7 @@ for my $i (0..scalar(@protsA)-1){
 		print `echo "$prog" >> $int/out.log`;
 		print `$int/$pairname-$prog.pl >> $int/out.log`;
 	    }
-            while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+            while ($hpcflag && `squeue -u $user | wc -l`-1 >= $maxjobs){
                 print "Queue is currently full, waiting for submission...\n";
                 sleep(60);
             }
@@ -107,13 +108,15 @@ sub submitBatch{
     my $args=join(",",@supported);
     $args="$args ".join(",",@intset);
     $args="$args $keepflag";
-    while (`squeue -u $user | wc -l`-1 >= $maxjobs){
+    while ($hpcflag && `squeue -u $user | wc -l`-1 >= $maxjobs){
 	print "Queue is currently full, waiting for submission...\n";
 	sleep(60);
     }
-    print `sbatch -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
-
-    #print `$peppidir/bin/multiwrapper.pl $args`;
+    if ($hpcflag){
+	print `sbatch -J PEPPI2batch -o /dev/null -t 24:00:00 $peppidir/bin/multiwrapper.pl $args`;
+    } else {
+	print `perl $peppidir/bin/multiwrapper.pl $args`;
+    }
 }
 
 #Tree traversing algorithm which grabs a list of domains

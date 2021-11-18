@@ -1,5 +1,7 @@
 #!/usr/bin/env perl
 
+#NOTE: This script is not used in the main body of PEPPI and will not function without a pre-existing installation
+#of PRISM.  This is only included to demonstrate how the benchmark was performed in the PEPPI manuscript.
 use strict;
 use warnings;
 use List::Util qw(min);
@@ -39,7 +41,7 @@ chdir($tempdir);
 print `tar -zxvf ./PRISM.tar.gz`;
 chdir("$tempdir/PRISM_protocol/0-SurfaceExtraction");
 print `echo "1ABC" > ./PDB.list`;
-print `cat /nfs/amino-home/ewbell/SPRINGDB/monomers/$realchainA.pdb > ./PDB/1abc.pdb`;
+print `cat /nfs/amino-home/ewbell/PEPPI/lib/SPRINGDB/monomers/$realchainA.pdb > ./PDB/1abc.pdb`;
 if ($chainletterA eq $chainletterB){
     if ($chainletterB ne "A"){
 	print `sed -i "s/ $chainletterA / A /" ./PDB/1abc.pdb`;
@@ -47,7 +49,7 @@ if ($chainletterA eq $chainletterB){
 	print `sed -i "s/ $chainletterA / B /" ./PDB/1abc.pdb`;
     }
 }
-print `cat /nfs/amino-home/ewbell/SPRINGDB/monomers/$realchainB.pdb >> ./PDB/1abc.pdb`;
+print `cat /nfs/amino-home/ewbell/PEPPI/lib/SPRINGDB/monomers/$realchainB.pdb >> ./PDB/1abc.pdb`;
 print `echo "END" >> ./PDB/1abc.pdb`;
 print `sed -i "/TER/d" ./PDB/1abc.pdb`;
 

@@ -18,7 +18,11 @@ print `mkdir -p $outdir/$pairname/SPRING`;
 #User-set parameters
 my $bindir="$peppidir/bin"; #location of program binaries
 my $springout="$outdir/$pairname/SPRING"; #location of program output
+<<<<<<< HEAD
 my $dbdir="/expanse/projects/itasser/ewbell/SPRINGDB"; #location of SPRING database
+=======
+my $dbdir="$peppidir/lib/SPRINGDB"; #location of SPRING database
+>>>>>>> master
 my $complexlist="$dbdir/70CDHITstruct.txt"; #location of pairs in the database
 my $maxmodels=1; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.5 : 1.1; #monomeric sequence homology cutoffs for threading; 0.5="benchmark", 1.1="real"
@@ -165,7 +169,10 @@ for my $pointer (@domainPairs){
     
     if (scalar(@dimerTemplates)==0){
 	print "No dimer templates found!\n";
-	exit(0);
+	my $domainscore=$scorerange[0];
+	$topscore=$domainscore if ($domainscore>$topscore);
+	print `rm -rf $tempdir/*`;
+	next;
     }
 
     my @dimerModels=();
