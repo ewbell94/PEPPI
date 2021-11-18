@@ -12,12 +12,7 @@ my $outdir="";
 ######### Needed changes ended #################################
 
 my $target="";
-<<<<<<< HEAD
-my $bindir="/home/ewbell/PEPPI/bin";
-my $libdir="/home/ewbell/PEPPI/lib";
-=======
-my $peppidir="/nfs/amino-home/ewbell/PEPPI";
->>>>>>> master
+my $peppidir="/home/ewbell/PEPPI";
 
 GetOptions(
     "outdir=s" => \$outdir,

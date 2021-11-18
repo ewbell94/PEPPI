@@ -13,15 +13,8 @@ chomp($user);
 my $starttime=time();
 
 my $randomTag=int(rand(1000000));
-<<<<<<< HEAD
-#my $uniprotdb="/nfs/amino-library/local/hhsuite/uniprot20_2016_02/uniprot20_2016_02";
-#my $blitsdb="$peppidir/lib/SEQ/hhblitsdb/db";
 my $interactfile="/expanse/projects/itasser/ewbell/lib/SEQ/psicquic.txt";
 my $aliasfile="/expanse/projects/itasser/ewbell/lib/SEQ/100_psicquic.fasta.clstr.aliases";
-=======
-my $interactfile="$peppidir/lib/SEQ/psicquic.txt"; #File containing all known dimers
-my $aliasfile="$peppidir/lib/SEQ/100_psicquic.fasta.clstr.aliases"; #File containing all potential names for the same sequence (because different databases use different IDs)
->>>>>>> master
 
 my $jobid=`head -1 $outdir/$pairname/jobid.txt`;
 chomp($jobid);

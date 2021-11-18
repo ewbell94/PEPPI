@@ -14,11 +14,7 @@ use POSIX qw(ceil);
 my $user="$ENV{USER}";
 my $outdir="";
 my $target="";
-<<<<<<< HEAD
-my $bindir="/home/ewbell/PEPPI/bin";
-=======
-my $peppidir="/nfs/amino-home/ewbell/PEPPI";
->>>>>>> master
+my $peppidir="/home/ewbell/PEPPI";
 my $domaindiv=0;
 my $benchflag=0;
 my $maxjobs=300;

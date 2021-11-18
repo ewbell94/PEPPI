@@ -18,13 +18,8 @@ print `mkdir -p $outdir/$pairname/SPRINGNEG`;
 #User-set parameters
 my $bindir="$peppidir/bin"; #location of program binaries
 my $springout="$outdir/$pairname/SPRINGNEG"; #location of program output
-<<<<<<< HEAD
 my $dbdir="/expanse/projects/itasser/ewbell/SPRINGDB"; #location of SPRING database
-my $complexlist="$dbdir/70negs.txt";
-=======
-my $dbdir="/nfs/amino-home/ewbell/SPRINGDB"; #location of SPRING database
 my $complexlist="$dbdir/70negs.txt"; #location of pairs in the database
->>>>>>> master
 my $maxmodels=1; #maximum number of model pdb files to make
 my $scut=($benchmarkflag) ? 0.5 : 1.1; #monomeric sequence homology cutoffs for threading; 0.5="benchmark", 1.1="real"
 

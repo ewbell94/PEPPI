@@ -44,22 +44,8 @@ print "\n";
 
 my @ids1=extractID($blast1res);
 my @ids2=extractID($blast2res);
-<<<<<<< HEAD
-=pod
-my $randomTag=int(rand(1000000));
-my $jobid=`head -1 $outdir/$pairname/jobid.txt`;
-chomp($jobid);
-my $tempdir="/scratch/$user/job_$jobid/PEPPI_STRING_$pairname\_$randomTag";
-if (! -e "$tempdir"){
-    print `mkdir -p $tempdir`;
-} else {
-    print `rm -rf $tempdir/*`;
-}
-=cut
-=======
 
 #Search for pairs in the STRING database
->>>>>>> master
 for my $i (0..scalar(@ids1)-1){
     my $id1=$ids1[$i][0];
     if ($ids1[$i][1] < $seqid){
