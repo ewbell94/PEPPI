@@ -33,7 +33,7 @@ fi
 cd PEPPI
 if ! [ -d "lib" ]; then
     if ! [ -f "lib.tar.gz" ]; then
-	wget https://zhanggroup.org/PEPPI/lib.tar.gz
+	wget https://zhanggroup.org/PEPPI/download/lib.tar.gz
     fi
     tar -zxvf lib.tar.gz && rm -rf lib.tar.gz
 fi
