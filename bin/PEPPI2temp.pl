@@ -49,7 +49,7 @@ while (my $line=<$protcodeB>){
 }
 close($protcodeB);
 
-my @supported=("AC"); #Change this to change which modules are available
+my @supported=("SPRING","SEQ","CT","SPRINGNEG","STRING"); #Change this to change which modules are available
 my @intset=();
 
 #Create PPI folders and run the pairs
