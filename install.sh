@@ -24,10 +24,7 @@ read -p "What is your fortran compiler? " fcompiler
 mkdir -p $peppidir
 cd $peppidir
 if ! [ -d "PEPPI" ]; then
-    if ! [ -f "PEPPI.tar.gz" ]; then
-	git clone https://github.com/ewbell94/PEPPI.git
-    fi
-    tar -zxvf PEPPI.tar.gz && rm -rf PEPPI.tar.gz
+    git clone https://github.com/ewbell94/PEPPI.git
 fi
 
 cd PEPPI
