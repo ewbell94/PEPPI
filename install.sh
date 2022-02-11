@@ -44,7 +44,7 @@ sed -i "s#\$hhsuitedir=\".*\"#\$hhsuitedir=\"$hhdir\"#" bin/makeHHR.pl
 sed -i "s#\$uniprotdb=\".*\"#\$uniprotdb=\"$dbdir\"#" bin/makeHHR.pl
 sed -i "s#/nfs/amino-library/anaconda/bin/python#$pythonbin#" bin/CTmod
 sed -i "s#/nfs/amino-library/anaconda/bin/python#$pythonbin#" bin/STRINGmod
-sed -i "s#/nfs/amino-library/anaconda/bin/python#$pythonbin#" PEPPI3temp.py
+sed -i "s#/nfs/amino-library/anaconda/bin/python#$pythonbin#" bin/PEPPI3temp.py
 $cppcompiler bin/compiled_source/dcomplex.c -o bin/dcomplex -lm -O3
 $cppcompiler bin/compiled_source/dimMap.cpp -o bin/dimMap -O3 --std=c++11
 $fcompiler bin/compiled_source/NWalign.f -o bin/NWalign -lm -O3
