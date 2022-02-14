@@ -198,7 +198,6 @@ for my $pointer (@domainPairs){
     print `rm -rf $tempdir/*`;
 }
 
-print `rm -rf $tempdir`;
 if ($topscore!=-100.0){
     if ($topscore < $scorerange[0]){
 	print "Best SPRINGscore is outside of training set range.  Set to $scorerange[0] for classification purposes\n";
@@ -214,6 +213,7 @@ if ($topscore!=-100.0){
     print `echo "$pairname,$topscore" >> $outdir/SPRINGres_$idnum.txt`;
 }
 
+print `rm -rf $tempdir`;
 open(my $resfile,">","$outdir/$pairname/SPRING/res.txt");
 
 if ($topscore==-100.0){

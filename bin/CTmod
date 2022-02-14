@@ -33,6 +33,10 @@ for my $val (@Bvals){
 print `/nfs/amino-library/anaconda/bin/python $peppidir/bin/CTpred.py $outdir/$pairname/CT/input.txt > $outdir/$pairname/CT/res.txt`;
 my $result=`cat $outdir/$pairname/CT/res.txt`;
 
+if ($result eq ""){
+    print "CT did not complete correctly\n";
+    exit(1);
+}
 my $idnum=0;
 if (defined($ENV{SLURM_JOB_ID}) && $ENV{SLURM_JOB_ID} ne ''){
     $idnum=$ENV{SLURM_JOB_ID};

@@ -25,6 +25,8 @@ mkdir -p $peppidir
 cd $peppidir
 if ! [ -d "PEPPI" ]; then
     git clone https://github.com/ewbell94/PEPPI.git
+else
+    echo "PEPPI source already exists!"
 fi
 
 cd PEPPI
@@ -33,6 +35,8 @@ if ! [ -d "lib" ]; then
 	wget https://zhanggroup.org/PEPPI/download/lib.tar.gz
     fi
     tar -zxvf lib.tar.gz && rm -rf lib.tar.gz
+else
+    echo "PEPPI library already exists!"
 fi
 sed -i "s#\$peppidir= \".*\"#\$peppidir=\"$peppidir/PEPPI\"#" PEPPI1.pl
 sed -i "s#\$maxjobs=.*;#\$maxjobs=$maxjobs;#" PEPPI1.pl
@@ -47,5 +51,13 @@ $cppcompiler bin/compiled_source/dcomplex.c -o bin/dcomplex -lm -O3
 $cppcompiler bin/compiled_source/dimMap.cpp -o bin/dimMap -O3 --std=c++11
 $fcompiler bin/compiled_source/NWalign.f -o bin/NWalign -lm -O3
 $fcompiler bin/compiled_source/TMalign.f -o bin/TMalign -lm -O3
+
+rm -rf bin/model_multiD
+rm -rf bin/CTNN
 $pythonbin bin/trainCT.py
-$pythonbin python bin/trainDists.py
+$pythonbin bin/trainDists.py
+
+test=`$pythonbin bin/getHashcode.py "Testing" "Hashcode"`
+if [ $test != "636" ]; then
+    echo "WARNING: getHashcode.py is not functioning properly, this will cause STRING to malfunction."
+fi
