@@ -63,7 +63,7 @@ def trainModel(trainData,trainLabels,param):
                 else:
                     nparams+=trainDist(neg,supported[i][1])
                     pparams+=trainDist(pos,supported[i][1])
-                featureParams.append([nparams,pparams])
+            featureParams.append([nparams,pparams])
             
         if len(featureParams) > 0:
             distParams.append(featureParams)
