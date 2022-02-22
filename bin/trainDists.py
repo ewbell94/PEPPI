@@ -56,13 +56,12 @@ def trainModel(trainData,trainLabels,param):
                 pos=[x for x in pos if x!=0.]
                 nparams=[len(neg)/nlen]
                 pparams=[len(pos)/plen]
+            if supported[i][1]=="kde":
+                nparams=trainDist(neg,supported[i][1])
+                pparams=trainDist(pos,supported[i][1])
             else:
-                if supported[i][1]=="kde":
-                    nparams=trainDist(neg,supported[i][1])
-                    pparams=trainDist(pos,supported[i][1])
-                else:
-                    nparams+=trainDist(neg,supported[i][1])
-                    pparams+=trainDist(pos,supported[i][1])
+                nparams+=trainDist(neg,supported[i][1])
+                pparams+=trainDist(pos,supported[i][1])
             featureParams.append([nparams,pparams])
             
         if len(featureParams) > 0:
